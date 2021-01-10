@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>The Null Type | pure | ecma262</title>
+	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="/qunit/qunit-2.9.2.js"></script>
+	<script>
+		QUnit.test('The Null Type (pure)', function(assert) {
+			;var result = (function () {
+	var foo = null;
+	return !foo && (typeof foo !== "undefined");
+}())
+
+			;assert.ok(result);
+		});
+	</script>
+</body>
+</html>

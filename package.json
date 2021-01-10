@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "babel": "babel",
-        "test": "node ./self-test/lib/meta.js"
+        "test": "node ./self-tests/lib/meta.js"
     },
     "author": "",
     "license": "MIT",
