@@ -1,0 +1,14 @@
+{
+    "spec": {
+        "org": "tc39",
+        "id": "ecma262",
+        "section": "6.1.2",
+        "name": "The Null Type",
+        "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-null-type"
+    },
+    "tests": {
+        "pure": "test.js",
+        "babel": "test.babel.js",
+        "issues": []
+    }
+}
