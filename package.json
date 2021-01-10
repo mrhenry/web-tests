@@ -3,10 +3,12 @@
     "version": "1.0.0",
     "description": "Tests for web features",
     "files": [
+      "./lib/",
       "./ecma262/"
     ],
     "scripts": {
-        "babel": "babel"
+        "babel": "babel",
+        "test": "node ./self-test/lib/meta.js"
     },
     "author": "",
     "license": "MIT",

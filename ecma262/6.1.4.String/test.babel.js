@@ -2,7 +2,8 @@
 
 (function () {
   try {
-    return typeof "foo" === "string";
+    var foo = "foo";
+    return typeof foo === "string" && foo[0] === "f";
   } catch (err) {
     return false;
   }

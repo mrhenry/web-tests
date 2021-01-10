@@ -1,0 +1,68 @@
+{
+  "ecma262": {
+    "bySection": {
+      "6.1.1": 0,
+      "6.1.2": 1,
+      "6.1.3": 2,
+      "6.1.4": 3
+    },
+    "items": [
+      {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "6.1.1",
+          "name": "The Undefined Type",
+          "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-undefined-type"
+        },
+        "tests": {
+          "pure": "test.js",
+          "babel": "test.babel.js",
+          "issues": []
+        }
+      },
+      {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "6.1.2",
+          "name": "The Null Type",
+          "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-null-type"
+        },
+        "tests": {
+          "pure": "test.js",
+          "babel": "test.babel.js",
+          "issues": []
+        }
+      },
+      {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "6.1.3",
+          "name": "The Boolean Type",
+          "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-boolean-type"
+        },
+        "tests": {
+          "pure": "test.js",
+          "babel": "test.babel.js",
+          "issues": []
+        }
+      },
+      {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "6.1.4",
+          "name": "The String Type",
+          "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type"
+        },
+        "tests": {
+          "pure": "test.js",
+          "babel": "test.babel.js",
+          "issues": []
+        }
+      }
+    ]
+  }
+}
