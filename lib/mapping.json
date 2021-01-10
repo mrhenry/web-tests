@@ -17,9 +17,9 @@
         },
         "tests": {
           "pure": "test.js",
-          "babel": "test.babel.js",
-          "issues": []
-        }
+          "babel": "test.babel.js"
+        },
+        "path": "ecma262/6.1.1.Undefined"
       },
       {
         "spec": {
@@ -31,9 +31,9 @@
         },
         "tests": {
           "pure": "test.js",
-          "babel": "test.babel.js",
-          "issues": []
-        }
+          "babel": "test.babel.js"
+        },
+        "path": "ecma262/6.1.2.Null"
       },
       {
         "spec": {
@@ -45,9 +45,9 @@
         },
         "tests": {
           "pure": "test.js",
-          "babel": "test.babel.js",
-          "issues": []
-        }
+          "babel": "test.babel.js"
+        },
+        "path": "ecma262/6.1.3.Boolean"
       },
       {
         "spec": {
@@ -59,9 +59,9 @@
         },
         "tests": {
           "pure": "test.js",
-          "babel": "test.babel.js",
-          "issues": []
-        }
+          "babel": "test.babel.js"
+        },
+        "path": "ecma262/6.1.4.String"
       }
     ]
   }

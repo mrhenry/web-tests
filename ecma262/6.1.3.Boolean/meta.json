@@ -8,7 +8,6 @@
     },
     "tests": {
         "pure": "test.js",
-        "babel": "test.babel.js",
-        "issues": []
+        "babel": "test.babel.js"
     }
 }

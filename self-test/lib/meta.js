@@ -1,14 +1,16 @@
 'use strict';
 
 const assert = require('assert');
-const { getMetaBySection, list } = require('../../lib/meta');
+const { meta, testSources, list } = require('../../lib/meta');
 
-testGetMetaBySection();
+testMeta();
 testList();
+testTestSources();
 
-function testGetMetaBySection() {
+function testMeta() {
 	try {
-		assert.deepStrictEqual(getMetaBySection('ecma262', '6.1.1'), {
+		assert.deepStrictEqual(meta('ecma262', '6.1.1'), {
+			"path": "ecma262/6.1.1.Undefined",
 			"spec": {
 				"org": "tc39",
 				"id": "ecma262",
@@ -18,10 +20,21 @@ function testGetMetaBySection() {
 			},
 			"tests": {
 				"pure": "test.js",
-				"babel": "test.babel.js",
-				"issues": []
+				"babel": "test.babel.js"
 			}
 		});
+	} catch (err) {
+		console.log(err.message);
+		process.exit(1);	
+	}
+}
+
+function testTestSources() {
+	try {
+		const sources = testSources('ecma262', '6.1.1');
+		assert.ok(sources);
+		assert.ok(sources.pure);
+		assert.ok(sources.babel);
 	} catch (err) {
 		console.log(err.message);
 		process.exit(1);	
