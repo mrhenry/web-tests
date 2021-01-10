@@ -1,5 +1,3 @@
-"use strict";
-
 (function () {
   try {
     var foo = true;

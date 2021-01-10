@@ -3,6 +3,7 @@
         [
             "@babel/preset-env",
             {
+                "modules": false,
                 "corejs": "^3.8.2",
                 "targets": {
                     "browsers": [
