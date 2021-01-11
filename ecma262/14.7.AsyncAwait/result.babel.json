@@ -1,7 +1,7 @@
 [
   {
     "browser": "Chrome",
-    "version": "63.0",
+    "version": "57.0",
     "passed": false
   },
   {
@@ -15,33 +15,18 @@
     "passed": false
   },
   {
-    "browser": "Safari",
-    "version": "12.1",
-    "passed": false
-  },
-  {
-    "browser": "Chrome",
-    "version": "44.0",
-    "passed": false
-  },
-  {
-    "browser": "Internet",
-    "version": "Explorer",
-    "passed": false
-  },
-  {
-    "browser": "Chrome",
-    "version": "55.0",
-    "passed": false
-  },
-  {
     "browser": "Edge",
     "version": "18.0",
     "passed": false
   },
   {
-    "browser": "Chrome",
-    "version": "64.0",
+    "browser": "Firefox",
+    "version": "84.0",
+    "passed": false
+  },
+  {
+    "browser": "Firefox",
+    "version": "43.0",
     "passed": false
   },
   {
@@ -51,22 +36,7 @@
   },
   {
     "browser": "Chrome",
-    "version": "87.0",
-    "passed": false
-  },
-  {
-    "browser": "Chrome",
-    "version": "57.0",
-    "passed": false
-  },
-  {
-    "browser": "Edge",
-    "version": "17.0",
-    "passed": false
-  },
-  {
-    "browser": "Chrome",
-    "version": "73.0",
+    "version": "55.0",
     "passed": false
   },
   {
@@ -80,13 +50,28 @@
     "passed": false
   },
   {
+    "browser": "Safari",
+    "version": "12.1",
+    "passed": false
+  },
+  {
     "browser": "Chrome",
     "version": "79.0",
     "passed": false
   },
   {
     "browser": "Chrome",
-    "version": "65.0",
+    "version": "73.0",
+    "passed": false
+  },
+  {
+    "browser": "Internet Explorer",
+    "version": "11.0",
+    "passed": false
+  },
+  {
+    "browser": "Chrome",
+    "version": "63.0",
     "passed": false
   },
   {
@@ -95,8 +80,33 @@
     "passed": false
   },
   {
-    "browser": "Firefox",
-    "version": "84.0",
+    "browser": "Chrome",
+    "version": "44.0",
+    "passed": false
+  },
+  {
+    "browser": "Chrome",
+    "version": "87.0",
+    "passed": false
+  },
+  {
+    "browser": "Edge",
+    "version": "17.0",
+    "passed": false
+  },
+  {
+    "browser": "Chrome",
+    "version": "64.0",
+    "passed": false
+  },
+  {
+    "browser": "Internet Explorer",
+    "version": "10.0",
+    "passed": false
+  },
+  {
+    "browser": "Chrome",
+    "version": "65.0",
     "passed": false
   }
 ]

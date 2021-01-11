@@ -1,10 +1,5 @@
 [
   {
-    "browser": "Safari",
-    "version": "8.0",
-    "passed": false
-  },
-  {
     "browser": "Chrome",
     "version": "57.0",
     "passed": true
@@ -12,11 +7,11 @@
   {
     "browser": "Chrome",
     "version": "43.0",
-    "passed": false
+    "passed": true
   },
   {
-    "browser": "Firefox",
-    "version": "84.0",
+    "browser": "Safari",
+    "version": "8.0",
     "passed": true
   },
   {
@@ -26,12 +21,7 @@
   },
   {
     "browser": "Firefox",
-    "version": "43.0",
-    "passed": false
-  },
-  {
-    "browser": "Opera",
-    "version": "73.0",
+    "version": "84.0",
     "passed": true
   },
   {
@@ -50,13 +40,23 @@
     "passed": true
   },
   {
-    "browser": "Safari",
-    "version": "12.1",
+    "browser": "Opera",
+    "version": "73.0",
     "passed": true
   },
   {
     "browser": "Chrome",
     "version": "79.0",
+    "passed": true
+  },
+  {
+    "browser": "Firefox",
+    "version": "43.0",
+    "passed": true
+  },
+  {
+    "browser": "Safari",
+    "version": "12.1",
     "passed": true
   },
   {
@@ -67,7 +67,7 @@
   {
     "browser": "Internet Explorer",
     "version": "11.0",
-    "passed": false
+    "passed": true
   },
   {
     "browser": "Chrome",
@@ -77,12 +77,12 @@
   {
     "browser": "Chrome",
     "version": "41.0",
-    "passed": false
+    "passed": true
   },
   {
     "browser": "Chrome",
     "version": "44.0",
-    "passed": false
+    "passed": true
   },
   {
     "browser": "Chrome",
@@ -102,7 +102,7 @@
   {
     "browser": "Internet Explorer",
     "version": "10.0",
-    "passed": false
+    "passed": true
   },
   {
     "browser": "Chrome",

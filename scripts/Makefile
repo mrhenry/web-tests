@@ -8,3 +8,5 @@
 	@echo "witness" > ../tests/witness
 
 all: ../tests/witness ../lib/mapping.json
+
+.PHONY: all

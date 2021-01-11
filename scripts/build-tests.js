@@ -51,6 +51,9 @@ function build() {
 		],
 		"test_server_port": "8899",
 		"browsers": [
+			// "ie_8",
+			// "ie_9",
+			"ie_10",
 			"ie_11",
 			"safari_8",
 			"safari_12.1",
@@ -68,6 +71,7 @@ function build() {
 			"safari_latest",
 			"chrome_latest",
 			"opera_latest",
+			"firefox_43",
 			"firefox_latest",
 			"edge_17",
 			"edge_18"

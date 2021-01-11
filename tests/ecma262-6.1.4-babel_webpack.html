@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>The String Type | babel_webpack | ecma262</title>
+	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="/qunit/qunit-2.9.2.js"></script>
+	<script>
+		QUnit.test('{"spec":{"id":"ecma262","section":"6.1.4"},"test":"babel_webpack"}', function(assert) {
+			var done = assert.async();
+			function callback(result) {
+				assert.ok(result);
+				done();
+			}
+
+			;/******/ (function() { // webpackBootstrap
+(function (cb) {
+  var foo = "foo";
+  cb(typeof foo === "string" && foo[0] === "f");
+})(callback);
+/******/ })()
+;;
+		});
+	</script>
+</body>
+</html>

@@ -1,12 +1,7 @@
 [
   {
     "browser": "Chrome",
-    "version": "63.0",
-    "passed": true
-  },
-  {
-    "browser": "Safari",
-    "version": "8.0",
+    "version": "57.0",
     "passed": true
   },
   {
@@ -15,23 +10,8 @@
     "passed": true
   },
   {
-    "browser": "Chrome",
-    "version": "44.0",
-    "passed": true
-  },
-  {
-    "browser": "Internet",
-    "version": "Explorer",
-    "passed": true
-  },
-  {
     "browser": "Safari",
-    "version": "12.1",
-    "passed": true
-  },
-  {
-    "browser": "Chrome",
-    "version": "55.0",
+    "version": "8.0",
     "passed": true
   },
   {
@@ -40,33 +20,13 @@
     "passed": true
   },
   {
-    "browser": "Chrome",
-    "version": "87.0",
+    "browser": "Firefox",
+    "version": "84.0",
     "passed": true
   },
   {
     "browser": "Chrome",
-    "version": "57.0",
-    "passed": true
-  },
-  {
-    "browser": "Opera",
-    "version": "73.0",
-    "passed": true
-  },
-  {
-    "browser": "Chrome",
-    "version": "64.0",
-    "passed": true
-  },
-  {
-    "browser": "Chrome",
-    "version": "73.0",
-    "passed": true
-  },
-  {
-    "browser": "Edge",
-    "version": "17.0",
+    "version": "55.0",
     "passed": true
   },
   {
@@ -80,8 +40,8 @@
     "passed": true
   },
   {
-    "browser": "Chrome",
-    "version": "65.0",
+    "browser": "Opera",
+    "version": "73.0",
     "passed": true
   },
   {
@@ -90,13 +50,63 @@
     "passed": true
   },
   {
+    "browser": "Firefox",
+    "version": "43.0",
+    "passed": true
+  },
+  {
+    "browser": "Safari",
+    "version": "12.1",
+    "passed": true
+  },
+  {
+    "browser": "Chrome",
+    "version": "73.0",
+    "passed": true
+  },
+  {
+    "browser": "Internet Explorer",
+    "version": "11.0",
+    "passed": true
+  },
+  {
+    "browser": "Chrome",
+    "version": "63.0",
+    "passed": true
+  },
+  {
     "browser": "Chrome",
     "version": "41.0",
     "passed": true
   },
   {
-    "browser": "Firefox",
-    "version": "84.0",
+    "browser": "Chrome",
+    "version": "44.0",
+    "passed": true
+  },
+  {
+    "browser": "Edge",
+    "version": "17.0",
+    "passed": true
+  },
+  {
+    "browser": "Chrome",
+    "version": "87.0",
+    "passed": true
+  },
+  {
+    "browser": "Chrome",
+    "version": "64.0",
+    "passed": true
+  },
+  {
+    "browser": "Internet Explorer",
+    "version": "10.0",
+    "passed": true
+  },
+  {
+    "browser": "Chrome",
+    "version": "65.0",
     "passed": true
   }
 ]

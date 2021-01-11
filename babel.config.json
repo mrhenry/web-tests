@@ -7,12 +7,12 @@
                 "corejs": "^3.8.2",
                 "targets": {
                     "browsers": [
-                        "IE >= 1",
-                        "Opera >= 1",
-                        "Safari >= 1",
-                        "Chrome >= 1",
-                        "Edge >= 1",
-                        "Firefox >= 1"
+                        "IE >= 6",
+                        "Opera >= 9",
+                        "Safari >= 4",
+                        "Chrome >= 4",
+                        "Edge >= 12",
+                        "Firefox >= 2"
                     ]
                 },
                 "useBuiltIns": "usage"

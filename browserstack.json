@@ -4,17 +4,23 @@
   "test_path": [
     "tests/ecma262-14.7-pure.html",
     "tests/ecma262-14.7-babel.html",
+    "tests/ecma262-14.7-babel_webpack.html",
     "tests/ecma262-6.1.1-pure.html",
     "tests/ecma262-6.1.1-babel.html",
+    "tests/ecma262-6.1.1-babel_webpack.html",
     "tests/ecma262-6.1.2-pure.html",
     "tests/ecma262-6.1.2-babel.html",
+    "tests/ecma262-6.1.2-babel_webpack.html",
     "tests/ecma262-6.1.3-pure.html",
     "tests/ecma262-6.1.3-babel.html",
+    "tests/ecma262-6.1.3-babel_webpack.html",
     "tests/ecma262-6.1.4-pure.html",
-    "tests/ecma262-6.1.4-babel.html"
+    "tests/ecma262-6.1.4-babel.html",
+    "tests/ecma262-6.1.4-babel_webpack.html"
   ],
   "test_server_port": "8899",
   "browsers": [
+    "ie_10",
     "ie_11",
     "safari_8",
     "safari_12.1",
@@ -32,6 +38,7 @@
     "safari_latest",
     "chrome_latest",
     "opera_latest",
+    "firefox_43",
     "firefox_latest",
     "edge_17",
     "edge_18"

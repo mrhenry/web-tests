@@ -23,8 +23,8 @@ browserstackRunner.run(config, function(error, report) {
 					const browserParts = parts[1].split(' ');
 
 					const runner = {
-						browser: browserParts[0],
-						version: browserParts[1]
+						browser: browserParts.slice(0, -1).join(' '),
+						version: browserParts.slice(-1).join(' ')
 					}
 
 					out.runner = runner;
