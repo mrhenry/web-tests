@@ -86,11 +86,11 @@ browserstackRunner.run(config, function(error, report) {
 				const bb = result.states[b];
 
 				if (aa.browser != bb.browser) {
-					if (aa < bb) {
+					if (aa.browser < bb.browser) {
 						return -1;
 					}
 
-					if (aa > bb) {
+					if (aa.browser > bb.browser) {
 						return 1;
 					}
 				}
@@ -98,11 +98,11 @@ browserstackRunner.run(config, function(error, report) {
 				const av = semver.coerce(aa.version);
 				const bv = semver.coerce(bb.version);
 				if (!av || !bv) {
-					if (av < bv) {
+					if (aa.version < bb.version) {
 						return -1;
 					}
 
-					if (av > bv) {
+					if (aa.version > bb.version) {
 						return 1;
 					}
 

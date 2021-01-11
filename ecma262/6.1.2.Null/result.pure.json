@@ -1,39 +1,4 @@
 {
-  "Safari/8.0": {
-    "browser": "Safari",
-    "version": "8.0",
-    "passed": true
-  },
-  "Internet Explorer/10.0": {
-    "browser": "Internet Explorer",
-    "version": "10.0",
-    "passed": true
-  },
-  "Internet Explorer/11.0": {
-    "browser": "Internet Explorer",
-    "version": "11.0",
-    "passed": true
-  },
-  "Safari/12.1": {
-    "browser": "Safari",
-    "version": "12.1",
-    "passed": true
-  },
-  "Safari/14.0": {
-    "browser": "Safari",
-    "version": "14.0",
-    "passed": true
-  },
-  "Edge/17.0": {
-    "browser": "Edge",
-    "version": "17.0",
-    "passed": true
-  },
-  "Edge/18.0": {
-    "browser": "Edge",
-    "version": "18.0",
-    "passed": true
-  },
   "Chrome/41.0": {
     "browser": "Chrome",
     "version": "41.0",
@@ -44,15 +9,10 @@
     "version": "43.0",
     "passed": true
   },
-  "Firefox/43.0": {
-    "browser": "Firefox",
-    "version": "43.0",
-    "passed": true
-  },
   "Chrome/44.0": {
     "browser": "Chrome",
     "version": "44.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/55.0": {
     "browser": "Chrome",
@@ -84,11 +44,6 @@
     "version": "65.0",
     "passed": true
   },
-  "Opera/73.0": {
-    "browser": "Opera",
-    "version": "73.0",
-    "passed": true
-  },
   "Chrome/73.0": {
     "browser": "Chrome",
     "version": "73.0",
@@ -99,14 +54,59 @@
     "version": "79.0",
     "passed": true
   },
-  "Firefox/84.0": {
-    "browser": "Firefox",
-    "version": "84.0",
-    "passed": true
-  },
   "Chrome/87.0": {
     "browser": "Chrome",
     "version": "87.0",
+    "passed": true
+  },
+  "Edge/17.0": {
+    "browser": "Edge",
+    "version": "17.0",
+    "passed": true
+  },
+  "Edge/18.0": {
+    "browser": "Edge",
+    "version": "18.0",
+    "passed": true
+  },
+  "Firefox/43.0": {
+    "browser": "Firefox",
+    "version": "43.0",
+    "passed": true
+  },
+  "Firefox/52.0": {
+    "browser": "Firefox",
+    "version": "52.0",
+    "passed": true
+  },
+  "Internet Explorer/10.0": {
+    "browser": "Internet Explorer",
+    "version": "10.0",
+    "passed": true
+  },
+  "Internet Explorer/11.0": {
+    "browser": "Internet Explorer",
+    "version": "11.0",
+    "passed": true
+  },
+  "Opera/73.0": {
+    "browser": "Opera",
+    "version": "73.0",
+    "passed": true
+  },
+  "Safari/8.0": {
+    "browser": "Safari",
+    "version": "8.0",
+    "passed": true
+  },
+  "Safari/12.1": {
+    "browser": "Safari",
+    "version": "12.1",
+    "passed": true
+  },
+  "Safari/14.0": {
+    "browser": "Safari",
+    "version": "14.0",
     "passed": true
   }
 }
