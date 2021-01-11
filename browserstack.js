@@ -3,6 +3,7 @@ const config = require("./browserstack.json");
 const webTests = require('./lib/meta');
 const fs = require('fs');
 const path = require('path');
+const semver = require('semver');
 
 browserstackRunner.run(config, function(error, report) {
 	const results = {};
@@ -51,6 +52,8 @@ browserstackRunner.run(config, function(error, report) {
 
 				const firstTest = run.tests[0];
 				const meta = webTests.meta(testInfo.spec.id, testInfo.spec.section);
+
+				// TODO check that "meta" is not null|undefined
 		
 				const state = {
 					browser: testInfo.runner.browser,
@@ -59,11 +62,11 @@ browserstackRunner.run(config, function(error, report) {
 				}
 
 				const result = results[key] || {
-					states: [],
+					states: {},
 					path: path.join(meta.path, `result.${testInfo.test}.json`)
 				};
 
-				result.states.push(state);
+				result.states[`${testInfo.runner.browser}/${testInfo.runner.version}`] = state ;
 
 
 				results[key] = result;
@@ -75,8 +78,52 @@ browserstackRunner.run(config, function(error, report) {
 		for (const key in results) {
 			const result = results[key];
 
+			const states = {};
+			
+			Object.keys(result.states).sort((a, b) => {
+				// This is not very efficient but good enough for now.
+				const aa = result.states[a];
+				const bb = result.states[b];
+
+				if (aa.browser != bb.browser) {
+					if (aa < bb) {
+						return -1;
+					}
+
+					if (aa > bb) {
+						return 1;
+					}
+				}
+
+				const av = semver.coerce(aa.version);
+				const bv = semver.coerce(bb.version);
+				if (!av || !bv) {
+					if (av < bv) {
+						return -1;
+					}
+
+					if (av > bv) {
+						return 1;
+					}
+
+					return 0;
+				}
+
+				if (semver.lt(av, bv)) {
+					return -1;
+				}
+
+				if (semver.gt(av, bv)) {
+					return 1;
+				}
+
+				return 0;
+			}).forEach((x) => {
+				states[x] = result.states[x];
+			});
+
 			console.log('write result', path.join(__dirname, result.path));
-			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(result.states, undefined, "  "));
+			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(states, undefined, "  "));
 		}
 	} catch (err) {
 		console.log("Error: " + err);

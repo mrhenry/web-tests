@@ -20,7 +20,8 @@ function testMeta() {
 			},
 			"tests": {
 				"pure": "test.pure.js",
-				"babel": "test.babel.js"
+				"babel": "test.babel.js",
+				"babel_webpack": "test.babel_webpack.js"
 			}
 		});
 	} catch (err) {
