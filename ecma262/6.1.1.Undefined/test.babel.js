@@ -1,4 +1,4 @@
-(function () {
+(function (cb) {
   var foo;
-  return typeof foo === "undefined";
-})();
+  cb(typeof foo === "undefined");
+})(callback);

@@ -20,9 +20,14 @@ function build() {
 	<div id="qunit-fixture"></div>
 	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('${ item.spec.name} (${testName})', function(assert) {
-			;var result = ${testSources[testName]}
-			;assert.ok(result);
+		QUnit.test('${JSON.stringify({ spec: { id: item.spec.id, section: item.spec.section }, test: testName })}', function(assert) {
+			var done = assert.async();
+			function callback(result) {
+				assert.ok(result);
+				done();
+			}
+
+			;${testSources[testName]};
 		});
 	</script>
 </body>

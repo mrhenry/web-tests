@@ -1,5 +1,5 @@
-(function () {
+(function (cb) {
   var foo = true;
   var baz = false;
-  return foo && !baz;
-})();
+  cb(foo && !baz);
+})(callback);

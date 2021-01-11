@@ -11,14 +11,19 @@
 	<div id="qunit-fixture"></div>
 	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('The Boolean Type (babel)', function(assert) {
-			;var result = (function () {
+		QUnit.test('{"spec":{"id":"ecma262","section":"6.1.3"},"test":"babel"}', function(assert) {
+			var done = assert.async();
+			function callback(result) {
+				assert.ok(result);
+				done();
+			}
+
+			;(function (cb) {
   var foo = true;
   var baz = false;
-  return foo && !baz;
-})();
-
-			;assert.ok(result);
+  cb(foo && !baz);
+})(callback);
+;
 		});
 	</script>
 </body>

@@ -11,13 +11,18 @@
 	<div id="qunit-fixture"></div>
 	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('The Null Type (babel)', function(assert) {
-			;var result = (function () {
-  var foo = null;
-  return !foo && typeof foo !== "undefined";
-})();
+		QUnit.test('{"spec":{"id":"ecma262","section":"6.1.2"},"test":"babel"}', function(assert) {
+			var done = assert.async();
+			function callback(result) {
+				assert.ok(result);
+				done();
+			}
 
-			;assert.ok(result);
+			;(function (cb) {
+  var foo = null;
+  cb(!foo && typeof foo !== "undefined");
+})(callback);
+;
 		});
 	</script>
 </body>
