@@ -19,7 +19,7 @@ function testMeta() {
 				"url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-undefined-type"
 			},
 			"tests": {
-				"pure": "test.js",
+				"pure": "test.pure.js",
 				"babel": "test.babel.js"
 			}
 		});
