@@ -12,7 +12,7 @@
   "Chrome/44.0": {
     "browser": "Chrome",
     "version": "44.0",
-    "passed": false
+    "passed": true
   },
   "Chrome/55.0": {
     "browser": "Chrome",
@@ -74,9 +74,9 @@
     "version": "43.0",
     "passed": true
   },
-  "Firefox/52.0": {
+  "Firefox/84.0": {
     "browser": "Firefox",
-    "version": "52.0",
+    "version": "84.0",
     "passed": true
   },
   "Internet Explorer/10.0": {

@@ -74,9 +74,9 @@
     "version": "43.0",
     "passed": true
   },
-  "Firefox/52.0": {
+  "Firefox/84.0": {
     "browser": "Firefox",
-    "version": "52.0",
+    "version": "84.0",
     "passed": true
   },
   "Internet Explorer/10.0": {
@@ -87,6 +87,11 @@
   "Internet Explorer/11.0": {
     "browser": "Internet Explorer",
     "version": "11.0",
+    "passed": true
+  },
+  "Opera/73.0": {
+    "browser": "Opera",
+    "version": "73.0",
     "passed": true
   },
   "Safari/8.0": {

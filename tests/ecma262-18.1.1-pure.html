@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
-	<title>The Null Type | pure | ecma262</title>
+	<title>globalThis | pure | ecma262</title>
 	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
 </head>
 <body>
@@ -11,7 +11,7 @@
 	<div id="qunit-fixture"></div>
 	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('{"spec":{"id":"ecma262","section":"6.1.2"},"test":"pure"}', function(assert) {
+		QUnit.test('{"spec":{"id":"ecma262","section":"18.1.1"},"test":"pure"}', function(assert) {
 			var done = assert.async();
 			function callback(result) {
 				assert.ok(result);
@@ -19,8 +19,7 @@
 			}
 
 			;(function (cb) {
-	var foo = null;
-	cb(!foo && (typeof foo !== "undefined"));
+	cb((typeof globalThis !== "undefined") && (typeof globalThis.String !== "undefined"));
 })(callback);
 ;
 		});

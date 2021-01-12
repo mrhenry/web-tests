@@ -17,32 +17,32 @@
   "Chrome/55.0": {
     "browser": "Chrome",
     "version": "55.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/56.0": {
     "browser": "Chrome",
     "version": "56.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/57.0": {
     "browser": "Chrome",
     "version": "57.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/63.0": {
     "browser": "Chrome",
     "version": "63.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/64.0": {
     "browser": "Chrome",
     "version": "64.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/65.0": {
     "browser": "Chrome",
     "version": "65.0",
-    "passed": true
+    "passed": false
   },
   "Chrome/73.0": {
     "browser": "Chrome",
@@ -62,12 +62,12 @@
   "Edge/17.0": {
     "browser": "Edge",
     "version": "17.0",
-    "passed": true
+    "passed": false
   },
   "Edge/18.0": {
     "browser": "Edge",
     "version": "18.0",
-    "passed": true
+    "passed": false
   },
   "Firefox/43.0": {
     "browser": "Firefox",
