@@ -2,111 +2,113 @@
   "Chrome/41.0": {
     "browser": "Chrome",
     "version": "41.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/43.0": {
     "browser": "Chrome",
     "version": "43.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/44.0": {
     "browser": "Chrome",
     "version": "44.0",
-    "passed": true
+    "score": 1
+  },
+  "Chrome/49.0": {
+    "browser": "Chrome",
+    "version": "49.0"
   },
   "Chrome/55.0": {
     "browser": "Chrome",
-    "version": "55.0",
-    "passed": true
+    "version": "55.0"
   },
   "Chrome/56.0": {
     "browser": "Chrome",
     "version": "56.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/57.0": {
     "browser": "Chrome",
     "version": "57.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/63.0": {
     "browser": "Chrome",
     "version": "63.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/64.0": {
     "browser": "Chrome",
     "version": "64.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/65.0": {
     "browser": "Chrome",
     "version": "65.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/73.0": {
     "browser": "Chrome",
     "version": "73.0",
-    "passed": true
+    "score": 1
   },
   "Chrome/79.0": {
     "browser": "Chrome",
     "version": "79.0",
-    "passed": true
-  },
-  "Chrome/87.0": {
-    "browser": "Chrome",
-    "version": "87.0",
-    "passed": true
+    "score": 1
   },
   "Edge/17.0": {
     "browser": "Edge",
     "version": "17.0",
-    "passed": true
+    "score": 1
   },
   "Edge/18.0": {
     "browser": "Edge",
     "version": "18.0",
-    "passed": true
+    "score": 1
   },
   "Firefox/43.0": {
     "browser": "Firefox",
     "version": "43.0",
-    "passed": true
+    "score": 1
   },
   "Firefox/84.0": {
     "browser": "Firefox",
     "version": "84.0",
-    "passed": true
+    "score": 1
   },
   "Internet Explorer/10.0": {
     "browser": "Internet Explorer",
     "version": "10.0",
-    "passed": true
+    "score": 1
   },
   "Internet Explorer/11.0": {
     "browser": "Internet Explorer",
     "version": "11.0",
-    "passed": true
-  },
-  "Opera/73.0": {
-    "browser": "Opera",
-    "version": "73.0",
-    "passed": true
-  },
-  "Safari/8.0": {
-    "browser": "Safari",
-    "version": "8.0",
-    "passed": true
+    "score": 1
   },
   "Safari/12.1": {
     "browser": "Safari",
-    "version": "12.1",
-    "passed": true
+    "version": "12.1"
   },
   "Safari/14.0": {
     "browser": "Safari",
     "version": "14.0",
-    "passed": true
+    "score": 1
+  },
+  "Chrome/87.0": {
+    "browser": "Chrome",
+    "version": "87.0",
+    "score": 1
+  },
+  "Opera/73.0": {
+    "browser": "Opera",
+    "version": "73.0",
+    "score": 1
+  },
+  "Safari/8.0": {
+    "browser": "Safari",
+    "version": "8.0",
+    "score": 1
   }
 }

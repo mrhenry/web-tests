@@ -12,7 +12,8 @@ browserstackRunner.run(config, function(error, report) {
 		report.forEach((run) => {
 			try {
 				if (run.tests.length !== 1) {
-					console.log('expected a single test result for', JSON.stringify(run, null, 2))
+					// TODO : find out why some runs have multiple entries
+					// console.log('expected a single test result for', JSON.stringify(run, null, 2))
 				}
 
 				const testInfo = (() => {
@@ -58,7 +59,7 @@ browserstackRunner.run(config, function(error, report) {
 				const state = {
 					browser: testInfo.runner.browser,
 					version: testInfo.runner.version,
-					passed: firstTest.status === "passed"
+					score: firstTest.status === "passed" ? 1 : 0
 				}
 
 				const result = results[key] || {
@@ -122,8 +123,19 @@ browserstackRunner.run(config, function(error, report) {
 				states[x] = result.states[x];
 			});
 
+			const existing = fs.existsSync(path.join(__dirname, result.path)) ? JSON.parse(fs.readFileSync(path.join(__dirname, result.path)) || '') : {};
+			for (const key in states) {
+				if (existing[key]) {
+					existing[key].score = (existing[key].score * 0.99) + (states[key].score * 0.01);
+				} else {
+					existing[key] = states[key];
+				}
+
+				existing[key].last_run = new Date();
+			}
+
 			console.log('write result', path.join(__dirname, result.path));
-			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(states, undefined, "  "));
+			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(existing, undefined, "  "));
 		}
 	} catch (err) {
 		console.log("Error: " + err);

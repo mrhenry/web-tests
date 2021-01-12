@@ -34,6 +34,7 @@ module.exports = [
 									'@babel/preset-env',
 									{
 										corejs: '^3.6.3',
+										bugfixes: true,
 										targets: {
 											browsers: [
 												"IE >= 6",

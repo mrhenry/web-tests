@@ -4,7 +4,10 @@
             "@babel/preset-env",
             {
                 "modules": false,
-                "corejs": "^3.8.2",
+                "bugfixes": true,
+                "exclude": [
+                    "@babel/plugin-transform-regenerator"
+                ],
                 "targets": {
                     "browsers": [
                         "IE >= 6",
@@ -15,7 +18,7 @@
                         "Firefox >= 2"
                     ]
                 },
-                "useBuiltIns": "usage"
+                "useBuiltIns": false
             }
         ]
     ]
