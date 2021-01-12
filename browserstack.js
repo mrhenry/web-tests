@@ -126,7 +126,7 @@ browserstackRunner.run(config, function(error, report) {
 			const existing = fs.existsSync(path.join(__dirname, result.path)) ? JSON.parse(fs.readFileSync(path.join(__dirname, result.path)) || '') : {};
 			for (const key in states) {
 				if (existing[key]) {
-					existing[key].score = (existing[key].score * 0.99) + (states[key].score * 0.01);
+					existing[key].score = ((existing[key].score || 1) * 0.99) + (states[key].score * 0.01);
 				} else {
 					existing[key] = states[key];
 				}
