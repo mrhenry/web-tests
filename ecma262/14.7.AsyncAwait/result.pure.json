@@ -20,8 +20,8 @@
   "Chrome/41.0": {
     "browser": "Chrome",
     "version": "41.0",
-    "score": 0.9043820750088043,
-    "last_run": "2021-01-13T17:40:38.281Z"
+    "score": 0.8953382542587163,
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Chrome/43.0": {
     "browser": "Chrome",
@@ -41,6 +41,12 @@
     "score": 0.99,
     "last_run": "2021-01-13T23:14:46.673Z"
   },
+  "Chrome/48.0": {
+    "browser": "Chrome",
+    "version": "48.0",
+    "score": 0,
+    "last_run": "2021-01-13T23:35:13.385Z"
+  },
   "Chrome/49.0": {
     "browser": "Chrome",
     "version": "49.0",
@@ -57,7 +63,7 @@
     "browser": "Chrome",
     "version": "55.0",
     "score": 1,
-    "last_run": "2021-01-13T17:40:38.281Z"
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Chrome/56.0": {
     "browser": "Chrome",
@@ -158,20 +164,26 @@
   "Firefox/11.0": {
     "browser": "Firefox",
     "version": "11.0",
-    "score": 0,
-    "last_run": "2021-01-13T21:12:11.701Z"
+    "score": 0.99,
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Firefox/12.0": {
     "browser": "Firefox",
     "version": "12.0",
-    "score": 0,
-    "last_run": "2021-01-13T23:14:46.673Z"
+    "score": 0.99,
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Firefox/13.0": {
     "browser": "Firefox",
     "version": "13.0",
     "score": 0,
     "last_run": "2021-01-13T21:12:11.701Z"
+  },
+  "Firefox/19.0": {
+    "browser": "Firefox",
+    "version": "19.0",
+    "score": 0,
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Firefox/28.0": {
     "browser": "Firefox",
@@ -215,17 +227,29 @@
     "score": 1,
     "last_run": "2021-01-13T21:29:59.484Z"
   },
+  "Firefox/55.0": {
+    "browser": "Firefox",
+    "version": "55.0",
+    "score": 1,
+    "last_run": "2021-01-13T23:35:13.385Z"
+  },
   "Firefox/57.0": {
     "browser": "Firefox",
     "version": "57.0",
     "score": 1,
-    "last_run": "2021-01-13T23:14:46.673Z"
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Firefox/58.0": {
     "browser": "Firefox",
     "version": "58.0",
     "score": 1,
     "last_run": "2021-01-13T21:29:59.484Z"
+  },
+  "Firefox/73.0": {
+    "browser": "Firefox",
+    "version": "73.0",
+    "score": 1,
+    "last_run": "2021-01-13T23:35:13.385Z"
   },
   "Firefox/76.0": {
     "browser": "Firefox",
