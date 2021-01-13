@@ -50,32 +50,7 @@ function build() {
 			})
 		],
 		"test_server_port": "8899",
-		"browsers": [
-			// "ie_8",
-			// "ie_9",
-			"ie_10",
-			"ie_11",
-			"safari_8",
-			"safari_12.1",
-			"chrome_41",
-			"chrome_43",
-			"chrome_44",
-			"chrome_55",
-			"chrome_56",
-			"chrome_57",
-			"chrome_63",
-			"chrome_64",
-			"chrome_65",
-			"chrome_73",
-			"chrome_79",
-			"safari_latest",
-			"chrome_latest",
-			"opera_latest",
-			"firefox_43",
-			"firefox_latest",
-			"edge_17",
-			"edge_18"
-		]
+		"browsers": JSON.parse(fs.readFileSync(path.join(__dirname, './browsers.json')))
 	}, undefined, "  "));
 }
 
