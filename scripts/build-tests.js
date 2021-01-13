@@ -50,9 +50,28 @@ function build() {
 			})
 		],
 		"test_server_port": "8899",
-		"browsers": JSON.parse(fs.readFileSync(path.join(__dirname, './browsers.json')))
+		"browsers": shuffle(JSON.parse(fs.readFileSync(path.join(__dirname, './browsers.json')))).slice(0, 10)
 	}, undefined, "  "));
 }
 
 build();
 console.log('updated tests/*');
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}

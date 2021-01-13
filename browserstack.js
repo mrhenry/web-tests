@@ -139,12 +139,12 @@ browserstackRunner.run(config, function(error, report) {
 		}
 	} catch (err) {
 		console.log("Error: " + err);
-		process.exit(1);
+		process.exit(0);
 	}
 
 	if (error) {
 		console.log("Error: " + error);
-		process.exit(1);
+		process.exit(0);
 	}
 
 	console.log("Test Finished");
