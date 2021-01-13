@@ -79,12 +79,23 @@ browserstackRunner.run(config, function(error, report) {
 		for (const key in results) {
 			const result = results[key];
 
-			const states = {};
+			const existing = fs.existsSync(path.join(__dirname, result.path)) ? JSON.parse(fs.readFileSync(path.join(__dirname, result.path)) || '') : {};
+			for (const key in result.states) {
+				if (existing[key]) {
+					existing[key].score = ((existing[key].score || 1) * 0.99) + (result.states[key].score * 0.01);
+				} else {
+					existing[key] = result.states[key];
+				}
+
+				existing[key].last_run = new Date();
+			}
+
+			const sorted = {};
 			
-			Object.keys(result.states).sort((a, b) => {
+			Object.keys(existing).sort((a, b) => {
 				// This is not very efficient but good enough for now.
-				const aa = result.states[a];
-				const bb = result.states[b];
+				const aa = existing[a];
+				const bb = existing[b];
 
 				if (aa.browser != bb.browser) {
 					if (aa.browser < bb.browser) {
@@ -120,22 +131,11 @@ browserstackRunner.run(config, function(error, report) {
 
 				return 0;
 			}).forEach((x) => {
-				states[x] = result.states[x];
+				sorted[x] = existing[x];
 			});
 
-			const existing = fs.existsSync(path.join(__dirname, result.path)) ? JSON.parse(fs.readFileSync(path.join(__dirname, result.path)) || '') : {};
-			for (const key in states) {
-				if (existing[key]) {
-					existing[key].score = ((existing[key].score || 1) * 0.99) + (states[key].score * 0.01);
-				} else {
-					existing[key] = states[key];
-				}
-
-				existing[key].last_run = new Date();
-			}
-
 			console.log('write result', path.join(__dirname, result.path));
-			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(existing, undefined, "  "));
+			fs.writeFileSync(path.join(__dirname, result.path), JSON.stringify(sorted, undefined, "  "));
 		}
 	} catch (err) {
 		console.log("Error: " + err);
