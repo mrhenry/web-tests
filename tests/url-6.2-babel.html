@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>URLSearchParams class | babel | url</title>
+	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+	<script src="/qunit/qunit-2.9.2.js"></script>
+	<script>
+		QUnit.test('{"spec":{"id":"url","section":"6.2"},"test":"babel"}', function(assert) {
+			var done = assert.async();
+			function callback(result) {
+				assert.ok(result);
+				done();
+			}
+
+			;(function (cb) {
+  var params = new URLSearchParams({
+    key: "730d67"
+  });
+  cb(typeof params.toString() === "key=730d67");
+})(callback);
+;
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "spec": {
+        "org": "whatwg",
+        "id": "url",
+        "section": "6.2",
+        "name": "URLSearchParams class",
+        "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
+    },
+    "tests": {
+        "pure": "test.pure.js",
+        "babel": "test.babel.js",
+        "babel_webpack": "test.babel_webpack.js"
+    }
+}

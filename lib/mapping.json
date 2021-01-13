@@ -116,5 +116,27 @@
         "path": "ecma262/6.1.4.String"
       }
     ]
+  },
+  "url": {
+    "bySection": {
+      "6.2": 0
+    },
+    "items": [
+      {
+        "spec": {
+          "org": "whatwg",
+          "id": "url",
+          "section": "6.2",
+          "name": "URLSearchParams class",
+          "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
+        },
+        "tests": {
+          "pure": "test.pure.js",
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js"
+        },
+        "path": "url/6.2.URLSearchParams"
+      }
+    ]
   }
 }
