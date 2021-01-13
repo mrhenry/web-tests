@@ -1,4 +1,16 @@
 {
+  "Chrome/32.0": {
+    "browser": "Chrome",
+    "version": "32.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
+  "Chrome/39.0": {
+    "browser": "Chrome",
+    "version": "39.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
   "Chrome/41.0": {
     "browser": "Chrome",
     "version": "41.0",
@@ -16,6 +28,12 @@
     "version": "44.0",
     "score": 1,
     "last_run": "2021-01-13T17:40:38.284Z"
+  },
+  "Chrome/46.0": {
+    "browser": "Chrome",
+    "version": "46.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
   },
   "Chrome/49.0": {
     "browser": "Chrome",
@@ -71,6 +89,12 @@
     "score": 1,
     "last_run": "2021-01-13T17:40:38.284Z"
   },
+  "Chrome/68.0": {
+    "browser": "Chrome",
+    "version": "68.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
   "Chrome/73.0": {
     "browser": "Chrome",
     "version": "73.0",
@@ -125,11 +149,23 @@
     "score": 1,
     "last_run": "2021-01-13T21:12:11.705Z"
   },
+  "Firefox/28.0": {
+    "browser": "Firefox",
+    "version": "28.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
   "Firefox/32.0": {
     "browser": "Firefox",
     "version": "32.0",
     "score": 1,
     "last_run": "2021-01-13T21:12:11.705Z"
+  },
+  "Firefox/36.0": {
+    "browser": "Firefox",
+    "version": "36.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
   },
   "Firefox/43.0": {
     "browser": "Firefox",
@@ -142,6 +178,24 @@
     "version": "52.0",
     "score": 1,
     "last_run": "2021-01-13T17:15:13.447Z"
+  },
+  "Firefox/53.0": {
+    "browser": "Firefox",
+    "version": "53.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
+  "Firefox/57.0": {
+    "browser": "Firefox",
+    "version": "57.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
+  },
+  "Firefox/58.0": {
+    "browser": "Firefox",
+    "version": "58.0",
+    "score": 1,
+    "last_run": "2021-01-13T21:29:59.486Z"
   },
   "Firefox/76.0": {
     "browser": "Firefox",
