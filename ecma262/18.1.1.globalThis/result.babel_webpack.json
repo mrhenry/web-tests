@@ -11,17 +11,35 @@
     "score": 1,
     "last_run": "2021-01-13T23:49:46.622Z"
   },
+  "Chrome/21.0": {
+    "browser": "Chrome",
+    "version": "21.0",
+    "score": 1,
+    "last_run": "2021-01-14T07:18:46.623Z"
+  },
   "Chrome/22.0": {
     "browser": "Chrome",
     "version": "22.0",
     "score": 1,
     "last_run": "2021-01-13T23:14:46.678Z"
   },
+  "Chrome/27.0": {
+    "browser": "Chrome",
+    "version": "27.0",
+    "score": 1,
+    "last_run": "2021-01-14T07:18:46.623Z"
+  },
   "Chrome/32.0": {
     "browser": "Chrome",
     "version": "32.0",
     "score": 1,
     "last_run": "2021-01-13T23:49:46.622Z"
+  },
+  "Chrome/38.0": {
+    "browser": "Chrome",
+    "version": "38.0",
+    "score": 1,
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Chrome/39.0": {
     "browser": "Chrome",
@@ -34,6 +52,12 @@
     "version": "41.0",
     "score": 1,
     "last_run": "2021-01-13T23:35:13.392Z"
+  },
+  "Chrome/42.0": {
+    "browser": "Chrome",
+    "version": "42.0",
+    "score": 1,
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Chrome/43.0": {
     "browser": "Chrome",
@@ -141,7 +165,7 @@
     "browser": "Chrome",
     "version": "83.0",
     "score": 1,
-    "last_run": "2021-01-13T23:49:46.622Z"
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Chrome/87.0": {
     "browser": "Chrome",
@@ -195,7 +219,7 @@
     "browser": "Firefox",
     "version": "13.0",
     "score": 1,
-    "last_run": "2021-01-13T21:12:11.710Z"
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Firefox/19.0": {
     "browser": "Firefox",
@@ -213,7 +237,7 @@
     "browser": "Firefox",
     "version": "28.0",
     "score": 1,
-    "last_run": "2021-01-13T21:29:59.491Z"
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Firefox/30.0": {
     "browser": "Firefox",
@@ -286,6 +310,12 @@
     "version": "73.0",
     "score": 1,
     "last_run": "2021-01-13T23:35:13.392Z"
+  },
+  "Firefox/75.0": {
+    "browser": "Firefox",
+    "version": "75.0",
+    "score": 1,
+    "last_run": "2021-01-14T07:18:46.623Z"
   },
   "Firefox/76.0": {
     "browser": "Firefox",
