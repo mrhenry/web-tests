@@ -22,6 +22,25 @@ function build() {
 		}
 	});
 
+	webTests.list('geometry-1').forEach((item) => {
+		const testSources = webTests.testSources('geometry-1', item.spec.section);
+
+		for (const testName in testSources) {
+			fs.writeFileSync(
+				path.join(
+					__dirname,
+					'../tests',
+					`geometry_1-${item.spec.section}-${testName}.html`
+				),
+				testTemplateHTML(
+					testName,
+					item,
+					testSources,
+				)
+			);
+		}
+	});
+
 	webTests.list('url').forEach((item) => {
 		const testSources = webTests.testSources('url', item.spec.section);
 

@@ -7,6 +7,10 @@ function build() {
 			bySection: {},
 			items: [],
 		},
+		geometry_1: {
+			bySection: {},
+			items: [],
+		},
 		url: {
 			bySection: {},
 			items: [],
@@ -20,6 +24,15 @@ function build() {
 
 		out.ecma262.items.push(meta);
 		out.ecma262.bySection[meta.spec.section] = index;
+	});
+
+	fs.readdirSync(path.join(__dirname, '../geometry-1/')).forEach((item) => {
+		const meta = JSON.parse(fs.readFileSync(path.join(__dirname, '../geometry-1/', item, 'meta.json')));
+		const index = out.geometry_1.items.length;
+		meta.path = path.join('geometry-1/', item);
+
+		out.geometry_1.items.push(meta);
+		out.geometry_1.bySection[meta.spec.section] = index;
 	});
 
 	fs.readdirSync(path.join(__dirname, '../url/')).forEach((item) => {

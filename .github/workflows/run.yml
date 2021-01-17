@@ -59,6 +59,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add ./ecma262
+          git add ./geometry-1
           git add ./url
           git commit -m "run"
           git push --set-upstream origin main
