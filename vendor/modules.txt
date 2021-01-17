@@ -1,0 +1,15 @@
+# github.com/blang/semver v3.5.1+incompatible
+github.com/blang/semver
+# github.com/google/uuid v1.1.5
+## explicit
+github.com/google/uuid
+# github.com/tebeka/selenium v0.9.9
+## explicit
+github.com/tebeka/selenium
+github.com/tebeka/selenium/chrome
+github.com/tebeka/selenium/firefox
+github.com/tebeka/selenium/internal/zip
+github.com/tebeka/selenium/log
+# golang.org/x/sync v0.0.0-20190423024810-112230192c58
+## explicit
+golang.org/x/sync/semaphore

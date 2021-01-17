@@ -4,21 +4,15 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<title>Async Function Definitions | babel_webpack | ecma262</title>
-	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
-	<div id="qunit"></div>
-	<div id="qunit-fixture"></div>
-	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('{"spec":{"id":"ecma262","section":"14.7"},"test":"babel_webpack"}', function(assert) {
-			var done = assert.async();
-			function callback(result) {
-				assert.ok(result);
-				done();
-			}
-
-			;/******/ (function() { // webpackBootstrap
+		function callback(success) {
+			window.testSuccess = success;
+		}
+		
+		;/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 3099:
@@ -2932,7 +2926,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 }();
 /******/ })()
 ;;
-		});
 	</script>
 </body>
 </html>

@@ -4,25 +4,18 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<title>globalThis | pure | ecma262</title>
-	<link rel="stylesheet" href="/qunit/qunit-2.9.2.css" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
-	<div id="qunit"></div>
-	<div id="qunit-fixture"></div>
-	<script src="/qunit/qunit-2.9.2.js"></script>
 	<script>
-		QUnit.test('{"spec":{"id":"ecma262","section":"18.1.1"},"test":"pure"}', function(assert) {
-			var done = assert.async();
-			function callback(result) {
-				assert.ok(result);
-				done();
-			}
-
-			;(function (cb) {
+		function callback(success) {
+			window.testSuccess = success;
+		}
+		
+		;(function (cb) {
 	cb((typeof globalThis !== "undefined") && (typeof globalThis.String !== "undefined"));
 })(callback);
 ;
-		});
 	</script>
 </body>
 </html>

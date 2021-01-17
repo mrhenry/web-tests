@@ -9,4 +9,7 @@
 
 all: ../tests/witness ../lib/mapping.json
 
-.PHONY: all
+web-tests-browserstack:
+	go install ./scripts/web-tests-browserstack/...
+
+.PHONY: all web-tests-browserstack

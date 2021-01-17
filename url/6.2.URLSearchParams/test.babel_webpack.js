@@ -3699,7 +3699,7 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
   var params = new URLSearchParams({
     key: "730d67"
   });
-  cb(typeof params.toString() === "key=730d67");
+  cb(params.toString() === "key=730d67");
 })(callback);
 }();
 /******/ })()
