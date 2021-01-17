@@ -20,7 +20,8 @@ jobs:
           node-version: 15
         
       - uses: actions/setup-go@v2
-      - run: go env
+        with:
+          go-version: '^1.15'
 
       - name: 'BrowserStack Env Setup'
         uses: 'browserstack/github-actions/setup-env@master'
@@ -36,14 +37,13 @@ jobs:
           local-testing: start
           local-identifier: random
 
-      - run : echo "$GOPATH"
       - name: make
         run: |
           npm install
           make
 
       - name: test
-        run: $GOPATH/bin/web-tests-browserstack
+        run: web-tests-browserstack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
