@@ -35,7 +35,8 @@ jobs:
           local-testing: start
           local-identifier: random
 
-      - run: |
+      - name: make
+        run: |
           npm install
           make
 

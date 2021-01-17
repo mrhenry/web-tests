@@ -7,9 +7,10 @@
 	@node ./build-tests.js
 	@echo "witness" > ../tests/witness
 
-all: ../tests/witness ../lib/mapping.json
+all: ../tests/witness ../lib/mapping.json web-tests-browserstack
 
 web-tests-browserstack:
-	go install ./scripts/web-tests-browserstack/...
+	go install ./web-tests-browserstack/...
+	@echo "build web-tests-browserstack"
 
 .PHONY: all web-tests-browserstack
