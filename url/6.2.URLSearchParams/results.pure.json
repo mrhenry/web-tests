@@ -9,7 +9,7 @@
   },
   "android/4.4 - android/": {
     "browser": "android",
-    "last_run": "2021-01-17T17:03:45.373281+01:00",
+    "last_run": "2021-01-17T19:09:39.354673557Z",
     "os": "android",
     "os_version": "4.4",
     "score": 1,
@@ -47,6 +47,14 @@
     "score": 1,
     "version": ""
   },
+  "android/8.0 - android/": {
+    "browser": "android",
+    "last_run": "2021-01-17T19:10:12.550800491Z",
+    "os": "android",
+    "os_version": "8.0",
+    "score": 1,
+    "version": ""
+  },
   "android/8.1 - android/": {
     "browser": "android",
     "last_run": "2021-01-17T17:05:11.751243+01:00",
@@ -73,7 +81,7 @@
   },
   "chrome/17.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:59:38.363141178Z",
+    "last_run": "2021-01-17T19:07:22.496881643Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -121,7 +129,7 @@
   },
   "chrome/24.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T19:01:28.02210686Z",
+    "last_run": "2021-01-17T19:10:39.477154957Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -185,7 +193,7 @@
   },
   "chrome/32.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T17:04:20.488753+01:00",
+    "last_run": "2021-01-17T19:08:08.161593937Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -201,7 +209,7 @@
   },
   "chrome/34.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:26:05.967897366Z",
+    "last_run": "2021-01-17T19:11:47.024642856Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -241,7 +249,7 @@
   },
   "chrome/39.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T17:03:30.824938+01:00",
+    "last_run": "2021-01-17T19:09:24.472367248Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -257,7 +265,7 @@
   },
   "chrome/41.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:57:20.213393341Z",
+    "last_run": "2021-01-17T19:11:55.552459822Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -265,7 +273,7 @@
   },
   "chrome/42.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:30:56.752198+01:00",
+    "last_run": "2021-01-17T19:11:12.468687975Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -281,7 +289,7 @@
   },
   "chrome/45.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T19:02:41.436185012Z",
+    "last_run": "2021-01-17T19:10:39.270481331Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -303,6 +311,14 @@
     "score": 0,
     "version": "47.0"
   },
+  "chrome/48.0": {
+    "browser": "chrome",
+    "last_run": "2021-01-17T19:06:15.622741315Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "48.0"
+  },
   "chrome/49.0": {
     "browser": "chrome",
     "last_run": "2021-01-17T16:52:19.192488+01:00",
@@ -321,7 +337,7 @@
   },
   "chrome/51.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T19:02:42.188405968Z",
+    "last_run": "2021-01-17T19:10:44.679877534Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -343,9 +359,25 @@
     "score": 0,
     "version": "53.0"
   },
+  "chrome/54.0": {
+    "browser": "chrome",
+    "last_run": "2021-01-17T19:07:23.495303873Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "54.0"
+  },
+  "chrome/55.0": {
+    "browser": "chrome",
+    "last_run": "2021-01-17T19:09:31.107039419Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "55.0"
+  },
   "chrome/57.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:27:38.644913+01:00",
+    "last_run": "2021-01-17T19:10:08.584179796Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -353,7 +385,7 @@
   },
   "chrome/58.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T17:02:21.137896+01:00",
+    "last_run": "2021-01-17T19:09:47.757698299Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -361,7 +393,7 @@
   },
   "chrome/59.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:38:23.50696357Z",
+    "last_run": "2021-01-17T19:10:19.152506713Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -385,7 +417,7 @@
   },
   "chrome/63.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T16:57:31.797403+01:00",
+    "last_run": "2021-01-17T19:07:45.694096409Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -407,9 +439,25 @@
     "score": 1,
     "version": "65.0"
   },
+  "chrome/66.0": {
+    "browser": "chrome",
+    "last_run": "2021-01-17T19:08:35.484965081Z",
+    "os": "",
+    "os_version": "",
+    "score": 1,
+    "version": "66.0"
+  },
+  "chrome/67.0": {
+    "browser": "chrome",
+    "last_run": "2021-01-17T19:07:38.490611046Z",
+    "os": "",
+    "os_version": "",
+    "score": 1,
+    "version": "67.0"
+  },
   "chrome/68.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T17:02:04.744627+01:00",
+    "last_run": "2021-01-17T19:07:22.432565398Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -441,7 +489,7 @@
   },
   "chrome/73.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:57:30.894553714Z",
+    "last_run": "2021-01-17T19:10:55.767454637Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -465,7 +513,7 @@
   },
   "chrome/76.0": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:21:41.09519914Z",
+    "last_run": "2021-01-17T19:09:02.931629555Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -545,7 +593,7 @@
   },
   "chrome/88.0 beta": {
     "browser": "chrome",
-    "last_run": "2021-01-17T18:40:58.897993048Z",
+    "last_run": "2021-01-17T19:07:57.937627499Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -574,6 +622,14 @@
     "os_version": "",
     "score": 1,
     "version": "18.0"
+  },
+  "edge/80.0": {
+    "browser": "edge",
+    "last_run": "2021-01-17T19:11:36.794822358Z",
+    "os": "",
+    "os_version": "",
+    "score": 1,
+    "version": "80.0"
   },
   "edge/81.0": {
     "browser": "edge",
@@ -617,7 +673,7 @@
   },
   "edge/87.0": {
     "browser": "edge",
-    "last_run": "2021-01-17T18:20:07.423633969Z",
+    "last_run": "2021-01-17T19:08:03.624757032Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -681,7 +737,7 @@
   },
   "firefox/17.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:40:09.736627276Z",
+    "last_run": "2021-01-17T19:06:44.781367044Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -694,6 +750,14 @@
     "os_version": "",
     "score": 0,
     "version": "18.0"
+  },
+  "firefox/19.0": {
+    "browser": "firefox",
+    "last_run": "2021-01-17T19:09:04.316401405Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "19.0"
   },
   "firefox/20.0": {
     "browser": "firefox",
@@ -833,7 +897,7 @@
   },
   "firefox/37.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:41:15.57174699Z",
+    "last_run": "2021-01-17T19:06:50.949026057Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -841,7 +905,7 @@
   },
   "firefox/38.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T17:06:27.080862+01:00",
+    "last_run": "2021-01-17T19:06:03.362584333Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -865,7 +929,7 @@
   },
   "firefox/40.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:57:51.547004715Z",
+    "last_run": "2021-01-17T19:09:23.717198738Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -889,11 +953,19 @@
   },
   "firefox/43.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T19:03:08.934939995Z",
+    "last_run": "2021-01-17T19:07:12.062695676Z",
     "os": "",
     "os_version": "",
     "score": 0,
     "version": "43.0"
+  },
+  "firefox/44.0": {
+    "browser": "firefox",
+    "last_run": "2021-01-17T19:06:05.58685848Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "44.0"
   },
   "firefox/45.0": {
     "browser": "firefox",
@@ -945,7 +1017,7 @@
   },
   "firefox/50.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:57:14.115800815Z",
+    "last_run": "2021-01-17T19:11:16.819204281Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -953,7 +1025,7 @@
   },
   "firefox/51.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:20:34.616173799Z",
+    "last_run": "2021-01-17T19:08:09.025799227Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -993,7 +1065,7 @@
   },
   "firefox/59.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:21:32.021914184Z",
+    "last_run": "2021-01-17T19:06:09.604429831Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1001,7 +1073,7 @@
   },
   "firefox/6.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T19:02:09.948776816Z",
+    "last_run": "2021-01-17T19:07:40.612998372Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -1033,7 +1105,7 @@
   },
   "firefox/63.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T17:05:03.880026+01:00",
+    "last_run": "2021-01-17T19:08:58.64896412Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1049,7 +1121,7 @@
   },
   "firefox/65.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:56:56.100995548Z",
+    "last_run": "2021-01-17T19:08:13.649599729Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1153,7 +1225,7 @@
   },
   "firefox/77.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T19:00:29.244216087Z",
+    "last_run": "2021-01-17T19:08:25.821669393Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1161,7 +1233,7 @@
   },
   "firefox/78.0": {
     "browser": "firefox",
-    "last_run": "2021-01-17T18:56:51.149815355Z",
+    "last_run": "2021-01-17T19:07:04.901644896Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1225,7 +1297,7 @@
   },
   "ie/10.0": {
     "browser": "ie",
-    "last_run": "2021-01-17T18:39:05.588935406Z",
+    "last_run": "2021-01-17T19:06:24.612673625Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -1241,7 +1313,7 @@
   },
   "ie/7.0": {
     "browser": "ie",
-    "last_run": "2021-01-17T17:05:55.084645+01:00",
+    "last_run": "2021-01-17T19:06:48.713546294Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -1265,7 +1337,7 @@
   },
   "ios/10 - iphone/": {
     "browser": "iphone",
-    "last_run": "2021-01-17T18:40:54.358197209Z",
+    "last_run": "2021-01-17T19:11:33.087359962Z",
     "os": "ios",
     "os_version": "10",
     "score": 0,
@@ -1281,7 +1353,7 @@
   },
   "ios/11 - iphone/": {
     "browser": "iphone",
-    "last_run": "2021-01-17T16:57:01.563949+01:00",
+    "last_run": "2021-01-17T19:08:02.904964992Z",
     "os": "ios",
     "os_version": "11",
     "score": 1,
@@ -1345,7 +1417,7 @@
   },
   "safari/10.1": {
     "browser": "safari",
-    "last_run": "2021-01-17T18:40:39.982266573Z",
+    "last_run": "2021-01-17T19:06:25.122153644Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -1377,7 +1449,7 @@
   },
   "safari/14.0": {
     "browser": "safari",
-    "last_run": "2021-01-17T19:01:29.468344407Z",
+    "last_run": "2021-01-17T19:09:48.119207363Z",
     "os": "",
     "os_version": "",
     "score": 1,
@@ -1385,7 +1457,7 @@
   },
   "safari/5.1": {
     "browser": "safari",
-    "last_run": "2021-01-17T17:06:03.384811+01:00",
+    "last_run": "2021-01-17T19:08:42.314010864Z",
     "os": "",
     "os_version": "",
     "score": 0,
@@ -1398,6 +1470,14 @@
     "os_version": "",
     "score": 0,
     "version": "6.0"
+  },
+  "safari/8.0": {
+    "browser": "safari",
+    "last_run": "2021-01-17T19:06:55.562201074Z",
+    "os": "",
+    "os_version": "",
+    "score": 0,
+    "version": "8.0"
   },
   "safari/9.1": {
     "browser": "safari",
