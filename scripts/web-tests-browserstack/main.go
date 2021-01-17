@@ -151,7 +151,7 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 				}
 
 				testResults = append(testResults, test)
-				log.Println(test.Path, test.Success(), test.Duration())
+				log.Println(browser.ResultKey(), test.Path, test.Success(), test.Duration())
 			}
 		}
 	}()
