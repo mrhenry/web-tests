@@ -233,17 +233,23 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]mapping
 			}
 		}
 
+		var newScore float64
+		if test.Success() {
+			newScore = 1
+		}
+
 		if _, ok := results[browser.ResultKey()]; !ok {
 			results[browser.ResultKey()] = map[string]interface{}{
-				"browser": browser.Browser,
-				"version": browser.BrowserVersion,
-				"score":   0,
+				"browser":    browser.Browser,
+				"version":    browser.BrowserVersion,
+				"os":         browser.OS,
+				"os_version": browser.OSVersion,
+				"score":      newScore,
 			}
 		}
 
 		if _, ok := results[browser.ResultKey()]["score"]; !ok {
-			var zeroFloat float64
-			results[browser.ResultKey()]["score"] = zeroFloat
+			results[browser.ResultKey()]["score"] = newScore
 		}
 
 		var score float64
@@ -252,11 +258,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]mapping
 			score = vv
 		}
 
-		if test.Success() {
-			score = (score * 0.99) + 0.01
-		} else {
-			score = score * 0.99
-		}
+		score = (score * 0.99) + (newScore * 0.01)
 
 		if score > 1 {
 			score = 1
