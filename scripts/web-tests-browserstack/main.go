@@ -70,7 +70,7 @@ func main() {
 			defer sema.Release(1)
 			err = runTest(ctx, client, b, sessionName, mapping)
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err) // non-fatal for us
 			}
 		}(b)
 	}
@@ -82,7 +82,7 @@ func main() {
 
 	err = done()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err) // non-fatal for us
 	}
 }
 

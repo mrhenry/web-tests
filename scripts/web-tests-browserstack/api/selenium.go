@@ -171,11 +171,13 @@ HTTP_CACHE_LOOP:
 
 	wg.Wait()
 
+	// TODO : this needs timeout handling
 	err = wd.Close()
 	if err != nil {
 		return err
 	}
 
+	// TODO : this needs timeout handling
 	err = wd.Quit()
 	if err != nil {
 		return err
