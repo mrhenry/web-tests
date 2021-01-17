@@ -94,8 +94,15 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 
 	wd, err := selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
 	if err != nil {
-		log.Println("new selenium remote : ", err)
-		return err
+		if strings.Contains(err.Error(), "Could not start Mobile Browser") {
+			time.Sleep(time.Minute)
+			wd, err = selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
+		}
+
+		if err != nil {
+			log.Println("new selenium remote : ", err)
+			return err
+		}
 	}
 
 	defer wd.Quit()
