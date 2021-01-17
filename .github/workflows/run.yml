@@ -36,13 +36,14 @@ jobs:
           local-testing: start
           local-identifier: random
 
+      - run : echo "$GOPATH"
       - name: make
         run: |
           npm install
           make
 
       - name: test
-        run: $GOPATH/web-tests-browserstack
+        run: $GOPATH/bin/web-tests-browserstack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
