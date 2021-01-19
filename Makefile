@@ -1,29 +1,18 @@
 .DEFAULT_GOAL := all
 
-ecma262_dirs := $(wildcard ./ecma262/*)
+feature_dirs := $(wildcard ./specifications/*/*/*)
 
-ecma262: $(ecma262_dirs)
+features: $(feature_dirs)
 
-$(ecma262_dirs):
-	@$(MAKE) -C $@
-
-geometry_1_dirs := $(wildcard ./geometry-1/*)
-
-geometry_1: $(geometry_1_dirs)
-
-$(geometry_1_dirs):
-	@$(MAKE) -C $@
-
-url_dirs := $(wildcard ./url/*)
-
-url: $(url_dirs)
-
-$(url_dirs):
+$(feature_dirs):
 	@$(MAKE) -C $@
 
 scripts: 
 	@$(MAKE) -C ./scripts
 
-all: ecma262 url scripts geometry_1
+build-mapping: scripts
+	web-tests-build-mapping
 
-.PHONY: all ecma262 $(ecma262_dirs) url $(url_dirs) geometry_1 $(geometry_1_dirs) scripts
+all: features scripts build-mapping
+
+.PHONY: all features $(feature_dirs) scripts build-mapping

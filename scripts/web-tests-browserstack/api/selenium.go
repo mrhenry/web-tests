@@ -45,19 +45,24 @@ func (x Test) Duration() time.Duration {
 	return x.end.Sub(x.start)
 }
 
-func (x Test) MappingID() string {
-	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), "-")
+func (x Test) MappingOrg() string {
+	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), ":")
 	return parts[0]
 }
 
-func (x Test) MappingSection() string {
-	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), "-")
+func (x Test) MappingID() string {
+	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), ":")
 	return parts[1]
 }
 
-func (x Test) ResultsFileName() string {
-	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), "-")
-	return fmt.Sprintf("results.%s.json", parts[2])
+func (x Test) MappingSection() string {
+	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), ":")
+	return parts[2]
+}
+
+func (x Test) MappingTestName() string {
+	parts := strings.Split(strings.TrimPrefix(strings.TrimSuffix(x.Path, ".html"), "tests/"), ":")
+	return parts[3]
 }
 
 func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, in chan Test, out chan Test) error {

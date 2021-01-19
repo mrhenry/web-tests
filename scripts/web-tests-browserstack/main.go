@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/romainmenke/web-tests/scripts/web-tests-browserstack/api"
@@ -86,7 +84,7 @@ func main() {
 	}
 }
 
-func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]mappingPart) error {
+func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*5)
 	defer cancel()
 
@@ -193,20 +191,19 @@ func getTestPaths() ([]string, error) {
 	return files, nil
 }
 
-var fsMu = &sync.Mutex{} // TODO : clean this up
-func writeResults(browser api.Browser, test api.Test, mapping map[string]mappingPart) error {
-	fsMu.Lock()
-	fsMu.Unlock()
-
-	resultsPath := ""
-	if itemIndex, ok := mapping[test.MappingID()].BySection[test.MappingSection()]; !ok {
-		return errors.New("no mapping for test " + test.Path)
-	} else {
-		item := mapping[test.MappingID()].Items[itemIndex]
-		resultsPath = filepath.Join(item.Path, test.ResultsFileName())
+func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature) error {
+	resultsDir := ""
+	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; !ok {
+		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
+		err := os.MkdirAll(resultsDir, os.ModePerm)
+		if err != nil {
+			return err
+		}
 	}
 
-	results := map[string]map[string]interface{}{}
+	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", browser.ResultKey()))
+
+	results := map[string]interface{}{}
 
 	{
 		f1, err := os.Open(resultsPath)
@@ -238,22 +235,12 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]mapping
 			newScore = 1
 		}
 
-		if _, ok := results[browser.ResultKey()]; !ok {
-			results[browser.ResultKey()] = map[string]interface{}{
-				"browser":    browser.Browser,
-				"version":    browser.BrowserVersion,
-				"os":         browser.OS,
-				"os_version": browser.OSVersion,
-				"score":      newScore,
-			}
-		}
-
-		if _, ok := results[browser.ResultKey()]["score"]; !ok {
-			results[browser.ResultKey()]["score"] = newScore
+		if _, ok := results["score"]; !ok {
+			results["score"] = newScore
 		}
 
 		var score float64
-		v := results[browser.ResultKey()]["score"]
+		v := results["score"]
 		if vv, ok := v.(float64); ok {
 			score = vv
 		}
@@ -268,8 +255,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]mapping
 			score = 0
 		}
 
-		results[browser.ResultKey()]["score"] = score
-		results[browser.ResultKey()]["last_run"] = time.Now()
+		results["score"] = score
 
 		err = f1.Close()
 		if err != nil {
@@ -304,7 +290,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]mapping
 	return nil
 }
 
-func getMapping() (map[string]mappingPart, error) {
+func getMapping() (map[string]map[string]map[string]feature, error) {
 	f, err := os.Open("lib/mapping.json")
 	if err != nil {
 		return nil, err
@@ -317,7 +303,7 @@ func getMapping() (map[string]mappingPart, error) {
 		return nil, err
 	}
 
-	out := map[string]mappingPart{}
+	out := map[string]map[string]map[string]feature{}
 
 	err = json.Unmarshal(b, &out)
 	if err != nil {
@@ -327,17 +313,12 @@ func getMapping() (map[string]mappingPart, error) {
 	return out, nil
 }
 
-type mappingPart struct {
-	BySection map[string]int `json:"bySection"`
-	Items     []struct {
-		Spec struct {
-			Org     string `json:"org"`
-			ID      string `json:"id"`
-			Section string `json:"section"`
-			Name    string `json:"name"`
-			URL     string `json:"url"`
-		} `json:"spec"`
-		Tests map[string]string `json:"tests"`
-		Path  string            `json:"path"`
-	} `json:"items"`
+type feature struct {
+	Spec struct {
+		Org     string `json:"org"`
+		ID      string `json:"id"`
+		Section string `json:"section"`
+	} `json:"spec"`
+	Tests map[string]string `json:"tests"`
+	Dir   string            `json:"dir"`
 }

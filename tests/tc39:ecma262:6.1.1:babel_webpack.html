@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+	<script>
+		function callback(success) {
+			window.testSuccess = success;
+		}
+		
+		;/******/ (function() { // webpackBootstrap
+(function (cb) {
+  var foo;
+  cb(typeof foo === "undefined");
+})(callback);
+/******/ })()
+;;
+	</script>
+</body>
+</html>

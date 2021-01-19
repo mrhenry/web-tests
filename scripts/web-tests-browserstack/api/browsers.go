@@ -23,8 +23,8 @@ type Browser struct {
 }
 
 func (x Browser) ResultKey() string {
-	if x.OS != "" {
-		return fmt.Sprintf("%s/%s - %s/%s", x.OS, x.OSVersion, x.Browser, x.BrowserVersion)
+	if x.Device != "" {
+		return fmt.Sprintf("%s/%s", x.OS, x.OSVersion)
 	}
 
 	return fmt.Sprintf("%s/%s", x.Browser, x.BrowserVersion)
@@ -57,21 +57,21 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 }
 
 func browserForReducedSet(b Browser) (string, Browser) {
-	if b.Device == "" {
+	if b.Device != "" {
 		bb := Browser{
+			Device:         b.Device,
 			Browser:        b.Browser,
 			BrowserVersion: b.BrowserVersion,
+			OS:             b.OS,
+			OSVersion:      b.OSVersion,
 		}
 
 		return bb.ResultKey(), bb
 	}
 
 	bb := Browser{
-		Device:         b.Device,
 		Browser:        b.Browser,
 		BrowserVersion: b.BrowserVersion,
-		OS:             b.OS,
-		OSVersion:      b.OSVersion,
 	}
 
 	return bb.ResultKey(), bb
