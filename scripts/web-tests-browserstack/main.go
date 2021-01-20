@@ -193,17 +193,24 @@ func getTestPaths() ([]string, error) {
 
 func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature) error {
 	resultsDir := ""
-	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; !ok {
+	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; ok {
 		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
 		err := os.MkdirAll(resultsDir, os.ModePerm)
 		if err != nil {
 			return err
 		}
+	} else {
+		return fmt.Errorf("not found in mapping %s %s %s", test.MappingOrg(), test.MappingID(), test.MappingSection())
 	}
 
-	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", browser.ResultKey()))
+	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", browser.ResultFilename()))
 
-	results := map[string]interface{}{}
+	results := map[string]interface{}{
+		"os":              browser.OS,
+		"os_version":      browser.OSVersion,
+		"browser":         browser.Browser,
+		"browser_version": browser.BrowserVersion,
+	}
 
 	{
 		f1, err := os.Open(resultsPath)
