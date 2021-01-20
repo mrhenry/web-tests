@@ -1,0 +1,14 @@
+{
+    "spec": {
+        "org": "example",
+        "id": "test",
+        "section": "1",
+        "name": "Example test",
+        "url": "TODO"
+    },
+    "tests": {
+        "pure": "test.pure.js",
+        "babel": "test.babel.js",
+        "babel_webpack": "test.babel_webpack.js"
+    }
+}

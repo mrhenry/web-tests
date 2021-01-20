@@ -1,4 +1,23 @@
 {
+  "example": {
+    "test": {
+      "1": {
+        "dir": "specifications/example/test/1.feature",
+        "spec": {
+          "id": "test",
+          "name": "Example test",
+          "org": "example",
+          "section": "1",
+          "url": "TODO"
+        },
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "pure": "test.pure.js"
+        }
+      }
+    }
+  },
   "tc39": {
     "ecma262": {
       "13.3.1.3": {

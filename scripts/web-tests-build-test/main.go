@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/url"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -43,7 +45,13 @@ func main() {
 			log.Fatal(err)
 		}
 
-		test := `<!DOCTYPE html>
+		err = f1.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		{
+			test := `<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -62,21 +70,63 @@ func main() {
 </html>
 `
 
-		f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
-		if err != nil {
-			log.Fatal(err)
+			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f2.Close()
+
+			_, err = f2.WriteString(test)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = f2.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
-		defer f2.Close()
+		if (k == "babel" || k == "pure") && len(meta.PolyfillIO) > 0 {
+			polyfills := url.QueryEscape(strings.Join(meta.PolyfillIO, ","))
 
-		_, err = f2.WriteString(test)
-		if err != nil {
-			log.Fatal(err)
+			test := `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>
+</head>
+<body>
+	<script>
+		function callback(success) {
+			window.testSuccess = success;
 		}
+		
+		;` + string(b) + `;
+	</script>
+</body>
+</html>
+`
 
-		err = f2.Close()
-		if err != nil {
-			log.Fatal(err)
+			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s_polyfillio.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f2.Close()
+
+			_, err = f2.WriteString(test)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = f2.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
@@ -87,6 +137,7 @@ type feature struct {
 		ID      string `json:"id"`
 		Section string `json:"section"`
 	} `json:"spec"`
-	Tests map[string]string `json:"tests"`
-	Dir   string            `json:"dir"`
+	Tests      map[string]string `json:"tests"`
+	Dir        string            `json:"dir"`
+	PolyfillIO []string          `json:"polyfill.io"`
 }
