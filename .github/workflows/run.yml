@@ -1,8 +1,8 @@
 name: 'Run'
 on:
-  # schedule:
-  #   - cron: '0 23 * * *'
-  # workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -58,9 +58,7 @@ jobs:
           # Git config
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add ./ecma262
-          git add ./geometry-1
-          git add ./url
+          git add ./specifications
           git commit -m "run"
           git push --set-upstream origin main
 

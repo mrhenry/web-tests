@@ -21,6 +21,3 @@ jobs:
           npm install
           make
 
-      - name: self tests
-        run: npm run test
-
