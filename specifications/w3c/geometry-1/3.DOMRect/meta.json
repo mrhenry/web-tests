@@ -10,5 +10,8 @@
         "pure": "test.pure.js",
         "babel": "test.babel.js",
         "babel_webpack": "test.babel_webpack.js"
-    }
+    },
+    "polyfill.io": [
+        "DOMRect"
+    ]
 }
