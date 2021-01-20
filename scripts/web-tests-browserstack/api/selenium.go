@@ -202,6 +202,7 @@ HTTP_CACHE_LOOP:
 func runSeleniumTest(wd selenium.WebDriver, port int, test Test) error {
 	test.didRun = true
 
+	// TODO : this needs a raced timeout
 	err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/%s", port, strings.TrimPrefix(test.Path, "./")))
 	if err != nil {
 		return err
