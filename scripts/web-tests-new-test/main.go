@@ -11,6 +11,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/romainmenke/web-tests/scripts/feature"
 )
 
 func main() {
@@ -101,36 +103,17 @@ func main() {
 		}
 
 		if strings.HasSuffix(path, "meta.json") {
-			meta := map[string]interface{}{}
+			meta := feature.Feature{}
 			err = json.Unmarshal(b, &meta)
 			if err != nil {
 				return err
 			}
 
-			if v, ok := meta["spec"]; !ok {
-				meta["spec"] = map[string]interface{}{
-					"org":     org,
-					"id":      id,
-					"section": section,
-					"name":    name,
-				}
-			} else if spec, ok := v.(map[string]interface{}); !ok {
-				meta["spec"] = map[string]interface{}{
-					"org":     org,
-					"id":      id,
-					"section": section,
-					"name":    name,
-				}
-			} else {
-				spec["org"] = org
-				spec["id"] = id
-				spec["section"] = section
-				spec["name"] = name
-
-				meta["spec"] = spec
-			}
-
-			meta["polyfill.io"] = []interface{}{}
+			meta.Spec.Org = org
+			meta.Spec.ID = id
+			meta.Spec.Section = section
+			meta.Spec.Name = name
+			meta.PolyfillIO = []string{}
 
 			b, err = json.MarshalIndent(meta, "", "  ")
 			if err != nil {

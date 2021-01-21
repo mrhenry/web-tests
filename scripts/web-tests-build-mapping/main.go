@@ -9,11 +9,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/romainmenke/web-tests/scripts/feature"
 )
 
 func main() {
 	featureDirs := []string{}
-	features := map[string]map[string]map[string]interface{}{}
+	features := map[string]map[string]map[string]feature.FeatureWithDir{}
 
 	err := filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -50,40 +52,27 @@ func main() {
 			log.Fatal(err)
 		}
 
-		item := map[string]interface{}{}
+		item := feature.FeatureWithDir{}
 		err = json.Unmarshal(b, &item)
 		if err != nil {
 			log.Fatal(err)
 		}
-		item["dir"] = featureDir
 
-		type metaType struct {
-			Spec struct {
-				Org     string `json:"org"`
-				ID      string `json:"id"`
-				Section string `json:"section"`
-			} `json:"spec"`
-		}
+		item.Dir = featureDir
 
-		meta := metaType{}
-		err = json.Unmarshal(b, &meta)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		org, ok := features[meta.Spec.Org]
+		org, ok := features[item.Spec.Org]
 		if !ok {
-			org = map[string]map[string]interface{}{}
+			org = map[string]map[string]feature.FeatureWithDir{}
 		}
 
-		spec, ok := org[meta.Spec.ID]
+		spec, ok := org[item.Spec.ID]
 		if !ok {
-			spec = map[string]interface{}{}
+			spec = map[string]feature.FeatureWithDir{}
 		}
 
-		spec[meta.Spec.Section] = item
-		org[meta.Spec.ID] = spec
-		features[meta.Spec.Org] = org
+		spec[item.Spec.Section] = item
+		org[item.Spec.ID] = spec
+		features[item.Spec.Org] = org
 	}
 
 	{
@@ -109,4 +98,9 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+}
+
+type Feature struct {
+	feature.Feature
+	Dir string `json:"dir"`
 }

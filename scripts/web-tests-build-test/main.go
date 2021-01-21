@@ -8,10 +8,12 @@ import (
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/romainmenke/web-tests/scripts/feature"
 )
 
 func main() {
-	meta := feature{}
+	meta := feature.Feature{}
 
 	{
 		f, err := os.Open("./meta.json")
@@ -129,15 +131,4 @@ func main() {
 			}
 		}
 	}
-}
-
-type feature struct {
-	Spec struct {
-		Org     string `json:"org"`
-		ID      string `json:"id"`
-		Section string `json:"section"`
-	} `json:"spec"`
-	Tests      map[string]string `json:"tests"`
-	Dir        string            `json:"dir"`
-	PolyfillIO []string          `json:"polyfill.io"`
 }

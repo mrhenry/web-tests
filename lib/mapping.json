@@ -2,175 +2,182 @@
   "example": {
     "test": {
       "1": {
-        "dir": "specifications/example/test/1.feature",
         "spec": {
-          "id": "test",
-          "name": "Example test",
           "org": "example",
+          "id": "test",
           "section": "1",
+          "name": "Example test",
           "url": "TODO"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/example/test/1.feature"
       }
     }
   },
   "tc39": {
     "ecma262": {
       "13.3.1.3": {
-        "dir": "specifications/tc39/ecma262/13.3.1.3.constDeclaration",
         "spec": {
-          "id": "ecma262",
-          "name": "Static Semantics: IsConstantDeclaration",
           "org": "tc39",
+          "id": "ecma262",
           "section": "13.3.1.3",
+          "name": "Static Semantics: IsConstantDeclaration",
           "url": "https://tc39.es/ecma262/#sec-let-and-const-declarations-static-semantics-isconstantdeclaration"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/13.3.1.3.constDeclaration"
       },
       "14.7": {
-        "dir": "specifications/tc39/ecma262/14.7.AsyncAwait",
         "spec": {
-          "id": "ecma262",
-          "name": "Async Function Definitions",
           "org": "tc39",
+          "id": "ecma262",
           "section": "14.7",
+          "name": "Async Function Definitions",
           "url": "https://tc39.es/ecma262/#sec-async-function-definitions"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/14.7.AsyncAwait"
       },
       "18.1.1": {
-        "dir": "specifications/tc39/ecma262/18.1.1.globalThis",
-        "polyfill.io": [
-          "globalThis"
-        ],
         "spec": {
-          "id": "ecma262",
-          "name": "globalThis",
           "org": "tc39",
+          "id": "ecma262",
           "section": "18.1.1",
+          "name": "globalThis",
           "url": "https://tc39.es/ecma262/#sec-globalthis"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": [
+          "globalThis"
+        ],
+        "dir": "specifications/tc39/ecma262/18.1.1.globalThis"
       },
       "6.1.1": {
-        "dir": "specifications/tc39/ecma262/6.1.1.Undefined",
         "spec": {
-          "id": "ecma262",
-          "name": "The Undefined Type",
           "org": "tc39",
+          "id": "ecma262",
           "section": "6.1.1",
+          "name": "The Undefined Type",
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-undefined-type"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/6.1.1.Undefined"
       },
       "6.1.2": {
-        "dir": "specifications/tc39/ecma262/6.1.2.Null",
         "spec": {
-          "id": "ecma262",
-          "name": "The Null Type",
           "org": "tc39",
+          "id": "ecma262",
           "section": "6.1.2",
+          "name": "The Null Type",
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-null-type"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/6.1.2.Null"
       },
       "6.1.3": {
-        "dir": "specifications/tc39/ecma262/6.1.3.Boolean",
         "spec": {
-          "id": "ecma262",
-          "name": "The Boolean Type",
           "org": "tc39",
+          "id": "ecma262",
           "section": "6.1.3",
+          "name": "The Boolean Type",
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-boolean-type"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/6.1.3.Boolean"
       },
       "6.1.4": {
-        "dir": "specifications/tc39/ecma262/6.1.4.String",
         "spec": {
-          "id": "ecma262",
-          "name": "The String Type",
           "org": "tc39",
+          "id": "ecma262",
           "section": "6.1.4",
+          "name": "The String Type",
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": null,
+        "dir": "specifications/tc39/ecma262/6.1.4.String"
       }
     }
   },
   "w3c": {
     "geometry-1": {
       "3": {
-        "dir": "specifications/w3c/geometry-1/3.DOMRect",
-        "polyfill.io": [
-          "DOMRect"
-        ],
         "spec": {
-          "id": "geometry-1",
-          "name": "The DOMRect interfaces",
           "org": "w3c",
+          "id": "geometry-1",
           "section": "3",
+          "name": "The DOMRect interfaces",
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": [
+          "DOMRect"
+        ],
+        "dir": "specifications/w3c/geometry-1/3.DOMRect"
       }
     }
   },
   "whatwg": {
     "url": {
       "6.2": {
-        "dir": "specifications/whatwg/url/6.2.URLSearchParams",
-        "polyfill.io": [
-          "URLSearchParams"
-        ],
         "spec": {
-          "id": "url",
-          "name": "URLSearchParams class",
           "org": "whatwg",
+          "id": "url",
           "section": "6.2",
+          "name": "URLSearchParams class",
           "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "pure": "test.pure.js"
-        }
+        },
+        "polyfill.io": [
+          "URLSearchParams"
+        ],
+        "dir": "specifications/whatwg/url/6.2.URLSearchParams"
       }
     }
   }

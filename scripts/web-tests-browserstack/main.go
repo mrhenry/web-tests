@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/romainmenke/web-tests/scripts/feature"
 	"github.com/romainmenke/web-tests/scripts/web-tests-browserstack/api"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
@@ -84,7 +85,7 @@ func main() {
 	}
 }
 
-func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature) error {
+func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*5)
 	defer cancel()
 
@@ -191,7 +192,7 @@ func getTestPaths() ([]string, error) {
 	return files, nil
 }
 
-func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature) error {
+func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
 	resultsDir := ""
 	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; ok {
 		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
@@ -297,7 +298,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]map[str
 	return nil
 }
 
-func getMapping() (map[string]map[string]map[string]feature, error) {
+func getMapping() (map[string]map[string]map[string]feature.FeatureWithDir, error) {
 	f, err := os.Open("lib/mapping.json")
 	if err != nil {
 		return nil, err
@@ -310,7 +311,7 @@ func getMapping() (map[string]map[string]map[string]feature, error) {
 		return nil, err
 	}
 
-	out := map[string]map[string]map[string]feature{}
+	out := map[string]map[string]map[string]feature.FeatureWithDir{}
 
 	err = json.Unmarshal(b, &out)
 	if err != nil {
@@ -318,14 +319,4 @@ func getMapping() (map[string]map[string]map[string]feature, error) {
 	}
 
 	return out, nil
-}
-
-type feature struct {
-	Spec struct {
-		Org     string `json:"org"`
-		ID      string `json:"id"`
-		Section string `json:"section"`
-	} `json:"spec"`
-	Tests map[string]string `json:"tests"`
-	Dir   string            `json:"dir"`
 }
