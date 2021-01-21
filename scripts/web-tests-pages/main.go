@@ -37,6 +37,7 @@ func main() {
 		feature := feature.FeatureWithDir{}
 		results := map[string]map[string]Result{}
 		tests := map[string]struct{}{}
+		testsSlice := []string{}
 
 		{
 			f, err := os.Open(filepath.Join(featureDir, "meta.json"))
@@ -77,6 +78,12 @@ func main() {
 				log.Fatal(err)
 			}
 
+			for k := range tests {
+				testsSlice = append(testsSlice, k)
+			}
+
+			sort.Sort(sort.StringSlice(testsSlice))
+
 			for _, resultPath := range resultPaths {
 				result := Result{}
 				f, err := os.Open(resultPath)
@@ -112,8 +119,8 @@ func main() {
 		{
 			tableHeading := "<thead><tr><th>" + feature.Spec.Name + "</th>"
 
-			for k := range tests {
-				tableHeading = tableHeading + "<th>" + k + "</th>"
+			for _, test := range testsSlice {
+				tableHeading = tableHeading + "<th>" + test + "</th>"
 			}
 
 			tableHeading = tableHeading + "</tr></thead>"
@@ -157,8 +164,8 @@ func main() {
 				tableBody = tableBody + "<tr>"
 				tableBody = tableBody + "<td>" + byBrowser.browser + "</td>"
 
-				for k := range tests {
-					result, ok := byBrowser.results[k]
+				for _, test := range testsSlice {
+					result, ok := byBrowser.results[test]
 					if !ok {
 						tableBody = tableBody + "<td>?</td>"
 					} else {
