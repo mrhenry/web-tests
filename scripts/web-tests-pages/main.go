@@ -6,8 +6,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
+	version "github.com/hashicorp/go-version"
 	"github.com/romainmenke/web-tests/scripts/feature"
 )
 
@@ -108,7 +110,7 @@ func main() {
 		}
 
 		{
-			tableHeading := "<thead><tr>" + feature.Spec.Name + "<th></th>"
+			tableHeading := "<thead><tr><th>" + feature.Spec.Name + "</th>"
 
 			for k := range tests {
 				tableHeading = tableHeading + "<th>" + k + "</th>"
@@ -118,14 +120,46 @@ func main() {
 
 			tableBody := "<tbody>"
 
+			resultsByBrowser := []struct {
+				browser string
+				results map[string]Result
+			}{}
+
 			for browser, byBrowser := range results {
+				resultsByBrowser = append(resultsByBrowser, struct {
+					browser string
+					results map[string]Result
+				}{
+					browser: browser,
+					results: byBrowser,
+				})
+			}
+
+			sort.Slice(resultsByBrowser, func(i int, j int) bool {
+				parts1 := strings.Split(resultsByBrowser[i].browser, "/")
+				parts2 := strings.Split(resultsByBrowser[j].browser, "/")
+
+				if parts1[0] == parts2[0] {
+					v1, _ := version.NewVersion(parts1[1])
+					v2, _ := version.NewVersion(parts2[1])
+
+					if v1 != nil && v2 != nil {
+						return v1.LessThan(v2)
+					}
+
+					return parts1[1] < parts2[1]
+				}
+
+				return parts1[0] < parts2[0]
+			})
+
+			for _, byBrowser := range resultsByBrowser {
 				tableBody = tableBody + "<tr>"
-				tableBody = tableBody + "<td>" + browser + "</td>"
+				tableBody = tableBody + "<td>" + byBrowser.browser + "</td>"
 
 				for k := range tests {
-					result, ok := byBrowser[k]
+					result, ok := byBrowser.results[k]
 					if !ok {
-						log.Println("expected result for ", k)
 						tableBody = tableBody + "<td>?</td>"
 					} else {
 						tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
@@ -153,6 +187,20 @@ func main() {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+	<style>
+		.feature-results {
+			padding: 50px 0;
+			width: 100%;
+		}
+
+		table {
+			margin: 0 auto;
+			max-width: 900px;
+			text-align: left;
+			width: 100%
+		}
+	</style>
 </head>
 <body>
 	` + tables + `
