@@ -138,6 +138,26 @@
     }
   },
   "w3c": {
+    "cssom": {
+      "4.innerWidth": {
+        "spec": {
+          "org": "w3c",
+          "id": "cssom",
+          "section": "4.innerWidth",
+          "name": "Window.innerWidth",
+          "url": "https://drafts.csswg.org/cssom-view/#dom-window-innerwidth"
+        },
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [
+          "innerWidth"
+        ],
+        "dir": "specifications/w3c/cssom/4.innerWidth.Window.innerWidth"
+      }
+    },
     "geometry-1": {
       "3": {
         "spec": {
