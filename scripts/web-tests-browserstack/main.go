@@ -83,7 +83,7 @@ func main() {
 		browsers[i], browsers[j] = browsers[j], browsers[i]
 	})
 
-	browsers = browsers[:50]
+	browsers = browsers[:25]
 
 	sema := semaphore.NewWeighted(5)
 
@@ -108,15 +108,19 @@ func main() {
 		}(b)
 	}
 
-	// Wait for all
-	if err := sema.Acquire(ctx, 5); err != nil {
-		log.Fatal(err)
-	}
+	go func() {
+		// Wait for all
+		if err := sema.Acquire(ctx, 5); err != nil {
+			log.Fatal(err)
+		}
 
-	err = done()
-	if err != nil {
-		log.Println(err) // non-fatal for us
-	}
+		err = done()
+		if err != nil {
+			log.Println(err) // non-fatal for us
+		}
+
+		doneChan <- true
+	}()
 
 	<-doneChan
 }

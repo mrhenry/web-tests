@@ -216,7 +216,7 @@ func main() {
 			for _, byBrowser := range resultsByBrowser {
 				detailSummary := `<details><summary>` + feature.Spec.Name + " : " + byBrowser.browser + `</summary><div class="table-container"><table>`
 
-				tableHeading := "<thead><tr>"
+				tableHeading := "<thead><tr><th></th>"
 
 				for _, test := range testsSlice {
 					tableHeading = tableHeading + "<th>" + test + "</th>"
@@ -271,12 +271,19 @@ func main() {
 		}
 
 		table {
+			content-visibility: auto;
 			margin: 0 auto;
 			max-height: 600px;
 			max-width: 900px;
 			overflow: scroll;
 			text-align: left;
 			width: 100%
+		}
+
+		th {
+			background-color: white;
+			position: sticky;
+			top: 0;
 		}
 	</style>
 </head>
