@@ -92,7 +92,7 @@ func (x *Client) OpenTunnel(parentCtx context.Context) (func() error, error) {
 			log.Println("closing BrowserStackLocal")
 			cmdCancel()
 
-			time.Sleep(time.Second * 2)
+			time.Sleep(time.Second * 15)
 
 			select {
 			case err := <-errChan:

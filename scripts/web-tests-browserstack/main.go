@@ -10,8 +10,10 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/romainmenke/web-tests/scripts/feature"
@@ -23,6 +25,31 @@ import (
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*30)
 	defer cancel()
+
+	runnerCtx, runnerCancel := context.WithCancel(ctx)
+	defer runnerCancel()
+
+	sigs := make(chan os.Signal, 1)
+	doneChan := make(chan bool, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		<-sigs
+		runnerCancel()
+
+		time.Sleep(time.Second * 30)
+
+		cancel()
+
+		time.Sleep(time.Second * 5)
+
+		doneChan <- true
+
+		time.Sleep(time.Second * 30)
+
+		os.Exit(1)
+	}()
 
 	sessionName := fmt.Sprintf("Web Tests – %s", time.Now().Format(time.RFC3339))
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
@@ -67,7 +94,14 @@ func main() {
 
 		go func(b api.Browser) {
 			defer sema.Release(1)
-			err = runTest(ctx, client, b, sessionName, mapping)
+
+			select {
+			case <-runnerCtx.Done():
+				return
+			default:
+			}
+
+			err = runTest(runnerCtx, client, b, sessionName, mapping)
 			if err != nil {
 				log.Println(err) // non-fatal for us
 			}
@@ -83,6 +117,8 @@ func main() {
 	if err != nil {
 		log.Println(err) // non-fatal for us
 	}
+
+	<-doneChan
 }
 
 func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
@@ -140,6 +176,13 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 
 	go func() {
 		for _, test := range tests {
+			select {
+			case <-ctx.Done():
+				close(in)
+				return
+			default:
+			}
+
 			in <- test
 		}
 
@@ -149,6 +192,8 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 	go func() {
 		for {
 			select {
+			case <-ctx.Done():
+				return
 			case test, ok := <-out:
 				if !ok {
 					return

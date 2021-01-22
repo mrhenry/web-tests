@@ -66,6 +66,12 @@ func (x Test) MappingTestName() string {
 }
 
 func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, in chan Test, out chan Test) error {
+	select {
+	case <-parentCtx.Done():
+		return parentCtx.Err()
+	default:
+	}
+
 	ctx, cancel := context.WithCancel(parentCtx)
 	defer cancel()
 
@@ -97,18 +103,47 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 		return err
 	}
 
-	wd, err := selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
-	if err != nil {
-		// TODO : create real retries
-		if strings.Contains(err.Error(), "Could not start Mobile Browser") {
-			time.Sleep(time.Minute)
-			wd, err = selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
+	var wd selenium.WebDriver
+	wdChan := make(chan selenium.WebDriver, 1)
+
+	webDriverStartCtx, webDriverStartCancel := context.WithTimeout(ctx, time.Second*30)
+	defer webDriverStartCancel()
+
+	go func() {
+		wd1, err := selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
+		if err != nil {
+			// TODO : create real retries
+			if strings.Contains(err.Error(), "Could not start Mobile Browser") {
+				time.Sleep(time.Minute)
+				wd1, err = selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
+			}
+
+			if err != nil {
+				log.Println("new selenium remote : ", err)
+				return
+			}
 		}
 
-		if err != nil {
-			log.Println("new selenium remote : ", err)
-			return err
+		select {
+		case <-webDriverStartCtx.Done():
+			defer wd1.Quit()
+			defer wd1.Close()
+		default:
+			// noop
 		}
+
+		wdChan <- wd1
+	}()
+
+	select {
+	case wd = <-wdChan:
+		// noop
+	case <-webDriverStartCtx.Done():
+		return webDriverStartCtx.Err()
+	}
+
+	if wd == nil {
+		return errors.New("webdriver remote not started")
 	}
 
 	defer wd.Quit()
@@ -121,21 +156,32 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 			case <-ctx.Done():
 				return
 			case test := <-runChan:
-				test.didRun = true
-				test.start = time.Now()
+				testDoneChan := make(chan bool, 1)
 
-				err := runSeleniumTest(wd, port, test)
-				if err != nil {
-					test.err = err
-				} else {
-					test.success = true
+				go func(test Test) {
+					test.didRun = true
+					test.start = time.Now()
+
+					err := runSeleniumTest(wd, port, test)
+					if err != nil {
+						test.err = err
+					} else {
+						test.success = true
+					}
+
+					test.end = time.Now()
+					out <- test
+
+					wg.Done()
+					testDoneChan <- true
+				}(test)
+
+				select {
+				case <-ctx.Done():
+					return
+				case <-testDoneChan:
+					continue SELENIUM_LOOP
 				}
-
-				test.end = time.Now()
-				out <- test
-
-				wg.Done()
-				continue SELENIUM_LOOP
 			}
 		}
 	}()
@@ -182,7 +228,19 @@ HTTP_CACHE_LOOP:
 		}
 	}
 
-	wg.Wait()
+	doneChan := make(chan bool, 1)
+
+	go func() {
+		wg.Wait()
+		doneChan <- true
+	}()
+
+	select {
+	case <-doneChan:
+		// noop
+	case <-ctx.Done():
+		// noop
+	}
 
 	// TODO : this needs timeout handling
 	err = wd.Close()
