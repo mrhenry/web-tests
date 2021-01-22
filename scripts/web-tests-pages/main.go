@@ -16,7 +16,7 @@ import (
 func main() {
 	featureDirs := []string{}
 
-	tables := ""
+	out := ""
 
 	err := filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -117,23 +117,13 @@ func main() {
 		}
 
 		{
-			tableHeading := "<thead><tr><th>" + feature.Spec.Name + "</th>"
-
-			for _, test := range testsSlice {
-				tableHeading = tableHeading + "<th>" + test + "</th>"
-			}
-
-			tableHeading = tableHeading + "</tr></thead>"
-
-			tableBody := "<tbody>"
-
-			resultsByBrowser := []struct {
+			resultsByBrowserVersion := []struct {
 				browser string
 				results map[string]Result
 			}{}
 
 			for browser, byBrowser := range results {
-				resultsByBrowser = append(resultsByBrowser, struct {
+				resultsByBrowserVersion = append(resultsByBrowserVersion, struct {
 					browser string
 					results map[string]Result
 				}{
@@ -142,48 +132,122 @@ func main() {
 				})
 			}
 
-			sort.Slice(resultsByBrowser, func(i int, j int) bool {
-				parts1 := strings.Split(resultsByBrowser[i].browser, "/")
-				parts2 := strings.Split(resultsByBrowser[j].browser, "/")
+			sort.Slice(resultsByBrowserVersion, func(i int, j int) bool {
+				parts1 := strings.Split(resultsByBrowserVersion[i].browser, "/")
+				parts2 := strings.Split(resultsByBrowserVersion[j].browser, "/")
 
 				if parts1[0] == parts2[0] {
 					v1, _ := version.NewVersion(parts1[1])
 					v2, _ := version.NewVersion(parts2[1])
 
 					if v1 != nil && v2 != nil {
-						return v1.LessThan(v2)
+						return v1.GreaterThan(v2)
 					}
 
-					return parts1[1] < parts2[1]
+					return parts1[1] > parts2[1]
 				}
 
-				return parts1[0] < parts2[0]
+				return parts1[0] > parts2[0]
 			})
 
-			for _, byBrowser := range resultsByBrowser {
-				tableBody = tableBody + "<tr>"
-				tableBody = tableBody + "<td>" + byBrowser.browser + "</td>"
+			resultsByBrowser := []struct {
+				browser   string
+				byBrowser []struct {
+					browserWithVersion string
+					results            map[string]Result
+				}
+			}{}
 
-				for _, test := range testsSlice {
-					result, ok := byBrowser.results[test]
-					if !ok {
-						tableBody = tableBody + "<td>?</td>"
-					} else {
-						tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
+			{
+				lastBrowser := ""
+				currentResults := []struct {
+					browserWithVersion string
+					results            map[string]Result
+				}{}
+
+				for i, byBrowser := range resultsByBrowserVersion {
+					if strings.Split(byBrowser.browser, "/")[0] != lastBrowser && lastBrowser != "" {
+						resultsByBrowser = append(resultsByBrowser, struct {
+							browser   string
+							byBrowser []struct {
+								browserWithVersion string
+								results            map[string]Result
+							}
+						}{
+							browser:   lastBrowser,
+							byBrowser: currentResults,
+						})
+
+						currentResults = []struct {
+							browserWithVersion string
+							results            map[string]Result
+						}{}
+
+						lastBrowser = strings.Split(byBrowser.browser, "/")[0]
+					}
+
+					if lastBrowser == "" {
+						lastBrowser = strings.Split(byBrowser.browser, "/")[0]
+					}
+
+					currentResults = append(currentResults, struct {
+						browserWithVersion string
+						results            map[string]Result
+					}{
+						browserWithVersion: byBrowser.browser,
+						results:            byBrowser.results,
+					})
+
+					if i == (len(resultsByBrowserVersion) - 1) {
+						resultsByBrowser = append(resultsByBrowser, struct {
+							browser   string
+							byBrowser []struct {
+								browserWithVersion string
+								results            map[string]Result
+							}
+						}{
+							browser:   strings.Split(byBrowser.browser, "/")[0],
+							byBrowser: currentResults,
+						})
 					}
 				}
-
-				tableBody = tableBody + "</tr>"
 			}
 
-			tableBody = tableBody + "</tbody>"
+			for _, byBrowser := range resultsByBrowser {
+				detailSummary := `<details><summary>` + feature.Spec.Name + " : " + byBrowser.browser + `</summary><div class="table-container"><table>`
 
-			tables = tables + `<div class="feature-results">
-<table>
-` + tableHeading + `
-` + tableBody + `
-</table>
-</div>`
+				tableHeading := "<thead><tr>"
+
+				for _, test := range testsSlice {
+					tableHeading = tableHeading + "<th>" + test + "</th>"
+				}
+
+				tableHeading = tableHeading + "</tr></thead>"
+
+				tableBody := "<tbody>"
+
+				for _, results := range byBrowser.byBrowser {
+					tableBody = tableBody + "<tr>"
+					tableBody = tableBody + "<td>" + results.browserWithVersion + "</td>"
+
+					for _, test := range testsSlice {
+						result, ok := results.results[test]
+						if !ok {
+							tableBody = tableBody + "<td>?</td>"
+						} else {
+							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
+						}
+					}
+
+					tableBody = tableBody + "</tr>"
+				}
+
+				tableBody = tableBody + "</tbody>"
+
+				detailSummary = detailSummary + tableHeading + tableBody + "</div></table></details>"
+
+				out = out + `<div class="feature-results">` + detailSummary + `</div>`
+			}
 		}
 	}
 
@@ -197,20 +261,27 @@ func main() {
 
 	<style>
 		.feature-results {
-			padding: 50px 0;
+			padding: 20px 0;
 			width: 100%;
+		}
+
+		.table-container {
+			max-height: 450px;
+			overflow: scroll;
 		}
 
 		table {
 			margin: 0 auto;
+			max-height: 600px;
 			max-width: 900px;
+			overflow: scroll;
 			text-align: left;
 			width: 100%
 		}
 	</style>
 </head>
 <body>
-	` + tables + `
+	` + out + `
 </body>
 </html>`
 
