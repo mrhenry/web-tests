@@ -1,0 +1,15 @@
+{
+  "spec": {
+    "org": "whatwg",
+    "id": "dom",
+    "section": "4.2.4",
+    "name": "NonElementParentNode",
+    "url": "https://dom.spec.whatwg.org/#interface-nonelementparentnode"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}

@@ -4,7 +4,6 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=DOMRect"></script>
 </head>
 <body>
 	
@@ -17,8 +16,8 @@
 		}
 		
 		;(function (cb) {
-  var domRect = new DOMRect();
-  cb(domRect.x === 0 && domRect.y === 0);
+  var fixture = document.getElementById('the-fixture');
+  cb(!!fixture);
 })(callback);
 ;
 	</script>

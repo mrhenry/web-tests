@@ -61,6 +61,7 @@ func main() {
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body>
+	` + fixtures + `
 	<script>
 		function callback(success) {
 			window.testSuccess = success;
@@ -102,6 +103,7 @@ func main() {
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>
 </head>
 <body>
+	` + fixtures + `
 	<script>
 		function callback(success) {
 			window.testSuccess = success;
@@ -132,3 +134,8 @@ func main() {
 		}
 	}
 }
+
+const fixtures = `
+<div id="the-fixture"></div>
+<div class="a-fixture"></div>
+`
