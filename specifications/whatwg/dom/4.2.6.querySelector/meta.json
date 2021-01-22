@@ -1,0 +1,17 @@
+{
+  "spec": {
+    "org": "whatwg",
+    "id": "dom",
+    "section": "4.2.6.querySelector",
+    "name": "querySelector",
+    "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "document.querySelector"
+  ]
+}

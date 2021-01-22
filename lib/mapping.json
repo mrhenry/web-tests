@@ -155,7 +155,7 @@
         "polyfill.io": [
           "innerWidth"
         ],
-        "dir": "specifications/w3c/cssom/4.innerWidth.Window.innerWidth"
+        "dir": "specifications/w3c/cssom/4.innerWidth"
       }
     },
     "geometry-1": {
@@ -196,6 +196,24 @@
         },
         "polyfill.io": [],
         "dir": "specifications/whatwg/dom/4.2.4.NonElementParentNode"
+      },
+      "4.2.6.querySelector": {
+        "spec": {
+          "org": "whatwg",
+          "id": "dom",
+          "section": "4.2.6.querySelector",
+          "name": "querySelector",
+          "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
+        },
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [
+          "document.querySelector"
+        ],
+        "dir": "specifications/whatwg/dom/4.2.6.querySelector"
       }
     },
     "url": {

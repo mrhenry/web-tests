@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=document.querySelector"></script>
+</head>
+<body>
+	
+<div id="the-fixture"></div>
+<div class="a-fixture"></div>
+
+	<script>
+		function callback(success) {
+			window.testSuccess = success;
+		}
+		
+		;(function (cb) {
+	var el = document.querySelector("a-fixture");
+	cb(!!el);
+})(callback);
+;
+	</script>
+</body>
+</html>
