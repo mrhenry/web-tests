@@ -45,7 +45,7 @@ func getLocalBinary(parentCtx context.Context, accessKey string, localIdentifier
 }
 
 func downloadLocalBinary(parentCtx context.Context, localBinPath string, platform string, arch string) error {
-	ctx, cancel := context.WithTimeout(parentCtx, time.Second*60)
+	ctx, cancel := context.WithTimeout(parentCtx, time.Second*120)
 	defer cancel()
 
 	ext := ""

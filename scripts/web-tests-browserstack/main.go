@@ -126,7 +126,7 @@ func main() {
 }
 
 func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
-	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*5)
+	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
 	caps := client.SetCaps(selenium.Capabilities{

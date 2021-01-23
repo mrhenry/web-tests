@@ -86,7 +86,7 @@ func browserForReducedSet(b Browser) (string, Browser) {
 }
 
 func (x *Client) Browsers(parentCtx context.Context) ([]Browser, error) {
-	ctx, cancel := context.WithTimeout(parentCtx, time.Second*5)
+	ctx, cancel := context.WithTimeout(parentCtx, time.Second*15)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.browserstack.com/automate/browsers.json", nil)

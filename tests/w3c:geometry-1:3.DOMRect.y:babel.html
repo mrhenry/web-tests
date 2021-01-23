@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body>
+	
+<style>
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<div id="the-fixture"></div>
+<div class="a-fixture"></div>
+<div style="position: relative; width: 100%; heigh: 100px;">
+	<div id="the-fixture--positioned" style="position: absolute; width: 50px; height: 50px; left: 25px; top: 25px; background-color: blue;">
+	</div>
+</div>
+
+	<script>
+		function callback(success) {
+			window.testSuccess = success;
+		}
+		
+		;(function (cb) {
+  cb("y" in DOMRect.prototype);
+})(callback);
+;
+	</script>
+</body>
+</html>

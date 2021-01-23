@@ -103,7 +103,7 @@ func (x *Client) OpenTunnel(parentCtx context.Context) (func() error, error) {
 		}
 	}
 
-	startCtx, startCancel := context.WithTimeout(parentCtx, time.Second*30)
+	startCtx, startCancel := context.WithTimeout(parentCtx, time.Second*45)
 	defer startCancel()
 
 	readyChan := make(chan struct{})
