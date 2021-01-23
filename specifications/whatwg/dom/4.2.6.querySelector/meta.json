@@ -3,13 +3,14 @@
     "org": "whatwg",
     "id": "dom",
     "section": "4.2.6.querySelector",
-    "name": "querySelector",
+    "name": "ParentNode.querySelector",
     "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
   },
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
-    "pure": "test.pure.js"
+    "pure": "test.pure.js",
+    "core-web": "test.core-web"
   },
   "polyfill.io": [
     "document.querySelector"

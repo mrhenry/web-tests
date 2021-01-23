@@ -7,9 +7,10 @@
         "url": "https://tc39.es/ecma262/#sec-globalthis"
     },
     "tests": {
-        "pure": "test.pure.js",
         "babel": "test.babel.js",
-        "babel_webpack": "test.babel_webpack.js"
+        "babel_webpack": "test.babel_webpack.js",
+        "core-web": "test.core-web",
+        "pure": "test.pure.js"
     },
     "polyfill.io": [
         "globalThis"

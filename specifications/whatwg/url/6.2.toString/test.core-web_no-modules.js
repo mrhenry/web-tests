@@ -1,21 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width" />
-	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-</head>
-<body>
-	
-<div id="the-fixture"></div>
-<div class="a-fixture"></div>
-
-	<script>
-		function callback(success) {
-			window.testSuccess = success;
-		}
-		
-		;/******/ (function() { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 3099:
@@ -3727,7 +3710,4 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 })(callback);
 }();
 /******/ })()
-;;
-	</script>
-</body>
-</html>
+;

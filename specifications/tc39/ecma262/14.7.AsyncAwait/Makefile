@@ -6,11 +6,14 @@ test.babel.js: test.pure.js ../../../../babel.config.json ../../../../package-lo
 	npm run babel -- $(mkfile_dir)test.pure.js --out-file $(mkfile_dir)test.babel.js
 
 test.babel_webpack.js: test.pure.js ../../../../webpack.config.js ../../../../package-lock.json
-	npm run webpack -- --entry $(mkfile_dir)test.pure.js --output-path $(mkfile_dir)
+	npm run webpack -- --entry $(mkfile_dir)test.pure.js --output-path $(mkfile_dir) --config webpack.config.js
+
+test.core-web_modules.js test.core-web_no-modules.js: test.pure.js ../../../../webpack-core-web.config.js ../../../../package-lock.json
+	npm run webpack -- --entry $(mkfile_dir)test.pure.js --output-path $(mkfile_dir) --config webpack-core-web.config.js
 
 html_tests:
 	web-tests-build-test
 
-all: test.babel.js test.babel_webpack.js html_tests
+all: test.babel.js test.babel_webpack.js test.core-web_modules.js test.core-web_no-modules.js html_tests
 
 .PHONY: all html_tests

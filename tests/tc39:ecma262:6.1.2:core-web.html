@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	
+	<script nomodule>
+		(function() {
+			var check = document.createElement('script');
+			if (!('noModule' in check) && 'onbeforeload' in check) {
+				var support = false;
+				document.addEventListener('beforeload', function(e) {
+					if (e.target === check) {
+						support = true;
+					} else if (!e.target.hasAttribute('nomodule') || !support) {
+						return;
+					}
+					e.preventDefault();
+				}, true);
+
+				check.type = 'module';
+				check.src = '.';
+				document.head.appendChild(check);
+				check.remove();
+			}
+		}());
+	</script>
+</head>
+<body>
+	
+<div id="the-fixture"></div>
+<div class="a-fixture"></div>
+
+	<script>
+		var callback = function callback(success) {
+			window.testSuccess = success;
+		}
+
+		window.callback = callback;
+	</script>
+	<script type="module" src="../test-assets/tc39:ecma262:6.1.2:core-web_modules.js"></script>
+	<script nomodule src="../test-assets/tc39:ecma262:6.1.2:core-web_no-modules.js"></script>
+</body>
+</html>

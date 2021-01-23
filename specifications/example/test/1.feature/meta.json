@@ -7,8 +7,9 @@
         "url": "TODO"
     },
     "tests": {
-        "pure": "test.pure.js",
         "babel": "test.babel.js",
-        "babel_webpack": "test.babel_webpack.js"
+        "babel_webpack": "test.babel_webpack.js",
+        "core-web": "test.core-web",
+        "pure": "test.pure.js"
     }
 }

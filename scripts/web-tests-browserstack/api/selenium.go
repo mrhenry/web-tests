@@ -6,10 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -90,6 +93,41 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 
 			w.WriteHeader(http.StatusOK)
 			w.Write(b)
+			return
+		}
+
+		if strings.Contains(req.URL.Path, "test-assets") {
+			log.Println(req.URL.Path)
+		}
+
+		if strings.HasPrefix(req.URL.Path, "/test-assets") {
+			pwd, err := os.Getwd()
+			if err != nil {
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
+			absPath, err := filepath.Abs(strings.TrimPrefix(req.URL.Path, "/"))
+			if err != nil {
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
+			if !strings.HasPrefix(absPath, pwd) {
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
+			f, err := os.Open(absPath)
+			if err != nil {
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
+
+			defer f.Close()
+
+			w.Header().Set("Content-Type", "text/javascript; charset=UTF-8")
+			io.Copy(w, f)
 			return
 		}
 

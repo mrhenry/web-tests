@@ -12,6 +12,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -32,6 +33,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -48,6 +50,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -64,6 +67,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -82,6 +86,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -98,6 +103,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -114,6 +120,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -130,6 +137,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -144,12 +152,13 @@
           "org": "w3c",
           "id": "cssom",
           "section": "4.innerWidth",
-          "name": "Window.innerWidth",
+          "name": "Window.prototype.innerWidth",
           "url": "https://drafts.csswg.org/cssom-view/#dom-window-innerwidth"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -170,6 +179,7 @@
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -181,33 +191,35 @@
   },
   "whatwg": {
     "dom": {
-      "4.2.4": {
+      "4.2.4.getElementByID": {
         "spec": {
           "org": "whatwg",
           "id": "dom",
-          "section": "4.2.4",
-          "name": "NonElementParentNode",
+          "section": "4.2.4.getElementByID",
+          "name": "NonElementParentNode.getElementByID",
           "url": "https://dom.spec.whatwg.org/#interface-nonelementparentnode"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
-        "dir": "specifications/whatwg/dom/4.2.4.NonElementParentNode"
+        "dir": "specifications/whatwg/dom/4.2.4.getElementById"
       },
       "4.2.6.querySelector": {
         "spec": {
           "org": "whatwg",
           "id": "dom",
           "section": "4.2.6.querySelector",
-          "name": "querySelector",
+          "name": "ParentNode.querySelector",
           "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -217,23 +229,24 @@
       }
     },
     "url": {
-      "6.2": {
+      "6.2.toString": {
         "spec": {
           "org": "whatwg",
           "id": "url",
-          "section": "6.2",
-          "name": "URLSearchParams class",
+          "section": "6.2.toString",
+          "name": "URLSearchParams.prototype.toString",
           "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
         },
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
           "URLSearchParams"
         ],
-        "dir": "specifications/whatwg/url/6.2.URLSearchParams"
+        "dir": "specifications/whatwg/url/6.2.toString"
       }
     }
   }

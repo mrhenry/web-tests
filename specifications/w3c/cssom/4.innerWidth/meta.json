@@ -3,12 +3,13 @@
     "org": "w3c",
     "id": "cssom",
     "section": "4.innerWidth",
-    "name": "Window.innerWidth",
+    "name": "Window.prototype.innerWidth",
     "url": "https://drafts.csswg.org/cssom-view/#dom-window-innerwidth"
   },
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
     "pure": "test.pure.js"
   },
   "polyfill.io": [

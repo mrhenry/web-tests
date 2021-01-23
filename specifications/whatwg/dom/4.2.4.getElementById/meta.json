@@ -2,13 +2,14 @@
   "spec": {
     "org": "whatwg",
     "id": "dom",
-    "section": "4.2.4",
-    "name": "NonElementParentNode",
+    "section": "4.2.4.getElementByID",
+    "name": "NonElementParentNode.getElementByID",
     "url": "https://dom.spec.whatwg.org/#interface-nonelementparentnode"
   },
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
     "pure": "test.pure.js"
   },
   "polyfill.io": []
