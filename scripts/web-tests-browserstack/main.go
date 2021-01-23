@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -70,6 +71,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+	{
+		var browser string
+
+		flag.StringVar(&browser, "browser", "", "Only run on browser")
+
+		flag.Parse()
+
+		if browser != "" {
+			for _, b := range browsers {
+				if b.ResultKey() == browser {
+					browsers = []api.Browser{b}
+					break
+				}
+			}
+		}
+	}
+
 	done, err := client.OpenTunnel(ctx)
 	defer done()
 	if err != nil {
@@ -83,7 +101,10 @@ func main() {
 		browsers[i], browsers[j] = browsers[j], browsers[i]
 	})
 
-	browsers = browsers[:25]
+	browsersLimit := 25
+	if len(browsers) > browsersLimit {
+		browsers = browsers[:browsersLimit]
+	}
 
 	sema := semaphore.NewWeighted(5)
 
