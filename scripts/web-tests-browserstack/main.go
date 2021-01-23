@@ -194,6 +194,10 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		tests[i], tests[j] = tests[j], tests[i]
 	})
 
+	if len(tests) > 100 {
+		tests = tests[:100]
+	}
+
 	in := make(chan api.Test, len(tests))
 	out := make(chan api.Test, len(tests))
 
