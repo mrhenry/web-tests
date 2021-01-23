@@ -1323,7 +1323,8 @@ function ToPropertyKey(argument) {
 
 
 (function (cb) {
-  cb("x" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.x !== "undefined");
 })(callback);
 })();
 

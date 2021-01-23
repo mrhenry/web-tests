@@ -1,3 +1,4 @@
 (function (cb) {
-	cb("top" in DOMRect.prototype);
+	var domRect = new DOMRect();
+	cb(typeof domRect.top !== "undefined");
 })(callback);

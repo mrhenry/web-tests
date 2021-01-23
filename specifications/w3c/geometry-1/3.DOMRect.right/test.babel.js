@@ -1,3 +1,4 @@
 (function (cb) {
-  cb("right" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.right !== "undefined");
 })(callback);

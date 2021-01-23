@@ -1,6 +1,7 @@
 /******/ (function() { // webpackBootstrap
 (function (cb) {
-  cb("height" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.height !== "undefined");
 })(callback);
 /******/ })()
 ;

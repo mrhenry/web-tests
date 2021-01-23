@@ -2957,7 +2957,8 @@ function DOMRect_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === 
 
 
 (function (cb) {
-  cb("bottom" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.bottom !== "undefined");
 })(callback);
 }();
 /******/ })()

@@ -1,6 +1,7 @@
 /******/ (function() { // webpackBootstrap
 (function (cb) {
-  cb("y" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.y !== "undefined");
 })(callback);
 /******/ })()
 ;

@@ -1323,7 +1323,8 @@ function ToPropertyKey(argument) {
 
 
 (function (cb) {
-  cb("width" in DOMRect.prototype);
+  var domRect = new DOMRect();
+  cb(typeof domRect.width !== "undefined");
 })(callback);
 })();
 
