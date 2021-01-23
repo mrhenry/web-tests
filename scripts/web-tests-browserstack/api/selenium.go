@@ -96,10 +96,6 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 			return
 		}
 
-		if strings.Contains(req.URL.Path, "test-assets") {
-			log.Println(req.URL.Path)
-		}
-
 		if strings.HasPrefix(req.URL.Path, "/test-assets") {
 			pwd, err := os.Getwd()
 			if err != nil {
