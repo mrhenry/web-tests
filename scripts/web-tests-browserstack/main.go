@@ -83,7 +83,7 @@ func main() {
 		browsers[i], browsers[j] = browsers[j], browsers[i]
 	})
 
-	browsers = browsers[:25]
+	browsers = browsers[:90]
 
 	sema := semaphore.NewWeighted(5)
 
