@@ -1,0 +1,16 @@
+{
+  "spec": {
+    "org": "w3c",
+    "id": "cssom",
+    "section": "6.getBoundingClientRect",
+    "name": "Element.prototype.getBoundingClientRect",
+    "url": "TODO"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}
