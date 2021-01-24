@@ -15,6 +15,8 @@ import (
 
 func main() {
 	featureDirs := []string{}
+	totalScores := Scores{}
+	totalTests := map[string]struct{}{}
 
 	out := ""
 
@@ -39,7 +41,7 @@ func main() {
 		tests := map[string]struct{}{}
 		testsSlice := []string{}
 
-		scores := map[string][]float64{}
+		scores := Scores{}
 
 		{
 			f, err := os.Open(filepath.Join(featureDir, "meta.json"))
@@ -74,6 +76,7 @@ func main() {
 				if strings.HasSuffix(path, ".json") {
 					resultPaths = append(resultPaths, path)
 					tests[filepath.Base(filepath.Dir(path))] = struct{}{}
+					totalTests[filepath.Base(filepath.Dir(path))] = struct{}{}
 				}
 
 				return nil
@@ -239,20 +242,12 @@ func main() {
 						if !ok {
 							tableBody = tableBody + "<td>?</td>"
 
-							if x, ok := scores[test]; ok {
-								scores[test] = append(x, 0.5)
-							} else {
-								scores[test] = []float64{0.5}
-							}
+							scores.addPlaceholder(test)
 
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
 
-							if x, ok := scores[test]; ok {
-								scores[test] = append(x, result.Score)
-							} else {
-								scores[test] = []float64{result.Score}
-							}
+							scores.addScore(test, result.Score)
 						}
 					}
 
@@ -267,31 +262,9 @@ func main() {
 			}
 		}
 
-		avgScores := map[string]float64{}
-		for k, v := range scores {
-			avgScores[k] = 0
+		totalScores.sum(scores)
 
-			for _, vv := range v {
-				avgScores[k] += vv
-			}
-
-			avgScores[k] = avgScores[k] / float64(len(v))
-		}
-
-		avgScoresDescriptionList := ""
-
-		for _, test := range testsSlice {
-			v, ok := avgScores[test]
-			if !ok {
-				continue
-			}
-
-			avgScoresDescriptionList = avgScoresDescriptionList + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.2f", v) + `</tr>`
-		}
-
-		featureScores := `<table><tbody>` + avgScoresDescriptionList + `</tbody></table>`
-
-		featureSummary := `<summary>` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + featureScores + `</summary>`
+		featureSummary := `<summary>` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + scores.table(testsSlice) + `</summary>`
 		out = out + `<details>` + featureSummary + featureDetails + `
 <ul>
 	<li>` + feature.Spec.Org + `</li>
@@ -300,6 +273,15 @@ func main() {
 </ul>
 </details>`
 	}
+
+	testsSlice := []string{}
+	for k := range totalTests {
+		testsSlice = append(testsSlice, k)
+	}
+
+	sort.Sort(sort.StringSlice(testsSlice))
+
+	totalScores.table(testsSlice)
 
 	{
 		resultsHTML := `<!DOCTYPE html>
@@ -372,7 +354,7 @@ func main() {
 	</style>
 </head>
 <body>
-	` + out + `
+	` + totalScores.table(testsSlice) + out + `
 </body>
 </html>`
 
@@ -409,4 +391,90 @@ func (x Result) resultKey() string {
 	}
 
 	return fmt.Sprintf("%s/%s", x.Browser, x.BrowserVersion)
+}
+
+type Scores map[string][]float64
+
+func (x Scores) sum(y Scores) {
+	{
+		_, hasPurePolyfillIOResult := y["pure_polyfillio"]
+		pureResult, hasPureResult := y["pure"]
+		if !hasPurePolyfillIOResult && hasPureResult {
+			if xv, ok := x["pure"]; ok {
+				x["pure_polyfillio"] = append(xv, pureResult...)
+			} else {
+				x["pure_polyfillio"] = pureResult
+			}
+		}
+	}
+
+	{
+		_, hasBabelPolyfillIOResult := y["babel_polyfillio"]
+		babelResult, hasBabelResult := y["babel"]
+		if !hasBabelPolyfillIOResult && hasBabelResult {
+			if xv, ok := x["babel"]; ok {
+				x["babel_polyfillio"] = append(xv, babelResult...)
+			} else {
+				x["babel_polyfillio"] = babelResult
+			}
+		}
+	}
+
+	for yk, yv := range y {
+		if xv, ok := x[yk]; ok {
+			x[yk] = append(xv, yv...)
+		} else {
+			x[yk] = yv
+		}
+	}
+}
+
+func (x Scores) addScore(test string, score float64) {
+	if y, ok := x[test]; ok {
+		x[test] = append(y, score)
+	} else {
+		x[test] = []float64{score}
+	}
+}
+
+func (x Scores) addPlaceholder(test string) {
+	if y, ok := x[test]; ok {
+		x[test] = append(y, 0.5)
+	} else {
+		x[test] = []float64{0.5}
+	}
+}
+
+func (x Scores) table(order []string) string {
+	avgScores := map[string]float64{}
+	maxV := 0
+
+	for _, v := range x {
+		if len(v) > maxV {
+			maxV = len(v)
+		}
+	}
+
+	for k, v := range x {
+		avgScores[k] = 0
+
+		for _, vv := range v {
+			avgScores[k] += vv
+		}
+
+		avgScores[k] = avgScores[k] / float64(maxV)
+	}
+
+	tableContents := ""
+
+	for _, test := range order {
+		v, ok := avgScores[test]
+		if !ok {
+			continue
+		}
+
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.2f", v) + `</tr>`
+	}
+
+	return `<table><tbody>` + tableContents + `</tbody></table>`
 }
