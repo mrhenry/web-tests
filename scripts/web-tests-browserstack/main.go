@@ -49,7 +49,7 @@ func main() {
 
 		time.Sleep(time.Second * 30)
 
-		os.Exit(1)
+		os.Exit(0)
 	}()
 
 	sessionName := fmt.Sprintf("Web Tests – %s", time.Now().Format(time.RFC3339))
