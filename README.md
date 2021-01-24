@@ -18,7 +18,7 @@ This project aims to eliminate that blind spot.
 
 ## Tested
 
-- native
+- native *
 - native + polyfill.io
 - babel
 - babel + polyfill.io
@@ -27,6 +27,7 @@ This project aims to eliminate that blind spot.
 
 _suggestions for other tools are welcome_
 
+\* native is refered to as `pure` in files and config as these files will not be modified by tooling.
 
 ## How
 
