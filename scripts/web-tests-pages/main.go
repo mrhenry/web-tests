@@ -447,13 +447,6 @@ func (x Scores) addPlaceholder(test string) {
 
 func (x Scores) table(order []string) string {
 	avgScores := map[string]float64{}
-	maxV := 0
-
-	for _, v := range x {
-		if len(v) > maxV {
-			maxV = len(v)
-		}
-	}
 
 	for k, v := range x {
 		avgScores[k] = 0
@@ -462,7 +455,7 @@ func (x Scores) table(order []string) string {
 			avgScores[k] += vv
 		}
 
-		avgScores[k] = avgScores[k] / float64(maxV)
+		avgScores[k] = avgScores[k] / float64(len(v))
 	}
 
 	tableContents := ""

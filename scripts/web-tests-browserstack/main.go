@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*30)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*60)
 	defer cancel()
 
 	runnerCtx, runnerCancel := context.WithCancel(ctx)
@@ -101,7 +101,7 @@ func main() {
 		browsers[i], browsers[j] = browsers[j], browsers[i]
 	})
 
-	browsersLimit := 25
+	browsersLimit := 50
 	if len(browsers) > browsersLimit {
 		browsers = browsers[:browsersLimit]
 	}

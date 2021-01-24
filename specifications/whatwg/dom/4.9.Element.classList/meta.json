@@ -1,0 +1,18 @@
+{
+  "spec": {
+    "org": "whatwg",
+    "id": "dom",
+    "section": "4.9.classList",
+    "name": "Element.prototype.classList",
+    "url": "https://dom.spec.whatwg.org/#dom-element-classlist"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "Element.prototype.classList"
+  ]
+}
