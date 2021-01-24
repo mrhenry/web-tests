@@ -162,7 +162,7 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 
 	if browser.Device != "" {
 		caps["deviceName"] = browser.Device
-		caps["browserstack.appium_version"] = "1.8.0"
+		// caps["browserstack.appium_version"] = "1.8.0"
 	}
 	if browser.OS != "" {
 		caps["platformName"] = browser.OS
@@ -332,7 +332,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]map[str
 			score = vv
 		}
 
-		score = (score * 0.99) + (newScore * 0.01)
+		score = (score * 0.99) + (newScore * 0.02) // success increased more than failure decreases
 
 		if score > 1 {
 			score = 1

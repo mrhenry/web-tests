@@ -140,7 +140,7 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 	var wd selenium.WebDriver
 	wdChan := make(chan selenium.WebDriver, 1)
 
-	webDriverStartCtx, webDriverStartCancel := context.WithTimeout(ctx, time.Second*45)
+	webDriverStartCtx, webDriverStartCancel := context.WithTimeout(ctx, time.Second*120)
 	defer webDriverStartCancel()
 
 	go func() {

@@ -39,6 +39,8 @@ func main() {
 		tests := map[string]struct{}{}
 		testsSlice := []string{}
 
+		scores := map[string][]float64{}
+
 		{
 			f, err := os.Open(filepath.Join(featureDir, "meta.json"))
 			if err != nil {
@@ -59,6 +61,8 @@ func main() {
 				log.Fatal(err)
 			}
 		}
+
+		featureDetails := ""
 
 		{
 			resultPaths := []string{}
@@ -214,7 +218,7 @@ func main() {
 			}
 
 			for _, byBrowser := range resultsByBrowser {
-				detailSummary := `<details><summary>` + feature.Spec.Name + " : " + byBrowser.browser + `</summary><div class="table-container"><table>`
+				detailSummary := `<details><summary>` + byBrowser.browser + `</summary><div class="table-container"><table>`
 
 				tableHeading := "<thead><tr><th></th>"
 
@@ -234,8 +238,21 @@ func main() {
 						result, ok := results.results[test]
 						if !ok {
 							tableBody = tableBody + "<td>?</td>"
+
+							if x, ok := scores[test]; ok {
+								scores[test] = append(x, 0.5)
+							} else {
+								scores[test] = []float64{0.5}
+							}
+
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
+
+							if x, ok := scores[test]; ok {
+								scores[test] = append(x, result.Score)
+							} else {
+								scores[test] = []float64{result.Score}
+							}
 						}
 					}
 
@@ -246,9 +263,42 @@ func main() {
 
 				detailSummary = detailSummary + tableHeading + tableBody + "</div></table></details>"
 
-				out = out + `<div class="feature-results">` + detailSummary + `</div>`
+				featureDetails = featureDetails + `<div class="feature-results">` + detailSummary + `</div>`
 			}
 		}
+
+		avgScores := map[string]float64{}
+		for k, v := range scores {
+			avgScores[k] = 0
+
+			for _, vv := range v {
+				avgScores[k] += vv
+			}
+
+			avgScores[k] = avgScores[k] / float64(len(v))
+		}
+
+		avgScoresDescriptionList := ""
+
+		for _, test := range testsSlice {
+			v, ok := avgScores[test]
+			if !ok {
+				continue
+			}
+
+			avgScoresDescriptionList = avgScoresDescriptionList + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.2f", v) + `</tr>`
+		}
+
+		featureScores := `<table><tbody>` + avgScoresDescriptionList + `</tbody></table>`
+
+		featureSummary := `<summary>` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + featureScores + `</summary>`
+		out = out + `<details>` + featureSummary + featureDetails + `
+<ul>
+	<li>` + feature.Spec.Org + `</li>
+	<li>` + feature.Spec.ID + `</li>
+	<li><a href="` + feature.Spec.URL + `" target="_blank" rel="noopener">` + feature.Spec.Section + `</a></li>
+</ul>
+</details>`
 	}
 
 	{
@@ -260,8 +310,15 @@ func main() {
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
 	<style>
+		body {
+			font-size: 16px;
+		}
+
+		* {
+			font-family: monospace;
+		}
+
 		.feature-results {
-			padding: 20px 0;
 			width: 100%;
 		}
 
@@ -270,20 +327,47 @@ func main() {
 			overflow: scroll;
 		}
 
+		table, th, td {
+			border: 1px solid #ccc;
+			border-collapse: collapse;
+		}
+
+		th, td {
+			padding: 3px 5px;
+		}
+
 		table {
 			content-visibility: auto;
-			margin: 0 auto;
 			max-height: 600px;
-			max-width: 900px;
+			max-width: 1000px;
 			overflow: scroll;
+			margin: 10px 0;
 			text-align: left;
 			width: 100%
+		}
+
+		td + td {
+			text-align: right;
 		}
 
 		th {
 			background-color: white;
 			position: sticky;
 			top: 0;
+		}
+
+		details {
+			max-width: 1000px;
+			padding: 10px 0;
+		}
+
+		summary {
+			border-radius: 0;
+			padding: 10px 5px;
+		}
+
+		details details {
+			margin-left: 25px;
 		}
 	</style>
 </head>
