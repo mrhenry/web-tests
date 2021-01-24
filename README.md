@@ -78,7 +78,7 @@ Each test either passes or fails. No extra debugging information is collected in
 All tests are "async", just call the `callback` function with the `boolean` result when done.
 
 We try to keep tests simple and short.
-There is no need to test if a feature works exactely according to the spec. Better to test if something is generally usable.
+There is no need to test if a feature works exactly according to the spec. Better to test if something is generally usable.
 
 
 ## What it's not
