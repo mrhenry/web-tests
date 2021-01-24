@@ -396,35 +396,32 @@ func (x Result) resultKey() string {
 type Scores map[string][]float64
 
 func (x Scores) sum(y Scores) {
+	c := Scores{}
+	for k, v := range y {
+		c[k] = v
+	}
+
 	{
-		_, hasPurePolyfillIOResult := y["pure_polyfillio"]
-		pureResult, hasPureResult := y["pure"]
+		_, hasPurePolyfillIOResult := c["pure_polyfillio"]
+		pureResult, hasPureResult := c["pure"]
 		if !hasPurePolyfillIOResult && hasPureResult {
-			if xv, ok := x["pure"]; ok {
-				x["pure_polyfillio"] = append(xv, pureResult...)
-			} else {
-				x["pure_polyfillio"] = pureResult
-			}
+			c["pure_polyfillio"] = pureResult
 		}
 	}
 
 	{
-		_, hasBabelPolyfillIOResult := y["babel_polyfillio"]
-		babelResult, hasBabelResult := y["babel"]
+		_, hasBabelPolyfillIOResult := c["babel_polyfillio"]
+		babelResult, hasBabelResult := c["babel"]
 		if !hasBabelPolyfillIOResult && hasBabelResult {
-			if xv, ok := x["babel"]; ok {
-				x["babel_polyfillio"] = append(xv, babelResult...)
-			} else {
-				x["babel_polyfillio"] = babelResult
-			}
+			c["babel_polyfillio"] = babelResult
 		}
 	}
 
-	for yk, yv := range y {
-		if xv, ok := x[yk]; ok {
-			x[yk] = append(xv, yv...)
+	for ck, cv := range c {
+		if xv, ok := x[ck]; ok {
+			x[ck] = append(xv, cv...)
 		} else {
-			x[yk] = yv
+			x[ck] = cv
 		}
 	}
 }
@@ -466,7 +463,7 @@ func (x Scores) table(order []string) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.2f", v) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.3f", v) + `</tr>`
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
