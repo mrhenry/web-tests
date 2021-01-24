@@ -56,7 +56,7 @@ run `web-tests-new-test -org="tc39" -id="ecma262" -section="6.1.1" -name="Undefi
 | `-name` | human readable name | `Undefined` |
 
 This will generate a new test.
-Git is helpful in helping you locate what was created.
+Git is helpful to locate what was created.
 
 Each test folder contains a `meta.json` and a `test.pure.js` file that need to customised.
 
