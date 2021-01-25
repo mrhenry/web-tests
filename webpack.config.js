@@ -13,7 +13,7 @@ module.exports = [
 		},
 		target: [
 				'web',
-				'browserslist:IE 6 or Opera 9 or Safari 4 or Chrome 4 or Edge 12 or Firefox 2'
+				'browserslist:IE 8 or Opera 9 or Safari 4 or Chrome 4 or Edge 12 or Firefox 2'
 			],
 		optimization: {
 			minimize: false
@@ -35,7 +35,7 @@ module.exports = [
 										bugfixes: true,
 										targets: {
 											browsers: [
-												"IE >= 6",
+												"IE >= 8",
 												"Opera >= 9",
 												"Safari >= 4",
 												"Chrome >= 4",
