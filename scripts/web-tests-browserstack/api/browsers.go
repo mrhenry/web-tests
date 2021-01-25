@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -52,14 +54,34 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 	browsersMap := map[string]Browser{}
 
 	for _, b := range browsers {
+		if b.Browser == "edge" {
+			parts := strings.Split(b.BrowserVersion, ".")
+			if len(parts) > 0 {
+				v, err := strconv.ParseInt(parts[0], 10, 64)
+				if err == nil && v >= 79 {
+					continue // Edge >= 79 is just Chrome
+				}
+			}
+		}
+
 		key, b := browserForReducedSet(b)
-		browsersMap[key] = b
+		switch key {
+		case "ie/6.0":
+			continue // too old
+		case "ie/7.0":
+			continue // too old
+		default:
+
+			browsersMap[key] = b
+		}
 	}
 
 	out := []Browser{}
 	for _, b := range browsersMap {
 		out = append(out, b)
 	}
+
+	log.Printf("%v", out)
 
 	return out, nil
 }

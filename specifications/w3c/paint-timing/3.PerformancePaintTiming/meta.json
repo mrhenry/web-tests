@@ -1,0 +1,16 @@
+{
+  "spec": {
+    "org": "w3c",
+    "id": "paint-timing",
+    "section": "3",
+    "name": "PerformancePaintTiming interface",
+    "url": "https://w3c.github.io/paint-timing/#sec-PerformancePaintTiming"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}

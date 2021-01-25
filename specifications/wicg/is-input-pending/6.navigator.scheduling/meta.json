@@ -1,0 +1,16 @@
+{
+  "spec": {
+    "org": "wicg",
+    "id": "is-input-pending",
+    "section": "6",
+    "name": "navigator.scheduling",
+    "url": "https://wicg.github.io/is-input-pending/#extensions-to-the-navigator-interface"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}
