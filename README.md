@@ -81,6 +81,17 @@ All tests are "async", just call the `callback` function with the `boolean` resu
 We try to keep tests simple and short.
 There is no need to test if a feature works exactly according to the spec. Better to test if something is generally usable.
 
+All tests are also written in ES3. Only the actual feature tested can be modern.
+
+```js
+// Testing `async/await`
+(async function (cb) {
+	// we still use var for ES3.
+	var foo = await true;
+	cb(foo);
+})(callback);
+```
+
 
 ## What it's not
 
