@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -88,8 +87,6 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 	for _, b := range browsersMap {
 		out = append(out, b)
 	}
-
-	log.Printf("%v", out)
 
 	return out, nil
 }
