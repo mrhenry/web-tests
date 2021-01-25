@@ -54,6 +54,14 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 	browsersMap := map[string]Browser{}
 
 	for _, b := range browsers {
+		if b.BrowserVersion == "insider preview" {
+			continue // not an official release
+		}
+
+		if strings.Contains(b.BrowserVersion, "beta") {
+			continue // not an official release
+		}
+
 		if b.Browser == "edge" {
 			parts := strings.Split(b.BrowserVersion, ".")
 			if len(parts) > 0 {
