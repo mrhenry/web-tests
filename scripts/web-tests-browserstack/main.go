@@ -13,7 +13,6 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"sort"
 	"strings"
 	"syscall"
 	"time"
@@ -106,15 +105,6 @@ func main() {
 	if len(browsers) > browsersLimit {
 		browsers = browsers[:browsersLimit]
 	}
-
-	// Device runs take longer, doing these first gives a faster overal run
-	sort.SliceStable(browsers, func(i int, j int) bool {
-		if browsers[i].Device != "" && browsers[j].Device == "" {
-			return true
-		}
-
-		return false
-	})
 
 	sema := semaphore.NewWeighted(5)
 
