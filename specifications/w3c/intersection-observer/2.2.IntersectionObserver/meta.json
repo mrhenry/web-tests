@@ -1,0 +1,18 @@
+{
+  "spec": {
+    "org": "w3c",
+    "id": "intersection-observer",
+    "section": "2.2.IntersectionObserver",
+    "name": "IntersectionObserver",
+    "url": "https://www.w3.org/TR/intersection-observer/#intersectionobserver"
+  },
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "IntersectionObserver"
+  ]
+}

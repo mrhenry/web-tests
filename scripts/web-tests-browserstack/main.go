@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"sort"
 	"strings"
 	"syscall"
 	"time"
@@ -106,6 +107,15 @@ func main() {
 		browsers = browsers[:browsersLimit]
 	}
 
+	// Device runs take longer, doing these first gives a faster overal run
+	sort.SliceStable(browsers, func(i int, j int) bool {
+		if browsers[i].Device != "" && browsers[j].Device == "" {
+			return true
+		}
+
+		return false
+	})
+
 	sema := semaphore.NewWeighted(5)
 
 	for _, b := range browsers {
@@ -194,8 +204,8 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		tests[i], tests[j] = tests[j], tests[i]
 	})
 
-	if len(tests) > 100 {
-		tests = tests[:100]
+	if len(tests) > 250 {
+		tests = tests[:250]
 	}
 
 	in := make(chan api.Test, len(tests))
