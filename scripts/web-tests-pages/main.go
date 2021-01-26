@@ -154,7 +154,7 @@ func main() {
 					return parts1[1] > parts2[1]
 				}
 
-				return parts1[0] > parts2[0]
+				return parts1[0] < parts2[0]
 			})
 
 			resultsByBrowser := []struct {
