@@ -358,7 +358,7 @@ func main() {
 </body>
 </html>`
 
-		f, err := os.Create("docs/results.html")
+		f, err := os.Create("docs/index.html")
 		if err != nil {
 			log.Fatal(err)
 		}

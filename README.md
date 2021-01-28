@@ -14,7 +14,7 @@ None of these can actually guarantee your code will work, and for how many users
 
 This project aims to eliminate that blind spot.
 
-[Check the results](https://romainmenke.github.io/web-tests/results.html)
+[Check the results](https://romainmenke.github.io/web-tests/)
 
 ## Tested
 
