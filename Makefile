@@ -2,13 +2,13 @@
 
 feature_dirs := $(wildcard ./specifications/*/*/*)
 
+scripts: 
+	@$(MAKE) -C ./scripts
+
 features: $(feature_dirs) scripts
 
 $(feature_dirs): scripts
 	@$(MAKE) -C $@
-
-scripts: 
-	@$(MAKE) -C ./scripts
 
 build-mapping: scripts features
 	web-tests-build-mapping

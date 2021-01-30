@@ -15,6 +15,6 @@ web-tests-new-test: $(wildcard web-tests-new-test/*)
 web-tests-pages: $(wildcard web-tests-pages/*)
 	go install ./web-tests-pages/...
 
-all: ../lib/mapping.json web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages
+all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages
 
 .PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages

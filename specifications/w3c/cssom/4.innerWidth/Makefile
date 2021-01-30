@@ -7,11 +7,14 @@ test.babel.js: test.pure.js ../../../../babel.config.json ../../../../package-lo
 
 test.babel_webpack.js: test.pure.js ../../../../webpack.config.js ../../../../package-lock.json
 	npm run webpack -- --entry $(mkfile_dir)test.pure.js --output-path $(mkfile_dir) --config webpack.config.js
+	@touch test.babel_webpack.js
 
 test.core-web_modules.js test.core-web_no-modules.js: test.pure.js ../../../../webpack-core-web.config.js ../../../../package-lock.json
 	npm run webpack -- --entry $(mkfile_dir)test.pure.js --output-path $(mkfile_dir) --config webpack-core-web.config.js
+	@touch test.core-web_modules.js
+	@touch test.core-web_no-modules.js
 
-html_tests:
+html_tests: test.babel.js test.babel_webpack.js test.core-web_modules.js test.core-web_no-modules.js
 	web-tests-build-test
 
 all: test.babel.js test.babel_webpack.js test.core-web_modules.js test.core-web_no-modules.js html_tests

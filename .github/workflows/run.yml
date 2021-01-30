@@ -40,7 +40,7 @@ jobs:
       - name: make
         run: |
           npm install
-          make
+          make -j 2
 
       - name: test
         run: web-tests-browserstack

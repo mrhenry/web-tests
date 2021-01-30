@@ -42,7 +42,7 @@ requirements : `make`, `go`, latest `node`
 
 - clone the repo
 - run `npm install`
-- run `make` to build everything
+- run `make` to build everything (or `make -j <X>` for parallel builds)
 - run `make scripts` to only build the tools
 
 ### Add a new test
