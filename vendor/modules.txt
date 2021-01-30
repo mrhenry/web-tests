@@ -1,6 +1,6 @@
 # github.com/blang/semver v3.5.1+incompatible
 github.com/blang/semver
-# github.com/google/uuid v1.1.5
+# github.com/google/uuid v1.2.0
 ## explicit
 github.com/google/uuid
 # github.com/hashicorp/go-version v1.2.1
