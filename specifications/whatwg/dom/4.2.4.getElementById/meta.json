@@ -6,6 +6,8 @@
     "name": "NonElementParentNode.getElementByID",
     "url": "https://dom.spec.whatwg.org/#interface-nonelementparentnode"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

@@ -1,18 +1,20 @@
 {
-    "spec": {
-        "org": "whatwg",
-        "id": "url",
-        "section": "6.2.toString",
-        "name": "URLSearchParams.prototype.toString",
-        "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
-    },
-    "tests": {
-        "babel": "test.babel.js",
-        "babel_webpack": "test.babel_webpack.js",
-        "core-web": "test.core-web",
-        "pure": "test.pure.js"
-    },
-    "polyfill.io": [
-        "URLSearchParams"
-    ]
+  "spec": {
+    "org": "whatwg",
+    "id": "url",
+    "section": "6.2.toString",
+    "name": "URLSearchParams.prototype.toString",
+    "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "URLSearchParams"
+  ]
 }

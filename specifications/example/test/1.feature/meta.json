@@ -1,15 +1,18 @@
 {
-    "spec": {
-        "org": "example",
-        "id": "test",
-        "section": "1",
-        "name": "Example test",
-        "url": "TODO"
-    },
-    "tests": {
-        "babel": "test.babel.js",
-        "babel_webpack": "test.babel_webpack.js",
-        "core-web": "test.core-web",
-        "pure": "test.pure.js"
-    }
+  "spec": {
+    "org": "example",
+    "id": "test",
+    "section": "1",
+    "name": "Example test",
+    "url": "TODO"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": null
 }

@@ -6,6 +6,8 @@
     "name": "Window.prototype.innerWidth",
     "url": "https://drafts.csswg.org/cssom-view/#dom-window-innerwidth"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

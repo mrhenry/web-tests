@@ -6,6 +6,8 @@
     "name": "IntersectionObserver",
     "url": "https://www.w3.org/TR/intersection-observer/#intersectionobserver"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

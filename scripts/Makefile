@@ -15,6 +15,12 @@ web-tests-new-test: $(wildcard web-tests-new-test/*)
 web-tests-pages: $(wildcard web-tests-pages/*)
 	go install ./web-tests-pages/...
 
-all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages
+web-tests-migrate-meta: $(wildcard web-tests-migrate-meta/*)
+	go install ./web-tests-migrate-meta/...
 
-.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages
+web-tests-migrate-makefile: $(wildcard web-tests-migrate-makefile/*)
+	go install ./web-tests-migrate-makefile/...
+
+all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile
+
+.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile

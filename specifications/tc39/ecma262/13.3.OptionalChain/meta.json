@@ -6,6 +6,8 @@
     "name": "Optional Chaining",
     "url": "https://tc39.es/ecma262/#prod-OptionalChain"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

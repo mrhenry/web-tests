@@ -1,15 +1,18 @@
 {
-    "spec": {
-        "org": "tc39",
-        "id": "ecma262",
-        "section": "6.1.4",
-        "name": "The String Type",
-        "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type"
-    },
-    "tests": {
-        "babel": "test.babel.js",
-        "babel_webpack": "test.babel_webpack.js",
-        "core-web": "test.core-web",
-        "pure": "test.pure.js"
-    }
+  "spec": {
+    "org": "tc39",
+    "id": "ecma262",
+    "section": "6.1.4",
+    "name": "The String Type",
+    "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": null
 }

@@ -6,11 +6,13 @@
     "name": "ParentNode.querySelector",
     "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
-    "pure": "test.pure.js",
-    "core-web": "test.core-web"
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
   },
   "polyfill.io": [
     "document.querySelector"

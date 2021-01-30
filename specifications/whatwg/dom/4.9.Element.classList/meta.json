@@ -6,6 +6,8 @@
     "name": "Element.prototype.classList",
     "url": "https://dom.spec.whatwg.org/#dom-element-classlist"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

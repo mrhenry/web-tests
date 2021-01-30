@@ -8,8 +8,12 @@ type Feature struct {
 		Name    string `json:"name"`
 		URL     string `json:"url"`
 	} `json:"spec"`
-	Tests      map[string]string `json:"tests"`
-	PolyfillIO []string          `json:"polyfill.io"`
+	Notes []struct {
+		Message string `json:"message"`
+	} `json:"notes"`
+	SearchTerms []string          `json:"search_terms"`
+	Tests       map[string]string `json:"tests"`
+	PolyfillIO  []string          `json:"polyfill.io"`
 }
 
 type FeatureWithDir struct {

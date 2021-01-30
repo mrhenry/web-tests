@@ -6,6 +6,8 @@
     "name": "navigator.scheduling",
     "url": "https://wicg.github.io/is-input-pending/#extensions-to-the-navigator-interface"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",

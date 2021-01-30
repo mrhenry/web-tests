@@ -6,6 +6,8 @@
     "name": "Element.prototype.getBoundingClientRect",
     "url": "https://drafts.csswg.org/cssom-view/#dom-element-getboundingclientrect"
   },
+  "notes": [],
+  "search_terms": [],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
