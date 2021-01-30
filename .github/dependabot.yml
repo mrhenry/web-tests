@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    vendor: true
+    open-pull-requests-limit: 10
+    labels:
+      - "go"
+      - "dependencies"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "npm"
+    directory: "/"
+    open-pull-requests-limit: 10
+    labels:
+      - "npm"
+      - "dependencies"
+    schedule:
+      interval: "daily"
