@@ -10,6 +10,7 @@
           "url": "TODO"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -32,6 +33,7 @@
           "url": "https://tc39.es/ecma262/#sec-let-and-const-declarations-static-semantics-isconstantdeclaration"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -50,6 +52,7 @@
           "url": "https://tc39.es/ecma262/#prod-OptionalChain"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -68,6 +71,7 @@
           "url": "https://tc39.es/ecma262/#sec-async-function-definitions"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -86,6 +90,7 @@
           "url": "https://tc39.es/ecma262/#sec-globalthis"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -106,6 +111,7 @@
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-undefined-type"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -124,6 +130,7 @@
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-null-type"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -142,6 +149,7 @@
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-boolean-type"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -160,6 +168,7 @@
           "url": "https://tc39.es/ecma262/#sec-ecmascript-language-types-string-type"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -182,6 +191,7 @@
           "url": "https://drafts.csswg.org/cssom-view/#dom-window-innerwidth"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -202,6 +212,7 @@
           "url": "https://drafts.csswg.org/cssom-view/#dom-element-getboundingclientrect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -222,6 +233,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -242,6 +254,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -262,6 +275,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -282,6 +296,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -302,6 +317,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -322,6 +338,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -342,6 +359,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -362,6 +380,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -382,6 +401,7 @@
           "url": "https://www.w3.org/TR/geometry-1/#DOMRect"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -404,6 +424,7 @@
           "url": "https://www.w3.org/TR/intersection-observer/#intersectionobserver"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -426,6 +447,7 @@
           "url": "https://w3c.github.io/paint-timing/#sec-PerformancePaintTiming"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -448,6 +470,7 @@
           "url": "https://dom.spec.whatwg.org/#interface-nonelementparentnode"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -466,6 +489,7 @@
           "url": "https://dom.spec.whatwg.org/#dom-parentnode-queryselector"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -486,6 +510,7 @@
           "url": "https://dom.spec.whatwg.org/#dom-element-classlist"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -508,6 +533,7 @@
           "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
@@ -532,6 +558,7 @@
           "url": "https://wicg.github.io/is-input-pending/#extensions-to-the-navigator-interface"
         },
         "notes": [],
+        "search_terms": [],
         "tests": {
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
