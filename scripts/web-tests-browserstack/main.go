@@ -217,6 +217,9 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		for _, test := range tests {
 			select {
 			case <-ctx.Done():
+				if ctx.Err() == context.DeadlineExceeded {
+					log.Println("test run deadline exceeded while sending tests to the runner")
+				}
 				close(in)
 				return
 			default:
@@ -232,6 +235,9 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		for {
 			select {
 			case <-ctx.Done():
+				if ctx.Err() == context.DeadlineExceeded {
+					log.Println("test run deadline exceeded while waiting for Selemium results in main")
+				}
 				return
 			case test, ok := <-out:
 				if !ok {

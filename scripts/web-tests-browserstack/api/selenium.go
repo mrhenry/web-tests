@@ -188,6 +188,10 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 		for {
 			select {
 			case <-ctx.Done():
+				if ctx.Err() == context.DeadlineExceeded {
+					log.Println("test run deadline exceeded in SELENIUM_LOOP")
+				}
+
 				return
 			case test := <-runChan:
 				testDoneChan := make(chan bool, 1)
@@ -212,6 +216,10 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 
 				select {
 				case <-ctx.Done():
+					if ctx.Err() == context.DeadlineExceeded {
+						log.Println("test run deadline exceeded in SELENIUM_LOOP")
+					}
+
 					return
 				case <-testDoneChan:
 					continue SELENIUM_LOOP
@@ -224,6 +232,10 @@ HTTP_CACHE_LOOP:
 	for {
 		select {
 		case <-ctx.Done():
+			if ctx.Err() == context.DeadlineExceeded {
+				log.Println("test run deadline exceeded in HTTP_CACHE_LOOP")
+			}
+
 			return ctx.Err()
 		case test, ok := <-in:
 			if !ok {
@@ -273,6 +285,11 @@ HTTP_CACHE_LOOP:
 	case <-doneChan:
 		// noop
 	case <-ctx.Done():
+		// We ignore ctx.Err() here as tests have their own validation outside this func
+		// We just need a fallback for "<-doneChan"
+		if ctx.Err() == context.DeadlineExceeded {
+			log.Println("test run deadline exceeded while waiting for Selenium results in runner")
+		}
 		// noop
 	}
 
