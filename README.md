@@ -47,7 +47,7 @@ requirements : `make`, `go`, latest `node`
 
 ### Add a new test
 
-run `web-tests-new-test -org="tc39" -id="ecma262" -section="6.1.1" -name="Undefined"`
+run `web-tests-new-test -org="tc39" -id="ecma262" -section="6.1.1" -name="Undefined" -dir="6.1.1.Undefined"`
 
 | arg | usage | examples |
 | --- | --- | --- |
@@ -55,6 +55,7 @@ run `web-tests-new-test -org="tc39" -id="ecma262" -section="6.1.1" -name="Undefi
 | `-id` | the name of the spec | `ecma262`, `dom`, `cssom`,... |
 | `-section` | the part of the spec | `6.1.1` |
 | `-name` | human readable name | `Undefined` |
+| `-dir` | dir name | `Undefined` |
 
 This will generate a new test.
 Git is helpful to locate what was created.

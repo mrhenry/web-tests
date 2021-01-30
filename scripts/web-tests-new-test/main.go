@@ -16,20 +16,22 @@ import (
 )
 
 func main() {
-	var org string
+	var dirName string
 	var id string
-	var section string
 	var name string
+	var org string
+	var section string
 
-	flag.StringVar(&org, "org", "", "Organisation authoring the spec")
+	flag.StringVar(&dirName, "dir", "", "Name of the feature dir")
 	flag.StringVar(&id, "id", "", "Name of the specification")
-	flag.StringVar(&section, "section", "", "Section of the feature (\"6.1.1\" for ecma262 Undefined)")
 	flag.StringVar(&name, "name", "", "Name of the feature (single word)")
+	flag.StringVar(&org, "org", "", "Organisation authoring the spec")
+	flag.StringVar(&section, "section", "", "Section of the feature (\"6.1.1\" for ecma262 Undefined)")
 
 	flag.Parse()
 
-	if org == "" {
-		fmt.Println("-org is required\n\tweb-tests-new-test --help")
+	if dirName == "" {
+		fmt.Println("-dir is required\n\tweb-tests-new-test --help")
 		return
 	}
 
@@ -38,17 +40,22 @@ func main() {
 		return
 	}
 
-	if section == "" {
-		fmt.Println("-section is required\n\tweb-tests-new-test --help")
-		return
-	}
-
 	if name == "" {
 		fmt.Println("-name is required\n\tweb-tests-new-test --help")
 		return
 	}
 
-	newFeatureDirPath := filepath.Join("./specifications/", org, id, fmt.Sprintf("%s.%s", section, name))
+	if org == "" {
+		fmt.Println("-org is required\n\tweb-tests-new-test --help")
+		return
+	}
+
+	if section == "" {
+		fmt.Println("-section is required\n\tweb-tests-new-test --help")
+		return
+	}
+
+	newFeatureDirPath := filepath.Join("./specifications/", org, id, dirName)
 	dir, err := os.Stat(newFeatureDirPath)
 	if err == nil {
 		if dir.IsDir() {
@@ -111,6 +118,10 @@ func main() {
 			meta.Spec.Section = section
 			meta.Spec.Name = name
 			meta.PolyfillIO = []string{}
+			meta.Notes = []struct {
+				Message string `json:"message"`
+			}{}
+			meta.SearchTerms = []string{}
 
 			b, err = json.MarshalIndent(meta, "", "  ")
 			if err != nil {
