@@ -1,19 +1,11 @@
 (function (cb) {
 	// TODO : there are more cases and gotcha's.
-	
+
 	var wrongThis = false;
 	function a1() {
 		if (this !== window) {
 			wrongThis = true;
 		}
-
-		var a2 = () => {
-			if (this !== window) {
-				wrongThis = true;
-			}
-		};
-
-		a2();
 	}
 
 	function b1() {
@@ -35,14 +27,6 @@
 		if (typeof this !== "undefined") {
 			wrongThis = true;
 		}
-
-		var c2 = () => {
-			if (typeof this !== "undefined") {
-				wrongThis = true;
-			}
-		};
-
-		c2();
 	}
 
 	function d1() {
@@ -60,21 +44,21 @@
 		d2();
 	}
 
-	class F1 {
-		f2() {
-			if (!(this instanceof F1)) {
-				wrongThis = true;
-			}
-		}
+	function F1() {}
 
-		f3(cb) {
+	F1.prototype.f2 = function () {
+		if (!(this instanceof F1)) {
+			wrongThis = true;
+		}
+	}
+
+	F1.prototype.f3 = function (cb) {
 			cb();
 		}
 
-		f4(cb) {
+	F1.prototype.f4 = function (cb) {
 			cb.bind(this)();
 		}
-	}
 
 	a1();
 	b1();
@@ -90,22 +74,8 @@
 		}
 	});
 
-	f1.f3(() => {
-		if (this !== window) {
-			wrongThis = true;
-		}
-	});
-
 	f1.f4(function () {
 		if (this !== f1) {
-			console.log(this);
-			wrongThis = true;
-		}
-	});
-
-	f1.f4(() => {
-		if (this !== window) {
-			console.log(this);
 			wrongThis = true;
 		}
 	});

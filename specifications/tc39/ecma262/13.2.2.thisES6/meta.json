@@ -1,0 +1,21 @@
+{
+  "spec": {
+    "org": "tc39",
+    "id": "ecma262",
+    "section": "13.2.2.es6",
+    "name": "The this Keyword (es6)",
+    "url": "https://tc39.es/ecma262/#sec-primary-expression"
+  },
+  "notes": [],
+  "search_terms": [
+    "this",
+    "es6"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}

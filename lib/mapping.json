@@ -32,9 +32,33 @@
           "name": "The this Keyword",
           "url": "https://tc39.es/ecma262/#sec-primary-expression"
         },
-        "notes": [],
+        "notes": [
+          {
+            "message": "Webpack forces strict mode."
+          }
+        ],
         "search_terms": [
           "this"
+        ],
+        "tests": {
+          "babel": "test.babel.js",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [],
+        "dir": "specifications/tc39/ecma262/13.2.2.this"
+      },
+      "13.2.2.es6": {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "13.2.2.es6",
+          "name": "The this Keyword (es6)",
+          "url": "https://tc39.es/ecma262/#sec-primary-expression"
+        },
+        "notes": [],
+        "search_terms": [
+          "this",
+          "es6"
         ],
         "tests": {
           "babel": "test.babel.js",
@@ -43,7 +67,29 @@
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
-        "dir": "specifications/tc39/ecma262/13.2.2.this"
+        "dir": "specifications/tc39/ecma262/13.2.2.thisES6"
+      },
+      "13.2.2.strict": {
+        "spec": {
+          "org": "tc39",
+          "id": "ecma262",
+          "section": "13.2.2.strict",
+          "name": "The this Keyword (strict mode)",
+          "url": "https://tc39.es/ecma262/#sec-primary-expression"
+        },
+        "notes": [],
+        "search_terms": [
+          "this",
+          "strict"
+        ],
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [],
+        "dir": "specifications/tc39/ecma262/13.2.2.this.strict"
       },
       "13.3.1.3": {
         "spec": {

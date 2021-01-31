@@ -6,14 +6,16 @@
     "name": "The this Keyword",
     "url": "https://tc39.es/ecma262/#sec-primary-expression"
   },
-  "notes": [],
+  "notes": [
+    {
+      "message": "Webpack forces strict mode."
+    }
+  ],
   "search_terms": [
     "this"
   ],
   "tests": {
     "babel": "test.babel.js",
-    "babel_webpack": "test.babel_webpack.js",
-    "core-web": "test.core-web",
     "pure": "test.pure.js"
   },
   "polyfill.io": []
