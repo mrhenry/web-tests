@@ -462,18 +462,10 @@ func (x Scores) table(order []string) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmtNines(numberOfNines(v)) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%dN", numberOfNines(v)) + `</tr>`
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
-}
-
-func fmtNines(v int) string {
-	if v == 1 {
-		return fmt.Sprintf("%d nine", v)
-	}
-
-	return fmt.Sprintf("%d nines", v)
 }
 
 func numberOfNines(v float64) int {
