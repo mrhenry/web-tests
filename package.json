@@ -3,12 +3,10 @@
     "version": "0.1.0",
     "description": "Tests for web features",
     "files": [
-        "./lib/",
-        "./ecma262/"
+        "./lib/"
     ],
     "scripts": {
         "babel": "babel",
-        "test": "node ./self-tests/lib/meta.js",
         "webpack": "webpack"
     },
     "author": "",

@@ -16,6 +16,10 @@ This project aims to eliminate that blind spot.
 
 [Check the results](https://romainmenke.github.io/web-tests/)
 
+Scores are represented as [nines](https://en.wikipedia.org/wiki/High_availability#"Nines").
+Each failing/passing test is weighted by the global usage of the browser from the test result.
+This gives an approximate "reliability" of a feature in the real world.
+
 ## Tested
 
 - native *

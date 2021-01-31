@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -20,7 +21,12 @@ func main() {
 
 	out := ""
 
-	err := filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
+	usageData, err := getUsageData(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -247,7 +253,8 @@ func main() {
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
 
-							scores.addScore(test, result.Score)
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
+							scores.addScore(test, weightedScore)
 						}
 					}
 
@@ -463,8 +470,56 @@ func (x Scores) table(order []string) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%0.3f", v) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmtNines(numberOfNines(v)) + `</tr>`
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
+}
+
+func fmtNines(v int) string {
+	if v == 1 {
+		return fmt.Sprintf("%d nine", v)
+	}
+
+	return fmt.Sprintf("%d nines", v)
+}
+
+func numberOfNines(v float64) int {
+	if v >= 0.999999999 {
+		return 9
+	}
+
+	if v >= 0.99999999 {
+		return 8
+	}
+
+	if v >= 0.9999999 {
+		return 7
+	}
+
+	if v >= 0.999999 {
+		return 6
+	}
+
+	if v >= 0.99999 {
+		return 5
+	}
+
+	if v >= 0.9999 {
+		return 4
+	}
+
+	if v >= 0.999 {
+		return 3
+	}
+
+	if v >= 0.99 {
+		return 2
+	}
+
+	if v >= 0.9 {
+		return 1
+	}
+
+	return 0
 }
