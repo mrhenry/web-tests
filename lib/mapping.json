@@ -505,6 +505,56 @@
         "polyfill.io": [],
         "dir": "specifications/w3c/paint-timing/3.PerformancePaintTiming"
       }
+    },
+    "web-animations-1": {
+      "4.3.2": {
+        "spec": {
+          "org": "w3c",
+          "id": "web-animations-1",
+          "section": "4.3.2",
+          "name": "The default document timeline",
+          "url": "https://www.w3.org/TR/web-animations-1/#the-documenttimeline-interface"
+        },
+        "notes": [],
+        "search_terms": [
+          "Web Animations",
+          "document.timeline"
+        ],
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [
+          "WebAnimations"
+        ],
+        "dir": "specifications/w3c/web-animations-1/4.3.2.document.timeline"
+      },
+      "6.9": {
+        "spec": {
+          "org": "w3c",
+          "id": "web-animations-1",
+          "section": "6.9",
+          "name": "Animatable Interface Mixin",
+          "url": "https://www.w3.org/TR/web-animations-1/#the-animatable-interface-mixin"
+        },
+        "notes": [],
+        "search_terms": [
+          "Web Animations",
+          "Element.prototype.animate"
+        ],
+        "tests": {
+          "babel": "test.babel.js",
+          "babel_webpack": "test.babel_webpack.js",
+          "core-web": "test.core-web",
+          "pure": "test.pure.js"
+        },
+        "polyfill.io": [
+          "WebAnimations"
+        ],
+        "dir": "specifications/w3c/web-animations-1/6.9.Animatable"
+      }
     }
   },
   "whatwg": {

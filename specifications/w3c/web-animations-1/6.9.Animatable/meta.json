@@ -1,0 +1,23 @@
+{
+  "spec": {
+    "org": "w3c",
+    "id": "web-animations-1",
+    "section": "6.9",
+    "name": "Animatable Interface Mixin",
+    "url": "https://www.w3.org/TR/web-animations-1/#the-animatable-interface-mixin"
+  },
+  "notes": [],
+  "search_terms": [
+    "Web Animations",
+    "Element.prototype.animate"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "WebAnimations"
+  ]
+}

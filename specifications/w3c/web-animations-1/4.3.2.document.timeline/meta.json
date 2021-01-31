@@ -1,0 +1,23 @@
+{
+  "spec": {
+    "org": "w3c",
+    "id": "web-animations-1",
+    "section": "4.3.2",
+    "name": "The default document timeline",
+    "url": "https://www.w3.org/TR/web-animations-1/#the-documenttimeline-interface"
+  },
+  "notes": [],
+  "search_terms": [
+    "Web Animations",
+    "document.timeline"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "WebAnimations"
+  ]
+}
