@@ -248,8 +248,8 @@ func main() {
 						if !ok {
 							tableBody = tableBody + "<td>?</td>"
 
-							scores.addPlaceholder(test)
-
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 0.5)
+							scores.addScore(test, weightedScore)
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.2f", result.Score) + "</td>"
 
@@ -438,14 +438,6 @@ func (x Scores) addScore(test string, score float64) {
 		x[test] = append(y, score)
 	} else {
 		x[test] = []float64{score}
-	}
-}
-
-func (x Scores) addPlaceholder(test string) {
-	if y, ok := x[test]; ok {
-		x[test] = append(y, 0.5)
-	} else {
-		x[test] = []float64{0.5}
 	}
 }
 
