@@ -1,0 +1,22 @@
+{
+  "spec": {
+    "org": "whatwg",
+    "id": "dom",
+    "section": "4.7",
+    "name": "DocumentFragment",
+    "url": "https://dom.spec.whatwg.org/#interface-documentfragment"
+  },
+  "notes": [],
+  "search_terms": [
+    "DocumentFragment"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "DocumentFragment"
+  ]
+}
