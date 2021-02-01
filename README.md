@@ -14,6 +14,12 @@ None of these can actually guarantee your code will work, and for how many users
 
 This project aims to eliminate that blind spot.
 
+There is also the concern that tooling and browsers are updated all the time.
+No one guarantees that everything that works today will work tomorrow.
+This project is also a log or delta of what works or is broken.
+
+## Results
+
 [Check the results](https://romainmenke.github.io/web-tests/)
 
 Scores are represented as [nines](https://en.wikipedia.org/wiki/High_availability#"Nines").
