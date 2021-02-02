@@ -34,6 +34,7 @@ This gives an approximate "reliability" of a feature in the real world.
 - babel + polyfill.io
 - babel + webpack and core-js
 - babel + webpack, core-js and core-web
+- esbuild ("unbuildable" fallbacks to original test file)
 
 _suggestions for other tools are welcome_
 
