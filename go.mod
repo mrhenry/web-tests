@@ -1,4 +1,4 @@
-module github.com/romainmenke/web-tests
+module github.com/mrhenry/web-tests
 
 go 1.15
 

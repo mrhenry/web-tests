@@ -18,8 +18,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/romainmenke/web-tests/scripts/feature"
-	"github.com/romainmenke/web-tests/scripts/web-tests-browserstack/api"
+	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/web-tests-browserstack/api"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
 )
