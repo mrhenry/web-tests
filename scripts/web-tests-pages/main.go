@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	version "github.com/hashicorp/go-version"
-	"github.com/romainmenke/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/feature"
 )
 
 func main() {
