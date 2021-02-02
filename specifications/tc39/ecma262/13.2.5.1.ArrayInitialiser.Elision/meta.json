@@ -1,0 +1,19 @@
+{
+  "spec": {
+    "org": "tc39",
+    "id": "ecma262",
+    "section": "13.2.5.1",
+    "name": "Trailing Commas in Array Initialiser",
+    "url": "https://tc39.es/ecma262/#sec-runtime-semantics-arrayaccumulation"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}
