@@ -15,6 +15,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -64,6 +65,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -86,6 +88,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -105,6 +108,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -124,6 +128,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -143,6 +148,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -162,6 +168,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -186,6 +193,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -210,6 +218,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -231,6 +240,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -250,6 +260,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -269,6 +280,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -288,6 +300,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": null,
@@ -311,6 +324,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -332,6 +346,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -353,6 +368,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -374,6 +390,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -395,6 +412,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -416,6 +434,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -437,6 +456,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -458,6 +478,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -479,6 +500,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -500,6 +522,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -521,6 +544,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -544,6 +568,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -567,6 +592,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -591,6 +617,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -615,6 +642,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -640,6 +668,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],
@@ -659,6 +688,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -682,6 +712,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -703,6 +734,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -726,6 +758,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [
@@ -751,6 +784,7 @@
           "babel": "test.babel.js",
           "babel_webpack": "test.babel_webpack.js",
           "core-web": "test.core-web",
+          "esbuild": "test.esbuild.js",
           "pure": "test.pure.js"
         },
         "polyfill.io": [],

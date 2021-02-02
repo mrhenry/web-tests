@@ -1,5 +1,3 @@
-# Webpack forces strict mode
-
 .DEFAULT_GOAL := all
 
 mkfile_dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))

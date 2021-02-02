@@ -113,7 +113,7 @@ module.exports = [
 		},
 		target: [
 				'web',
-				'browserslist:IE 8 or Opera 9 or Safari 4 or Chrome 4 or Edge 12 or Firefox 2'
+				'browserslist:IE 8 or Opera 12 or Safari 5 or Chrome 15 or Edge 12 or Firefox 4'
 			],
 		optimization: {
 			minimize: false
@@ -136,11 +136,11 @@ module.exports = [
 										targets: {
 											browsers: [
 												"IE >= 8",
-												"Opera >= 9",
-												"Safari >= 4",
-												"Chrome >= 4",
+												"Opera >= 12",
+												"Safari >= 5.1",
+												"Chrome >= 15",
 												"Edge >= 12",
-												"Firefox >= 2"
+												"Firefox >= 4"
 											]
 										},
 										useBuiltIns: 'usage'
@@ -163,11 +163,11 @@ module.exports = [
 									{
 										browsers: {
 											"ie": "8",
-											"opera": "9",
-											"safari": "4",
-											"chrome": "4",
+											"opera": "12",
+											"safari": "5.1",
+											"chrome": "15",
 											"edge": "12",
-											"firefox": "2"
+											"firefox": "4"
 										},
 										debug: true
 									}
@@ -182,11 +182,11 @@ module.exports = [
 										targets: {
 											browsers: [
 												"IE >= 8",
-												"Opera >= 9",
-												"Safari >= 4",
-												"Chrome >= 4",
+												"Opera >= 12",
+												"Safari >= 5.1",
+												"Chrome >= 15",
 												"Edge >= 12",
-												"Firefox >= 2"
+												"Firefox >= 4"
 											]
 										},
 										useBuiltIns: 'usage'
