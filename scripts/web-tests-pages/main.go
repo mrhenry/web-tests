@@ -361,6 +361,7 @@ func main() {
 	</style>
 </head>
 <body>
+	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
 	` + totalScores.table(testsSlice) + out + `
 </body>
 </html>`
@@ -462,48 +463,51 @@ func (x Scores) table(order []string) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%dN", numberOfNines(v)) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%sN", numberOfNines(v)) + `</tr>`
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
 }
 
-func numberOfNines(v float64) int {
+func numberOfNines(v float64) string {
+	if v >= 0.9999999999 {
+		return "∞"
+	}
 	if v >= 0.999999999 {
-		return 9
+		return "9"
 	}
 
 	if v >= 0.99999999 {
-		return 8
+		return "8"
 	}
 
 	if v >= 0.9999999 {
-		return 7
+		return "7"
 	}
 
 	if v >= 0.999999 {
-		return 6
+		return "6"
 	}
 
 	if v >= 0.99999 {
-		return 5
+		return "5"
 	}
 
 	if v >= 0.9999 {
-		return 4
+		return "4"
 	}
 
 	if v >= 0.999 {
-		return 3
+		return "3"
 	}
 
 	if v >= 0.99 {
-		return 2
+		return "2"
 	}
 
 	if v >= 0.9 {
-		return 1
+		return "1"
 	}
 
-	return 0
+	return "0"
 }
