@@ -1,10 +1,10 @@
-name: 'Build'
+name: 'Check if build is ok'
 on:
   push:
 
 jobs:
   build:
-    name: 'Build'
+    name: 'Check if build is ok'
     runs-on: ubuntu-latest
     steps:
       - name: check out
