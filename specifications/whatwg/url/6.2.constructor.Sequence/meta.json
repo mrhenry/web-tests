@@ -1,0 +1,25 @@
+{
+  "spec": {
+    "org": "whatwg",
+    "id": "url",
+    "section": "6.2.constructor.Sequence",
+    "name": "URLSearchParams constructor with a Sequence",
+    "url": "https://url.spec.whatwg.org/#interface-urlsearchparams"
+  },
+  "notes": [],
+  "search_terms": [
+    "URLSearchParams",
+    "constructor",
+    "Sequence"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "URLSearchParams"
+  ]
+}

@@ -53,6 +53,14 @@ func main() {
 		os.Exit(0)
 	}()
 
+	var browserArg string
+	var testFilterArg string
+
+	flag.StringVar(&browserArg, "browser", "", "Only run on browser")
+	flag.StringVar(&testFilterArg, "run", "", "Only run tests matching")
+
+	flag.Parse()
+
 	sessionName := fmt.Sprintf("Web Tests – %s", time.Now().Format(time.RFC3339))
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
@@ -72,19 +80,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	{
-		var browser string
-
-		flag.StringVar(&browser, "browser", "", "Only run on browser")
-
-		flag.Parse()
-
-		if browser != "" {
-			for _, b := range browsers {
-				if b.ResultKey() == browser {
-					browsers = []api.Browser{b}
-					break
-				}
+	if browserArg != "" {
+		for _, b := range browsers {
+			if b.ResultKey() == browserArg {
+				browsers = []api.Browser{b}
+				break
 			}
 		}
 	}
@@ -132,7 +132,7 @@ func main() {
 			default:
 			}
 
-			err = runTest(runnerCtx, client, b, sessionName, mapping)
+			err = runTest(runnerCtx, client, b, sessionName, mapping, testFilterArg)
 			if err != nil {
 				log.Println(err) // non-fatal for us
 			}
@@ -156,7 +156,7 @@ func main() {
 	<-doneChan
 }
 
-func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir, testFilter string) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
@@ -194,9 +194,15 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 	}
 
 	for _, p := range testPaths {
-		tests = append(tests, api.Test{
-			Path: p,
-		})
+		if testFilter == "" {
+			tests = append(tests, api.Test{
+				Path: p,
+			})
+		} else if strings.Contains(p, testFilter) {
+			tests = append(tests, api.Test{
+				Path: p,
+			})
+		}
 	}
 
 	rand.Seed(time.Now().UnixNano())

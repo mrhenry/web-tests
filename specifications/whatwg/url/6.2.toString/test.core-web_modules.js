@@ -3637,9 +3637,8 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 
 
 (function (cb) {
-  var params = new URLSearchParams({
-    key: "730d67"
-  });
+  var params = new URLSearchParams();
+  params.set("key", "730d67");
   cb(params.toString() === "key=730d67");
 })(callback);
 })();

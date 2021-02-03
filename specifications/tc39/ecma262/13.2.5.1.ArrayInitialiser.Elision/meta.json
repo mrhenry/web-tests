@@ -7,7 +7,10 @@
     "url": "https://tc39.es/ecma262/#sec-runtime-semantics-arrayaccumulation"
   },
   "notes": [],
-  "search_terms": [],
+  "search_terms": [
+    "Array",
+    "Trailing Commas"
+  ],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
