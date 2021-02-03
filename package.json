@@ -21,6 +21,6 @@
         "core-js": "^3.8.2",
         "esbuild": "^0.8.39",
         "webpack": "^5.20.0",
-        "webpack-cli": "^4.3.0"
+        "webpack-cli": "^4.5.0"
     }
 }
