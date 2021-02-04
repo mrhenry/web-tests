@@ -3,6 +3,15 @@ on:
   schedule:
     - cron: '0 23 * * *'
   workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Browser filter'
+        required: false
+        default: ''
+      run:
+        description: 'Test filter'
+        required: false
+        default: ''
 
 jobs:
   build:
@@ -43,7 +52,7 @@ jobs:
           make -j 2
 
       - name: test
-        run: web-tests-browserstack
+        run: web-tests-browserstack -browser="${{ github.event.inputs.browser }}" -run="${{ github.event.inputs.run }}"
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
