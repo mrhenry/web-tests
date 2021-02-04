@@ -25,7 +25,7 @@ import (
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*60)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*90)
 	defer cancel()
 
 	runnerCtx, runnerCancel := context.WithCancel(ctx)
@@ -161,7 +161,7 @@ func main() {
 }
 
 func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir, testFilter string) error {
-	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
+	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*15)
 	defer cancel()
 
 	caps := client.SetCaps(selenium.Capabilities{
