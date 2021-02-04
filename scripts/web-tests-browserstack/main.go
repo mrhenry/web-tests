@@ -75,20 +75,6 @@ func main() {
 		AccessKey: accessKey,
 	})
 
-	browsers, err := client.ReducedBrowsers(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if browserArg != "" {
-		for _, b := range browsers {
-			if b.ResultKey() == browserArg {
-				browsers = []api.Browser{b}
-				break
-			}
-		}
-	}
-
 	done, err := client.OpenTunnel(ctx)
 	defer done()
 	if err != nil {
@@ -96,6 +82,24 @@ func main() {
 	}
 
 	log.Println("tunnel ready")
+
+	browsers, err := client.ReducedBrowsers(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if browserArg != "" {
+		filteredBrowsers := []api.Browser{}
+		for _, b := range browsers {
+			if strings.Contains(b.ResultKey(), browserArg) {
+				filteredBrowsers = append(filteredBrowsers, b)
+			}
+		}
+
+		if len(filteredBrowsers) > 0 {
+			browsers = filteredBrowsers
+		}
+	}
 
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(browsers), func(i, j int) {

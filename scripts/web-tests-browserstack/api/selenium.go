@@ -373,6 +373,8 @@ func newTestServer(ctx context.Context, handler http.Handler) (int, error) {
 	go func() {
 		select {
 		case <-ctx.Done():
+			time.Sleep(time.Second * 30)
+
 			srv.Close()
 		}
 	}()
