@@ -197,10 +197,9 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 				testDoneChan := make(chan bool, 1)
 
 				go func(test Test) {
-					test.didRun = true
 					test.start = time.Now()
 
-					err := runSeleniumTest(wd, port, test)
+					test, err := runSeleniumTest(wd, port, test)
 					if err != nil {
 						test.err = err
 					} else {
@@ -308,18 +307,18 @@ HTTP_CACHE_LOOP:
 	return nil
 }
 
-func runSeleniumTest(wd selenium.WebDriver, port int, test Test) error {
-	test.didRun = true
-
+func runSeleniumTest(wd selenium.WebDriver, port int, test Test) (Test, error) {
 	// TODO : this needs a raced timeout
 	err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/%s", port, strings.TrimPrefix(test.Path, "./")))
 	if err != nil {
-		return err
+		return test, err
 	}
+
+	test.didRun = true
 
 	ok, err := getBoolFromWebDriver(wd, `return window.testSuccess;`)
 	if err != nil {
-		return err
+		return test, err
 	}
 
 	if !ok {
@@ -327,20 +326,20 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) error {
 			return getBoolFromWebDriver(wd1, `return (typeof window.testSuccess !== "undefined");`)
 		}), time.Second*1, time.Millisecond*100)
 		if err != nil {
-			return err
+			return test, err
 		}
 
 		ok, err = getBoolFromWebDriver(wd, `return window.testSuccess;`)
 		if err != nil {
-			return err
+			return test, err
 		}
 	}
 
 	if !ok {
-		return errors.New("selenium test failed")
+		return test, errors.New("selenium test failed")
 	}
 
-	return nil
+	return test, err
 }
 
 func getBoolFromWebDriver(wd selenium.WebDriver, script string) (bool, error) {

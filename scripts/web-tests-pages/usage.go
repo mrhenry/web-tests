@@ -93,6 +93,12 @@ type UsageData struct {
 }
 
 func weightScoreByUsageDataForBrowserWithVersion(usageData *UsageData, browserWithVersion string, score float64) float64 {
+	if score > 0.9 {
+		score = 1
+	} else {
+		score = 0
+	}
+
 	if usageData == nil {
 		return score
 	}

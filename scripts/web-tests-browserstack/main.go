@@ -25,14 +25,13 @@ import (
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*90)
-	defer cancel()
+	processCtx, processCancel := context.WithTimeout(context.Background(), time.Minute*120)
+	defer processCancel()
 
-	runnerCtx, runnerCancel := context.WithCancel(ctx)
+	runnerCtx, runnerCancel := context.WithCancel(processCtx)
 	defer runnerCancel()
 
 	sigs := make(chan os.Signal, 1)
-	doneChan := make(chan bool, 1)
 
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
@@ -42,26 +41,69 @@ func main() {
 
 		time.Sleep(time.Second * 30)
 
-		cancel()
-
-		time.Sleep(time.Second * 5)
-
-		doneChan <- true
+		processCancel()
 
 		time.Sleep(time.Second * 30)
 
 		os.Exit(0)
 	}()
 
-	var browserArg string
+	var browserFilterArg string
 	var testFilterArg string
 
-	flag.StringVar(&browserArg, "browser", "", "Only run on browser")
+	flag.StringVar(&browserFilterArg, "browser", "", "Only run on browser")
 	flag.StringVar(&testFilterArg, "run", "", "Only run tests matching")
 
 	flag.Parse()
 
-	sessionName := fmt.Sprintf("Web Tests – %s", time.Now().Format(time.RFC3339))
+	testChunks, err := testsChunked(testFilterArg)
+	if err != nil {
+		log.Println(err) // non-fatal for us
+		return
+	}
+
+	for i, tests := range testChunks {
+		if i > 0 {
+			time.Sleep(time.Second * 30)
+		}
+
+		select {
+		case <-processCtx.Done():
+			return
+		default:
+		}
+
+		run(processCtx, runnerCtx, i, tests, browserFilterArg)
+	}
+}
+
+func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, tests []api.Test, browserFilter string) {
+	doneChan := make(chan bool, 1)
+
+	go func() {
+		select {
+		case <-processCtx.Done():
+			select {
+			case doneChan <- true:
+				// noop
+				return
+			default:
+				// noop
+				return
+			}
+		}
+	}()
+
+	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
+	defer cancel()
+
+	select {
+	case <-processCtx.Done():
+		return
+	default:
+	}
+
+	sessionName := fmt.Sprintf("Web Tests (%d) – %s", chunkIndex, time.Now().Format(time.RFC3339))
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
@@ -75,7 +117,7 @@ func main() {
 		AccessKey: accessKey,
 	})
 
-	done, err := client.OpenTunnel(ctx)
+	done, err := client.OpenTunnel(processCtx)
 	defer done()
 	if err != nil {
 		log.Fatal(err)
@@ -88,10 +130,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if browserArg != "" {
+	if browserFilter != "" {
 		filteredBrowsers := []api.Browser{}
 		for _, b := range browsers {
-			if strings.Contains(b.ResultKey(), browserArg) {
+			if strings.Contains(b.ResultKey(), browserFilter) {
 				filteredBrowsers = append(filteredBrowsers, b)
 			}
 		}
@@ -122,7 +164,7 @@ func main() {
 
 	sema := semaphore.NewWeighted(5)
 
-	for _, b := range browsers {
+	for _, browser := range browsers {
 		if err := sema.Acquire(ctx, 1); err != nil {
 			log.Fatal(err)
 		}
@@ -136,11 +178,11 @@ func main() {
 			default:
 			}
 
-			err = runTest(runnerCtx, client, b, sessionName, mapping, testFilterArg)
+			err = runTest(ctx, client, b, tests, sessionName, mapping)
 			if err != nil {
 				log.Println(err) // non-fatal for us
 			}
-		}(b)
+		}(browser)
 	}
 
 	go func() {
@@ -154,14 +196,19 @@ func main() {
 			log.Println(err) // non-fatal for us
 		}
 
-		doneChan <- true
+		select {
+		case doneChan <- true:
+			// noop
+		default:
+			// noop
+		}
 	}()
 
 	<-doneChan
 }
 
-func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir, testFilter string) error {
-	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*15)
+func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, tests []api.Test, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
 	caps := client.SetCaps(selenium.Capabilities{
@@ -189,33 +236,6 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 	}
 	if browser.BrowserVersion != "" {
 		caps["browserVersion"] = browser.BrowserVersion
-	}
-
-	tests := []api.Test{}
-	testPaths, err := getTestPaths()
-	if err != nil {
-		return err
-	}
-
-	for _, p := range testPaths {
-		if testFilter == "" {
-			tests = append(tests, api.Test{
-				Path: p,
-			})
-		} else if strings.Contains(p, testFilter) {
-			tests = append(tests, api.Test{
-				Path: p,
-			})
-		}
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(tests), func(i, j int) {
-		tests[i], tests[j] = tests[j], tests[i]
-	})
-
-	if len(tests) > 250 {
-		tests = tests[:250]
 	}
 
 	in := make(chan api.Test, len(tests))
@@ -260,7 +280,7 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		}
 	}()
 
-	err = client.RunTest(ctx, caps, in, out)
+	err := client.RunTest(ctx, caps, in, out)
 	if err != nil {
 		return err
 	}
@@ -424,4 +444,46 @@ func getMapping() (map[string]map[string]map[string]feature.FeatureWithDir, erro
 	}
 
 	return out, nil
+}
+
+func testsChunked(testFilter string) ([][]api.Test, error) {
+	tests := []api.Test{}
+	testPaths, err := getTestPaths()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, p := range testPaths {
+		if testFilter == "" {
+			tests = append(tests, api.Test{
+				Path: p,
+			})
+		} else if strings.Contains(p, testFilter) {
+			tests = append(tests, api.Test{
+				Path: p,
+			})
+		}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(tests), func(i, j int) {
+		tests[i], tests[j] = tests[j], tests[i]
+	})
+
+	chunks := [][]api.Test{}
+	for i := 0; i < len(tests); i += 25 {
+		end := i + 25
+
+		if end > len(tests) {
+			end = len(tests)
+		}
+
+		chunks = append(chunks, tests[i:end])
+	}
+
+	if len(chunks) > 10 {
+		tests = tests[:10]
+	}
+
+	return chunks, nil
 }
