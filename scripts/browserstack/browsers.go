@@ -1,4 +1,4 @@
-package api
+package browserstack
 
 import (
 	"bytes"
@@ -72,6 +72,10 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 		}
 
 		key, b := browserForReducedSet(b)
+		if strings.HasPrefix(key, "ios/") {
+			b.RealMobile = true
+		}
+
 		switch key {
 		case "ie/6.0":
 			continue // too old
@@ -99,6 +103,7 @@ func browserForReducedSet(b Browser) (string, Browser) {
 			BrowserVersion: b.BrowserVersion,
 			OS:             b.OS,
 			OSVersion:      b.OSVersion,
+			RealMobile:     b.RealMobile,
 		}
 
 		return bb.ResultKey(), bb

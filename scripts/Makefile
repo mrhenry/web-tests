@@ -21,6 +21,9 @@ web-tests-migrate-meta: $(wildcard web-tests-migrate-meta/*)
 web-tests-migrate-makefile: $(wildcard web-tests-migrate-makefile/*)
 	go install ./web-tests-migrate-makefile/...
 
-all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile
+web-tests-collect-ua-strings: $(wildcard web-tests-collect-ua-strings/*)
+	go install ./web-tests-collect-ua-strings/...
 
-.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile
+all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings
+
+.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings

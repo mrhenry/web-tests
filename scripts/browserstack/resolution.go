@@ -1,4 +1,4 @@
-package api
+package browserstack
 
 type Resolution string
 

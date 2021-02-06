@@ -1,0 +1,63 @@
+name: 'Collect Context Data'
+on:
+  schedule:
+    - cron: '0 20 * * 0'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 'Collect Context Data'
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 1
+
+      - name: setup node
+        uses: actions/setup-node@v2.1.3
+        with:
+          node-version: 15
+        
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.15'
+
+      - name: 'BrowserStack Env Setup'
+        uses: 'browserstack/github-actions/setup-env@master'
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          build-name: BUILD_INFO
+          project-name: REPO_NAME
+
+      - name: 'BrowserStack Local Setup'
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: start
+          local-identifier: random
+
+      - name: make
+        run: make scripts -j 2
+
+      - name: collect
+        run: |
+          web-tests-collect-ua-strings
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
+      - name: 'Stop BrowserStack Local'
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: 'stop'
+
+      - name: save
+        run: |
+          # Git config
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add ./data
+          git commit -m "collect user agent strings"
+          git push --set-upstream origin main
+

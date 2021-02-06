@@ -18,8 +18,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/feature"
-	"github.com/mrhenry/web-tests/scripts/web-tests-browserstack/api"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
 )
@@ -93,7 +93,7 @@ func main() {
 	<-doneChan
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, tests []api.Test, browserFilter string) {
+func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, tests []browserstack.Test, browserFilter string) {
 	doneChan := make(chan bool, 1)
 	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
 	defer cancel()
@@ -130,7 +130,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 		return
 	}
 
-	client := api.New(api.Config{
+	client := browserstack.New(browserstack.Config{
 		UserName:  userName,
 		AccessKey: accessKey,
 	})
@@ -151,7 +151,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	}
 
 	if browserFilter != "" {
-		filteredBrowsers := []api.Browser{}
+		filteredBrowsers := []browserstack.Browser{}
 		for _, b := range browsers {
 			if strings.Contains(b.ResultKey(), browserFilter) {
 				filteredBrowsers = append(filteredBrowsers, b)
@@ -190,7 +190,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 			return
 		}
 
-		go func(b api.Browser) {
+		go func(b browserstack.Browser) {
 			defer sema.Release(1)
 
 			select {
@@ -210,6 +210,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 		// Wait for all
 		if err := sema.Acquire(ctx, 5); err != nil {
 			log.Println(err)
+			return
 		}
 
 		err = done()
@@ -228,7 +229,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	<-doneChan
 }
 
-func runTest(parentCtx context.Context, client *api.Client, browser api.Browser, tests []api.Test, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+func runTest(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
@@ -259,10 +260,10 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 		caps["browserVersion"] = browser.BrowserVersion
 	}
 
-	in := make(chan api.Test, len(tests))
-	out := make(chan api.Test, len(tests))
+	in := make(chan browserstack.Test, len(tests))
+	out := make(chan browserstack.Test, len(tests))
 
-	testResults := []api.Test{}
+	testResults := []browserstack.Test{}
 
 	go func() {
 		for _, test := range tests {
@@ -340,7 +341,7 @@ func getTestPaths() ([]string, error) {
 	return files, nil
 }
 
-func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+func writeResults(browser browserstack.Browser, test browserstack.Test, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
 	if test.DidRun() == false {
 		return nil
 	}
@@ -473,8 +474,8 @@ func getMapping() (map[string]map[string]map[string]feature.FeatureWithDir, erro
 	return out, nil
 }
 
-func testsChunked(testFilter string) ([][]api.Test, error) {
-	tests := []api.Test{}
+func testsChunked(testFilter string) ([][]browserstack.Test, error) {
+	tests := []browserstack.Test{}
 	testPaths, err := getTestPaths()
 	if err != nil {
 		return nil, err
@@ -482,11 +483,11 @@ func testsChunked(testFilter string) ([][]api.Test, error) {
 
 	for _, p := range testPaths {
 		if testFilter == "" {
-			tests = append(tests, api.Test{
+			tests = append(tests, browserstack.Test{
 				Path: p,
 			})
 		} else if strings.Contains(p, testFilter) {
-			tests = append(tests, api.Test{
+			tests = append(tests, browserstack.Test{
 				Path: p,
 			})
 		}
@@ -497,7 +498,7 @@ func testsChunked(testFilter string) ([][]api.Test, error) {
 		tests[i], tests[j] = tests[j], tests[i]
 	})
 
-	chunks := [][]api.Test{}
+	chunks := [][]browserstack.Test{}
 	for i := 0; i < len(tests); i += 25 {
 		end := i + 25
 
