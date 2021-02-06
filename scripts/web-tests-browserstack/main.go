@@ -481,16 +481,32 @@ func testsChunked(testFilter string) ([][]browserstack.Test, error) {
 		return nil, err
 	}
 
+	mapping, err := getMapping()
+	if err != nil {
+		return nil, err
+	}
+
 	for _, p := range testPaths {
-		if testFilter == "" {
-			tests = append(tests, browserstack.Test{
-				Path: p,
-			})
-		} else if strings.Contains(p, testFilter) {
-			tests = append(tests, browserstack.Test{
-				Path: p,
-			})
+		test := browserstack.Test{
+			Path: p,
 		}
+
+		if testFilter != "" {
+			if item, ok := mapping[test.MappingID()]; ok {
+				terms := item.Spec.Org + ":" + item.Spec.ID + ":" + item.Spec.Section + ":" + item.Spec.Name
+				for _, x := range item.SearchTerms {
+					terms = terms + ":" + x
+				}
+
+				if !strings.Contains(terms, testFilter) {
+					continue
+				}
+			} else {
+				continue
+			}
+		}
+
+		tests = append(tests, test)
 	}
 
 	rand.Seed(time.Now().UnixNano())
