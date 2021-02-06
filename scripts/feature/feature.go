@@ -1,6 +1,7 @@
 package feature
 
 type Feature struct {
+	ID   string `json:"id"`
 	Spec struct {
 		Org     string `json:"org"`
 		ID      string `json:"id"`
@@ -20,3 +21,5 @@ type FeatureWithDir struct {
 	Feature
 	Dir string `json:"dir"`
 }
+
+type Mapping map[string]FeatureWithDir

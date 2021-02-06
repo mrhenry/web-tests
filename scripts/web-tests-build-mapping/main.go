@@ -15,7 +15,7 @@ import (
 
 func main() {
 	featureDirs := []string{}
-	features := map[string]map[string]map[string]feature.FeatureWithDir{}
+	features := feature.Mapping{}
 
 	err := filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -59,20 +59,7 @@ func main() {
 		}
 
 		item.Dir = featureDir
-
-		org, ok := features[item.Spec.Org]
-		if !ok {
-			org = map[string]map[string]feature.FeatureWithDir{}
-		}
-
-		spec, ok := org[item.Spec.ID]
-		if !ok {
-			spec = map[string]feature.FeatureWithDir{}
-		}
-
-		spec[item.Spec.Section] = item
-		org[item.Spec.ID] = spec
-		features[item.Spec.Org] = org
+		features[item.ID] = item
 	}
 
 	{
@@ -98,9 +85,4 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-}
-
-type Feature struct {
-	feature.Feature
-	Dir string `json:"dir"`
 }

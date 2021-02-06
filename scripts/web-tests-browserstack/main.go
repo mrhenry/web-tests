@@ -229,7 +229,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	<-doneChan
 }
 
-func runTest(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+func runTest(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping feature.Mapping) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
@@ -341,20 +341,20 @@ func getTestPaths() ([]string, error) {
 	return files, nil
 }
 
-func writeResults(browser browserstack.Browser, test browserstack.Test, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+func writeResults(browser browserstack.Browser, test browserstack.Test, mapping feature.Mapping) error {
 	if test.DidRun() == false {
 		return nil
 	}
 
 	resultsDir := ""
-	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; ok {
+	if item, ok := mapping[test.MappingID()]; ok {
 		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
 		err := os.MkdirAll(resultsDir, os.ModePerm)
 		if err != nil {
 			return err
 		}
 	} else {
-		return fmt.Errorf("not found in mapping %s %s %s", test.MappingOrg(), test.MappingID(), test.MappingSection())
+		return fmt.Errorf("not found in mapping %s", test.MappingID())
 	}
 
 	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", browser.ResultFilename()))
@@ -451,7 +451,7 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 	return nil
 }
 
-func getMapping() (map[string]map[string]map[string]feature.FeatureWithDir, error) {
+func getMapping() (feature.Mapping, error) {
 	f, err := os.Open("lib/mapping.json")
 	if err != nil {
 		return nil, err
@@ -464,7 +464,7 @@ func getMapping() (map[string]map[string]map[string]feature.FeatureWithDir, erro
 		return nil, err
 	}
 
-	out := map[string]map[string]map[string]feature.FeatureWithDir{}
+	out := feature.Mapping{}
 
 	err = json.Unmarshal(b, &out)
 	if err != nil {

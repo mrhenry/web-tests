@@ -2,6 +2,16 @@
 
 feature_dirs := $(wildcard ./specifications/*/*/*)
 
+clean:
+	@rm -rf ./tests
+	@mkdir ./tests
+	@touch ./tests/.gitkeep
+	@echo "*.html" > ./tests/.gitignore
+	@rm -rf ./test-assets
+	@mkdir ./test-assets
+	@touch ./test-assets/.gitkeep
+	@echo "*.js" > ./test-assets/.gitignore
+
 scripts: 
 	@$(MAKE) -C ./scripts
 
@@ -15,4 +25,4 @@ build-mapping: scripts features
 
 all: scripts features build-mapping
 
-.PHONY: scripts all features $(feature_dirs) build-mapping
+.PHONY: clean scripts all features $(feature_dirs) build-mapping

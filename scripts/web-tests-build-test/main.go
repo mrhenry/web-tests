@@ -45,7 +45,7 @@ func main() {
 
 				defer f1.Close()
 
-				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s:%s:%s", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, "core-web_modules.js"))
+				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, "core-web_modules.js"))
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -76,7 +76,7 @@ func main() {
 
 				defer f1.Close()
 
-				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s:%s:%s", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, "core-web_no-modules.js"))
+				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, "core-web_no-modules.js"))
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -139,13 +139,13 @@ func main() {
 
 		window.callback = callback;
 	</script>
-	<script type="module" src="` + fmt.Sprintf("../test-assets/%s:%s:%s:%s", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, "core-web_modules.js") + `"></script>
-	<script nomodule src="` + fmt.Sprintf("../test-assets/%s:%s:%s:%s", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, "core-web_no-modules.js") + `"></script>
+	<script type="module" src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_modules.js") + `"></script>
+	<script nomodule src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_no-modules.js") + `"></script>
 </body>
 </html>
 `
 
-			f3, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
+			f3, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s.html", meta.ID, k))
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -205,7 +205,7 @@ func main() {
 </html>
 `
 
-			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
+			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s.html", meta.ID, k))
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -249,7 +249,7 @@ func main() {
 </html>
 `
 
-			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s:%s:%s_polyfillio.html", meta.Spec.Org, meta.Spec.ID, meta.Spec.Section, k))
+			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s_polyfillio.html", meta.ID, k))
 			if err != nil {
 				log.Fatal(err)
 			}

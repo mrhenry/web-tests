@@ -54,6 +54,7 @@ func main() {
 			}
 
 			postMigration := FeaturePostMigration{}
+			postMigration.ID = feature.ID
 			postMigration.Spec.Org = feature.Spec.Org
 			postMigration.Spec.ID = feature.Spec.ID
 			postMigration.Spec.Section = feature.Spec.Section
@@ -91,6 +92,7 @@ func main() {
 }
 
 type FeaturePostMigration struct {
+	ID   string `json:"id"`
 	Spec struct {
 		Org     string `json:"org"`
 		ID      string `json:"id"`

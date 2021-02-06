@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/mrhenry/web-tests/scripts/feature"
 )
 
@@ -113,6 +114,7 @@ func main() {
 				return err
 			}
 
+			meta.ID = uuid.NewString()
 			meta.Spec.Org = org
 			meta.Spec.ID = id
 			meta.Spec.Section = section
