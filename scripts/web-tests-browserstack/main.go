@@ -32,20 +32,25 @@ func main() {
 	defer runnerCancel()
 
 	sigs := make(chan os.Signal, 1)
-
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	doneChan := make(chan bool, 1)
 
 	go func() {
 		<-sigs
+		log.Println("shutting down")
 		runnerCancel()
 
 		time.Sleep(time.Second * 30)
 
 		processCancel()
 
-		time.Sleep(time.Second * 30)
+		time.Sleep(time.Second * 10)
 
-		os.Exit(0)
+		select {
+		case doneChan <- true:
+		default:
+		}
 	}()
 
 	var browserFilterArg string
@@ -75,14 +80,29 @@ func main() {
 
 		run(processCtx, runnerCtx, i, tests, browserFilterArg)
 	}
+
+	go func() {
+		time.Sleep(time.Second * 10)
+
+		select {
+		case doneChan <- true:
+		default:
+		}
+	}()
+
+	<-doneChan
 }
 
 func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, tests []api.Test, browserFilter string) {
 	doneChan := make(chan bool, 1)
+	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
+	defer cancel()
 
 	go func() {
 		select {
-		case <-processCtx.Done():
+		case <-runnerCtx.Done():
+			time.Sleep(time.Second * 10)
+
 			select {
 			case doneChan <- true:
 				// noop
@@ -93,9 +113,6 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 			}
 		}
 	}()
-
-	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
-	defer cancel()
 
 	select {
 	case <-processCtx.Done():
@@ -109,7 +126,8 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 	mapping, err := getMapping()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	client := api.New(api.Config{
@@ -120,14 +138,16 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	done, err := client.OpenTunnel(processCtx)
 	defer done()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	log.Println("tunnel ready")
 
 	browsers, err := client.ReducedBrowsers(ctx)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	if browserFilter != "" {
@@ -166,7 +186,8 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 	for _, browser := range browsers {
 		if err := sema.Acquire(ctx, 1); err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			return
 		}
 
 		go func(b api.Browser) {
@@ -188,7 +209,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	go func() {
 		// Wait for all
 		if err := sema.Acquire(ctx, 5); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		err = done()
@@ -275,7 +296,9 @@ func runTest(parentCtx context.Context, client *api.Client, browser api.Browser,
 				}
 
 				testResults = append(testResults, test)
-				// log.Println(browser.ResultKey(), test.Path, test.Success(), test.Duration())
+				if !test.DidRun() {
+					log.Println(browser.ResultKey(), test.Path, test.DidRun(), test.Success(), test.Duration())
+				}
 			}
 		}
 	}()
@@ -318,6 +341,10 @@ func getTestPaths() ([]string, error) {
 }
 
 func writeResults(browser api.Browser, test api.Test, mapping map[string]map[string]map[string]feature.FeatureWithDir) error {
+	if test.DidRun() == false {
+		return nil
+	}
+
 	resultsDir := ""
 	if item, ok := mapping[test.MappingOrg()][test.MappingID()][test.MappingSection()]; ok {
 		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
@@ -363,7 +390,7 @@ func writeResults(browser api.Browser, test api.Test, mapping map[string]map[str
 			}
 		}
 
-		var newScore float64
+		var newScore float64 = 0.5 // start half way
 		if test.Success() {
 			newScore = 1
 		}

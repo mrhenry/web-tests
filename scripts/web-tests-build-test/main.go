@@ -131,6 +131,8 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
+		window.testLoaded = true;
+
 		var callback = function callback(success) {
 			window.testSuccess = success;
 		}
@@ -191,6 +193,8 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
+		window.testLoaded = true;
+
 		function callback(success) {
 			window.testSuccess = success;
 		}
@@ -233,6 +237,8 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
+		window.testLoaded = true;
+
 		function callback(success) {
 			window.testSuccess = success;
 		}

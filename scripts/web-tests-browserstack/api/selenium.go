@@ -197,17 +197,12 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 				testDoneChan := make(chan bool, 1)
 
 				go func(test Test) {
-					test.start = time.Now()
-
-					test, err := runSeleniumTest(wd, port, test)
-					if err != nil {
-						test.err = err
-					} else {
-						test.success = true
+					select {
+					case out <- runSeleniumTest(wd, port, test):
+						// noop
+					case <-ctx.Done():
+						// fallthrough
 					}
-
-					test.end = time.Now()
-					out <- test
 
 					wg.Done()
 					testDoneChan <- true
@@ -307,18 +302,40 @@ HTTP_CACHE_LOOP:
 	return nil
 }
 
-func runSeleniumTest(wd selenium.WebDriver, port int, test Test) (Test, error) {
-	// TODO : this needs a raced timeout
+func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
+	test.start = time.Now()
+
 	err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/%s", port, strings.TrimPrefix(test.Path, "./")))
 	if err != nil {
-		return test, err
+		test.end = time.Now()
+		test.err = err
+		return test
 	}
-
-	test.didRun = true
 
 	ok, err := getBoolFromWebDriver(wd, `return window.testSuccess;`)
 	if err != nil {
-		return test, err
+		test.didRun = true
+		test.end = time.Now()
+		test.err = err
+		return test
+	}
+
+	// First check if the page loaded and has our content before waiting for async tests
+	{
+		ok, err = getBoolFromWebDriver(wd, `return window.testLoaded;`)
+		if err != nil {
+			test.end = time.Now()
+			test.err = err
+			return test
+		}
+
+		if !ok {
+			test.end = time.Now()
+			test.err = errors.New("test page not loaded")
+			return test
+		}
+
+		test.didRun = true
 	}
 
 	if !ok {
@@ -326,20 +343,29 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) (Test, error) {
 			return getBoolFromWebDriver(wd1, `return (typeof window.testSuccess !== "undefined");`)
 		}), time.Second*1, time.Millisecond*100)
 		if err != nil {
-			return test, err
+			test.end = time.Now()
+			test.err = err
+			return test
 		}
 
 		ok, err = getBoolFromWebDriver(wd, `return window.testSuccess;`)
 		if err != nil {
-			return test, err
+			test.end = time.Now()
+			test.err = err
+			return test
+		}
+
+		if !ok {
+			test.end = time.Now()
+			test.err = errors.New("selenium test failed")
+			return test
 		}
 	}
 
-	if !ok {
-		return test, errors.New("selenium test failed")
-	}
+	test.end = time.Now()
+	test.success = true
 
-	return test, err
+	return test
 }
 
 func getBoolFromWebDriver(wd selenium.WebDriver, script string) (bool, error) {
