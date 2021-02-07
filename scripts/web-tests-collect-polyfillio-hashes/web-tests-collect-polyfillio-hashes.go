@@ -49,7 +49,7 @@ func main() {
 				go func(i int, iLen int, j int, jLen int, f feature.FeatureInMapping, browser *browserua.BrowserUAs) {
 					defer sema.Release(1)
 
-					var browserB []byte
+					browserB := map[string][]byte{}
 
 					sort.Strings(browser.UAs)
 
@@ -60,10 +60,17 @@ func main() {
 							panic(err)
 						}
 
-						browserB = append(browserB, b...)
+						singleSum := sha256.Sum256(b)
+
+						browserB[fmt.Sprintf("%x", singleSum)] = b
 					}
 
-					sum := sha256.Sum256(browserB)
+					parts := []byte{}
+					for _, b := range browserB {
+						parts = append(parts, b...)
+					}
+
+					sum := sha256.Sum256(parts)
 
 					mu.Lock()
 					defer mu.Unlock()
