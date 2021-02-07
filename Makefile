@@ -17,12 +17,17 @@ scripts:
 
 features: $(feature_dirs) scripts
 
-$(feature_dirs): scripts
+$(feature_dirs): scripts clean
 	@$(MAKE) -C $@
+
+html-tests: scripts clean
+	@for feature_dir in $(feature_dirs); do \
+		$(MAKE) -C $$feature_dir html-tests; \
+	done
 
 build-mapping: scripts features
 	web-tests-build-mapping
 
 all: scripts features build-mapping
 
-.PHONY: clean scripts all features $(feature_dirs) build-mapping
+.PHONY: clean scripts all features $(feature_dirs) html-tests build-mapping
