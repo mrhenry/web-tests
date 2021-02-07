@@ -311,7 +311,7 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
 	}
 
 	// First check if the page loaded and has our content before waiting for async tests
-	{
+	if !ok {
 		ok, err = getBoolFromWebDriver(wd, `return window.testLoaded;`)
 		if err != nil {
 			test.end = time.Now()
@@ -324,9 +324,9 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
 			test.err = errors.New("test page not loaded")
 			return test
 		}
-
-		test.didRun = true
 	}
+
+	test.didRun = true
 
 	if !ok {
 		err = wd.WaitWithTimeoutAndInterval(selenium.Condition(func(wd1 selenium.WebDriver) (bool, error) {

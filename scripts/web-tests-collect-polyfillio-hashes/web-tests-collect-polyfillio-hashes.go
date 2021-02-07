@@ -49,26 +49,27 @@ func main() {
 				go func(i int, iLen int, j int, jLen int, f feature.FeatureInMapping, browser *browserua.BrowserUAs) {
 					defer sema.Release(1)
 
-					sums := []string{}
+					var browserB []byte
+
+					sort.Strings(browser.UAs)
 
 					for k, ua := range browser.UAs {
 
-						sum, err := getPolyfillIOContentHash(i, iLen, j, jLen, k, len(browser.UAs), f, browser, ua)
+						b, err := getPolyfillIOContent(i, iLen, j, jLen, k, len(browser.UAs), f, browser, ua)
 						if err != nil {
 							panic(err)
 						}
 
-						sums = append(sums, fmt.Sprintf("%x", sum))
+						browserB = append(browserB, b...)
 					}
 
-					sums = uniqueStringSlice(sums)
-					sort.Strings(sums)
+					sum := sha256.Sum256(browserB)
 
 					mu.Lock()
 					defer mu.Unlock()
 					fingerPrints = append(fingerPrints, priority.Fingerprint{
 						FeatureID:      f.ID,
-						PolyfillIOHash: strings.Join(sums, ":"),
+						PolyfillIOHash: fmt.Sprintf("%x", sum),
 						BrowserKey:     browser.Key,
 					})
 
@@ -91,7 +92,7 @@ func main() {
 	}
 }
 
-func getPolyfillIOContentHash(i int, iLen int, j int, jLen int, k int, kLen int, f feature.FeatureInMapping, browser *browserua.BrowserUAs, ua string) (string, error) {
+func getPolyfillIOContent(i int, iLen int, j int, jLen int, k int, kLen int, f feature.FeatureInMapping, browser *browserua.BrowserUAs, ua string) ([]byte, error) {
 	polyfills := url.QueryEscape(strings.Join(f.PolyfillIO, ","))
 
 	// log.Printf(
@@ -105,29 +106,28 @@ func getPolyfillIOContentHash(i int, iLen int, j int, jLen int, k int, kLen int,
 
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://polyfill.io/v3/polyfill.min.js?features=%s", polyfills), nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	req.Header.Set("User-Agent", ua)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return "", fmt.Errorf("unexpected status code for \"%s\", : %d", fmt.Sprintf("https://polyfill.io/v3/polyfill.min.js?features=%s", polyfills), resp.StatusCode)
+		return nil, fmt.Errorf("unexpected status code for \"%s\", : %d", fmt.Sprintf("https://polyfill.io/v3/polyfill.min.js?features=%s", polyfills), resp.StatusCode)
 	}
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	sum := sha256.Sum256(b)
-	return fmt.Sprintf("%x", sum), nil
+	return b, nil
 }
 
 func getMapping() (feature.Mapping, error) {
@@ -160,6 +160,14 @@ func saveFingerprints(fingerprints []priority.Fingerprint) error {
 	}
 
 	defer f.Close()
+
+	sort.Slice(fingerprints, func(i int, j int) bool {
+		if fingerprints[i].FeatureID == fingerprints[j].FeatureID {
+			return fingerprints[i].BrowserKey < fingerprints[j].BrowserKey
+		}
+
+		return fingerprints[i].FeatureID < fingerprints[j].FeatureID
+	})
 
 	b, err := json.MarshalIndent(fingerprints, "", "  ")
 	if err != nil {
