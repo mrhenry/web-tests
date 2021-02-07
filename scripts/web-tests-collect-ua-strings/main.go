@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/mrhenry/web-tests/scripts/browserstack"
+	"github.com/mrhenry/web-tests/scripts/browserua"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
 )
@@ -83,7 +84,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	defer cancel()
 
 	mu := &sync.Mutex{}
-	uas := map[string]*BrowserUAs{}
+	uas := map[string]*browserua.BrowserUAs{}
 
 	go func() {
 		select {
@@ -184,7 +185,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	}
 }
 
-func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) (*BrowserUAs, error) {
+func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) (*browserua.BrowserUAs, error) {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*2)
 	defer cancel()
 
@@ -220,7 +221,7 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 		return nil, err
 	}
 
-	return &BrowserUAs{
+	return &browserua.BrowserUAs{
 		Key: browser.ResultKey(),
 		UAs: uaStrings,
 	}, nil
@@ -254,12 +255,7 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 	return chunks, nil
 }
 
-type BrowserUAs struct {
-	Key string   `json:"key"`
-	UAs []string `json:"uas"`
-}
-
-func updateUAs(uas map[string]*BrowserUAs) error {
+func updateUAs(uas map[string]*browserua.BrowserUAs) error {
 	existing := existingUAs()
 
 	f, err := os.Create("data/uas.json")
@@ -293,24 +289,24 @@ func updateUAs(uas map[string]*BrowserUAs) error {
 	return nil
 }
 
-func existingUAs() map[string]*BrowserUAs {
+func existingUAs() map[string]*browserua.BrowserUAs {
 
 	f, err := os.Open("data/uas.json")
 	if err != nil {
-		return map[string]*BrowserUAs{}
+		return map[string]*browserua.BrowserUAs{}
 	}
 
 	defer f.Close()
 
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
-		return map[string]*BrowserUAs{}
+		return map[string]*browserua.BrowserUAs{}
 	}
 
-	existing := map[string]*BrowserUAs{}
+	existing := map[string]*browserua.BrowserUAs{}
 	err = json.Unmarshal(b, &existing)
 	if err != nil {
-		return map[string]*BrowserUAs{}
+		return map[string]*browserua.BrowserUAs{}
 	}
 
 	return existing

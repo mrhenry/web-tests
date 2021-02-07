@@ -17,9 +17,9 @@ type Feature struct {
 	PolyfillIO  []string          `json:"polyfill.io"`
 }
 
-type FeatureWithDir struct {
+type FeatureInMapping struct {
 	Feature
 	Dir string `json:"dir"`
 }
 
-type Mapping map[string]FeatureWithDir
+type Mapping map[string]FeatureInMapping

@@ -52,7 +52,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		item := feature.FeatureWithDir{}
+		item := feature.FeatureInMapping{}
 		err = json.Unmarshal(b, &item)
 		if err != nil {
 			log.Fatal(err)

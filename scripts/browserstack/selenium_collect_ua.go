@@ -47,6 +47,8 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 
 		if strings.Contains(req.Header.Get("Accept"), "text/html") {
 			uaStrings = append(uaStrings, req.UserAgent())
+		} else if strings.Contains(req.UserAgent(), "Trident/4.0") {
+			uaStrings = append(uaStrings, req.UserAgent())
 		} else {
 			// Browserstack has a separate process that also requests the test page.
 			// This process has a different UA.

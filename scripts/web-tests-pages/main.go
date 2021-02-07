@@ -42,7 +42,7 @@ func main() {
 	}
 
 	for _, featureDir := range featureDirs {
-		feature := feature.FeatureWithDir{}
+		feature := feature.FeatureInMapping{}
 		results := map[string]map[string]Result{}
 		tests := map[string]struct{}{}
 		testsSlice := []string{}
