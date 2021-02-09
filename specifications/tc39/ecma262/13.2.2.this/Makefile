@@ -8,6 +8,9 @@ test.babel.js: test.pure.js ../../../../babel.config.json ../../../../package-lo
 html-tests: test.babel.js
 	web-tests-build-test
 
+html-tests-from-existing-sources:
+	web-tests-build-test
+
 all: test.babel.js html-tests
 
-.PHONY: all html-tests
+.PHONY: all html-tests-from-existing-sources

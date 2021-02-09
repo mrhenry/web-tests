@@ -42,7 +42,7 @@ jobs:
           local-identifier: random
 
       - name: make
-        run: make html-tests -j 2
+        run: make html-tests-from-existing-sources -j 2
 
       - name: test
         run: web-tests-browserstack -browser="${{ github.event.inputs.browser }}" -run="${{ github.event.inputs.run }}"

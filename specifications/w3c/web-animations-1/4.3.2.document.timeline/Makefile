@@ -20,6 +20,9 @@ test.esbuild.js: test.pure.js ../../../../package-lock.json
 html-tests: test.babel.js test.babel_webpack.js test.core-web_modules.js test.core-web_no-modules.js test.esbuild.js
 	web-tests-build-test
 
+html-tests-from-existing-sources:
+	web-tests-build-test
+
 all: test.babel.js test.babel_webpack.js test.core-web_modules.js test.core-web_no-modules.js test.esbuild.js html-tests
 
-.PHONY: all html-tests
+.PHONY: all html-tests html-tests-from-existing-sources

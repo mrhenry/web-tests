@@ -20,9 +20,9 @@ features: $(feature_dirs) scripts
 $(feature_dirs): scripts clean
 	@$(MAKE) -C $@
 
-html-tests: scripts clean
+html-tests-from-existing-sources: scripts clean
 	@for feature_dir in $(feature_dirs); do \
-		$(MAKE) -C $$feature_dir html-tests; \
+		$(MAKE) -C $$feature_dir html-tests-from-existing-sources; \
 	done
 
 build-mapping: scripts features
@@ -30,4 +30,4 @@ build-mapping: scripts features
 
 all: scripts features build-mapping
 
-.PHONY: clean scripts all features $(feature_dirs) html-tests build-mapping
+.PHONY: clean scripts all features $(feature_dirs) html-tests-from-existing-sources build-mapping
