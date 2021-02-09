@@ -1,0 +1,20 @@
+{
+  "id": "c8d40df0-89f5-4532-975e-3b32f772565d",
+  "spec": {
+    "org": "example",
+    "id": "test",
+    "section": "2",
+    "name": "Example test (failing)",
+    "url": "#TODO"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": null
+}

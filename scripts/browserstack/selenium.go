@@ -310,50 +310,50 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
 		return test
 	}
 
-	// First check if the page loaded and has our content before waiting for async tests
-	if !ok {
-		ok, err = getBoolFromWebDriver(wd, `return window.testLoaded;`)
-		if err != nil {
-			test.end = time.Now()
-			test.err = err
-			return test
-		}
+	if ok {
+		test.didRun = true
+		test.end = time.Now()
+		test.success = true
+		return test
+	}
 
-		if !ok {
-			test.end = time.Now()
-			test.err = errors.New("test page not loaded")
-			return test
-		}
+	// First check if the page loaded and has our content before waiting for async tests
+	loaded, err := getBoolFromWebDriver(wd, `return window.testLoaded;`)
+	if err != nil {
+		test.end = time.Now()
+		test.err = err
+		return test
+	}
+
+	if !loaded {
+		test.end = time.Now()
+		test.err = errors.New("test page not loaded")
+		return test
 	}
 
 	test.didRun = true
 
-	if !ok {
-		err = wd.WaitWithTimeoutAndInterval(selenium.Condition(func(wd1 selenium.WebDriver) (bool, error) {
-			return getBoolFromWebDriver(wd1, `return (typeof window.testSuccess !== "undefined");`)
-		}), time.Second*1, time.Millisecond*100)
-		if err != nil {
-			test.end = time.Now()
-			test.err = err
-			return test
-		}
-
-		ok, err = getBoolFromWebDriver(wd, `return window.testSuccess;`)
-		if err != nil {
-			test.end = time.Now()
-			test.err = err
-			return test
-		}
-
-		if !ok {
-			test.end = time.Now()
-			test.err = errors.New("selenium test failed")
-			return test
-		}
+	err = wd.WaitWithTimeoutAndInterval(selenium.Condition(func(wd1 selenium.WebDriver) (bool, error) {
+		return getBoolFromWebDriver(wd1, `return (typeof window.testSuccess !== "undefined");`)
+	}), time.Second*1, time.Millisecond*100)
+	if err != nil {
+		test.end = time.Now()
+		test.err = err
+		return test
 	}
 
-	test.end = time.Now()
-	test.success = true
+	ok, err = getBoolFromWebDriver(wd, `return window.testSuccess;`)
+	if err != nil {
+		test.end = time.Now()
+		test.err = err
+		return test
+	}
+
+	if !ok {
+		test.end = time.Now()
+		test.err = errors.New("selenium test failed")
+		return test
+	}
 
 	return test
 }

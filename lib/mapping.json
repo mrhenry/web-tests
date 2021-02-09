@@ -260,6 +260,32 @@
     ],
     "dir": "specifications/whatwg/url/6.2.constructor"
   },
+  "40765c13-ffd9-486a-b71e-69ac56daf798": {
+    "id": "40765c13-ffd9-486a-b71e-69ac56daf798",
+    "spec": {
+      "org": "whatwg",
+      "id": "url",
+      "section": "6.1.2",
+      "name": "URL.constructor with base",
+      "url": "https://url.spec.whatwg.org/#url-class"
+    },
+    "notes": [],
+    "search_terms": [
+      "URL",
+      "constructor"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "URL"
+    ],
+    "dir": "specifications/whatwg/url/6.1.2.constructor.base"
+  },
   "408bb6de-21cb-4bfe-8a44-225a0cb975ae": {
     "id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
     "spec": {
@@ -750,6 +776,27 @@
       "DOMRect"
     ],
     "dir": "specifications/w3c/geometry-1/3.DOMRect.width"
+  },
+  "c8d40df0-89f5-4532-975e-3b32f772565d": {
+    "id": "c8d40df0-89f5-4532-975e-3b32f772565d",
+    "spec": {
+      "org": "example",
+      "id": "test",
+      "section": "2",
+      "name": "Example test (failing)",
+      "url": "#TODO"
+    },
+    "notes": [],
+    "search_terms": [],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": null,
+    "dir": "specifications/example/test/2.failing"
   },
   "cdee1f84-c253-4886-b964-a6d4eacab6ce": {
     "id": "cdee1f84-c253-4886-b964-a6d4eacab6ce",

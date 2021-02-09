@@ -31,6 +31,10 @@ func main() {
 			return err
 		}
 
+		if strings.Contains(path, "example/test") {
+			return filepath.SkipDir
+		}
+
 		if strings.HasSuffix(path, "meta.json") {
 			featureDirs = append(featureDirs, filepath.Dir(path))
 		}
@@ -251,7 +255,7 @@ func main() {
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 0.5)
 							scores.addScore(test, weightedScore)
 						} else {
-							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.f", result.Score) + "</td>"
+							tableBody = tableBody + "<td>" + fmt.Sprintf("%d", scoreToInt(result.Score)) + "</td>"
 
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
 							scores.addScore(test, weightedScore)
@@ -467,6 +471,14 @@ func (x Scores) table(order []string) string {
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
+}
+
+func scoreToInt(v float64) int {
+	if v >= 0.9 {
+		return 1
+	}
+
+	return 0
 }
 
 func numberOfNines(v float64) string {

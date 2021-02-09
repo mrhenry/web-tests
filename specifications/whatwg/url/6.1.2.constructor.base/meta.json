@@ -1,0 +1,25 @@
+{
+  "id": "40765c13-ffd9-486a-b71e-69ac56daf798",
+  "spec": {
+    "org": "whatwg",
+    "id": "url",
+    "section": "6.1.2",
+    "name": "URL.constructor with base",
+    "url": "https://url.spec.whatwg.org/#url-class"
+  },
+  "notes": [],
+  "search_terms": [
+    "URL",
+    "constructor"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "URL"
+  ]
+}
