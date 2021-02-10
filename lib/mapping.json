@@ -339,10 +339,13 @@
       "id": "url",
       "section": "6.1",
       "name": "URL.prototype.toJSON",
-      "url": "#TODO"
+      "url": "https://url.spec.whatwg.org/#dom-url-tojson"
     },
     "notes": [],
-    "search_terms": [],
+    "search_terms": [
+      "URL",
+      "toJSON"
+    ],
     "tests": {
       "babel": "test.babel.js",
       "babel_webpack": "test.babel_webpack.js",
@@ -350,7 +353,9 @@
       "esbuild": "test.esbuild.js",
       "pure": "test.pure.js"
     },
-    "polyfill.io": [],
+    "polyfill.io": [
+      "URL"
+    ],
     "dir": "specifications/whatwg/url/6.1.URL.prototype.toJSON"
   },
   "5d300f24-4316-4efa-97fb-e6a4777b7cd5": {

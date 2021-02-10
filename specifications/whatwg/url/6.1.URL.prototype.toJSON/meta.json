@@ -5,10 +5,13 @@
     "id": "url",
     "section": "6.1",
     "name": "URL.prototype.toJSON",
-    "url": "#TODO"
+    "url": "https://url.spec.whatwg.org/#dom-url-tojson"
   },
   "notes": [],
-  "search_terms": [],
+  "search_terms": [
+    "URL",
+    "toJSON"
+  ],
   "tests": {
     "babel": "test.babel.js",
     "babel_webpack": "test.babel_webpack.js",
@@ -16,5 +19,7 @@
     "esbuild": "test.esbuild.js",
     "pure": "test.pure.js"
   },
-  "polyfill.io": []
+  "polyfill.io": [
+    "URL"
+  ]
 }
