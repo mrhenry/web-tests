@@ -332,6 +332,27 @@
     "polyfill.io": null,
     "dir": "specifications/tc39/ecma262/6.1.4.String"
   },
+  "59933cd3-48cc-4f36-9c52-9ac7b46e5329": {
+    "id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
+    "spec": {
+      "org": "whatwg",
+      "id": "url",
+      "section": "6.1",
+      "name": "URL.prototype.toJSON",
+      "url": "#TODO"
+    },
+    "notes": [],
+    "search_terms": [],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [],
+    "dir": "specifications/whatwg/url/6.1.URL.prototype.toJSON"
+  },
   "5d300f24-4316-4efa-97fb-e6a4777b7cd5": {
     "id": "5d300f24-4316-4efa-97fb-e6a4777b7cd5",
     "spec": {
