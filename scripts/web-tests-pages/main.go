@@ -275,13 +275,14 @@ func main() {
 
 		totalScores.sum(scores)
 
-		featureSummary := `<summary>` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + scores.table(testsSlice) + `</summary>`
+		featureSummary := `<summary id="` + feature.ID + `">` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + scores.table(testsSlice) + `</summary>`
 		out = out + `<details>` + featureSummary + featureDetails + `
 <ul>
 	<li>` + feature.Spec.Org + `</li>
 	<li>` + feature.Spec.ID + `</li>
 	<li><a href="` + feature.Spec.URL + `" target="_blank" rel="noopener">` + feature.Spec.Section + `</a></li>
-</ul>
+	<li><a href="#` + feature.ID + `">🔗</a></li>
+	</ul>
 </details>`
 	}
 
