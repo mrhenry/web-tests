@@ -391,13 +391,17 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			}
 		}
 
-		var newScore float64 = 0.5 // start kinda half way
+		var newScore float64 = 0
 		if test.Success() {
 			newScore = 1
 		}
 
 		if _, ok := results["score"]; !ok {
-			results["score"] = newScore
+			if test.Success() {
+				results["score"] = 1
+			} else {
+				results["score"] = 0.5 // start half way
+			}
 		}
 
 		var score float64
