@@ -416,7 +416,7 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			score = 1
 		}
 
-		if score < 0 {
+		if score < 0.00999 {
 			score = 0
 		}
 
