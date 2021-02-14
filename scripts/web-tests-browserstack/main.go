@@ -400,7 +400,7 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			if test.Success() {
 				results["score"] = 1
 			} else {
-				results["score"] = 0.5 // start half way
+				results["score"] = 0.01 // start from just above 0
 			}
 		}
 
