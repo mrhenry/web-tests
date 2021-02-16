@@ -1309,6 +1309,8 @@ for (var COLLECTION_NAME in DOMIterables) {
 /******/ 	}();
 /******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
 "use strict";
 /* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9554);

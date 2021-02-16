@@ -1,4 +1,5 @@
 /******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
 (function (cb) {
   setTimeout(function () {
     var entries = performance.getEntriesByType("paint");

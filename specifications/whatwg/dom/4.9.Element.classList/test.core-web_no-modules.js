@@ -3477,6 +3477,8 @@ $({ global: true, bind: true, forced: MSIE }, {
 /******/ 	}();
 /******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
 "use strict";
 
