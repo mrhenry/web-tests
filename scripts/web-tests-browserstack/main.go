@@ -412,6 +412,16 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 
 		score = (score * 0.99) + (newScore * 0.02) // success increased more than failure decreases
 
+		// Tmp reset after flaky runner
+		if score > 0.3 && test.Success() {
+			score = 1
+		}
+
+		if score < 0.6 && !test.Success() {
+			score = 0
+		}
+		// Tmp reset after flaky runner
+
 		if score > 1 {
 			score = 1
 		}
