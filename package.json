@@ -21,7 +21,7 @@
         "@babel/preset-env": "^7.12.17",
         "@mrhenry/babel-plugin-core-web": "^0.4.5",
         "babel-loader": "^8.2.2",
-        "core-js": "^3.8.2",
+        "core-js": "^3.9.0",
         "esbuild": "^0.8.48",
         "webpack": "^5.22.0",
         "webpack-cli": "^4.5.0"
