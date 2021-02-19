@@ -400,7 +400,7 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			if test.Success() {
 				results["score"] = 1
 			} else {
-				results["score"] = 0.01 // start from just above 0
+				results["score"] = 0
 			}
 		}
 
@@ -410,23 +410,13 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			score = vv
 		}
 
-		score = (score * 0.99) + (newScore * 0.02) // success increased more than failure decreases
-
-		// Tmp reset after flaky runner
-		if score > 0.3 && test.Success() {
-			score = 1
-		}
-
-		if score < 0.6 && !test.Success() {
-			score = 0
-		}
-		// Tmp reset after flaky runner
+		score = (score - 0.01) + (newScore * 0.02) // success increased more than failure decreases
 
 		if score > 1 {
 			score = 1
 		}
 
-		if score < 0.00999 {
+		if score < 0.00099 {
 			score = 0
 		}
 
