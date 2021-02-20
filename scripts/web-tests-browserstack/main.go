@@ -404,6 +404,8 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 		v := results["score"]
 		if vv, ok := v.(float64); ok {
 			score = vv
+		} else if vv, ok := v.(int); ok {
+			score = float64(vv)
 		}
 
 		score = (score - 0.01) + (newScore * 0.02) // success increased more than failure decreases
