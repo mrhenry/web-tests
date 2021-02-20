@@ -311,6 +311,32 @@
     ],
     "dir": "specifications/whatwg/dom/4.7.DocumentFragment"
   },
+  "462af931-88f8-4eb2-a652-627dbf55aeab": {
+    "id": "462af931-88f8-4eb2-a652-627dbf55aeab",
+    "spec": {
+      "org": "tc39",
+      "id": "ecma262",
+      "section": "20.4.2.5",
+      "name": "Symbol.iterator",
+      "url": "https://tc39.es/ecma262/#sec-symbol.iterator"
+    },
+    "notes": [],
+    "search_terms": [
+      "Symbol",
+      "iterator"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "Symbol.iterator"
+    ],
+    "dir": "specifications/tc39/ecma262/20.4.2.5.Symbol.iterator"
+  },
   "532e2524-538a-4bee-810e-4c3298f3ee26": {
     "id": "532e2524-538a-4bee-810e-4c3298f3ee26",
     "spec": {
