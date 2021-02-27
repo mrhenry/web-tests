@@ -3453,14 +3453,14 @@ var __webpack_exports__ = {};
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
-var es_symbol_iterator = __webpack_require__(2165);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__(1539);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
+var es_symbol_iterator = __webpack_require__(2165);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__(3948);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
@@ -3489,16 +3489,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(2564);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
-
-
-
-
-
-
-
-
-
 function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_typeof(obj); }
+
+
+
+
+
+
+
+
 
 (function (undefined) {
   if (!("Element" in self && "HTMLElement" in self)) {
@@ -3598,26 +3597,26 @@ function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === 
     })();
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-getter.js
-var es_object_define_getter = __webpack_require__(9595);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
 var es_object_define_property = __webpack_require__(9070);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
-var es_array_for_each = __webpack_require__(9554);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
-var es_array_join = __webpack_require__(9600);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3710);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-getter.js
+var es_object_define_getter = __webpack_require__(9595);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
 var es_function_name = __webpack_require__(8309);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4916);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
-var es_regexp_to_string = __webpack_require__(9714);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(5306);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(5306);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
+var es_regexp_to_string = __webpack_require__(9714);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__(3710);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
+var es_array_join = __webpack_require__(9600);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
+var es_array_for_each = __webpack_require__(9554);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
 var web_dom_collections_for_each = __webpack_require__(4747);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.CreateMethodProperty.js
@@ -3713,8 +3712,6 @@ function ToLength(argument) {
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.Call.js
 
 
-
-
 function _ESAbstract_Call_Call(F, V) {
   var argumentsList = arguments.length > 2 ? arguments[2] : [];
 
@@ -3757,16 +3754,15 @@ function _ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive(O, hint) {
 
 /* harmony default export */ var _ESAbstract_OrdinaryToPrimitive = ((/* unused pure expression or super */ null && (_ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.ToPrimitive.js
-
-
-
-
-
-
-
-
-
 function _ESAbstract_ToPrimitive_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return typeof obj; }; } else { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _ESAbstract_ToPrimitive_typeof(obj); }
+
+
+
+
+
+
+
+
 
 
 
@@ -3839,26 +3835,25 @@ function ToString(argument) {
 
 /* harmony default export */ var _ESAbstract_ToString = ((/* unused pure expression or super */ null && (ToString)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function _DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _DOMTokenList_typeof = function _typeof(obj) { return typeof obj; }; } else { _DOMTokenList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _DOMTokenList_typeof(obj); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4043,17 +4038,16 @@ var _DOMTokenList = function () {
 
 /* harmony default export */ var helpers_DOMTokenList = (_DOMTokenList);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
-
-
-
-
-
-
-
-
-
-
 function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_prototype_classList_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_prototype_classList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_prototype_classList_typeof(obj); }
+
+
+
+
+
+
+
+
+
 
 
 

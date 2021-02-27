@@ -684,30 +684,6 @@ var TEMPLATE = String(String).split('String');
 
 /***/ }),
 
-/***/ 66:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var anObject = __webpack_require__(670);
-
-// `RegExp.prototype.flags` getter implementation
-// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
-module.exports = function () {
-  var that = anObject(this);
-  var result = '';
-  if (that.global) result += 'g';
-  if (that.ignoreCase) result += 'i';
-  if (that.multiline) result += 'm';
-  if (that.dotAll) result += 's';
-  if (that.unicode) result += 'u';
-  if (that.sticky) result += 'y';
-  return result;
-};
-
-
-/***/ }),
-
 /***/ 488:
 /***/ ((module) => {
 
@@ -882,39 +858,6 @@ module.exports = function (key) {
 
 /***/ }),
 
-/***/ 714:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var redefine = __webpack_require__(320);
-var anObject = __webpack_require__(670);
-var fails = __webpack_require__(293);
-var flags = __webpack_require__(66);
-
-var TO_STRING = 'toString';
-var RegExpPrototype = RegExp.prototype;
-var nativeToString = RegExpPrototype[TO_STRING];
-
-var NOT_GENERIC = fails(function () { return nativeToString.call({ source: 'a', flags: 'b' }) != '/a/b'; });
-// FF44- RegExp#toString has a wrong name
-var INCORRECT_NAME = nativeToString.name != TO_STRING;
-
-// `RegExp.prototype.toString` method
-// https://tc39.es/ecma262/#sec-regexp.prototype.tostring
-if (NOT_GENERIC || INCORRECT_NAME) {
-  redefine(RegExp.prototype, TO_STRING, function toString() {
-    var R = anObject(this);
-    var p = String(R.source);
-    var rf = R.flags;
-    var f = String(rf === undefined && R instanceof RegExp && !('flags' in RegExpPrototype) ? flags.call(R) : rf);
-    return '/' + p + '/' + f;
-  }, { unsafe: true });
-}
-
-
-/***/ }),
-
 /***/ 817:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1047,22 +990,6 @@ function _ESAbstract_Type_Type(x) {
 }
 
 /* harmony default export */ const _ESAbstract_Type = ((/* unused pure expression or super */ null && (_ESAbstract_Type_Type)));
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
-var es_regexp_to_string = __webpack_require__(714);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.Call.js
-
-
-function _ESAbstract_Call_Call(F, V) {
-  var argumentsList = arguments.length > 2 ? arguments[2] : [];
-
-  if (IsCallable(F) === false) {
-    throw new TypeError(Object.prototype.toString.call(F) + 'is not a function.');
-  }
-
-  return F.apply(V, argumentsList);
-}
-
-/* harmony default export */ const _ESAbstract_Call = ((/* unused pure expression or super */ null && (_ESAbstract_Call_Call)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.OrdinaryToPrimitive.js
 
 

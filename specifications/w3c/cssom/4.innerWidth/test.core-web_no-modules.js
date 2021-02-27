@@ -1449,30 +1449,6 @@ var TEMPLATE = String(String).split('String');
 
 /***/ }),
 
-/***/ 7066:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var anObject = __webpack_require__(9670);
-
-// `RegExp.prototype.flags` getter implementation
-// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
-module.exports = function () {
-  var that = anObject(this);
-  var result = '';
-  if (that.global) result += 'g';
-  if (that.ignoreCase) result += 'i';
-  if (that.multiline) result += 'm';
-  if (that.dotAll) result += 's';
-  if (that.unicode) result += 'u';
-  if (that.sticky) result += 'y';
-  return result;
-};
-
-
-/***/ }),
-
 /***/ 4488:
 /***/ (function(module) {
 
@@ -1881,30 +1857,6 @@ addToUnscopables('entries');
 
 /***/ }),
 
-/***/ 3710:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var redefine = __webpack_require__(1320);
-
-var DatePrototype = Date.prototype;
-var INVALID_DATE = 'Invalid Date';
-var TO_STRING = 'toString';
-var nativeDateToString = DatePrototype[TO_STRING];
-var getTime = DatePrototype.getTime;
-
-// `Date.prototype.toString` method
-// https://tc39.es/ecma262/#sec-date.prototype.tostring
-if (new Date(NaN) + '' != INVALID_DATE) {
-  redefine(DatePrototype, TO_STRING, function toString() {
-    var value = getTime.call(this);
-    // eslint-disable-next-line no-self-compare -- NaN check
-    return value === value ? nativeDateToString.call(this) : INVALID_DATE;
-  });
-}
-
-
-/***/ }),
-
 /***/ 9653:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2036,39 +1988,6 @@ var toString = __webpack_require__(288);
 // https://tc39.es/ecma262/#sec-object.prototype.tostring
 if (!TO_STRING_TAG_SUPPORT) {
   redefine(Object.prototype, 'toString', toString, { unsafe: true });
-}
-
-
-/***/ }),
-
-/***/ 9714:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var redefine = __webpack_require__(1320);
-var anObject = __webpack_require__(9670);
-var fails = __webpack_require__(7293);
-var flags = __webpack_require__(7066);
-
-var TO_STRING = 'toString';
-var RegExpPrototype = RegExp.prototype;
-var nativeToString = RegExpPrototype[TO_STRING];
-
-var NOT_GENERIC = fails(function () { return nativeToString.call({ source: 'a', flags: 'b' }) != '/a/b'; });
-// FF44- RegExp#toString has a wrong name
-var INCORRECT_NAME = nativeToString.name != TO_STRING;
-
-// `RegExp.prototype.toString` method
-// https://tc39.es/ecma262/#sec-regexp.prototype.tostring
-if (NOT_GENERIC || INCORRECT_NAME) {
-  redefine(RegExp.prototype, TO_STRING, function toString() {
-    var R = anObject(this);
-    var p = String(R.source);
-    var rf = R.flags;
-    var f = String(rf === undefined && R instanceof RegExp && !('flags' in RegExpPrototype) ? flags.call(R) : rf);
-    return '/' + p + '/' + f;
-  }, { unsafe: true });
 }
 
 
@@ -2584,20 +2503,20 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
+var es_object_define_properties = __webpack_require__(3321);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
-var es_symbol_iterator = __webpack_require__(2165);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__(6992);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
-var es_object_define_properties = __webpack_require__(3321);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__(1539);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
+var es_symbol_iterator = __webpack_require__(2165);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__(3948);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
@@ -2654,13 +2573,7 @@ function _ESAbstract_Type_Type(x) {
 /* harmony default export */ var _ESAbstract_Type = ((/* unused pure expression or super */ null && (_ESAbstract_Type_Type)));
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
 var es_number_constructor = __webpack_require__(9653);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3710);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
-var es_regexp_to_string = __webpack_require__(9714);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.Call.js
-
-
 
 
 function _ESAbstract_Call_Call(F, V) {
@@ -2705,16 +2618,15 @@ function _ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive(O, hint) {
 
 /* harmony default export */ var _ESAbstract_OrdinaryToPrimitive = ((/* unused pure expression or super */ null && (_ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.ToPrimitive.js
-
-
-
-
-
-
-
-
-
 function _ESAbstract_ToPrimitive_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return typeof obj; }; } else { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _ESAbstract_ToPrimitive_typeof(obj); }
+
+
+
+
+
+
+
+
 
 
 
@@ -2810,16 +2722,15 @@ function ToPropertyKey(argument) {
 
 /* harmony default export */ var _ESAbstract_ToPropertyKey = ((/* unused pure expression or super */ null && (ToPropertyKey)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~viewport.js
-
-
-
-
-
-
-
-
-
 function _viewport_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _viewport_typeof = function _typeof(obj) { return typeof obj; }; } else { _viewport_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _viewport_typeof(obj); }
+
+
+
+
+
+
+
+
 
 
 
