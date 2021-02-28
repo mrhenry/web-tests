@@ -61,6 +61,14 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 			continue // not an official release
 		}
 
+		if strings.Contains(strings.ToLower(b.OS), "android") {
+			continue // android can't be tested with Browserstack
+		}
+
+		if strings.Contains(strings.ToLower(b.Browser), "android") {
+			continue // android can't be tested with Browserstack
+		}
+
 		if b.Browser == "edge" {
 			parts := strings.Split(b.BrowserVersion, ".")
 			if len(parts) > 0 {
