@@ -182,7 +182,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 		return false
 	})
 
-	sema := semaphore.NewWeighted(5)
+	sema := semaphore.NewWeighted(4)
 
 	for _, browser := range browsers {
 		if err := sema.Acquire(ctx, 1); err != nil {
@@ -199,6 +199,8 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 			default:
 			}
 
+			time.Sleep(time.Second * 10)
+
 			err = runTest(ctx, client, b, tests, sessionName, mapping)
 			if err != nil {
 				log.Println(err) // non-fatal for us
@@ -208,7 +210,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 	go func() {
 		// Wait for all
-		if err := sema.Acquire(ctx, 5); err != nil {
+		if err := sema.Acquire(ctx, 4); err != nil {
 			log.Println(err)
 			return
 		}

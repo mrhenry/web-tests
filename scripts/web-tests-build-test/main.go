@@ -134,6 +134,10 @@ func main() {
 		window.testLoaded = true;
 
 		var callback = function callback(success) {
+			if ('testSuccess' in window) {
+				return;
+			}
+			
 			window.testSuccess = success;
 		}
 
@@ -196,6 +200,10 @@ func main() {
 		window.testLoaded = true;
 
 		function callback(success) {
+			if ('testSuccess' in window) {
+				return;
+			}
+
 			window.testSuccess = success;
 		}
 		
@@ -240,6 +248,10 @@ func main() {
 		window.testLoaded = true;
 
 		function callback(success) {
+			if ('testSuccess' in window) {
+				return;
+			}
+
 			window.testSuccess = success;
 		}
 		

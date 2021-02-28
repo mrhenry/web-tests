@@ -11,7 +11,7 @@ var __webpack_exports__ = {};
 
     var firstEntry = entries[0];
     cb(firstEntry.entryType == "paint" && typeof firstEntry.duration !== "undefined" && typeof firstEntry.startTime !== "undefined" && typeof firstEntry.name !== "undefined");
-  }, 100);
+  }, 500);
 })(callback);
 /******/ })()
 ;

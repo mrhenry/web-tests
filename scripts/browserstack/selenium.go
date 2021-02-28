@@ -137,7 +137,7 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 		wd1, err := selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
 		if err != nil {
 			// TODO : create real retries
-			if strings.Contains(err.Error(), "Could not start Mobile Browser") {
+			if strings.Contains(err.Error(), "Could not start Mobile Browser") || strings.Contains(err.Error(), "All parallel tests are currently in use") {
 				time.Sleep(time.Minute)
 				wd1, err = selenium.NewRemote(caps, "https://hub-cloud.browserstack.com/wd/hub")
 			}

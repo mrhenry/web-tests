@@ -14,5 +14,5 @@
 			(typeof firstEntry.startTime !== "undefined") &&
 			(typeof firstEntry.name !== "undefined")
 		);
-	}, 100);
+	}, 500);
 })(callback);
