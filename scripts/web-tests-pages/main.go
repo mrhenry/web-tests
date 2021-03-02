@@ -255,7 +255,7 @@ func main() {
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 0.5)
 							scores.addScore(test, weightedScore)
 						} else {
-							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.3f", result.Score) + "</td>"
+							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>"
 
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
 							scores.addScore(test, weightedScore)
