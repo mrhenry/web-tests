@@ -131,8 +131,6 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
-		window.testLoaded = true;
-
 		var callback = function callback(success) {
 			if ('testSuccess' in window) {
 				return;
@@ -142,6 +140,9 @@ func main() {
 		}
 
 		window.callback = callback;
+	</script>
+	<script>
+		window.testLoaded = true;
 	</script>
 	<script type="module" src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_modules.js") + `"></script>
 	<script nomodule src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_no-modules.js") + `"></script>
@@ -197,7 +198,6 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
-		window.testLoaded = true;
 
 		function callback(success) {
 			if ('testSuccess' in window) {
@@ -208,6 +208,9 @@ func main() {
 		}
 		
 		;` + string(b) + `;
+	</script>
+	<script>
+		window.testLoaded = true;
 	</script>
 </body>
 </html>
@@ -245,7 +248,6 @@ func main() {
 <body>
 	` + fixtures + `
 	<script>
-		window.testLoaded = true;
 
 		function callback(success) {
 			if ('testSuccess' in window) {
@@ -256,6 +258,9 @@ func main() {
 		}
 		
 		;` + string(b) + `;
+	</script>
+	<script>
+		window.testLoaded = true;
 	</script>
 </body>
 </html>
