@@ -43,7 +43,7 @@
 		}
 
 		f4(cb) {
-			cb.bind(this)();
+			cb.apply(this);
 		}
 	}
 

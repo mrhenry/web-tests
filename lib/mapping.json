@@ -460,27 +460,6 @@
     ],
     "dir": "specifications/whatwg/url/6.2.constructor.Sequence"
   },
-  "76296bf6-61e8-48d9-a8b0-93455b717a97": {
-    "id": "76296bf6-61e8-48d9-a8b0-93455b717a97",
-    "spec": {
-      "org": "w3c",
-      "id": "paint-timing",
-      "section": "3",
-      "name": "PerformancePaintTiming interface",
-      "url": "https://w3c.github.io/paint-timing/#sec-PerformancePaintTiming"
-    },
-    "notes": [],
-    "search_terms": [],
-    "tests": {
-      "babel": "test.babel.js",
-      "babel_webpack": "test.babel_webpack.js",
-      "core-web": "test.core-web",
-      "esbuild": "test.esbuild.js",
-      "pure": "test.pure.js"
-    },
-    "polyfill.io": [],
-    "dir": "specifications/w3c/paint-timing/3.PerformancePaintTiming"
-  },
   "78d88d85-c3b6-4b60-a382-f73d5e7cf8e5": {
     "id": "78d88d85-c3b6-4b60-a382-f73d5e7cf8e5",
     "spec": {
@@ -714,27 +693,6 @@
       "globalThis"
     ],
     "dir": "specifications/tc39/ecma262/18.1.1.globalThis"
-  },
-  "90db82c6-f525-4c2e-bee5-df256f4a98dc": {
-    "id": "90db82c6-f525-4c2e-bee5-df256f4a98dc",
-    "spec": {
-      "org": "wicg",
-      "id": "is-input-pending",
-      "section": "6",
-      "name": "navigator.scheduling",
-      "url": "https://wicg.github.io/is-input-pending/#extensions-to-the-navigator-interface"
-    },
-    "notes": [],
-    "search_terms": [],
-    "tests": {
-      "babel": "test.babel.js",
-      "babel_webpack": "test.babel_webpack.js",
-      "core-web": "test.core-web",
-      "esbuild": "test.esbuild.js",
-      "pure": "test.pure.js"
-    },
-    "polyfill.io": [],
-    "dir": "specifications/wicg/is-input-pending/6.navigator.scheduling"
   },
   "95ea3db0-5a45-426d-b202-699b9e6afd14": {
     "id": "95ea3db0-5a45-426d-b202-699b9e6afd14",

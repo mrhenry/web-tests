@@ -30,7 +30,7 @@
       cb2();
     };
     F1.prototype.f4 = function(cb2) {
-      cb2.bind(this)();
+      cb2.apply(this);
     };
     c1();
     d1();
