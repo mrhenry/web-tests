@@ -62,7 +62,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }, {
       key: "f4",
       value: function f4(cb) {
-        cb.bind(this)();
+        cb.apply(this);
       }
     }]);
 

@@ -45,7 +45,7 @@ var __webpack_exports__ = {};
     }
 
     f4(cb) {
-      cb.bind(this)();
+      cb.apply(this);
     }
 
   }

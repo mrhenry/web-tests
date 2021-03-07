@@ -1,18 +1,6 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 99:
-/***/ (function(module) {
-
-module.exports = function (it) {
-  if (typeof it != 'function') {
-    throw TypeError(String(it) + ' is not a function');
-  } return it;
-};
-
-
-/***/ }),
-
 /***/ 670:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -84,7 +72,7 @@ module.exports = function (it) {
 var has = __webpack_require__(871);
 var ownKeys = __webpack_require__(887);
 var getOwnPropertyDescriptorModule = __webpack_require__(236);
-var definePropertyModule = __webpack_require__(70);
+var definePropertyModule = __webpack_require__(463);
 
 module.exports = function (target, source) {
   var keys = ownKeys(source);
@@ -103,7 +91,7 @@ module.exports = function (target, source) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var DESCRIPTORS = __webpack_require__(781);
-var definePropertyModule = __webpack_require__(70);
+var definePropertyModule = __webpack_require__(463);
 var createPropertyDescriptor = __webpack_require__(114);
 
 module.exports = DESCRIPTORS ? function (object, key, value) {
@@ -248,41 +236,6 @@ module.exports = function (exec) {
   } catch (error) {
     return true;
   }
-};
-
-
-/***/ }),
-
-/***/ 65:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var aFunction = __webpack_require__(99);
-var isObject = __webpack_require__(111);
-
-var slice = [].slice;
-var factories = {};
-
-var construct = function (C, argsLength, args) {
-  if (!(argsLength in factories)) {
-    for (var list = [], i = 0; i < argsLength; i++) list[i] = 'a[' + i + ']';
-    // eslint-disable-next-line no-new-func -- we have no proper alternatives, IE8- only
-    factories[argsLength] = Function('C,a', 'return new C(' + list.join(',') + ')');
-  } return factories[argsLength](C, args);
-};
-
-// `Function.prototype.bind` method implementation
-// https://tc39.es/ecma262/#sec-function.prototype.bind
-module.exports = Function.bind || function bind(that /* , ...args */) {
-  var fn = aFunction(this);
-  var partArgs = slice.call(arguments, 1);
-  var boundFunction = function bound(/* args... */) {
-    var args = partArgs.concat(slice.call(arguments));
-    return this instanceof boundFunction ? construct(fn, args.length, args) : fn.apply(that, args);
-  };
-  if (isObject(fn.prototype)) boundFunction.prototype = fn.prototype;
-  return boundFunction;
 };
 
 
@@ -532,7 +485,7 @@ module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSour
 
 /***/ }),
 
-/***/ 70:
+/***/ 463:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 var DESCRIPTORS = __webpack_require__(781);
@@ -905,27 +858,12 @@ module.exports = function (key) {
 
 /***/ }),
 
-/***/ 812:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var $ = __webpack_require__(109);
-var bind = __webpack_require__(65);
-
-// `Function.prototype.bind` method
-// https://tc39.es/ecma262/#sec-function.prototype.bind
-$({ target: 'Function', proto: true }, {
-  bind: bind
-});
-
-
-/***/ }),
-
-/***/ 340:
+/***/ 70:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 var $ = __webpack_require__(109);
 var DESCRIPTORS = __webpack_require__(781);
-var objectDefinePropertyModile = __webpack_require__(70);
+var objectDefinePropertyModile = __webpack_require__(463);
 
 // `Object.defineProperty` method
 // https://tc39.es/ecma262/#sec-object.defineproperty
@@ -1008,11 +946,8 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var core_js_modules_es_function_bind_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(812);
-/* harmony import */ var core_js_modules_es_function_bind_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_bind_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(340);
-/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_1__);
-
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(70);
+/* harmony import */ var core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property_js__WEBPACK_IMPORTED_MODULE_0__);
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1078,7 +1013,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     }, {
       key: "f4",
       value: function f4(cb) {
-        cb.bind(this)();
+        cb.apply(this);
       }
     }]);
 

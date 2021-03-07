@@ -37,7 +37,7 @@
   };
 
   F1.prototype.f4 = function (cb) {
-    cb.bind(this)();
+    cb.apply(this);
   };
 
   c1();
