@@ -412,6 +412,16 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 
 		score = (score - 0.01) + (newScore * 0.02) // success increased more than failure decreases
 
+		if score != 0 && score != 1 {
+			if score > 0.2 && test.Success() {
+				score = 1
+			}
+
+			if score < 0.8 && !test.Success() {
+				score = 0
+			}
+		}
+
 		if score > 1 {
 			score = 1
 		}
