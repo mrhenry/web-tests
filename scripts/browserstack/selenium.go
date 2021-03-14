@@ -143,6 +143,7 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 			}
 
 			if err != nil {
+				log.Printf("%v", caps)
 				log.Println("new selenium remote : ", err)
 				return
 			}
