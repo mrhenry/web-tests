@@ -89,6 +89,8 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 			continue // too old
 		case "ie/7.0":
 			continue // too old
+		case "firefox/3.6":
+			continue // broken
 		default:
 
 			browsersMap[key] = b
