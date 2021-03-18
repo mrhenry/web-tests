@@ -9,14 +9,16 @@
       "Mozilla/5.0 (Linux; Android 10; SM-T875) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
       "Mozilla/5.0 (Linux; Android 10; vivo 1935) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 10; SM-G988B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/11.0": {
     "key": "android/11.0",
     "uas": [
       "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/4.4": {
     "key": "android/4.4",
@@ -24,14 +26,16 @@
       "Mozilla/5.0 (Linux; Android 4.4.2; SM-T530) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.99 Safari/537.36",
       "Mozilla/5.0 (Linux; Android 4.4.4; SM-N910C) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.99 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 4.4; Nexus 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.99 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/5.0": {
     "key": "android/5.0",
     "uas": [
       "Mozilla/5.0 (Linux; Android 5.0; XT1092) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 5.0.2; SM-G920F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/6.0": {
     "key": "android/6.0",
@@ -39,7 +43,8 @@
       "Mozilla/5.0 (Linux; Android 6.0; XT1092) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 6.0.1; SM-G930F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 6.0; Nexus 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/7.0": {
     "key": "android/7.0",
@@ -47,14 +52,16 @@
       "Mozilla/5.0 (Linux; Android 7.0; SM-T825) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
       "Mozilla/5.0 (Linux; Android 7.0; SM-G955F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 7.0; SM-G950F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/7.1": {
     "key": "android/7.1",
     "uas": [
       "Mozilla/5.0 (Linux; Android 7.1.1; SM-A530F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 7.1; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/8.0": {
     "key": "android/8.0",
@@ -63,7 +70,8 @@
       "Mozilla/5.0 (Linux; Android 8.0.0; Pixel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 8.0.0; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/8.1": {
     "key": "android/8.1",
@@ -71,7 +79,8 @@
       "Mozilla/5.0 (Linux; Android 8.1.0; SM-N960F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 8.1.0; SM-T835) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
       "Mozilla/5.0 (Linux; Android 8.1.0; SM-G610F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "android/9.0": {
     "key": "android/9.0",
@@ -82,28 +91,32 @@
       "Mozilla/5.0 (Linux; Android 9; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 9; Redmi Note 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36",
       "Mozilla/5.0 (Linux; Android 9; Redmi Note 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/14.0": {
     "key": "chrome/14.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/15.0": {
     "key": "chrome/15.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/16.0": {
     "key": "chrome/16.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/17.0": {
     "key": "chrome/17.0",
@@ -112,7 +125,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.26 Safari/535.11",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/18.0": {
     "key": "chrome/18.0",
@@ -120,7 +134,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.151 Safari/535.19",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.152 Safari/535.19",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.152 Safari/535.19"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/19.0": {
     "key": "chrome/19.0",
@@ -128,7 +143,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/20.0": {
     "key": "chrome/20.0",
@@ -137,7 +153,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/21.0": {
     "key": "chrome/21.0",
@@ -146,7 +163,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.57 Safari/537.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/22.0": {
     "key": "chrome/22.0",
@@ -155,7 +173,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.92 Safari/537.4",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.96 Safari/537.4",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.96 Safari/537.4"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/23.0": {
     "key": "chrome/23.0",
@@ -164,14 +183,16 @@
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.101 Safari/537.11",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/24.0": {
     "key": "chrome/24.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/25.0": {
     "key": "chrome/25.0",
@@ -179,7 +200,8 @@
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.160 Safari/537.22",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.160 Safari/537.22",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.160 Safari/537.22"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/26.0": {
     "key": "chrome/26.0",
@@ -188,7 +210,8 @@
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/27.0": {
     "key": "chrome/27.0",
@@ -196,7 +219,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/28.0": {
     "key": "chrome/28.0",
@@ -205,7 +229,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.71 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/29.0": {
     "key": "chrome/29.0",
@@ -214,7 +239,8 @@
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.62 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/30.0": {
     "key": "chrome/30.0",
@@ -224,7 +250,8 @@
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/31.0": {
     "key": "chrome/31.0",
@@ -234,7 +261,8 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/32.0": {
     "key": "chrome/32.0",
@@ -244,7 +272,8 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.76 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.76 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/33.0": {
     "key": "chrome/33.0",
@@ -253,15 +282,18 @@
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/34.0": {
     "key": "chrome/34.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/35.0": {
     "key": "chrome/35.0",
@@ -271,7 +303,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.114 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/36.0": {
     "key": "chrome/36.0",
@@ -280,7 +313,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/37.0": {
     "key": "chrome/37.0",
@@ -288,7 +322,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/38.0": {
     "key": "chrome/38.0",
@@ -296,7 +331,8 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/39.0": {
     "key": "chrome/39.0",
@@ -304,7 +340,8 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/40.0": {
     "key": "chrome/40.0",
@@ -313,7 +350,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.94 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/41.0": {
     "key": "chrome/41.0",
@@ -322,7 +360,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.76 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/42.0": {
     "key": "chrome/42.0",
@@ -331,7 +370,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/43.0": {
     "key": "chrome/43.0",
@@ -340,7 +380,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.65 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.65 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/44.0": {
     "key": "chrome/44.0",
@@ -349,7 +390,8 @@
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/45.0": {
     "key": "chrome/45.0",
@@ -359,7 +401,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/46.0": {
     "key": "chrome/46.0",
@@ -368,7 +411,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/47.0": {
     "key": "chrome/47.0",
@@ -378,7 +422,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/48.0": {
     "key": "chrome/48.0",
@@ -386,22 +431,27 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36",
       "Mozilla/5.0 (Windows NT 5.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/49.0": {
     "key": "chrome/49.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/50.0": {
     "key": "chrome/50.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/51.0": {
     "key": "chrome/51.0",
@@ -409,7 +459,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/52.0": {
     "key": "chrome/52.0",
@@ -417,28 +468,33 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/53.0": {
     "key": "chrome/53.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.113 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.113 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/54.0": {
     "key": "chrome/54.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/55.0": {
     "key": "chrome/55.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/56.0": {
     "key": "chrome/56.0",
@@ -446,7 +502,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/57.0": {
     "key": "chrome/57.0",
@@ -455,22 +512,26 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/58.0": {
     "key": "chrome/58.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/59.0": {
     "key": "chrome/59.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/60.0": {
     "key": "chrome/60.0",
@@ -479,7 +540,8 @@
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/61.0": {
     "key": "chrome/61.0",
@@ -487,7 +549,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/62.0": {
     "key": "chrome/62.0",
@@ -495,7 +558,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/63.0": {
     "key": "chrome/63.0",
@@ -503,7 +567,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/64.0": {
     "key": "chrome/64.0",
@@ -511,14 +576,16 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/65.0": {
     "key": "chrome/65.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/66.0": {
     "key": "chrome/66.0",
@@ -528,14 +595,16 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/67.0": {
     "key": "chrome/67.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/68.0": {
     "key": "chrome/68.0",
@@ -543,7 +612,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/69.0": {
     "key": "chrome/69.0",
@@ -552,21 +622,25 @@
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/70.0": {
     "key": "chrome/70.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/71.0": {
     "key": "chrome/71.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/72.0": {
     "key": "chrome/72.0",
@@ -574,55 +648,64 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/73.0": {
     "key": "chrome/73.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/74.0": {
     "key": "chrome/74.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/75.0": {
     "key": "chrome/75.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/76.0": {
     "key": "chrome/76.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/77.0": {
     "key": "chrome/77.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/78.0": {
     "key": "chrome/78.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "chrome/79.0": {
     "key": "chrome/79.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/80.0": {
     "key": "chrome/80.0",
@@ -630,20 +713,23 @@
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/81.0": {
     "key": "chrome/81.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/83.0": {
     "key": "chrome/83.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/84.0": {
     "key": "chrome/84.0",
@@ -651,14 +737,16 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/85.0": {
     "key": "chrome/85.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/86.0": {
     "key": "chrome/86.0",
@@ -667,7 +755,8 @@
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/87.0": {
     "key": "chrome/87.0",
@@ -675,7 +764,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/88.0": {
     "key": "chrome/88.0",
@@ -685,37 +775,44 @@
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "chrome/89.0": {
     "key": "chrome/89.0",
     "uas": [
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36"
-    ]
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"
+    ],
+    "sec-ch-ua": false
   },
   "edge/15.0": {
     "key": "edge/15.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "edge/16.0": {
     "key": "edge/16.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "edge/17.0": {
     "key": "edge/17.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/17.17134"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "edge/18.0": {
     "key": "edge/18.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/10.0": {
     "key": "firefox/10.0",
@@ -723,14 +820,16 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0) Gecko/20100101 Firefox/10.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:10.0.1) Gecko/20100101 Firefox/10.0.1",
       "Mozilla/5.0 (Windows NT 5.2; rv:10.0) Gecko/20100101 Firefox/10.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/11.0": {
     "key": "firefox/11.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:11.0) Gecko/20100101 Firefox/11.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:11.0) Gecko/20100101 Firefox/11.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/12.0": {
     "key": "firefox/12.0",
@@ -738,7 +837,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:12.0) Gecko/20100101 Firefox/12.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:12.0) Gecko/20100101 Firefox/12.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/13.0": {
     "key": "firefox/13.0",
@@ -746,7 +846,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:13.0) Gecko/20100101 Firefox/13.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:13.0) Gecko/20100101 Firefox/13.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/14.0": {
     "key": "firefox/14.0",
@@ -754,14 +855,16 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1",
       "Mozilla/5.0 (Windows NT 5.2; rv:14.0) Gecko/20100101 Firefox/14.0.1",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:14.0) Gecko/20100101 Firefox/14.0.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/15.0": {
     "key": "firefox/15.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 5.2; rv:15.0) Gecko/20100101 Firefox/15.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/16.0": {
     "key": "firefox/16.0",
@@ -769,7 +872,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/17.0": {
     "key": "firefox/17.0",
@@ -780,7 +884,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:17.0) Gecko/20100101 Firefox/17.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/17.0 Firefox/17.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:17.0) Gecko/20100101 Firefox/17.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/18.0": {
     "key": "firefox/18.0",
@@ -790,7 +895,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:18.0) Gecko/20100101 Firefox/18.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:18.0) Gecko/20100101 Firefox/18.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/19.0": {
     "key": "firefox/19.0",
@@ -798,7 +904,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:19.0) Gecko/20100101 Firefox/19.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/20.0": {
     "key": "firefox/20.0",
@@ -807,7 +914,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:20.0) Gecko/20100101 Firefox/20.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:20.0) Gecko/20100101 Firefox/20.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/21.0": {
     "key": "firefox/21.0",
@@ -815,7 +923,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:21.0) Gecko/20100101 Firefox/21.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/22.0": {
     "key": "firefox/22.0",
@@ -825,7 +934,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:22.0) Gecko/20100101 Firefox/22.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:22.0) Gecko/20100101 Firefox/22.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:22.0) Gecko/20100101 Firefox/22.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/23.0": {
     "key": "firefox/23.0",
@@ -834,15 +944,18 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:23.0) Gecko/20100101 Firefox/23.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/24.0": {
     "key": "firefox/24.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0"
-    ]
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0",
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/25.0": {
     "key": "firefox/25.0",
@@ -851,14 +964,16 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/26.0": {
     "key": "firefox/26.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/27.0": {
     "key": "firefox/27.0",
@@ -868,7 +983,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:27.0) Gecko/20100101 Firefox/27.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:27.0) Gecko/20100101 Firefox/27.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/28.0": {
     "key": "firefox/28.0",
@@ -878,7 +994,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:28.0) Gecko/20100101 Firefox/28.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/29.0": {
     "key": "firefox/29.0",
@@ -888,7 +1005,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:29.0) Gecko/20100101 Firefox/29.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/30.0": {
     "key": "firefox/30.0",
@@ -896,8 +1014,10 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:30.0) Gecko/20100101 Firefox/30.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:30.0) Gecko/20100101 Firefox/30.0"
-    ]
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:30.0) Gecko/20100101 Firefox/30.0",
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/31.0": {
     "key": "firefox/31.0",
@@ -907,7 +1027,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:31.0) Gecko/20100101 Firefox/31.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/32.0": {
     "key": "firefox/32.0",
@@ -917,7 +1038,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:32.0) Gecko/20100101 Firefox/32.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:32.0) Gecko/20100101 Firefox/32.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/33.0": {
     "key": "firefox/33.0",
@@ -925,15 +1047,18 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:33.0) Gecko/20100101 Firefox/33.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:33.0) Gecko/20100101 Firefox/33.0",
-      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/34.0": {
     "key": "firefox/34.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:34.0) Gecko/20100101 Firefox/34.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/35.0": {
     "key": "firefox/35.0",
@@ -942,7 +1067,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:35.0) Gecko/20100101 Firefox/35.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/36.0": {
     "key": "firefox/36.0",
@@ -951,8 +1077,10 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:36.0) Gecko/20100101 Firefox/36.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:36.0) Gecko/20100101 Firefox/36.0",
-      "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0",
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/37.0": {
     "key": "firefox/37.0",
@@ -962,7 +1090,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/38.0": {
     "key": "firefox/38.0",
@@ -970,7 +1099,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:38.0) Gecko/20100101 Firefox/38.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/39.0": {
     "key": "firefox/39.0",
@@ -979,7 +1109,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:39.0) Gecko/20100101 Firefox/39.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/4.0": {
     "key": "firefox/4.0",
@@ -987,7 +1118,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
       "Mozilla/5.0 (Windows NT 5.2; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0.1) Gecko/20100101 Firefox/4.0.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/40.0": {
     "key": "firefox/40.0",
@@ -996,7 +1128,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:40.0) Gecko/20100101 Firefox/40.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:40.0) Gecko/20100101 Firefox/40.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/41.0": {
     "key": "firefox/41.0",
@@ -1006,15 +1139,18 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:41.0) Gecko/20100101 Firefox/41.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/42.0": {
     "key": "firefox/42.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:42.0) Gecko/20100101 Firefox/42.0",
-      "Mozilla/5.0 (Windows NT 5.2; rv:42.0) Gecko/20100101 Firefox/42.0"
-    ]
+      "Mozilla/5.0 (Windows NT 5.2; rv:42.0) Gecko/20100101 Firefox/42.0",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:42.0) Gecko/20100101 Firefox/42.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/43.0": {
     "key": "firefox/43.0",
@@ -1022,7 +1158,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/44.0": {
     "key": "firefox/44.0",
@@ -1032,7 +1169,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:44.0) Gecko/20100101 Firefox/44.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:44.0) Gecko/20100101 Firefox/44.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/45.0": {
     "key": "firefox/45.0",
@@ -1042,7 +1180,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:45.0) Gecko/20100101 Firefox/45.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:45.0) Gecko/20100101 Firefox/45.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/46.0": {
     "key": "firefox/46.0",
@@ -1050,14 +1189,16 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0",
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/47.0": {
     "key": "firefox/47.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/48.0": {
     "key": "firefox/48.0",
@@ -1066,7 +1207,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:48.0) Gecko/20100101 Firefox/48.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/49.0": {
     "key": "firefox/49.0",
@@ -1075,21 +1217,24 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:49.0) Gecko/20100101 Firefox/49.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/5.0": {
     "key": "firefox/5.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0.1) Gecko/20100101 Firefox/5.0.1",
       "Mozilla/5.0 (Windows NT 5.2; rv:5.0.1) Gecko/20100101 Firefox/5.0.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/50.0": {
     "key": "firefox/50.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/51.0": {
     "key": "firefox/51.0",
@@ -1097,15 +1242,18 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0",
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/52.0": {
     "key": "firefox/52.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:52.0) Gecko/20100101 Firefox/52.0"
-    ]
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:52.0) Gecko/20100101 Firefox/52.0",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/53.0": {
     "key": "firefox/53.0",
@@ -1113,7 +1261,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/54.0": {
     "key": "firefox/54.0",
@@ -1122,7 +1271,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/55.0": {
     "key": "firefox/55.0",
@@ -1130,22 +1280,27 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/56.0": {
     "key": "firefox/56.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0",
-      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:56.0) Gecko/20100101 Firefox/56.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/57.0": {
     "key": "firefox/57.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:57.0) Gecko/20100101 Firefox/57.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:57.0) Gecko/20100101 Firefox/57.0",
-      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:57.0) Gecko/20100101 Firefox/57.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:57.0) Gecko/20100101 Firefox/57.0",
+      "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:57.0) Gecko/20100101 Firefox/57.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/58.0": {
     "key": "firefox/58.0",
@@ -1153,7 +1308,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:58.0) Gecko/20100101 Firefox/58.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:58.0) Gecko/20100101 Firefox/58.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:58.0) Gecko/20100101 Firefox/58.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/59.0": {
     "key": "firefox/59.0",
@@ -1162,14 +1318,16 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:59.0) Gecko/20100101 Firefox/59.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:59.0) Gecko/20100101 Firefox/59.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:59.0) Gecko/20100101 Firefox/59.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/6.0": {
     "key": "firefox/6.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 5.2; rv:6.0) Gecko/20100101 Firefox/6.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/60.0": {
     "key": "firefox/60.0",
@@ -1178,7 +1336,8 @@
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:60.0) Gecko/20100101 Firefox/60.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101 Firefox/60.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101 Firefox/60.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/61.0": {
     "key": "firefox/61.0",
@@ -1186,7 +1345,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0",
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:61.0) Gecko/20100101 Firefox/61.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/62.0": {
     "key": "firefox/62.0",
@@ -1195,7 +1355,8 @@
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:62.0) Gecko/20100101 Firefox/62.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:62.0) Gecko/20100101 Firefox/62.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:62.0) Gecko/20100101 Firefox/62.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/63.0": {
     "key": "firefox/63.0",
@@ -1204,7 +1365,8 @@
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:63.0) Gecko/20100101 Firefox/63.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:63.0) Gecko/20100101 Firefox/63.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/64.0": {
     "key": "firefox/64.0",
@@ -1212,14 +1374,17 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:64.0) Gecko/20100101 Firefox/64.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:64.0) Gecko/20100101 Firefox/64.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:64.0) Gecko/20100101 Firefox/64.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/65.0": {
     "key": "firefox/65.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:65.0) Gecko/20100101 Firefox/65.0",
-      "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:65.0) Gecko/20100101 Firefox/65.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:65.0) Gecko/20100101 Firefox/65.0",
+      "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:65.0) Gecko/20100101 Firefox/65.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/66.0": {
     "key": "firefox/66.0",
@@ -1227,14 +1392,16 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:66.0) Gecko/20100101 Firefox/66.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:66.0) Gecko/20100101 Firefox/66.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:66.0) Gecko/20100101 Firefox/66.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/67.0": {
     "key": "firefox/67.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:67.0) Gecko/20100101 Firefox/67.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:67.0) Gecko/20100101 Firefox/67.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/68.0": {
     "key": "firefox/68.0",
@@ -1242,7 +1409,8 @@
       "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Firefox/68.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101 Firefox/68.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101 Firefox/68.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/69.0": {
     "key": "firefox/69.0",
@@ -1251,7 +1419,8 @@
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/7.0": {
     "key": "firefox/7.0",
@@ -1259,7 +1428,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:7.0.1) Gecko/20100101 Firefox/7.0.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:7.0) Gecko/20100101 Firefox/7.0",
       "Mozilla/5.0 (Windows NT 5.2; rv:7.0) Gecko/20100101 Firefox/7.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/70.0": {
     "key": "firefox/70.0",
@@ -1268,7 +1438,8 @@
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/71.0": {
     "key": "firefox/71.0",
@@ -1277,7 +1448,8 @@
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/72.0": {
     "key": "firefox/72.0",
@@ -1286,7 +1458,8 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:72.0) Gecko/20100101 Firefox/72.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/73.0": {
     "key": "firefox/73.0",
@@ -1294,14 +1467,16 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/74.0": {
     "key": "firefox/74.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/75.0": {
     "key": "firefox/75.0",
@@ -1310,7 +1485,8 @@
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/76.0": {
     "key": "firefox/76.0",
@@ -1318,7 +1494,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/77.0": {
     "key": "firefox/77.0",
@@ -1326,15 +1503,18 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:77.0) Gecko/20100101 Firefox/77.0",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0",
-      "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0",
+      "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/78.0": {
     "key": "firefox/78.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/79.0": {
     "key": "firefox/79.0",
@@ -1342,7 +1522,8 @@
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/8.0": {
     "key": "firefox/8.0",
@@ -1351,7 +1532,8 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:8.0.1) Gecko/20100101 Firefox/8.0.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:8.0.1) Gecko/20100101 Firefox/8.0.1",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:8.0.1) Gecko/20100101 Firefox/8.0.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/80.0": {
     "key": "firefox/80.0",
@@ -1359,7 +1541,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/81.0": {
     "key": "firefox/81.0",
@@ -1367,14 +1550,16 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/82.0": {
     "key": "firefox/82.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/83.0": {
     "key": "firefox/83.0",
@@ -1382,7 +1567,8 @@
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/84.0": {
     "key": "firefox/84.0",
@@ -1391,21 +1577,25 @@
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
       "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/85.0": {
     "key": "firefox/85.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0",
-      "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0"
-    ]
+      "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0",
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0"
+    ],
+    "sec-ch-ua": false
   },
   "firefox/86.0": {
     "key": "firefox/86.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "firefox/9.0": {
     "key": "firefox/9.0",
@@ -1413,40 +1603,46 @@
       "Mozilla/5.0 (Windows NT 5.2; rv:9.0.1) Gecko/20100101 Firefox/9.0.1",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:9.0.1) Gecko/20100101 Firefox/9.0.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ie/10.0": {
     "key": "ie/10.0",
     "uas": [
       "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
       "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ie/11.0": {
     "key": "ie/11.0",
     "uas": [
       "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ie/8.0": {
     "key": "ie/8.0",
     "uas": [
       "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ie/9.0": {
     "key": "ie/9.0",
     "uas": [
       "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ios/10": {
     "key": "ios/10",
     "uas": [
       "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_2 like Mac OS X) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.0 Mobile/14F89 Safari/602.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ios/11": {
     "key": "ios/11",
@@ -1459,7 +1655,8 @@
       "Mozilla/5.0 (iPad; CPU OS 11_2_1 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Version/11.0 Mobile/15C153 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Version/11.0 Mobile/15C114 Safari/604.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ios/12": {
     "key": "ios/12",
@@ -1467,8 +1664,10 @@
       "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPad; CPU OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
-      "Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1"
-    ]
+      "Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1",
+      "Mozilla/5.0 (iPad; CPU OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1"
+    ],
+    "sec-ch-ua": false
   },
   "ios/13": {
     "key": "ios/13",
@@ -1476,7 +1675,8 @@
       "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 13_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Mobile/15E148 Safari/604.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "ios/14": {
     "key": "ios/14",
@@ -1486,7 +1686,8 @@
       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "opera/12.15": {
     "key": "opera/12.15",
@@ -1494,7 +1695,8 @@
       "Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.15",
       "Opera/9.80 (Windows NT 5.2) Presto/2.12.388 Version/12.15",
       "Opera/9.80 (Windows NT 6.2; WOW64) Presto/2.12.388 Version/12.15"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "opera/12.16": {
     "key": "opera/12.16",
@@ -1502,72 +1704,85 @@
       "Opera/9.80 (Windows NT 6.1; WOW64) Presto/2.12.388 Version/12.16",
       "Opera/9.80 (Windows NT 5.2) Presto/2.12.388 Version/12.16",
       "Opera/9.80 (Windows NT 6.2; WOW64) Presto/2.12.388 Version/12.16"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/10.1": {
     "key": "safari/10.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/11.1": {
     "key": "safari/11.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/12.1": {
     "key": "safari/12.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/13.1": {
     "key": "safari/13.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/14.0": {
     "key": "safari/14.0",
     "uas": [
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15"
-    ]
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15"
+    ],
+    "sec-ch-ua": false
   },
   "safari/5.1": {
     "key": "safari/5.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.59.8 (KHTML, like Gecko) Version/5.1.9 Safari/534.59.8"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/6.0": {
     "key": "safari/6.0",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/536.30.1 (KHTML, like Gecko) Version/6.0.5 Safari/536.30.1"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/6.2": {
     "key": "safari/6.2",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/6.2.8 Safari/537.85.17"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/7.1": {
     "key": "safari/7.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/7.1.8 Safari/537.85.17"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/8.0": {
     "key": "safari/8.0",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9"
-    ]
+    ],
+    "sec-ch-ua": false
   },
   "safari/9.1": {
     "key": "safari/9.1",
     "uas": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.8 (KHTML, like Gecko) Version/9.1.3 Safari/601.7.8"
-    ]
+    ],
+    "sec-ch-ua": false
   }
 }
