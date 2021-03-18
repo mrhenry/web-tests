@@ -216,14 +216,15 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 		caps["browserVersion"] = browser.BrowserVersion
 	}
 
-	uaStrings, err := client.CollectUAs(ctx, caps, browser)
+	uaStrings, secCHUA, err := client.CollectUAs(ctx, caps, browser)
 	if err != nil {
 		return nil, err
 	}
 
 	return &browserua.BrowserUAs{
-		Key: browser.ResultKey(),
-		UAs: uaStrings,
+		Key:     browser.ResultKey(),
+		UAs:     uaStrings,
+		SecCHUA: secCHUA,
 	}, nil
 }
 
@@ -269,6 +270,7 @@ func updateUAs(uas map[string]*browserua.BrowserUAs) error {
 		if b, ok := existing[k]; ok {
 			b.UAs = append(b.UAs, browser.UAs...)
 			b.UAs = uniqueStringSlice(b.UAs)
+			b.SecCHUA = browser.SecCHUA
 			existing[k] = b
 		} else {
 			browser.UAs = uniqueStringSlice(browser.UAs)

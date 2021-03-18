@@ -13,10 +13,10 @@ import (
 	"github.com/tebeka/selenium"
 )
 
-func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilities, browser Browser) ([]string, error) {
+func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilities, browser Browser) ([]string, bool, error) {
 	select {
 	case <-parentCtx.Done():
-		return nil, parentCtx.Err()
+		return nil, false, parentCtx.Err()
 	default:
 	}
 
@@ -24,9 +24,13 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	defer cancel()
 
 	uaStrings := []string{}
+	secCHUA := false
+
 	mu := &sync.RWMutex{}
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Add("Accept-CH", "Sec-CH-UA, UA")
+
 		if req.URL.Path != "" && req.URL.Path != "/" {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
@@ -44,6 +48,8 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 
 		mu.RLock()
 		defer mu.RUnlock()
+
+		secCHUA = req.Header.Get("Sec-CH-UA") != ""
 
 		if strings.Contains(req.Header.Get("Accept"), "text/html") {
 			uaStrings = append(uaStrings, req.UserAgent())
@@ -71,7 +77,7 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 
 	port, err := newTestServer(ctx, handler)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	var wd selenium.WebDriver
@@ -110,41 +116,57 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	case wd = <-wdChan:
 		// noop
 	case <-webDriverStartCtx.Done():
-		return nil, webDriverStartCtx.Err()
+		return nil, false, webDriverStartCtx.Err()
 	}
 
 	if wd == nil {
-		return nil, errors.New("webdriver remote not started")
+		return nil, false, errors.New("webdriver remote not started")
 	}
 
 	defer wd.Quit()
 	defer wd.Close()
 
+	// First
 	select {
 	case <-ctx.Done():
 		if ctx.Err() == context.DeadlineExceeded {
 			log.Println("test run deadline exceeded in SELENIUM_LOOP")
 		}
 
-		return nil, err
+		return nil, false, err
 	default:
 		err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", port))
 		if err != nil {
-			return nil, err
+			return nil, false, err
+		}
+	}
+
+	// Second
+	select {
+	case <-ctx.Done():
+		if ctx.Err() == context.DeadlineExceeded {
+			log.Println("test run deadline exceeded in SELENIUM_LOOP")
+		}
+
+		return nil, false, err
+	default:
+		err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", port))
+		if err != nil {
+			return nil, false, err
 		}
 	}
 
 	// TODO : this needs timeout handling
 	err = wd.Close()
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	// TODO : this needs timeout handling
 	err = wd.Quit()
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
-	return uaStrings, nil
+	return uaStrings, secCHUA, nil
 }
