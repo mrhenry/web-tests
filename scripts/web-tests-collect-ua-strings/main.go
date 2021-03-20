@@ -126,7 +126,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 	log.Println("tunnel ready")
 
-	sema := semaphore.NewWeighted(5)
+	sema := semaphore.NewWeighted(4)
 
 	for _, browser := range browsers {
 		if err := sema.Acquire(ctx, 1); err != nil {
@@ -158,7 +158,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 	go func() {
 		// Wait for all
-		if err := sema.Acquire(ctx, 5); err != nil {
+		if err := sema.Acquire(ctx, 4); err != nil {
 			log.Println(err)
 			return
 		}

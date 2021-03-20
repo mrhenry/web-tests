@@ -49,7 +49,9 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 		mu.RLock()
 		defer mu.RUnlock()
 
-		secCHUA = req.Header.Get("Sec-CH-UA") != ""
+		if secCHUA == false {
+			secCHUA = req.Header.Get("Sec-CH-UA") != ""
+		}
 
 		if strings.Contains(req.Header.Get("Accept"), "text/html") {
 			uaStrings = append(uaStrings, req.UserAgent())
@@ -75,7 +77,12 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 		return
 	})
 
-	port, err := newTestServer(ctx, handler)
+	httpsPort, err := newHTTPSTestServer(ctx, handler)
+	if err != nil {
+		return nil, false, err
+	}
+
+	httpPort, err := newTestServer(ctx, handler)
 	if err != nil {
 		return nil, false, err
 	}
@@ -126,33 +133,69 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	defer wd.Quit()
 	defer wd.Close()
 
-	// First
-	select {
-	case <-ctx.Done():
-		if ctx.Err() == context.DeadlineExceeded {
-			log.Println("test run deadline exceeded in SELENIUM_LOOP")
+	// HTTP
+	{
+		// First
+		select {
+		case <-ctx.Done():
+			if ctx.Err() == context.DeadlineExceeded {
+				log.Println("test run deadline exceeded in SELENIUM_LOOP")
+			}
+
+			return nil, false, err
+		default:
+			err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", httpPort))
+			if err != nil {
+				return nil, false, err
+			}
 		}
 
-		return nil, false, err
-	default:
-		err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", port))
-		if err != nil {
+		// Second
+		select {
+		case <-ctx.Done():
+			if ctx.Err() == context.DeadlineExceeded {
+				log.Println("test run deadline exceeded in SELENIUM_LOOP")
+			}
+
 			return nil, false, err
+		default:
+			err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", httpPort))
+			if err != nil {
+				return nil, false, err
+			}
 		}
 	}
 
-	// Second
-	select {
-	case <-ctx.Done():
-		if ctx.Err() == context.DeadlineExceeded {
-			log.Println("test run deadline exceeded in SELENIUM_LOOP")
+	// HTTPS
+	{
+		// First
+		select {
+		case <-ctx.Done():
+			if ctx.Err() == context.DeadlineExceeded {
+				log.Println("test run deadline exceeded in SELENIUM_LOOP")
+			}
+
+			return nil, false, err
+		default:
+			err := wd.Get(fmt.Sprintf("https://bs-local.com:%d/", httpsPort))
+			if err != nil {
+				return nil, false, err
+			}
 		}
 
-		return nil, false, err
-	default:
-		err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", port))
-		if err != nil {
+		// Second
+		select {
+		case <-ctx.Done():
+			if ctx.Err() == context.DeadlineExceeded {
+				log.Println("test run deadline exceeded in SELENIUM_LOOP")
+			}
+
 			return nil, false, err
+		default:
+			err := wd.Get(fmt.Sprintf("https://bs-local.com:%d/", httpsPort))
+			if err != nil {
+				return nil, false, err
+			}
 		}
 	}
 
