@@ -1028,6 +1028,12 @@
   {
     "feature_id": "02f49216-0949-4e1f-9ab5-8ec0c87e59cc",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "02f49216-0949-4e1f-9ab5-8ec0c87e59cc",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -1911,7 +1917,7 @@
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "feature_hash": "",
     "browser_key": "firefox/44.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
@@ -1923,13 +1929,13 @@
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "feature_hash": "",
     "browser_key": "firefox/46.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
@@ -1941,7 +1947,7 @@
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "feature_hash": "",
     "browser_key": "firefox/49.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
@@ -2187,6 +2193,12 @@
     "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "123ebec4-89ca-4714-8084-d571ab40639b",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -3351,6 +3363,12 @@
     "feature_id": "1698dc21-4dff-4998-92ed-dc590e304d42",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "1698dc21-4dff-4998-92ed-dc590e304d42",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -4520,6 +4538,12 @@
   {
     "feature_id": "1f40043c-1a6d-47d3-97e1-6e0617a1b464",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "1f40043c-1a6d-47d3-97e1-6e0617a1b464",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "1b8dd331648a93eab6e55aa8e4e1dea38edb42260ac6c97be92fb965e6df98cc"
   },
@@ -5403,7 +5427,7 @@
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
     "feature_hash": "",
     "browser_key": "firefox/44.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
@@ -5415,13 +5439,13 @@
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
     "feature_hash": "",
     "browser_key": "firefox/46.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
@@ -5433,7 +5457,7 @@
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
     "feature_hash": "",
     "browser_key": "firefox/49.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
@@ -5679,6 +5703,12 @@
     "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "2e2eb193-2b8b-43d2-a26d-ecf286fac4aa",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -6848,6 +6878,12 @@
   {
     "feature_id": "30fe1210-7551-4d46-b01c-391cae98a933",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "30fe1210-7551-4d46-b01c-391cae98a933",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -7731,7 +7767,7 @@
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
     "feature_hash": "",
     "browser_key": "firefox/44.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
@@ -7743,13 +7779,13 @@
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
     "feature_hash": "",
     "browser_key": "firefox/46.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
@@ -7761,7 +7797,7 @@
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
     "feature_hash": "",
     "browser_key": "firefox/49.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
@@ -8007,6 +8043,12 @@
     "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "3e639ba4-29c8-4a12-b3ac-36cd40e14b74",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -8913,7 +8955,7 @@
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
@@ -8937,19 +8979,19 @@
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
     "feature_hash": "",
     "browser_key": "firefox/50.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
     "feature_hash": "",
     "browser_key": "firefox/51.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
     "feature_hash": "",
     "browser_key": "firefox/52.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
@@ -9171,6 +9213,12 @@
     "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "40765c13-ffd9-486a-b71e-69ac56daf798",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -9825,7 +9873,7 @@
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
     "feature_hash": "",
     "browser_key": "edge/15.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "9331792b6f9aa627cfa012a8f604b92199ac747eafc17bb99b91ff0467a04bb3"
   },
   {
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
@@ -10340,6 +10388,12 @@
   {
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "e237e065e84b379efafb040d5e2799d074e0178d08fb6cb16e7044fb9fad20c2"
   },
@@ -10347,13 +10401,13 @@
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
     "feature_hash": "",
     "browser_key": "ie/10.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "9331792b6f9aa627cfa012a8f604b92199ac747eafc17bb99b91ff0467a04bb3"
   },
   {
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
     "feature_hash": "",
     "browser_key": "ie/11.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "9331792b6f9aa627cfa012a8f604b92199ac747eafc17bb99b91ff0467a04bb3"
   },
   {
     "feature_id": "408bb6de-21cb-4bfe-8a44-225a0cb975ae",
@@ -11504,6 +11558,12 @@
   {
     "feature_id": "462af931-88f8-4eb2-a652-627dbf55aeab",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "462af931-88f8-4eb2-a652-627dbf55aeab",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "c3a421112ae4d358573db44f5071abd140d52febec55baca22a4b7adc8d3703e"
   },
@@ -12405,7 +12465,7 @@
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
@@ -12429,19 +12489,19 @@
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
     "feature_hash": "",
     "browser_key": "firefox/50.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
     "feature_hash": "",
     "browser_key": "firefox/51.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
     "feature_hash": "",
     "browser_key": "firefox/52.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
@@ -12663,6 +12723,12 @@
     "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "59933cd3-48cc-4f36-9c52-9ac7b46e5329",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -13827,6 +13893,12 @@
     "feature_id": "5d300f24-4316-4efa-97fb-e6a4777b7cd5",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "5d300f24-4316-4efa-97fb-e6a4777b7cd5",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -14996,6 +15068,12 @@
   {
     "feature_id": "65c83d6c-58e3-4813-9051-bbc1a8cb5124",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "65c83d6c-58e3-4813-9051-bbc1a8cb5124",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -15879,7 +15957,7 @@
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
     "feature_hash": "",
     "browser_key": "firefox/44.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
@@ -15891,13 +15969,13 @@
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
     "feature_hash": "",
     "browser_key": "firefox/46.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
@@ -15909,7 +15987,7 @@
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
     "feature_hash": "",
     "browser_key": "firefox/49.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
@@ -16155,6 +16233,12 @@
     "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "6c91fae8-503b-4746-be86-0ba8b2e75e91",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -17319,6 +17403,12 @@
     "feature_id": "78d88d85-c3b6-4b60-a382-f73d5e7cf8e5",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "78d88d85-c3b6-4b60-a382-f73d5e7cf8e5",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -18488,6 +18578,12 @@
   {
     "feature_id": "84eeb5c6-89c0-4f77-905c-bf2eb377679d",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "84eeb5c6-89c0-4f77-905c-bf2eb377679d",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "b88ce29f2498f434a6a58ae878fbbd7627b7ea12b89a33d17c1a25710acaf6cd"
   },
@@ -19371,7 +19467,7 @@
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
     "feature_hash": "",
     "browser_key": "firefox/44.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
@@ -19383,13 +19479,13 @@
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
     "feature_hash": "",
     "browser_key": "firefox/46.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
     "feature_hash": "",
     "browser_key": "firefox/47.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
@@ -19401,7 +19497,7 @@
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
     "feature_hash": "",
     "browser_key": "firefox/49.0",
-    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+    "polyfill.io_hash": "ff6ea873cdd73d8998ca0a72e6d72fd252f4ceeed5c70d354fe68912c50f2593"
   },
   {
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
@@ -19647,6 +19743,12 @@
     "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "87bed84f-78a5-434b-9083-a4bf404fd8fa",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -20811,6 +20913,12 @@
     "feature_id": "881971e2-48cd-45cd-afc3-b90e74bfd0db",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "881971e2-48cd-45cd-afc3-b90e74bfd0db",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -21980,6 +22088,12 @@
   {
     "feature_id": "891966c0-d8aa-46e9-a08a-cff4925b6453",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "891966c0-d8aa-46e9-a08a-cff4925b6453",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "1b8dd331648a93eab6e55aa8e4e1dea38edb42260ac6c97be92fb965e6df98cc"
   },
@@ -23144,6 +23258,12 @@
   {
     "feature_id": "8956b128-493d-478f-84b9-15cc323b716d",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "8956b128-493d-478f-84b9-15cc323b716d",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -24303,6 +24423,12 @@
     "feature_id": "8dda6a67-3527-4f7c-b2ab-0c6a455a1710",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "8dda6a67-3527-4f7c-b2ab-0c6a455a1710",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
@@ -25472,6 +25598,12 @@
   {
     "feature_id": "95ea3db0-5a45-426d-b202-699b9e6afd14",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "95ea3db0-5a45-426d-b202-699b9e6afd14",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -26636,6 +26768,12 @@
   {
     "feature_id": "a14e87c8-ae84-4491-b332-ba4289b9b03b",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "a14e87c8-ae84-4491-b332-ba4289b9b03b",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -27800,6 +27938,12 @@
   {
     "feature_id": "be7e56ce-a1f2-4314-a645-a4949a840122",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "be7e56ce-a1f2-4314-a645-a4949a840122",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -28964,6 +29108,12 @@
   {
     "feature_id": "cea75398-dae7-4b93-9df6-2e51728a618f",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "cea75398-dae7-4b93-9df6-2e51728a618f",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -30128,6 +30278,12 @@
   {
     "feature_id": "d6a25d25-7a50-47a4-829c-fc05dbf5dd7f",
     "feature_hash": "",
+    "browser_key": "firefox/87.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "d6a25d25-7a50-47a4-829c-fc05dbf5dd7f",
+    "feature_hash": "",
     "browser_key": "firefox/9.0",
     "polyfill.io_hash": "9e3a6dc58f9fda45cb912eddb20403bb53bec041cb7f36b1e2adf995f8657881"
   },
@@ -31287,6 +31443,12 @@
     "feature_id": "e6228fd7-a72b-421e-a626-6d9a253c5638",
     "feature_hash": "",
     "browser_key": "firefox/86.0",
+    "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
+  },
+  {
+    "feature_id": "e6228fd7-a72b-421e-a626-6d9a253c5638",
+    "feature_hash": "",
+    "browser_key": "firefox/87.0",
     "polyfill.io_hash": "aaecd144d2b8763b2fa5c91f09778294363cef363c10504205f4203922644d11"
   },
   {
