@@ -126,6 +126,7 @@ var fails = __webpack_require__(293);
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
 
@@ -268,9 +269,10 @@ var check = function (it) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  /* global globalThis -- safe */
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
+  // eslint-disable-next-line no-restricted-globals -- safe
   check(typeof self == 'object' && self) ||
   check(typeof __webpack_require__.g == 'object' && __webpack_require__.g) ||
   // eslint-disable-next-line no-new-func -- fallback
@@ -308,6 +310,7 @@ var createElement = __webpack_require__(317);
 
 // Thank's IE8 for his funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
+  // eslint-disable-next-line es/no-object-defineproperty -- requied for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -493,16 +496,17 @@ var IE8_DOM_DEFINE = __webpack_require__(664);
 var anObject = __webpack_require__(670);
 var toPrimitive = __webpack_require__(593);
 
-var nativeDefineProperty = Object.defineProperty;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var $defineProperty = Object.defineProperty;
 
 // `Object.defineProperty` method
 // https://tc39.es/ecma262/#sec-object.defineproperty
-exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
+exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
   if (IE8_DOM_DEFINE) try {
-    return nativeDefineProperty(O, P, Attributes);
+    return $defineProperty(O, P, Attributes);
   } catch (error) { /* empty */ }
   if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported');
   if ('value' in Attributes) O[P] = Attributes.value;
@@ -523,15 +527,16 @@ var toPrimitive = __webpack_require__(593);
 var has = __webpack_require__(871);
 var IE8_DOM_DEFINE = __webpack_require__(664);
 
-var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
 // https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
   O = toIndexedObject(O);
   P = toPrimitive(P, true);
   if (IE8_DOM_DEFINE) try {
-    return nativeGetOwnPropertyDescriptor(O, P);
+    return $getOwnPropertyDescriptor(O, P);
   } catch (error) { /* empty */ }
   if (has(O, P)) return createPropertyDescriptor(!propertyIsEnumerableModule.f.call(O, P), O[P]);
 };
@@ -549,6 +554,7 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -559,6 +565,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 /***/ 181:
 /***/ (function(__unused_webpack_module, exports) {
 
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
 
@@ -593,18 +600,19 @@ module.exports = function (object, names) {
 
 "use strict";
 
-var nativePropertyIsEnumerable = {}.propertyIsEnumerable;
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
-var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
 
 // `Object.prototype.propertyIsEnumerable` method implementation
 // https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
   var descriptor = getOwnPropertyDescriptor(this, V);
   return !!descriptor && descriptor.enumerable;
-} : nativePropertyIsEnumerable;
+} : $propertyIsEnumerable;
 
 
 /***/ }),
@@ -752,7 +760,7 @@ var store = __webpack_require__(465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.9.1',
+  version: '3.10.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });

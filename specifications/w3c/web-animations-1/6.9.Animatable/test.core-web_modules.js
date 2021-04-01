@@ -229,6 +229,7 @@ var fails = __webpack_require__(7293);
 module.exports = !fails(function () {
   function F() { /* empty */ }
   F.prototype.constructor = null;
+  // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
   return Object.getPrototypeOf(new F()) !== F.prototype;
 });
 
@@ -396,6 +397,7 @@ var fails = __webpack_require__(7293);
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
 
@@ -632,6 +634,7 @@ var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
 // IE <= 11 replaces $0 with the whole match, as if it was $&
 // https://stackoverflow.com/questions/6024666/getting-ie-to-replace-a-regex-with-the-literal-string-0
 var REPLACE_KEEPS_$0 = (function () {
+  // eslint-disable-next-line regexp/prefer-escape-replacement-dollar-char -- required for testing
   return 'a'.replace(/./, '$0') === '$0';
 })();
 
@@ -809,9 +812,10 @@ var check = function (it) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  /* global globalThis -- safe */
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
+  // eslint-disable-next-line no-restricted-globals -- safe
   check(typeof self == 'object' && self) ||
   check(typeof __webpack_require__.g == 'object' && __webpack_require__.g) ||
   // eslint-disable-next-line no-new-func -- fallback
@@ -859,6 +863,7 @@ var createElement = __webpack_require__(317);
 
 // Thank's IE8 for his funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
+  // eslint-disable-next-line es/no-object-defineproperty -- requied for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -1087,6 +1092,7 @@ var returnThis = function () { return this; };
 // https://tc39.es/ecma262/#sec-%iteratorprototype%-object
 var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 
+/* eslint-disable es/no-array-prototype-keys -- safe */
 if ([].keys) {
   arrayIterator = [].keys();
   // Safari 8 has buggy iterators w/o `next`
@@ -1133,8 +1139,9 @@ var IS_NODE = __webpack_require__(5268);
 var V8_VERSION = __webpack_require__(7392);
 var fails = __webpack_require__(7293);
 
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
-  /* global Symbol -- required for testing */
+  // eslint-disable-next-line es/no-symbol -- required for testing
   return !Symbol.sham &&
     // Chrome 38 Symbol has incorrect toString conversion
     // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
@@ -1252,6 +1259,7 @@ var objectKeys = __webpack_require__(1956);
 
 // `Object.defineProperties` method
 // https://tc39.es/ecma262/#sec-object.defineproperties
+// eslint-disable-next-line es/no-object-defineproperties -- safe
 module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var keys = objectKeys(Properties);
@@ -1273,16 +1281,17 @@ var IE8_DOM_DEFINE = __webpack_require__(4664);
 var anObject = __webpack_require__(9670);
 var toPrimitive = __webpack_require__(7593);
 
-var nativeDefineProperty = Object.defineProperty;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var $defineProperty = Object.defineProperty;
 
 // `Object.defineProperty` method
 // https://tc39.es/ecma262/#sec-object.defineproperty
-exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
+exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
   if (IE8_DOM_DEFINE) try {
-    return nativeDefineProperty(O, P, Attributes);
+    return $defineProperty(O, P, Attributes);
   } catch (error) { /* empty */ }
   if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported');
   if ('value' in Attributes) O[P] = Attributes.value;
@@ -1303,15 +1312,16 @@ var toPrimitive = __webpack_require__(7593);
 var has = __webpack_require__(6656);
 var IE8_DOM_DEFINE = __webpack_require__(4664);
 
-var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
 // https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
   O = toIndexedObject(O);
   P = toPrimitive(P, true);
   if (IE8_DOM_DEFINE) try {
-    return nativeGetOwnPropertyDescriptor(O, P);
+    return $getOwnPropertyDescriptor(O, P);
   } catch (error) { /* empty */ }
   if (has(O, P)) return createPropertyDescriptor(!propertyIsEnumerableModule.f.call(O, P), O[P]);
 };
@@ -1329,6 +1339,7 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -1339,6 +1350,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
 /***/ 5181:
 /***/ ((__unused_webpack_module, exports) => {
 
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
 
@@ -1357,6 +1369,7 @@ var ObjectPrototype = Object.prototype;
 
 // `Object.getPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.getprototypeof
+// eslint-disable-next-line es/no-object-getprototypeof -- safe
 module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
   O = toObject(O);
   if (has(O, IE_PROTO)) return O[IE_PROTO];
@@ -1400,6 +1413,7 @@ var enumBugKeys = __webpack_require__(748);
 
 // `Object.keys` method
 // https://tc39.es/ecma262/#sec-object.keys
+// eslint-disable-next-line es/no-object-keys -- safe
 module.exports = Object.keys || function keys(O) {
   return internalObjectKeys(O, enumBugKeys);
 };
@@ -1412,18 +1426,19 @@ module.exports = Object.keys || function keys(O) {
 
 "use strict";
 
-var nativePropertyIsEnumerable = {}.propertyIsEnumerable;
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
-var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
 
 // `Object.prototype.propertyIsEnumerable` method implementation
 // https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
   var descriptor = getOwnPropertyDescriptor(this, V);
   return !!descriptor && descriptor.enumerable;
-} : nativePropertyIsEnumerable;
+} : $propertyIsEnumerable;
 
 
 /***/ }),
@@ -1438,11 +1453,13 @@ var aPossiblePrototype = __webpack_require__(6077);
 // `Object.setPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var CORRECT_SETTER = false;
   var test = {};
   var setter;
   try {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
     setter = Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set;
     setter.call(test, []);
     CORRECT_SETTER = test instanceof Array;
@@ -1570,12 +1587,13 @@ module.exports = function (R, S) {
 
 var regexpFlags = __webpack_require__(7066);
 var stickyHelpers = __webpack_require__(2999);
+var shared = __webpack_require__(2309);
 
 var nativeExec = RegExp.prototype.exec;
 // This always refers to the native implementation, because the
 // String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
 // which loads this file before patching the method.
-var nativeReplace = String.prototype.replace;
+var nativeReplace = shared('native-string-replace', String.prototype.replace);
 
 var patchedExec = nativeExec;
 
@@ -1732,6 +1750,7 @@ module.exports = function (it) {
 
 // `SameValue` abstract operation
 // https://tc39.es/ecma262/#sec-samevalue
+// eslint-disable-next-line es/no-object-is -- safe
 module.exports = Object.is || function is(x, y) {
   // eslint-disable-next-line no-self-compare -- NaN check
   return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
@@ -1840,7 +1859,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.9.1',
+  version: '3.10.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -1912,7 +1931,7 @@ var requireObjectCoercible = __webpack_require__(4488);
 
 // `String.prototype.repeat` method implementation
 // https://tc39.es/ecma262/#sec-string.prototype.repeat
-module.exports = ''.repeat || function repeat(count) {
+module.exports = function repeat(count) {
   var str = String(requireObjectCoercible(this));
   var result = '';
   var n = toInteger(count);
@@ -2110,10 +2129,10 @@ module.exports = function (key) {
 /***/ 3307:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+/* eslint-disable es/no-symbol -- required for testing */
 var NATIVE_SYMBOL = __webpack_require__(133);
 
 module.exports = NATIVE_SYMBOL
-  /* global Symbol -- safe */
   && !Symbol.sham
   && typeof Symbol.iterator == 'symbol';
 
