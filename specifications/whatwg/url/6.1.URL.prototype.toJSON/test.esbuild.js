@@ -1,4 +1,7 @@
-(function (cb) {
-	var foo = new URL("https://developer.mozilla.org/en-US/docs/Web/API/URL/toString");
-	cb(foo.toJSON() === foo.href);
-})(callback);
+(function() {
+  // specifications/whatwg/url/6.1.URL.prototype.toJSON/test.pure.js
+  (function(cb) {
+    var foo = new URL("https://developer.mozilla.org/en-US/docs/Web/API/URL/toString");
+    cb(foo.toJSON() === foo.href);
+  })(callback);
+})();

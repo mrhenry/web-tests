@@ -1,0 +1,20 @@
+{
+  "id": "4b7342b5-72e4-432b-a79d-19a9576bad25",
+  "spec": {
+    "org": "whatwg",
+    "id": "html",
+    "section": "4.10.5.4",
+    "name": "HTMLInputElement.prototype.valueAsDate",
+    "url": "https://html.spec.whatwg.org/multipage/input.html#common-input-element-apis"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}

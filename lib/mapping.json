@@ -337,6 +337,27 @@
     ],
     "dir": "specifications/tc39/ecma262/20.4.2.5.Symbol.iterator"
   },
+  "4b7342b5-72e4-432b-a79d-19a9576bad25": {
+    "id": "4b7342b5-72e4-432b-a79d-19a9576bad25",
+    "spec": {
+      "org": "whatwg",
+      "id": "html",
+      "section": "4.10.5.4",
+      "name": "HTMLInputElement.prototype.valueAsDate",
+      "url": "https://html.spec.whatwg.org/multipage/input.html#common-input-element-apis"
+    },
+    "notes": [],
+    "search_terms": [],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [],
+    "dir": "specifications/whatwg/html/4.10.5.4.valueAsDate"
+  },
   "532e2524-538a-4bee-810e-4c3298f3ee26": {
     "id": "532e2524-538a-4bee-810e-4c3298f3ee26",
     "spec": {
