@@ -22,7 +22,7 @@
         "@mrhenry/babel-plugin-core-web": "^0.4.6",
         "babel-loader": "^8.2.2",
         "core-js": "^3.11.0",
-        "esbuild": "^0.11.13",
+        "esbuild": "^0.11.16",
         "webpack": "^5.36.1",
         "webpack-cli": "^4.6.0"
     }
