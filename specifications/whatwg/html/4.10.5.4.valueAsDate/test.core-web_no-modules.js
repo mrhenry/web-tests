@@ -2610,7 +2610,7 @@ var es_date_to_string = __webpack_require__(3710);
 (function (cb) {
   try {
     var inputA = document.createElement('input');
-    inputA.type = "date";
+    inputA.setAttribute('type', 'date');
     inputA.valueAsDate = new Date();
   } catch (_) {
     cb(false);
@@ -2618,7 +2618,7 @@ var es_date_to_string = __webpack_require__(3710);
   }
 
   var inputB = document.createElement('input');
-  inputB.type = "date";
+  inputB.setAttribute('type', 'date');
   inputB.value = "2006-01-02";
   var valueAsDate = inputB.valueAsDate;
   cb("undefined" !== typeof valueAsDate);
