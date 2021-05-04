@@ -6,7 +6,7 @@ function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-on
   var foo = "foo";
 
   try {
-    foo = (_readOnlyError("foo"), 5);
+    5, _readOnlyError("foo");
     cb(false);
   } catch (_) {
     cb(foo === "foo");
