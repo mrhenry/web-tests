@@ -80,6 +80,11 @@ func main() {
 			log.Fatal(err)
 		}
 
+		_, err = f.WriteString("\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		err = f.Close()
 		if err != nil {
 			log.Fatal(err)

@@ -446,6 +446,11 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			return err
 		}
 
+		_, err = f2.WriteString("\n")
+		if err != nil {
+			return err
+		}
+
 		err = f2.Close()
 		if err != nil {
 			return err

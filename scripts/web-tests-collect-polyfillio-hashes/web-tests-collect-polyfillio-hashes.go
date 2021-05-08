@@ -186,6 +186,11 @@ func saveFingerprints(fingerprints []priority.Fingerprint) error {
 		return err
 	}
 
+	_, err = f.WriteString("\n")
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

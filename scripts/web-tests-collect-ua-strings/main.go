@@ -288,6 +288,11 @@ func updateUAs(uas map[string]*browserua.BrowserUAs) error {
 		return err
 	}
 
+	_, err = f.WriteString("\n")
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
