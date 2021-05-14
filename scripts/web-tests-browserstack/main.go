@@ -410,7 +410,22 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			score = float64(vv)
 		}
 
-		score = (score - 0.01) + (newScore * 0.02) // success increased more than failure decreases
+		if score > 0.1 && test.Success() {
+			// Test appears to be succeeding and might to be going up.
+			score = score + 0.05
+		} else if score > 0.2 && test.Success() {
+			// Test is succeeding and seems to be going up.
+			score = score + 0.1
+		} else if score < 0.8 && !test.Success() {
+			// Test is failing and seems to be going down.
+			score = score - 0.2
+		} else if score < 0.9 && !test.Success() {
+			// Test appears to be failing and might to be going down.
+			score = score - 0.05
+		} else {
+			// Test might go either way.
+			score = (score - 0.01) + (newScore * 0.02)
+		}
 
 		if score > 1 {
 			score = 1
