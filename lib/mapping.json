@@ -738,6 +738,32 @@
     ],
     "dir": "specifications/w3c/geometry-1/3.DOMRect.right"
   },
+  "a104fddc-a0f4-42b0-b8df-e632afcd8de0": {
+    "id": "a104fddc-a0f4-42b0-b8df-e632afcd8de0",
+    "spec": {
+      "org": "whatwg",
+      "id": "dom",
+      "section": "7.1",
+      "name": "DOMTokenList.prototype.@@iterator",
+      "url": "https://dom.spec.whatwg.org/#interface-domtokenlist"
+    },
+    "notes": [],
+    "search_terms": [
+      "Iterable",
+      "Iterator"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "DOMTokenList.prototype.@@iterator"
+    ],
+    "dir": "specifications/whatwg/dom/7.1.DOMTokenList.prototype.@@iterator"
+  },
   "a14e87c8-ae84-4491-b332-ba4289b9b03b": {
     "id": "a14e87c8-ae84-4491-b332-ba4289b9b03b",
     "spec": {
