@@ -1,0 +1,26 @@
+{
+  "id": "e85d4116-6a00-4056-94e4-d0763c1ce466",
+  "spec": {
+    "org": "whatwg",
+    "id": "dom",
+    "section": "4.2.10.1",
+    "name": "NodeList.prototype.@@iterator",
+    "url": "https://dom.spec.whatwg.org/#interface-nodelist"
+  },
+  "notes": [],
+    "search_terms": [
+    "Iterable",
+    "Iterator"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "NodeList.prototype.@@iterator",
+    "document.querySelectorAll"
+  ]
+}

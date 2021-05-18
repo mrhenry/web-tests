@@ -1013,6 +1013,33 @@
     ],
     "dir": "specifications/whatwg/dom/4.9.Element.classList"
   },
+  "e85d4116-6a00-4056-94e4-d0763c1ce466": {
+    "id": "e85d4116-6a00-4056-94e4-d0763c1ce466",
+    "spec": {
+      "org": "whatwg",
+      "id": "dom",
+      "section": "4.2.10.1",
+      "name": "NodeList.prototype.@@iterator",
+      "url": "https://dom.spec.whatwg.org/#interface-nodelist"
+    },
+    "notes": [],
+    "search_terms": [
+      "Iterable",
+      "Iterator"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "NodeList.prototype.@@iterator",
+      "document.querySelectorAll"
+    ],
+    "dir": "specifications/whatwg/dom/4.2.10.1.NodeList.prototype.@@iterator"
+  },
   "ee6c748c-dc1c-4b54-a2b4-9a7f159ec1ed": {
     "id": "ee6c748c-dc1c-4b54-a2b4-9a7f159ec1ed",
     "spec": {
