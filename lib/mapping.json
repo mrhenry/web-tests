@@ -355,7 +355,9 @@
       "esbuild": "test.esbuild.js",
       "pure": "test.pure.js"
     },
-    "polyfill.io": [],
+    "polyfill.io": [
+      "HTMLInputElement.prototype.valueAsDate"
+    ],
     "dir": "specifications/whatwg/html/4.10.5.4.valueAsDate"
   },
   "532e2524-538a-4bee-810e-4c3298f3ee26": {
@@ -401,7 +403,8 @@
       "pure": "test.pure.js"
     },
     "polyfill.io": [
-      "URL"
+      "URL",
+      "URL.prototype.toJSON"
     ],
     "dir": "specifications/whatwg/url/6.1.URL.prototype.toJSON"
   },
@@ -760,7 +763,8 @@
       "pure": "test.pure.js"
     },
     "polyfill.io": [
-      "DOMTokenList.prototype.@@iterator"
+      "DOMTokenList.prototype.@@iterator",
+      "Element.prototype.classList"
     ],
     "dir": "specifications/whatwg/dom/7.1.DOMTokenList.prototype.@@iterator"
   },

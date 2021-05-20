@@ -20,6 +20,7 @@
     "pure": "test.pure.js"
   },
   "polyfill.io": [
-    "DOMTokenList.prototype.@@iterator"
+    "DOMTokenList.prototype.@@iterator",
+    "Element.prototype.classList"
   ]
 }

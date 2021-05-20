@@ -20,6 +20,7 @@
     "pure": "test.pure.js"
   },
   "polyfill.io": [
-    "URL"
+    "URL",
+    "URL.prototype.toJSON"
   ]
 }
