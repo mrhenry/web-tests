@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"sort"
 	"sync"
 	"syscall"
 	"time"
@@ -216,15 +217,14 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 		caps["browserVersion"] = browser.BrowserVersion
 	}
 
-	uaStrings, secCHUA, err := client.CollectUAs(ctx, caps, browser)
+	uaStrings, err := client.CollectUAs(ctx, caps, browser)
 	if err != nil {
 		return nil, err
 	}
 
 	return &browserua.BrowserUAs{
-		Key:     browser.ResultKey(),
-		UAs:     uaStrings,
-		SecCHUA: secCHUA,
+		Key: browser.ResultKey(),
+		UAs: uaStrings,
 	}, nil
 }
 
@@ -270,7 +270,6 @@ func updateUAs(uas map[string]*browserua.BrowserUAs) error {
 		if b, ok := existing[k]; ok {
 			b.UAs = append(b.UAs, browser.UAs...)
 			b.UAs = uniqueStringSlice(b.UAs)
-			b.SecCHUA = browser.SecCHUA
 			existing[k] = b
 		} else {
 			browser.UAs = uniqueStringSlice(browser.UAs)
@@ -332,6 +331,8 @@ func uniqueStringSlice(s []string) []string {
 			track[elem] = true
 		}
 	}
+
+	sort.Strings(unique)
 
 	return unique
 }

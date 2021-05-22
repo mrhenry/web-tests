@@ -6,6 +6,9 @@ github.com/google/uuid
 # github.com/hashicorp/go-version v1.3.0
 ## explicit
 github.com/hashicorp/go-version
+# github.com/mileusna/useragent v1.0.2
+## explicit
+github.com/mileusna/useragent
 # github.com/tebeka/selenium v0.9.9
 ## explicit
 github.com/tebeka/selenium

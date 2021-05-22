@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -20,7 +21,8 @@ import (
 )
 
 type Test struct {
-	Path string
+	Path      string
+	UserAgent string
 
 	didRun  bool
 	success bool
@@ -71,12 +73,21 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 	wg := &sync.WaitGroup{}
 
 	respMap := map[string][]byte{}
+	uaStrings := []string{}
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		mu.RLock()
 		defer mu.RUnlock()
 
 		if b, ok := respMap[strings.TrimPrefix(req.URL.Path, "/")]; ok {
+			if strings.Contains(req.Header.Get("Accept"), "text/html") {
+				uaStrings = append(uaStrings, req.UserAgent())
+				uaStrings = uniqueStringSlice(uaStrings)
+			} else if strings.Contains(req.UserAgent(), "Trident/4.0") {
+				uaStrings = append(uaStrings, req.UserAgent())
+				uaStrings = uniqueStringSlice(uaStrings)
+			}
+
 			w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 			w.Header().Set("Content-Encoding", "gzip")
 
@@ -187,8 +198,16 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 				testDoneChan := make(chan bool, 1)
 
 				go func(test Test) {
+					result := runSeleniumTest(wd, port, test)
+
+					mu.RLock()
+					if len(uaStrings) > 0 {
+						result.UserAgent = uaStrings[0]
+					}
+					mu.RUnlock()
+
 					select {
-					case out <- runSeleniumTest(wd, port, test):
+					case out <- result:
 						// noop
 					case <-ctx.Done():
 						// fallthrough
@@ -373,4 +392,23 @@ func getBoolFromWebDriver(wd selenium.WebDriver, script string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func uniqueStringSlice(s []string) []string {
+	track := make(map[string]bool, len(s))
+	unique := make([]string, 0, len(s))
+	for _, elem := range s {
+		if elem == "" {
+			continue
+		}
+
+		if _, ok := track[elem]; !ok {
+			unique = append(unique, elem)
+			track[elem] = true
+		}
+	}
+
+	sort.Strings(unique)
+
+	return unique
 }

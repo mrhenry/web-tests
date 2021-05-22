@@ -400,7 +400,7 @@ type Result struct {
 
 func (x Result) resultKey() string {
 	if x.OS != "" {
-		return fmt.Sprintf("%s/%s", x.OS, x.OSVersion)
+		return fmt.Sprintf("%s/%s", x.OS, x.BrowserVersion)
 	}
 
 	return fmt.Sprintf("%s/%s", x.Browser, x.BrowserVersion)

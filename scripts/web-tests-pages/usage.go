@@ -53,6 +53,10 @@ func getUsageData(parentCtx context.Context) (*UsageData, error) {
 	for k, v := range data.Agents {
 		usageGlobalByMajorVersion := map[string]float64{}
 		for version, usage := range v.UsageGlobal {
+			if strings.Contains(version, "-") {
+				version = strings.Split(version, "-")[0]
+			}
+
 			parsedVersion, err := reallyTolerantSemver(version)
 			if err != nil {
 				continue

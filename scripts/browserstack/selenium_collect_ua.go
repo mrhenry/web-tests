@@ -13,10 +13,10 @@ import (
 	"github.com/tebeka/selenium"
 )
 
-func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilities, browser Browser) ([]string, bool, error) {
+func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilities, browser Browser) ([]string, error) {
 	select {
 	case <-parentCtx.Done():
-		return nil, false, parentCtx.Err()
+		return nil, parentCtx.Err()
 	default:
 	}
 
@@ -24,7 +24,6 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	defer cancel()
 
 	uaStrings := []string{}
-	secCHUA := false
 
 	mu := &sync.RWMutex{}
 
@@ -48,10 +47,6 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 
 		mu.RLock()
 		defer mu.RUnlock()
-
-		if secCHUA == false {
-			secCHUA = req.Header.Get("Sec-CH-UA") != ""
-		}
 
 		if strings.Contains(req.Header.Get("Accept"), "text/html") {
 			uaStrings = append(uaStrings, req.UserAgent())
@@ -77,14 +72,9 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 		return
 	})
 
-	httpsPort, err := newHTTPSTestServer(ctx, handler)
-	if err != nil {
-		return nil, false, err
-	}
-
 	httpPort, err := newTestServer(ctx, handler)
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 
 	var wd selenium.WebDriver
@@ -123,11 +113,11 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	case wd = <-wdChan:
 		// noop
 	case <-webDriverStartCtx.Done():
-		return nil, false, webDriverStartCtx.Err()
+		return nil, webDriverStartCtx.Err()
 	}
 
 	if wd == nil {
-		return nil, false, errors.New("webdriver remote not started")
+		return nil, errors.New("webdriver remote not started")
 	}
 
 	defer wd.Quit()
@@ -142,11 +132,11 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 				log.Println("test run deadline exceeded in SELENIUM_LOOP")
 			}
 
-			return nil, false, err
+			return nil, err
 		default:
 			err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", httpPort))
 			if err != nil {
-				return nil, false, err
+				return nil, err
 			}
 		}
 
@@ -157,44 +147,11 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 				log.Println("test run deadline exceeded in SELENIUM_LOOP")
 			}
 
-			return nil, false, err
+			return nil, err
 		default:
 			err := wd.Get(fmt.Sprintf("http://bs-local.com:%d/", httpPort))
 			if err != nil {
-				return nil, false, err
-			}
-		}
-	}
-
-	// HTTPS
-	{
-		// First
-		select {
-		case <-ctx.Done():
-			if ctx.Err() == context.DeadlineExceeded {
-				log.Println("test run deadline exceeded in SELENIUM_LOOP")
-			}
-
-			return nil, false, err
-		default:
-			err := wd.Get(fmt.Sprintf("https://bs-local.com:%d/", httpsPort))
-			if err != nil {
-				return nil, false, err
-			}
-		}
-
-		// Second
-		select {
-		case <-ctx.Done():
-			if ctx.Err() == context.DeadlineExceeded {
-				log.Println("test run deadline exceeded in SELENIUM_LOOP")
-			}
-
-			return nil, false, err
-		default:
-			err := wd.Get(fmt.Sprintf("https://bs-local.com:%d/", httpsPort))
-			if err != nil {
-				return nil, false, err
+				return nil, err
 			}
 		}
 	}
@@ -202,14 +159,14 @@ func (x *Client) CollectUAs(parentCtx context.Context, caps selenium.Capabilitie
 	// TODO : this needs timeout handling
 	err = wd.Close()
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 
 	// TODO : this needs timeout handling
 	err = wd.Quit()
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
 
-	return uaStrings, secCHUA, nil
+	return uaStrings, nil
 }

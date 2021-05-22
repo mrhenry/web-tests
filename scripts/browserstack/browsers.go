@@ -31,14 +31,6 @@ func (x Browser) ResultKey() string {
 	return fmt.Sprintf("%s/%s", x.Browser, x.BrowserVersion)
 }
 
-func (x Browser) ResultFilename() string {
-	if x.Device != "" {
-		return fmt.Sprintf("%s:%s", x.OS, x.OSVersion)
-	}
-
-	return fmt.Sprintf("%s:%s", x.Browser, x.BrowserVersion)
-}
-
 func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 	browsers, err := x.Browsers(ctx)
 	if err != nil {

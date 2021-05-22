@@ -18,6 +18,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/hashicorp/go-version"
+	ua "github.com/mileusna/useragent"
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/feature"
 	"github.com/tebeka/selenium"
@@ -153,7 +155,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	if browserFilter != "" {
 		filteredBrowsers := []browserstack.Browser{}
 		for _, b := range browsers {
-			if strings.Contains(b.ResultKey(), browserFilter) {
+			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
 				filteredBrowsers = append(filteredBrowsers, b)
 			}
 		}
@@ -359,13 +361,32 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 		return fmt.Errorf("not found in mapping %s", test.MappingID())
 	}
 
-	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", browser.ResultFilename()))
+	ua := ua.Parse(test.UserAgent)
+	key := ""
+	version, err := reallyTolerantSemver(ua.Version)
+	if err != nil {
+		panic(err)
+	}
+
+	if browser.OS == "ios" {
+		key = fmt.Sprintf("ios:%d.%d", version.Segments()[0], version.Segments()[1])
+	} else {
+		key = fmt.Sprintf("%s:%d.%d", strings.ToLower(ua.Name), version.Segments()[0], version.Segments()[1])
+	}
+
+	if strings.Contains(key, "macos") {
+		log.Printf("%v", browser)
+		log.Printf("%v", ua)
+		panic("must not be macos")
+	}
+
+	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", key))
 
 	results := map[string]interface{}{
 		"os":              browser.OS,
 		"os_version":      browser.OSVersion,
-		"browser":         browser.Browser,
-		"browser_version": browser.BrowserVersion,
+		"browser":         strings.ToLower(ua.Name),
+		"browser_version": fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1]),
 	}
 
 	{
@@ -436,6 +457,8 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 		}
 
 		results["score"] = score
+		results["browser"] = strings.ToLower(ua.Name)
+		results["browser_version"] = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
 
 		err = f1.Close()
 		if err != nil {
@@ -522,7 +545,7 @@ func testsChunked(testFilter string) ([][]browserstack.Test, error) {
 					terms = terms + ":" + x
 				}
 
-				if !strings.Contains(terms, testFilter) {
+				if !strings.Contains(strings.ToLower(terms), strings.ToLower(testFilter)) {
 					continue
 				}
 			} else {
@@ -554,4 +577,17 @@ func testsChunked(testFilter string) ([][]browserstack.Test, error) {
 	}
 
 	return chunks, nil
+}
+
+func reallyTolerantSemver(v string) (*version.Version, error) {
+	switch strings.Count(v, ".") {
+	case 2:
+		return version.NewVersion(v)
+	case 1:
+		return version.NewVersion(v + ".0")
+	case 0:
+		return version.NewVersion(v + ".0.0")
+	default:
+		return version.NewVersion(v)
+	}
 }
