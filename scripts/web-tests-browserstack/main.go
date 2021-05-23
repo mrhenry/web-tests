@@ -369,14 +369,19 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 	}
 
 	browserName := strings.ToLower(browser.Browser)
+	browserVersion := browser.BrowserVersion
 	if strings.ToLower(browser.OS) == "ios" {
 		browserName = "safari"
+		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
 		key = fmt.Sprintf("ios:%d.%d", version.Segments()[0], version.Segments()[1])
 	} else if browserName == "safari" {
+		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
 		key = fmt.Sprintf("safari:%d.%d", version.Segments()[0], version.Segments()[1])
 	} else if browserName == "opera" {
+		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
 		key = fmt.Sprintf("opera:%d.%d", version.Segments()[0], version.Segments()[1])
 	} else {
+		browserVersion = fmt.Sprintf("%d.0", version.Segments()[0])
 		key = fmt.Sprintf("%s:%d.0", browserName, version.Segments()[0])
 	}
 
@@ -386,7 +391,7 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 		"os":              browser.OS,
 		"os_version":      browser.OSVersion,
 		"browser":         browserName,
-		"browser_version": fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1]),
+		"browser_version": browserVersion,
 	}
 
 	{
@@ -457,8 +462,8 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 		}
 
 		results["score"] = score
-		results["browser"] = strings.ToLower(ua.Name)
-		results["browser_version"] = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
+		results["browser"] = browserName
+		results["browser_version"] = browserVersion
 
 		err = f1.Close()
 		if err != nil {
