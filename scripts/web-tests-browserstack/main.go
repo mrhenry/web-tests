@@ -373,18 +373,12 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 	if strings.ToLower(browser.OS) == "ios" {
 		browserName = "safari"
 		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
-		key = fmt.Sprintf("ios:%d.%d", version.Segments()[0], version.Segments()[1])
 	} else if browserName == "safari" {
+		browserName = "safari"
 		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
-		key = fmt.Sprintf("safari:%d.%d", version.Segments()[0], version.Segments()[1])
-	} else if browserName == "opera" {
-		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
-		key = fmt.Sprintf("opera:%d.%d", version.Segments()[0], version.Segments()[1])
-	} else {
-		browserVersion = fmt.Sprintf("%d.0", version.Segments()[0])
-		key = fmt.Sprintf("%s:%d.0", browserName, version.Segments()[0])
 	}
 
+	key = fmt.Sprintf("%s:%s", browserName, browserVersion)
 	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", key))
 
 	results := map[string]interface{}{
