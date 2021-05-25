@@ -365,6 +365,18 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 	key := ""
 	version, err := reallyTolerantSemver(ua.Version)
 	if err != nil {
+		log.Println("version", ua.Version)
+		log.Println("browser version", browser.BrowserVersion)
+		log.Println("os version", browser.OSVersion)
+		log.Println(err)
+
+		if browser.OSVersion != "" {
+			version, err = reallyTolerantSemver(browser.OSVersion)
+		} else {
+			version, err = reallyTolerantSemver(browser.BrowserVersion)
+		}
+	}
+	if err != nil {
 		panic(err)
 	}
 
