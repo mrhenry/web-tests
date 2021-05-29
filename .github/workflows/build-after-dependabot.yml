@@ -35,6 +35,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "rebuild"
+          git commit --allow-empty -m "rebuild"
           git push --set-upstream origin ${GITHUB_REF}
 

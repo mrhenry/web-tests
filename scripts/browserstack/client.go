@@ -18,7 +18,7 @@ func (x *Client) SetCaps(caps selenium.Capabilities) selenium.Capabilities {
 	caps["browserstack.user"] = x.userName
 	caps["browserstack.key"] = x.accessKey
 	caps["browserstack.localIdentifier"] = x.localIdentifier
-	caps["browserstack.idleTimeout"] = 15
+	// caps["browserstack.idleTimeout"] = 15 // doesnt work in old safari versions
 	caps["acceptSslCerts"] = "true"
 	return caps
 }

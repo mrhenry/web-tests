@@ -181,11 +181,6 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 		return errors.New("webdriver remote not started")
 	}
 
-	err = wd.SetPageLoadTimeout(time.Second)
-	if err != nil {
-		return err
-	}
-
 	defer wd.Quit()
 	defer wd.Close()
 
