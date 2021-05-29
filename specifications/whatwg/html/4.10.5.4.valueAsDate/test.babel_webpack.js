@@ -120,7 +120,7 @@ var toObject = __webpack_require__(908);
 
 var hasOwnProperty = {}.hasOwnProperty;
 
-module.exports = function hasOwn(it, key) {
+module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty.call(toObject(it), key);
 };
 
@@ -160,7 +160,7 @@ var store = __webpack_require__(465);
 
 var functionToString = Function.toString;
 
-// this helper broken in `3.4.1-3.4.4`, so we can't use `shared` helper
+// this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
 if (typeof store.inspectSource != 'function') {
   store.inspectSource = function (it) {
     return functionToString.call(it);
@@ -420,7 +420,7 @@ var store = __webpack_require__(465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.12.1',
+  version: '3.13.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
