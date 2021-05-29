@@ -181,6 +181,11 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 		return errors.New("webdriver remote not started")
 	}
 
+	err = wd.SetPageLoadTimeout(time.Second)
+	if err != nil {
+		return err
+	}
+
 	defer wd.Quit()
 	defer wd.Close()
 
@@ -321,6 +326,7 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
 		return test
 	}
 
+	// Test might have already succeeded. First check for "true".
 	ok, err := getBoolFromWebDriver(wd, `return window.testSuccess;`)
 	if err != nil {
 		test.didRun = true

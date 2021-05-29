@@ -106,24 +106,29 @@ func main() {
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 	
+	` + errorHandlers + `
 	<script nomodule>
 		(function() {
-			var check = document.createElement('script');
-			if (!('noModule' in check) && 'onbeforeload' in check) {
-				var support = false;
-				document.addEventListener('beforeload', function(e) {
-					if (e.target === check) {
-						support = true;
-					} else if (!e.target.hasAttribute('nomodule') || !support) {
-						return;
-					}
-					e.preventDefault();
-				}, true);
+			try {
+				var check = document.createElement('script');
+				if (!('noModule' in check) && 'onbeforeload' in check) {
+					var support = false;
+					document.addEventListener('beforeload', function(e) {
+						if (e.target === check) {
+							support = true;
+						} else if (!e.target.hasAttribute('nomodule') || !support) {
+							return;
+						}
+						e.preventDefault();
+					}, true);
 
-				check.type = 'module';
-				check.src = '.';
-				document.head.appendChild(check);
-				check.remove();
+					check.type = 'module';
+					check.src = '.';
+					document.head.appendChild(check);
+					check.remove();
+				}
+			} catch ( _ ) {
+
 			}
 		}());
 	</script>
@@ -194,6 +199,8 @@ func main() {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+	` + errorHandlers + `
 </head>
 <body>
 	` + fixtures + `
@@ -243,6 +250,9 @@ func main() {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+	` + errorHandlers + `
+	
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>
 </head>
 <body>
@@ -300,4 +310,24 @@ const fixtures = `
 	<div id="the-fixture--positioned" style="position: absolute; width: 50px; height: 50px; left: 25px; top: 25px; background-color: blue;">
 	</div>
 </div>
+`
+
+const errorHandlers = `
+<script>
+	window.onerror = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+
+	window.onunhandledrejection = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+</script>
 `
