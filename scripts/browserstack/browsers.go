@@ -23,6 +23,43 @@ type Browser struct {
 	RealMobile     bool   `json:"real_mobile"`
 }
 
+type BrowsersByTestSpeed []Browser
+
+func (x BrowsersByTestSpeed) Len() int      { return len(x) }
+func (x BrowsersByTestSpeed) Swap(i, j int) { x[i], x[j] = x[j], x[i] }
+
+func (x BrowsersByTestSpeed) Less(i, j int) bool {
+	if x[i].Device != "" && x[j].Device == "" {
+		return true
+	}
+
+	if x[i].RealMobile && !x[j].RealMobile {
+		return true
+	}
+
+	if x[i].BrowserVersion != "" && x[j].BrowserVersion != "" && x[i].Browser == x[j].Browser {
+		majorI := strings.Split(x[i].BrowserVersion, ".")[0]
+		majorJ := strings.Split(x[j].BrowserVersion, ".")[0]
+
+		majorIInt, _ := strconv.ParseInt(majorI, 10, 64)
+		majorJInt, _ := strconv.ParseInt(majorJ, 10, 64)
+
+		return majorIInt < majorJInt
+	}
+
+	if x[i].OSVersion != "" && x[j].OSVersion != "" && x[i].OS == x[j].OS {
+		majorI := strings.Split(x[i].OSVersion, ".")[0]
+		majorJ := strings.Split(x[j].OSVersion, ".")[0]
+
+		majorIInt, _ := strconv.ParseInt(majorI, 10, 64)
+		majorJInt, _ := strconv.ParseInt(majorJ, 10, 64)
+
+		return majorIInt < majorJInt
+	}
+
+	return false
+}
+
 func (x Browser) ResultKey() string {
 	if x.Device != "" {
 		return fmt.Sprintf("%s/%s", x.OS, x.OSVersion)

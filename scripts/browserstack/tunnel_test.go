@@ -14,6 +14,10 @@ func TestOpenTunnel(t *testing.T) {
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
+	if userName == "" {
+		return
+	}
+
 	client := New(Config{
 		UserName:  userName,
 		AccessKey: accessKey,

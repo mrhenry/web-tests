@@ -71,7 +71,7 @@ func main() {
 
 	for i, tests := range testChunks {
 		if i > 0 {
-			time.Sleep(time.Second * 30)
+			time.Sleep(time.Second * 15)
 		}
 
 		select {
@@ -175,14 +175,9 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 		browsers = browsers[:browsersLimit]
 	}
 
-	// Device runs take longer, doing these earlier gives a faster overal run
-	sort.SliceStable(browsers, func(i int, j int) bool {
-		if browsers[i].Device != "" && browsers[j].Device == "" {
-			return true
-		}
-
-		return false
-	})
+	// With parallelism it is faster to start with all slower runs.
+	// This prevents a single slow run at the end blocking the session.
+	sort.Sort(browserstack.BrowsersByTestSpeed(browsers))
 
 	sema := semaphore.NewWeighted(4)
 
@@ -201,7 +196,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 			default:
 			}
 
-			time.Sleep(time.Second * 10)
+			time.Sleep(time.Second * 5)
 
 			err = runTest(ctx, client, b, tests, sessionName, mapping)
 			if err != nil {

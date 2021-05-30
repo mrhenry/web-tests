@@ -11,6 +11,10 @@ func TestNewWorker(t *testing.T) {
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
+	if userName == "" {
+		return
+	}
+
 	client := New(Config{
 		UserName:  userName,
 		AccessKey: accessKey,
@@ -36,6 +40,10 @@ func TestWorkers(t *testing.T) {
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
+	if userName == "" {
+		return
+	}
+
 	client := New(Config{
 		UserName:  userName,
 		AccessKey: accessKey,
@@ -56,6 +64,10 @@ func TestWorkers(t *testing.T) {
 func TestWorkers_WithoutAuth(t *testing.T) {
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := "b"
+
+	if userName == "" {
+		return
+	}
 
 	client := New(Config{
 		UserName:  userName,
