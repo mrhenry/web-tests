@@ -787,6 +787,18 @@ module.exports = version && +version;
 
 /***/ }),
 
+/***/ 8008:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var userAgent = __webpack_require__(8113);
+
+var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
+
+module.exports = !!webkit && +webkit[1];
+
+
+/***/ }),
+
 /***/ 748:
 /***/ (function(module) {
 
@@ -1863,14 +1875,13 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 var IS_PURE = __webpack_require__(1913);
 var global = __webpack_require__(7854);
 var fails = __webpack_require__(7293);
-var userAgent = __webpack_require__(8113);
+var WEBKIT = __webpack_require__(8008);
 
 // Forced replacement object prototype accessors methods
 module.exports = IS_PURE || !fails(function () {
   // This feature detection crashes old WebKit
   // https://github.com/zloirock/core-js/issues/232
-  var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
-  if (webkit && +webkit[1] < 535) return;
+  if (WEBKIT && WEBKIT < 535) return;
   var key = Math.random();
   // In FF throws only define methods
   // eslint-disable-next-line no-undef, no-useless-call -- required for testing
@@ -2271,7 +2282,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.13.1',
+  version: '3.14.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
