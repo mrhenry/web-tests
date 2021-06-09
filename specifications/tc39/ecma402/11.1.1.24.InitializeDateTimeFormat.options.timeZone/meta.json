@@ -1,0 +1,24 @@
+{
+  "id": "36cc7262-95d7-4551-ac48-1e5e46ea1571",
+  "spec": {
+    "org": "tc39",
+    "id": "ecma402",
+    "section": "11.1.1.24",
+    "name": "InitializeDateTimeFormat.options.timeZone",
+    "url": "https://tc39.es/ecma402/#sec-initializedatetimeformat"
+  },
+  "notes": [],
+  "search_terms": [
+    "time zone",
+    "Intl",
+    "DateTimeFormat"
+  ],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": []
+}
