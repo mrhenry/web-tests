@@ -4178,6 +4178,8 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__(9601);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
@@ -4538,6 +4540,7 @@ function ArraySpeciesCreate(originalArray, length) {
 
 /* harmony default export */ const _ESAbstract_ArraySpeciesCreate = ((/* unused pure expression or super */ null && (ArraySpeciesCreate)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.getCanonicalLocales.js
+
 
 
 
@@ -8449,6 +8452,7 @@ function SameValue(x, y) {
 
 /* harmony default export */ const _ESAbstract_SameValue = ((/* unused pure expression or super */ null && (SameValue)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.Locale.js
+
 
 
 
@@ -13307,6 +13311,7 @@ var es_string_replace = __webpack_require__(5306);
 
 
 
+
 (function (undefined) {
   if (!("Intl" in self && "PluralRules" in self.Intl)) {
     (function (factory) {
@@ -14197,6 +14202,7 @@ var es_string_match = __webpack_require__(4723);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
 var es_regexp_constructor = __webpack_require__(4603);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.NumberFormat.js
+
 
 
 
@@ -16353,6 +16359,7 @@ var es_regexp_constructor = __webpack_require__(4603);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.js
+
 
 
 
@@ -23797,6 +23804,7 @@ var es_regexp_constructor = __webpack_require__(4603);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.PluralRules.~locale.en.js
+
 
 
 
