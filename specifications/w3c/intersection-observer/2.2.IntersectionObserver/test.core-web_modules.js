@@ -2188,6 +2188,8 @@ var __webpack_exports__ = {};
 var es_number_to_fixed = __webpack_require__(6977);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
 var es_array_sort = __webpack_require__(2707);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -2577,6 +2579,7 @@ function SameValueZero(x, y) {
 
 /* harmony default export */ const _ESAbstract_SameValueZero = ((/* unused pure expression or super */ null && (SameValueZero)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
+
 
 
 

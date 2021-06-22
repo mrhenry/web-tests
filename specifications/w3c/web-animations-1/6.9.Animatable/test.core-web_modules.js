@@ -3333,6 +3333,8 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
@@ -3358,6 +3360,7 @@ var es_string_trim = __webpack_require__(3210);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.search.js
 var es_string_search = __webpack_require__(4765);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
+
 
 
 
