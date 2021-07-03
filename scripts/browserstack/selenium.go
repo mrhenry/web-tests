@@ -75,9 +75,32 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 	respMap := map[string][]byte{}
 	uaStrings := []string{}
 
+	isFirefox := false
+	if browser, ok := caps["browserName"].(string); ok && strings.ToLower(browser) == "firefox" {
+		isFirefox = true
+	}
+
+	isFirefox17 := false
+	if version, ok := caps["browserVersion"].(string); ok && strings.ToLower(version) == "17.0" && isFirefox {
+		isFirefox17 = true
+	}
+
 	handler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		mu.RLock()
 		defer mu.RUnlock()
+
+		// "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0",
+		// "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:29.0) Gecko/20100101 Firefox/29.0"
+		if (isFirefox17 && strings.Contains(req.UserAgent(), "; rv:29.0)")) ||
+			(isFirefox17 && strings.Contains(req.UserAgent(), "; rv:27.0)")) {
+			log.Println("bad firefox detected", req.UserAgent())
+			w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+			w.Header().Set("Content-Encoding", "gzip")
+
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(blockBadFirefoxUA))
+			return
+		}
 
 		if b, ok := respMap[strings.TrimPrefix(req.URL.Path, "/")]; ok {
 			if strings.Contains(req.Header.Get("Accept"), "text/html") {
@@ -413,3 +436,22 @@ func uniqueStringSlice(s []string) []string {
 
 	return unique
 }
+
+const blockBadFirefoxUA = `<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Blocked Firefox UA</title>
+
+	<script>
+		window.testLoaded = false;
+	</script>
+</head>
+<body>
+	
+</body>
+</html>
+
+`
