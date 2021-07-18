@@ -252,7 +252,7 @@ func main() {
 						if !ok {
 							tableBody = tableBody + "<td>?</td>"
 
-							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 0.5)
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 1)
 							scores.addScore(test, weightedScore)
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>"

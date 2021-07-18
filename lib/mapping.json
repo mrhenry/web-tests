@@ -43,6 +43,33 @@
     "polyfill.io": [],
     "dir": "specifications/whatwg/dom/4.2.4.getElementById"
   },
+  "0d6ef80b-1146-44d7-b361-34032288e00b": {
+    "id": "0d6ef80b-1146-44d7-b361-34032288e00b",
+    "spec": {
+      "org": "whatwg",
+      "id": "fetch",
+      "section": "5.2",
+      "name": "BodyInit unions URLSearchParams",
+      "url": "https://fetch.spec.whatwg.org/#bodyinit-unions"
+    },
+    "notes": [],
+    "search_terms": [
+      "fetch",
+      "URLSearchParams"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "URL",
+      "fetch"
+    ],
+    "dir": "specifications/whatwg/fetch/5.2.BodyInit.unions.URLSearchParams"
+  },
   "123ebec4-89ca-4714-8084-d571ab40639b": {
     "id": "123ebec4-89ca-4714-8084-d571ab40639b",
     "spec": {
