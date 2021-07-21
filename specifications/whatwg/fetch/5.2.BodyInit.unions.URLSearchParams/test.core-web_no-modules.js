@@ -9660,8 +9660,197 @@ function CreateDataPropertyOrThrow(O, P, V) {
 }
 
 /* harmony default export */ var _ESAbstract_CreateDataPropertyOrThrow = ((/* unused pure expression or super */ null && (CreateDataPropertyOrThrow)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.GetIterator.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function GetIterator(obj) {
+  var method = arguments.length > 1 ? arguments[1] : GetMethod(obj, Symbol.iterator);
+  var iterator = Call(method, obj);
+
+  if (Type(iterator) !== 'object') {
+    throw new TypeError('bad iterator');
+  }
+
+  var nextMethod = GetV(iterator, "next");
+  var iteratorRecord = Object.create(null);
+  iteratorRecord['[[Iterator]]'] = iterator;
+  iteratorRecord['[[NextMethod]]'] = nextMethod;
+  iteratorRecord['[[Done]]'] = false;
+  return iteratorRecord;
+}
+
+/* harmony default export */ var _ESAbstract_GetIterator = ((/* unused pure expression or super */ null && (GetIterator)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.IteratorClose.js
+
+
+
+
+
+
+
+
+function IteratorClose(iteratorRecord, completion) {
+  if (Type(iteratorRecord['[[Iterator]]']) !== 'object') {
+    throw new Error(Object.prototype.toString.call(iteratorRecord['[[Iterator]]']) + 'is not an Object.');
+  }
+
+  var iterator = iteratorRecord['[[Iterator]]'];
+  var returnMethod = GetMethod(iterator, "return");
+
+  if (returnMethod === undefined) {
+    return completion;
+  }
+
+  try {
+    var innerResult = Call(returnMethod, iterator);
+  } catch (error) {
+    var innerException = error;
+  }
+
+  if (completion) {
+    return completion;
+  }
+
+  if (innerException) {
+    throw innerException;
+  }
+
+  if (Type(innerResult) !== 'object') {
+    throw new TypeError("Iterator's return method returned a non-object.");
+  }
+
+  return completion;
+}
+
+/* harmony default export */ var _ESAbstract_IteratorClose = ((/* unused pure expression or super */ null && (IteratorClose)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.IteratorNext.js
+
+
+
+function _ESAbstract_IteratorNext_IteratorNext(iteratorRecord) {
+  if (arguments.length < 2) {
+    var result = Call(iteratorRecord['[[NextMethod]]'], iteratorRecord['[[Iterator]]']);
+  } else {
+    result = Call(iteratorRecord['[[NextMethod]]'], iteratorRecord['[[Iterator]]'], [arguments[1]]);
+  }
+
+  if (Type(result) !== 'object') {
+    throw new TypeError('bad iterator');
+  }
+
+  return result;
+}
+
+/* harmony default export */ var _ESAbstract_IteratorNext = ((/* unused pure expression or super */ null && (_ESAbstract_IteratorNext_IteratorNext)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.IteratorComplete.js
+
+
+
+
+
+function _ESAbstract_IteratorComplete_IteratorComplete(iterResult) {
+  if (Type(iterResult) !== 'object') {
+    throw new Error(Object.prototype.toString.call(iterResult) + 'is not an Object.');
+  }
+
+  return ToBoolean(Get(iterResult, "done"));
+}
+
+/* harmony default export */ var _ESAbstract_IteratorComplete = ((/* unused pure expression or super */ null && (_ESAbstract_IteratorComplete_IteratorComplete)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.IteratorStep.js
+
+
+
+
+
+
+
+function IteratorStep(iteratorRecord) {
+  var result = IteratorNext(iteratorRecord);
+  var done = IteratorComplete(result);
+
+  if (done === true) {
+    return false;
+  }
+
+  return result;
+}
+
+/* harmony default export */ var _ESAbstract_IteratorStep = ((/* unused pure expression or super */ null && (IteratorStep)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.IteratorValue.js
+
+
+
+
+function IteratorValue(iterResult) {
+  if (Type(iterResult) !== 'object') {
+    throw new Error(Object.prototype.toString.call(iterResult) + 'is not an Object.');
+  }
+
+  return Get(iterResult, "value");
+}
+
+/* harmony default export */ var _ESAbstract_IteratorValue = ((/* unused pure expression or super */ null && (IteratorValue)));
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.CreateIterResultObject.js
+
+
+
+function CreateIterResultObject(value, done) {
+  if (Type(done) !== 'boolean') {
+    throw new Error();
+  }
+
+  var obj = {};
+  CreateDataProperty(obj, "value", value);
+  CreateDataProperty(obj, "done", done);
+  return obj;
+}
+
+/* harmony default export */ var _ESAbstract_CreateIterResultObject = ((/* unused pure expression or super */ null && (CreateIterResultObject)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
 function fetch_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { fetch_typeof = function _typeof(obj) { return typeof obj; }; } else { fetch_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return fetch_typeof(obj); }
+
+
+
+
+
+
+
 
 
 
