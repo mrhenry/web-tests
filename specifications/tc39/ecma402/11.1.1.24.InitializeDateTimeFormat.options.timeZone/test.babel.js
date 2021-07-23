@@ -1,7 +1,7 @@
 (function (cb) {
   var resolvedTimeZone = new Intl.DateTimeFormat('en', {
-    timeZone: 'Africa/Dakar',
+    timeZone: 'Australia/Sydney',
     timeZoneName: 'short'
   }).resolvedOptions().timeZone;
-  cb(resolvedTimeZone === 'Africa/Dakar');
+  cb(resolvedTimeZone === 'Australia/Sydney');
 })(callback);
