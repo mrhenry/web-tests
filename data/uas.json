@@ -601,6 +601,7 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36",
       "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36"
     ]
   },
@@ -1067,6 +1068,7 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:25.0) Gecko/20100101 Firefox/25.0",
+      "Mozilla/5.0 (Windows NT 5.2; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0",
       "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0"
@@ -1790,6 +1792,12 @@
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:9.0.1) Gecko/20100101 Firefox/9.0.1",
       "Mozilla/5.0 (Windows NT 5.2; rv:9.0.1) Gecko/20100101 Firefox/9.0.1",
       "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1"
+    ]
+  },
+  "firefox/90.0": {
+    "key": "firefox/90.0",
+    "uas": [
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"
     ]
   },
   "ie/10.0": {
