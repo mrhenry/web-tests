@@ -19,7 +19,7 @@
         "@babel/cli": "^7.14.8",
         "@babel/core": "^7.14.8",
         "@babel/preset-env": "^7.14.8",
-        "@mrhenry/babel-plugin-core-web": "^0.5.1",
+        "@mrhenry/babel-plugin-core-web": "^0.5.2",
         "babel-loader": "^8.2.2",
         "core-js": "^3.15.1",
         "esbuild": "^0.12.15",

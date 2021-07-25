@@ -1251,7 +1251,7 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 
 /* eslint-disable es/no-object-getownpropertynames -- safe */
 var toIndexedObject = __webpack_require__(5656);
-var $getOwnPropertyNames = __webpack_require__(8079).f;
+var $getOwnPropertyNames = __webpack_require__(8006).f;
 
 var toString = {}.toString;
 
@@ -1276,7 +1276,7 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 /***/ }),
 
-/***/ 8079:
+/***/ 8006:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 var internalObjectKeys = __webpack_require__(6324);
@@ -1444,7 +1444,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var getBuiltIn = __webpack_require__(5005);
-var getOwnPropertyNamesModule = __webpack_require__(8079);
+var getOwnPropertyNamesModule = __webpack_require__(8006);
 var getOwnPropertySymbolsModule = __webpack_require__(5181);
 var anObject = __webpack_require__(9670);
 
@@ -1941,7 +1941,7 @@ var inheritIfRequired = __webpack_require__(9587);
 var toPrimitive = __webpack_require__(7593);
 var fails = __webpack_require__(7293);
 var create = __webpack_require__(30);
-var getOwnPropertyNames = __webpack_require__(8079).f;
+var getOwnPropertyNames = __webpack_require__(8006).f;
 var getOwnPropertyDescriptor = __webpack_require__(1236).f;
 var defineProperty = __webpack_require__(3070).f;
 var trim = __webpack_require__(3111).trim;
@@ -2025,22 +2025,6 @@ var defineProperties = __webpack_require__(6048);
 // https://tc39.es/ecma262/#sec-object.defineproperties
 $({ target: 'Object', stat: true, forced: !DESCRIPTORS, sham: !DESCRIPTORS }, {
   defineProperties: defineProperties
-});
-
-
-/***/ }),
-
-/***/ 9070:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var $ = __webpack_require__(2109);
-var DESCRIPTORS = __webpack_require__(9781);
-var objectDefinePropertyModile = __webpack_require__(3070);
-
-// `Object.defineProperty` method
-// https://tc39.es/ecma262/#sec-object.defineproperty
-$({ target: 'Object', stat: true, forced: !DESCRIPTORS, sham: !DESCRIPTORS }, {
-  defineProperty: objectDefinePropertyModile.f
 });
 
 
@@ -2192,7 +2176,7 @@ var toPrimitive = __webpack_require__(7593);
 var createPropertyDescriptor = __webpack_require__(9114);
 var nativeObjectCreate = __webpack_require__(30);
 var objectKeys = __webpack_require__(1956);
-var getOwnPropertyNamesModule = __webpack_require__(8079);
+var getOwnPropertyNamesModule = __webpack_require__(8006);
 var getOwnPropertyNamesExternal = __webpack_require__(1156);
 var getOwnPropertySymbolsModule = __webpack_require__(5181);
 var getOwnPropertyDescriptorModule = __webpack_require__(1236);
@@ -2591,221 +2575,8 @@ var es_array_iterator = __webpack_require__(6992);
 var es_string_iterator = __webpack_require__(8783);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__(3948);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__(9070);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.CreateMethodProperty.js
-
-
-function CreateMethodProperty(O, P, V) {
-  var newDesc = {
-    value: V,
-    writable: true,
-    enumerable: false,
-    configurable: true
-  };
-  Object.defineProperty(O, P, newDesc);
-}
-
-/* harmony default export */ var _ESAbstract_CreateMethodProperty = ((/* unused pure expression or super */ null && (CreateMethodProperty)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.Type.js
-
-
-
-
-
-
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _ESAbstract_Type_Type(x) {
-  switch (_typeof(x)) {
-    case 'undefined':
-      return 'undefined';
-
-    case 'boolean':
-      return 'boolean';
-
-    case 'number':
-      return 'number';
-
-    case 'string':
-      return 'string';
-
-    case 'symbol':
-      return 'symbol';
-
-    default:
-      if (x === null) return 'null';
-      if ('Symbol' in self && (x instanceof self.Symbol || x.constructor === self.Symbol)) return 'symbol';
-      return 'object';
-  }
-}
-
-/* harmony default export */ var _ESAbstract_Type = ((/* unused pure expression or super */ null && (_ESAbstract_Type_Type)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.Call.js
-
-
-function _ESAbstract_Call_Call(F, V) {
-  var argumentsList = arguments.length > 2 ? arguments[2] : [];
-
-  if (IsCallable(F) === false) {
-    throw new TypeError(Object.prototype.toString.call(F) + 'is not a function.');
-  }
-
-  return F.apply(V, argumentsList);
-}
-
-/* harmony default export */ var _ESAbstract_Call = ((/* unused pure expression or super */ null && (_ESAbstract_Call_Call)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.OrdinaryToPrimitive.js
-
-
-
-
-
-function _ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive(O, hint) {
-  if (hint === 'string') {
-    var methodNames = ['toString', 'valueOf'];
-  } else {
-    methodNames = ['valueOf', 'toString'];
-  }
-
-  for (var i = 0; i < methodNames.length; ++i) {
-    var name = methodNames[i];
-    var method = Get(O, name);
-
-    if (IsCallable(method)) {
-      var result = Call(method, O);
-
-      if (Type(result) !== 'object') {
-        return result;
-      }
-    }
-  }
-
-  throw new TypeError('Cannot convert to primitive.');
-}
-
-/* harmony default export */ var _ESAbstract_OrdinaryToPrimitive = ((/* unused pure expression or super */ null && (_ESAbstract_OrdinaryToPrimitive_OrdinaryToPrimitive)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.ToPrimitive.js
-function _ESAbstract_ToPrimitive_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return typeof obj; }; } else { _ESAbstract_ToPrimitive_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _ESAbstract_ToPrimitive_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function _ESAbstract_ToPrimitive_ToPrimitive(input) {
-  var PreferredType = arguments.length > 1 ? arguments[1] : undefined;
-
-  if (Type(input) === 'object') {
-    if (arguments.length < 2) {
-      var hint = 'default';
-    } else if (PreferredType === String) {
-      hint = 'string';
-    } else if (PreferredType === Number) {
-      hint = 'number';
-    }
-
-    var exoticToPrim = typeof self.Symbol === 'function' && _ESAbstract_ToPrimitive_typeof(self.Symbol.toPrimitive) === 'symbol' ? GetMethod(input, self.Symbol.toPrimitive) : undefined;
-
-    if (exoticToPrim !== undefined) {
-      var result = Call(exoticToPrim, input, [hint]);
-
-      if (Type(result) !== 'object') {
-        return result;
-      }
-
-      throw new TypeError('Cannot convert exotic object to primitive.');
-    }
-
-    if (hint === 'default') {
-      hint = 'number';
-    }
-
-    return OrdinaryToPrimitive(input, hint);
-  }
-
-  return input;
-}
-
-/* harmony default export */ var _ESAbstract_ToPrimitive = ((/* unused pure expression or super */ null && (_ESAbstract_ToPrimitive_ToPrimitive)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.ToString.js
-
-
-
-
-
-
-
-
-
-
-function _ESAbstract_ToString_ToString(argument) {
-  switch (Type(argument)) {
-    case 'symbol':
-      throw new TypeError('Cannot convert a Symbol value to a string');
-
-    case 'object':
-      var primValue = ToPrimitive(argument, String);
-      return _ESAbstract_ToString_ToString(primValue);
-
-    default:
-      return String(argument);
-  }
-}
-
-/* harmony default export */ var _ESAbstract_ToString = ((/* unused pure expression or super */ null && (_ESAbstract_ToString_ToString)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ESAbstract.ToPropertyKey.js
-
-
-
-
-
-
-
-
-
-
-
-function ToPropertyKey(argument) {
-  var key = ToPrimitive(argument, String);
-
-  if (Type(key) === 'symbol') {
-    return key;
-  }
-
-  return ToString(key);
-}
-
-/* harmony default export */ var _ESAbstract_ToPropertyKey = ((/* unused pure expression or super */ null && (ToPropertyKey)));
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMRect.js
-function DOMRect_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { DOMRect_typeof = function _typeof(obj) { return typeof obj; }; } else { DOMRect_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return DOMRect_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-
-
-
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
@@ -2934,7 +2705,7 @@ function DOMRect_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === 
       global.DOMRect = DOMRect;
     })(self);
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : DOMRect_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMRect_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMRect_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/geometry-1/3.DOMRect.left/test.pure.js
 
 
