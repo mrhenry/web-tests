@@ -452,10 +452,10 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 			score = score + 0.05
 		} else if score < 0.8 && !test.Success() {
 			// Test is failing and seems to be going down.
-			score = score - 0.1
+			score = score - 0.02
 		} else if score < 0.9 && !test.Success() {
 			// Test appears to be failing and might to be going down.
-			score = score - 0.05
+			score = score - 0.02
 		} else {
 			// Test might go either way.
 			score = (score - 0.01) + (newScore * 0.02)
