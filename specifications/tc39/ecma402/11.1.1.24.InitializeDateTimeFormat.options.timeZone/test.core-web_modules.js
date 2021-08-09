@@ -5592,6 +5592,17 @@ module.exports = /MSIE|Trident/.test(UA);
 
 /***/ }),
 
+/***/ 1528:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var userAgent = __webpack_require__(8113);
+var global = __webpack_require__(7854);
+
+module.exports = /iphone|ipod|ipad/i.test(userAgent) && global.Pebble !== undefined;
+
+
+/***/ }),
+
 /***/ 6833:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -6428,6 +6439,7 @@ var global = __webpack_require__(7854);
 var getOwnPropertyDescriptor = __webpack_require__(1236).f;
 var macrotask = __webpack_require__(261).set;
 var IS_IOS = __webpack_require__(6833);
+var IS_IOS_PEBBLE = __webpack_require__(1528);
 var IS_WEBOS_WEBKIT = __webpack_require__(1036);
 var IS_NODE = __webpack_require__(5268);
 
@@ -6470,7 +6482,7 @@ if (!queueMicrotask) {
       node.data = toggle = !toggle;
     };
   // environments with maybe non-completely correct, but existent Promise
-  } else if (Promise && Promise.resolve) {
+  } else if (!IS_IOS_PEBBLE && Promise && Promise.resolve) {
     // Promise.resolve without an argument throws an error in LG WebOS 2
     promise = Promise.resolve(undefined);
     // workaround of WebKit ~ iOS Safari 10.1 bug
@@ -7440,7 +7452,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.16.0',
+  version: '3.16.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
