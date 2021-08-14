@@ -16,7 +16,7 @@ import (
 
 func main() {
 	featureDirs := []string{}
-	totalScores := Scores{}
+	totalPoints := Points{}
 	totalTests := map[string]struct{}{}
 
 	out := ""
@@ -273,7 +273,7 @@ func main() {
 			}
 		}
 
-		totalScores.sum(scores)
+		totalPoints.sum(scores)
 
 		featureSummary := `<summary id="` + feature.ID + `">` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + scores.table(testsSlice) + `</summary>`
 		out = out + `<details>` + featureSummary + featureDetails + `
@@ -292,8 +292,6 @@ func main() {
 	}
 
 	sort.Sort(sort.StringSlice(testsSlice))
-
-	totalScores.table(testsSlice)
 
 	{
 		resultsHTML := `<!DOCTYPE html>
@@ -367,7 +365,7 @@ func main() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalScores.table(testsSlice) + out + `
+	` + totalPoints.table(testsSlice, len(featureDirs)) + out + `
 </body>
 </html>`
 
@@ -469,6 +467,59 @@ func (x Scores) table(order []string) string {
 		}
 
 		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%sN", numberOfNines(v)) + `</tr>`
+	}
+
+	return `<table><tbody>` + tableContents + `</tbody></table>`
+}
+
+type Points map[string]int
+
+func (x Points) sum(y Scores) {
+	avgScores := map[string]float64{}
+
+	for k, v := range y {
+		avgScores[k] = 0
+
+		for _, vv := range v {
+			avgScores[k] += vv
+		}
+
+		avgScores[k] = avgScores[k] / float64(len(v))
+	}
+
+	{
+		_, hasPurePolyfillIOResult := avgScores["pure_polyfillio"]
+		pureResult, hasPureResult := avgScores["pure"]
+		if !hasPurePolyfillIOResult && hasPureResult {
+			avgScores["pure_polyfillio"] = pureResult
+		}
+	}
+
+	{
+		_, hasBabelPolyfillIOResult := avgScores["babel_polyfillio"]
+		babelResult, hasBabelResult := avgScores["babel"]
+		if !hasBabelPolyfillIOResult && hasBabelResult {
+			avgScores["babel_polyfillio"] = babelResult
+		}
+	}
+
+	for ck, score := range avgScores {
+		if score >= 0.99999 {
+			x[ck] = x[ck] + 1
+		}
+	}
+}
+
+func (x Points) table(order []string, featuresTested int) string {
+	tableContents := ""
+
+	for _, test := range order {
+		v, ok := x[test]
+		if !ok {
+			continue
+		}
+
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%d", v) + ` / ` + fmt.Sprintf("%d", featuresTested) + `</tr>`
 	}
 
 	return `<table><tbody>` + tableContents + `</tbody></table>`
