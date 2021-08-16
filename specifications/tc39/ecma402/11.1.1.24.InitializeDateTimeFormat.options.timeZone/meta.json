@@ -20,5 +20,8 @@
     "esbuild": "test.esbuild.js",
     "pure": "test.pure.js"
   },
-  "polyfill.io": []
+  "polyfill.io": [
+    "Intl.DateTimeFormat.~locale.en",
+    "Intl.DateTimeFormat.~timeZone.golden"
+  ]
 }
