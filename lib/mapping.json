@@ -119,6 +119,33 @@
     ],
     "dir": "specifications/w3c/intersection-observer/2.2.IntersectionObserver"
   },
+  "1bc7e152-dce1-46cb-a6df-08e5f181d84d": {
+    "id": "1bc7e152-dce1-46cb-a6df-08e5f181d84d",
+    "spec": {
+      "org": "tc39",
+      "id": "ecma402",
+      "section": "11.4.6",
+      "name": "Intl.DateTimeFormat.prototype.formatRangeToParts",
+      "url": "https://tc39.es/ecma402/#sec-Intl.DateTimeFormat.prototype.formatRangeToParts"
+    },
+    "notes": [],
+    "search_terms": [
+      "Intl",
+      "DateTimeFormat"
+    ],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": [
+      "Intl.DateTimeFormat",
+      "Intl.DateTimeFormat.~locale.en"
+    ],
+    "dir": "specifications/tc39/ecma402/11.4.6.Intl.DateTimeFormat.prototype.formatRangeToParts"
+  },
   "1f40043c-1a6d-47d3-97e1-6e0617a1b464": {
     "id": "1f40043c-1a6d-47d3-97e1-6e0617a1b464",
     "spec": {
