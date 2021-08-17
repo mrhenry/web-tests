@@ -26283,7 +26283,7 @@ function Intl_DateTimeFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; 
   var parts = new Intl.DateTimeFormat('en', {
     hourCycle: 'h11',
     hour: 'numeric'
-  }).formatRangeToParts(1, 43201000);
+  }).formatRangeToParts(43201000, 43201000 * 2);
   cb(!!parts && !!parts.length);
 })(callback);
 }();
