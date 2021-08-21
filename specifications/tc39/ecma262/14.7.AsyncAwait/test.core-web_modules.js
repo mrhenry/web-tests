@@ -280,7 +280,7 @@ module.exports = typeof window == 'object';
 var userAgent = __webpack_require__(8113);
 var global = __webpack_require__(7854);
 
-module.exports = /iphone|ipod|ipad/i.test(userAgent) && global.Pebble !== undefined;
+module.exports = /ipad|iphone|ipod/i.test(userAgent) && global.Pebble !== undefined;
 
 
 /***/ }),
@@ -290,7 +290,7 @@ module.exports = /iphone|ipod|ipad/i.test(userAgent) && global.Pebble !== undefi
 
 var userAgent = __webpack_require__(8113);
 
-module.exports = /(?:iphone|ipod|ipad).*applewebkit/i.test(userAgent);
+module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
 
 
 /***/ }),
@@ -1441,7 +1441,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.16.1',
+  version: '3.16.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
