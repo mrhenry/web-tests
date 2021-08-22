@@ -894,6 +894,27 @@
     "polyfill.io": [],
     "dir": "specifications/tc39/ecma262/13.2.5.1.ArrayInitialiser.Elision"
   },
+  "b8b4c5d7-0ae9-4058-97ce-a7864157a162": {
+    "id": "b8b4c5d7-0ae9-4058-97ce-a7864157a162",
+    "spec": {
+      "org": "w3c",
+      "id": "geometry-1",
+      "section": "3",
+      "name": "DOMRect.fromRect",
+      "url": "https://drafts.fxtf.org/geometry/#dom-domrect-fromrect"
+    },
+    "notes": [],
+    "search_terms": [],
+    "tests": {
+      "babel": "test.babel.js",
+      "babel_webpack": "test.babel_webpack.js",
+      "core-web": "test.core-web",
+      "esbuild": "test.esbuild.js",
+      "pure": "test.pure.js"
+    },
+    "polyfill.io": null,
+    "dir": "specifications/w3c/geometry-1/3.DOMRect.fromRect"
+  },
   "be7e56ce-a1f2-4314-a645-a4949a840122": {
     "id": "be7e56ce-a1f2-4314-a645-a4949a840122",
     "spec": {

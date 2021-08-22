@@ -1,0 +1,22 @@
+{
+  "id": "b8b4c5d7-0ae9-4058-97ce-a7864157a162",
+  "spec": {
+    "org": "w3c",
+    "id": "geometry-1",
+    "section": "3",
+    "name": "DOMRect.fromRect",
+    "url": "https://drafts.fxtf.org/geometry/#dom-domrect-fromrect"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": "test.babel.js",
+    "babel_webpack": "test.babel_webpack.js",
+    "core-web": "test.core-web",
+    "esbuild": "test.esbuild.js",
+    "pure": "test.pure.js"
+  },
+  "polyfill.io": [
+    "DOMRect.fromRect"
+  ]
+}
