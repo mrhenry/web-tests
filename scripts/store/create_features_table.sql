@@ -1,4 +1,4 @@
-CREATE TABLE `features` IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS `features` (
 	`id` TEXT NOT NULL UNIQUE,
 	
 	`directory` TEXT NOT NULL,

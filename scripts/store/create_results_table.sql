@@ -1,4 +1,4 @@
-CREATE TABLE `results` (
+CREATE TABLE IF NOT EXISTS `results` (
 	`browser_version` TEXT NOT NULL,
 	`browser` TEXT NOT NULL,
 	`feature_id` TEXT NOT NULL,
