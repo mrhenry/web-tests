@@ -16,5 +16,7 @@
     "esbuild": "test.esbuild.js",
     "pure": "test.pure.js"
   },
-  "polyfill.io": []
+  "polyfill.io": [
+    "DOMRect.fromRect"
+  ]
 }

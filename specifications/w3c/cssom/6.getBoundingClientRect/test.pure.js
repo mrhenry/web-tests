@@ -1,18 +1,18 @@
 (function (cb) {
 	var el = document.getElementById("the-fixture--positioned");
-	var clientBoundingRect = el.getBoundingClientRect();
+	var rect = DOMRect.fromRect(el.getBoundingClientRect());
 	cb(
-		"top" in clientBoundingRect &&
-		"left" in clientBoundingRect &&
-		"x" in clientBoundingRect &&
-		"y" in clientBoundingRect &&
-		"width" in clientBoundingRect &&
-		"height" in clientBoundingRect &&
-		clientBoundingRect.top > 0 &&
-		clientBoundingRect.left > 0 &&
-		clientBoundingRect.x > 0 &&
-		clientBoundingRect.y > 0 &&
-		clientBoundingRect.width > 0 &&
-		clientBoundingRect.height > 0
+		"top" in rect &&
+		"left" in rect &&
+		"x" in rect &&
+		"y" in rect &&
+		"width" in rect &&
+		"height" in rect &&
+		rect.top > 0 &&
+		rect.left > 0 &&
+		rect.x > 0 &&
+		rect.y > 0 &&
+		rect.width > 0 &&
+		rect.height > 0
 	);
 })(callback);

@@ -821,6 +821,30 @@ module.exports = fails(function () {
 
 /***/ }),
 
+/***/ 9587:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var isObject = __webpack_require__(111);
+var setPrototypeOf = __webpack_require__(7674);
+
+// makes subclassing work correct for wrapped built-ins
+module.exports = function ($this, dummy, Wrapper) {
+  var NewTarget, NewTargetPrototype;
+  if (
+    // it can work only with native `setPrototypeOf`
+    setPrototypeOf &&
+    // we haven't completely correct pre-ES6 way for getting `new.target`, so use this
+    typeof (NewTarget = dummy.constructor) == 'function' &&
+    NewTarget !== Wrapper &&
+    isObject(NewTargetPrototype = NewTarget.prototype) &&
+    NewTargetPrototype !== Wrapper.prototype
+  ) setPrototypeOf($this, NewTargetPrototype);
+  return $this;
+};
+
+
+/***/ }),
+
 /***/ 2788:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1671,6 +1695,42 @@ module.exports = {
 
 /***/ }),
 
+/***/ 3111:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var requireObjectCoercible = __webpack_require__(4488);
+var toString = __webpack_require__(1340);
+var whitespaces = __webpack_require__(1361);
+
+var whitespace = '[' + whitespaces + ']';
+var ltrim = RegExp('^' + whitespace + whitespace + '*');
+var rtrim = RegExp(whitespace + whitespace + '*$');
+
+// `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
+var createMethod = function (TYPE) {
+  return function ($this) {
+    var string = toString(requireObjectCoercible($this));
+    if (TYPE & 1) string = string.replace(ltrim, '');
+    if (TYPE & 2) string = string.replace(rtrim, '');
+    return string;
+  };
+};
+
+module.exports = {
+  // `String.prototype.{ trimLeft, trimStart }` methods
+  // https://tc39.es/ecma262/#sec-string.prototype.trimstart
+  start: createMethod(1),
+  // `String.prototype.{ trimRight, trimEnd }` methods
+  // https://tc39.es/ecma262/#sec-string.prototype.trimend
+  end: createMethod(2),
+  // `String.prototype.trim` method
+  // https://tc39.es/ecma262/#sec-string.prototype.trim
+  trim: createMethod(3)
+};
+
+
+/***/ }),
+
 /***/ 1400:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1885,6 +1945,16 @@ module.exports = function (name) {
 
 /***/ }),
 
+/***/ 1361:
+/***/ (function(module) {
+
+// a string of all valid unicode whitespaces
+module.exports = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002' +
+  '\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+
+
+/***/ }),
+
 /***/ 6992:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1942,6 +2012,112 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
+
+
+/***/ }),
+
+/***/ 9653:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var DESCRIPTORS = __webpack_require__(9781);
+var global = __webpack_require__(7854);
+var isForced = __webpack_require__(4705);
+var redefine = __webpack_require__(1320);
+var has = __webpack_require__(6656);
+var classof = __webpack_require__(4326);
+var inheritIfRequired = __webpack_require__(9587);
+var isSymbol = __webpack_require__(2190);
+var toPrimitive = __webpack_require__(7593);
+var fails = __webpack_require__(7293);
+var create = __webpack_require__(30);
+var getOwnPropertyNames = __webpack_require__(8006).f;
+var getOwnPropertyDescriptor = __webpack_require__(1236).f;
+var defineProperty = __webpack_require__(3070).f;
+var trim = __webpack_require__(3111).trim;
+
+var NUMBER = 'Number';
+var NativeNumber = global[NUMBER];
+var NumberPrototype = NativeNumber.prototype;
+
+// Opera ~12 has broken Object#toString
+var BROKEN_CLASSOF = classof(create(NumberPrototype)) == NUMBER;
+
+// `ToNumber` abstract operation
+// https://tc39.es/ecma262/#sec-tonumber
+var toNumber = function (argument) {
+  if (isSymbol(argument)) throw TypeError('Cannot convert a Symbol value to a number');
+  var it = toPrimitive(argument, 'number');
+  var first, third, radix, maxCode, digits, length, index, code;
+  if (typeof it == 'string' && it.length > 2) {
+    it = trim(it);
+    first = it.charCodeAt(0);
+    if (first === 43 || first === 45) {
+      third = it.charCodeAt(2);
+      if (third === 88 || third === 120) return NaN; // Number('+0x1') should be NaN, old V8 fix
+    } else if (first === 48) {
+      switch (it.charCodeAt(1)) {
+        case 66: case 98: radix = 2; maxCode = 49; break; // fast equal of /^0b[01]+$/i
+        case 79: case 111: radix = 8; maxCode = 55; break; // fast equal of /^0o[0-7]+$/i
+        default: return +it;
+      }
+      digits = it.slice(2);
+      length = digits.length;
+      for (index = 0; index < length; index++) {
+        code = digits.charCodeAt(index);
+        // parseInt parses a string to a first unavailable symbol
+        // but ToNumber should return NaN if a string contains unavailable symbols
+        if (code < 48 || code > maxCode) return NaN;
+      } return parseInt(digits, radix);
+    }
+  } return +it;
+};
+
+// `Number` constructor
+// https://tc39.es/ecma262/#sec-number-constructor
+if (isForced(NUMBER, !NativeNumber(' 0o1') || !NativeNumber('0b1') || NativeNumber('+0x1'))) {
+  var NumberWrapper = function Number(value) {
+    var it = arguments.length < 1 ? 0 : value;
+    var dummy = this;
+    return dummy instanceof NumberWrapper
+      // check on 1..constructor(foo) case
+      && (BROKEN_CLASSOF ? fails(function () { NumberPrototype.valueOf.call(dummy); }) : classof(dummy) != NUMBER)
+        ? inheritIfRequired(new NativeNumber(toNumber(it)), dummy, NumberWrapper) : toNumber(it);
+  };
+  for (var keys = DESCRIPTORS ? getOwnPropertyNames(NativeNumber) : (
+    // ES3:
+    'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
+    // ES2015 (in case, if modules with ES2015 Number statics required before):
+    'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' +
+    'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger,' +
+    // ESNext
+    'fromString,range'
+  ).split(','), j = 0, key; keys.length > j; j++) {
+    if (has(NativeNumber, key = keys[j]) && !has(NumberWrapper, key)) {
+      defineProperty(NumberWrapper, key, getOwnPropertyDescriptor(NativeNumber, key));
+    }
+  }
+  NumberWrapper.prototype = NumberPrototype;
+  NumberPrototype.constructor = NumberWrapper;
+  redefine(global, NUMBER, NumberWrapper);
+}
+
+
+/***/ }),
+
+/***/ 3321:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+var $ = __webpack_require__(2109);
+var DESCRIPTORS = __webpack_require__(9781);
+var defineProperties = __webpack_require__(6048);
+
+// `Object.defineProperties` method
+// https://tc39.es/ecma262/#sec-object.defineproperties
+$({ target: 'Object', stat: true, forced: !DESCRIPTORS, sham: !DESCRIPTORS }, {
+  defineProperties: defineProperties
+});
 
 
 /***/ }),
@@ -2469,6 +2645,10 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
+var es_number_constructor = __webpack_require__(9653);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
+var es_object_define_properties = __webpack_require__(3321);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -2483,6 +2663,137 @@ var es_array_iterator = __webpack_require__(6992);
 var es_string_iterator = __webpack_require__(8783);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__(3948);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMRect.js
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+
+
+
+
+
+
+
+(function (undefined) {
+  if (!("DOMRect" in self && function (e) {
+    try {
+      return new e();
+    } catch (t) {
+      return !1;
+    }
+  }(self.DOMRect))) {
+    (function (global) {
+      function number(v) {
+        return v === undefined ? 0 : Number(v);
+      }
+
+      function different(u, v) {
+        return u !== v && !(isNaN(u) && isNaN(v));
+      }
+
+      function DOMRect(xArg, yArg, wArg, hArg) {
+        var x, y, width, height, left, right, top, bottom;
+        x = number(xArg);
+        y = number(yArg);
+        width = number(wArg);
+        height = number(hArg);
+        Object.defineProperties(this, {
+          x: {
+            get: function get() {
+              return x;
+            },
+            set: function set(newX) {
+              if (different(x, newX)) {
+                x = newX;
+                left = right = undefined;
+              }
+            },
+            enumerable: true
+          },
+          y: {
+            get: function get() {
+              return y;
+            },
+            set: function set(newY) {
+              if (different(y, newY)) {
+                y = newY;
+                top = bottom = undefined;
+              }
+            },
+            enumerable: true
+          },
+          width: {
+            get: function get() {
+              return width;
+            },
+            set: function set(newWidth) {
+              if (different(width, newWidth)) {
+                width = newWidth;
+                left = right = undefined;
+              }
+            },
+            enumerable: true
+          },
+          height: {
+            get: function get() {
+              return height;
+            },
+            set: function set(newHeight) {
+              if (different(height, newHeight)) {
+                height = newHeight;
+                top = bottom = undefined;
+              }
+            },
+            enumerable: true
+          },
+          left: {
+            get: function get() {
+              if (left === undefined) {
+                left = x + Math.min(0, width);
+              }
+
+              return left;
+            },
+            enumerable: true
+          },
+          right: {
+            get: function get() {
+              if (right === undefined) {
+                right = x + Math.max(0, width);
+              }
+
+              return right;
+            },
+            enumerable: true
+          },
+          top: {
+            get: function get() {
+              if (top === undefined) {
+                top = y + Math.min(0, height);
+              }
+
+              return top;
+            },
+            enumerable: true
+          },
+          bottom: {
+            get: function get() {
+              if (bottom === undefined) {
+                bottom = y + Math.max(0, height);
+              }
+
+              return bottom;
+            },
+            enumerable: true
+          }
+        });
+      }
+
+      global.DOMRect = DOMRect;
+    })(self);
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
 
 
@@ -2492,7 +2803,7 @@ var web_dom_collections_iterator = __webpack_require__(3948);
 
 
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function document_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { document_typeof = function _typeof(obj) { return typeof obj; }; } else { document_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return document_typeof(obj); }
 
 (function (undefined) {
   if (!("document" in self)) {
@@ -2505,13 +2816,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/cssom/6.getBoundingClientRect/test.pure.js
 
 
+
 (function (cb) {
+  var foo = new DOMRect();
   var el = document.getElementById("the-fixture--positioned");
-  var clientBoundingRect = el.getBoundingClientRect();
+  var clientBoundingRect = new DOMRect(el.getBoundingClientRect());
   cb("top" in clientBoundingRect && "left" in clientBoundingRect && "x" in clientBoundingRect && "y" in clientBoundingRect && "width" in clientBoundingRect && "height" in clientBoundingRect && clientBoundingRect.top > 0 && clientBoundingRect.left > 0 && clientBoundingRect.x > 0 && clientBoundingRect.y > 0 && clientBoundingRect.width > 0 && clientBoundingRect.height > 0);
 })(callback);
 }();
