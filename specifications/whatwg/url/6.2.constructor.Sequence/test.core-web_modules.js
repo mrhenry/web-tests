@@ -91,6 +91,7 @@ var callWithSafeIterationClosing = __webpack_require__(3411);
 var isArrayIteratorMethod = __webpack_require__(7659);
 var toLength = __webpack_require__(7466);
 var createProperty = __webpack_require__(6135);
+var getIterator = __webpack_require__(8554);
 var getIteratorMethod = __webpack_require__(1246);
 
 // `Array.from` method implementation
@@ -107,7 +108,7 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
   if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined, 2);
   // if the target is not iterable or it's an array with the default iterator - use a simple case
   if (iteratorMethod != undefined && !(C == Array && isArrayIteratorMethod(iteratorMethod))) {
-    iterator = iteratorMethod.call(O);
+    iterator = getIterator(O, iteratorMethod);
     next = iterator.next;
     result = new C();
     for (;!(step = next.call(iterator)).done; index++) {
@@ -179,8 +180,7 @@ module.exports = function (iterator, fn, value, ENTRIES) {
   try {
     return ENTRIES ? fn(anObject(value)[0], value[1]) : fn(value);
   } catch (error) {
-    iteratorClose(iterator);
-    throw error;
+    iteratorClose(iterator, 'throw', error);
   }
 };
 
@@ -714,8 +714,8 @@ module.exports = function (it) {
 var anObject = __webpack_require__(9670);
 var getIteratorMethod = __webpack_require__(1246);
 
-module.exports = function (it) {
-  var iteratorMethod = getIteratorMethod(it);
+module.exports = function (it, usingIterator) {
+  var iteratorMethod = arguments.length < 2 ? getIteratorMethod(it) : usingIterator;
   if (typeof iteratorMethod != 'function') {
     throw TypeError(String(it) + ' is not iterable');
   } return anObject(iteratorMethod.call(it));
@@ -992,11 +992,24 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
 
 var anObject = __webpack_require__(9670);
 
-module.exports = function (iterator) {
-  var returnMethod = iterator['return'];
-  if (returnMethod !== undefined) {
-    return anObject(returnMethod.call(iterator)).value;
+module.exports = function (iterator, kind, value) {
+  var innerResult, innerError;
+  anObject(iterator);
+  try {
+    innerResult = iterator['return'];
+    if (innerResult === undefined) {
+      if (kind === 'throw') throw value;
+      return value;
+    }
+    innerResult = innerResult.call(iterator);
+  } catch (error) {
+    innerError = true;
+    innerResult = error;
   }
+  if (kind === 'throw') throw value;
+  if (innerError) throw innerResult;
+  anObject(innerResult);
+  return value;
 };
 
 
@@ -1697,7 +1710,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.16.3',
+  version: '3.16.4',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -2408,7 +2421,7 @@ var URLSearchParamsConstructor = function URLSearchParams(/* init */) {
     if (isObject(init)) {
       iteratorMethod = getIteratorMethod(init);
       if (typeof iteratorMethod === 'function') {
-        iterator = iteratorMethod.call(init);
+        iterator = getIterator(init, iteratorMethod);
         next = iterator.next;
         while (!(step = next.call(iterator)).done) {
           entryIterator = getIterator(anObject(step.value));
