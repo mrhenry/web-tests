@@ -128,6 +128,28 @@ module.exports = function (target, source) {
 
 /***/ }),
 
+/***/ 4964:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var wellKnownSymbol = __webpack_require__(5112);
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (error1) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (error2) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
 /***/ 8544:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -323,48 +345,6 @@ var EXISTS = isObject(document) && isObject(document.createElement);
 
 module.exports = function (it) {
   return EXISTS ? document.createElement(it) : {};
-};
-
-
-/***/ }),
-
-/***/ 8324:
-/***/ ((module) => {
-
-// iterable DOM collections
-// flag - `iterable` interface - 'entries', 'keys', 'values', 'forEach' methods
-module.exports = {
-  CSSRuleList: 0,
-  CSSStyleDeclaration: 0,
-  CSSValueList: 0,
-  ClientRectList: 0,
-  DOMRectList: 0,
-  DOMStringList: 0,
-  DOMTokenList: 1,
-  DataTransferItemList: 0,
-  FileList: 0,
-  HTMLAllCollection: 0,
-  HTMLCollection: 0,
-  HTMLFormElement: 0,
-  HTMLSelectElement: 0,
-  MediaList: 0,
-  MimeTypeArray: 0,
-  NamedNodeMap: 0,
-  NodeList: 1,
-  PaintRequestList: 0,
-  Plugin: 0,
-  PluginArray: 0,
-  SVGLengthList: 0,
-  SVGNumberList: 0,
-  SVGPathSegList: 0,
-  SVGPointList: 0,
-  SVGStringList: 0,
-  SVGTransformList: 0,
-  SourceBufferList: 0,
-  StyleSheetList: 0,
-  TextTrackCueList: 0,
-  TextTrackList: 0,
-  TouchList: 0
 };
 
 
@@ -746,6 +726,25 @@ module.exports = false;
 
 /***/ }),
 
+/***/ 7850:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isObject = __webpack_require__(111);
+var classof = __webpack_require__(4326);
+var wellKnownSymbol = __webpack_require__(5112);
+
+var MATCH = wellKnownSymbol('match');
+
+// `IsRegExp` abstract operation
+// https://tc39.es/ecma262/#sec-isregexp
+module.exports = function (it) {
+  var isRegExp;
+  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
+};
+
+
+/***/ }),
+
 /***/ 2190:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -853,6 +852,82 @@ var inspectSource = __webpack_require__(2788);
 var WeakMap = global.WeakMap;
 
 module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
+
+
+/***/ }),
+
+/***/ 3929:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isRegExp = __webpack_require__(7850);
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
+};
+
+
+/***/ }),
+
+/***/ 1574:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var DESCRIPTORS = __webpack_require__(9781);
+var fails = __webpack_require__(7293);
+var objectKeys = __webpack_require__(1956);
+var getOwnPropertySymbolsModule = __webpack_require__(5181);
+var propertyIsEnumerableModule = __webpack_require__(5296);
+var toObject = __webpack_require__(7908);
+var IndexedObject = __webpack_require__(8361);
+
+// eslint-disable-next-line es/no-object-assign -- safe
+var $assign = Object.assign;
+// eslint-disable-next-line es/no-object-defineproperty -- required for testing
+var defineProperty = Object.defineProperty;
+
+// `Object.assign` method
+// https://tc39.es/ecma262/#sec-object.assign
+module.exports = !$assign || fails(function () {
+  // should have correct order of operations (Edge bug)
+  if (DESCRIPTORS && $assign({ b: 1 }, $assign(defineProperty({}, 'a', {
+    enumerable: true,
+    get: function () {
+      defineProperty(this, 'b', {
+        value: 3,
+        enumerable: false
+      });
+    }
+  }), { b: 2 })).b !== 1) return true;
+  // should work with symbols and should have deterministic property order (V8 bug)
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line es/no-symbol -- safe
+  var symbol = Symbol();
+  var alphabet = 'abcdefghijklmnopqrst';
+  A[symbol] = 7;
+  alphabet.split('').forEach(function (chr) { B[chr] = chr; });
+  return $assign({}, A)[symbol] != 7 || objectKeys($assign({}, B)).join('') != alphabet;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars -- required for `.length`
+  var T = toObject(target);
+  var argumentsLength = arguments.length;
+  var index = 1;
+  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
+  var propertyIsEnumerable = propertyIsEnumerableModule.f;
+  while (argumentsLength > index) {
+    var S = IndexedObject(arguments[index++]);
+    var keys = getOwnPropertySymbols ? objectKeys(S).concat(getOwnPropertySymbols(S)) : objectKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) {
+      key = keys[j++];
+      if (!DESCRIPTORS || propertyIsEnumerable.call(S, key)) T[key] = S[key];
+    }
+  } return T;
+} : $assign;
 
 
 /***/ }),
@@ -1342,7 +1417,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.17.1',
+  version: '3.17.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -1473,6 +1548,19 @@ module.exports = function (argument) {
 
 /***/ }),
 
+/***/ 1340:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isSymbol = __webpack_require__(2190);
+
+module.exports = function (argument) {
+  if (isSymbol(argument)) throw TypeError('Cannot convert a Symbol value to a string');
+  return String(argument);
+};
+
+
+/***/ }),
+
 /***/ 9711:
 /***/ ((module) => {
 
@@ -1587,41 +1675,98 @@ addToUnscopables('entries');
 
 /***/ }),
 
-/***/ 3948:
+/***/ 9601:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(7854);
-var DOMIterables = __webpack_require__(8324);
-var ArrayIteratorMethods = __webpack_require__(6992);
-var createNonEnumerableProperty = __webpack_require__(8880);
-var wellKnownSymbol = __webpack_require__(5112);
+var $ = __webpack_require__(2109);
+var assign = __webpack_require__(1574);
 
-var ITERATOR = wellKnownSymbol('iterator');
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var ArrayValues = ArrayIteratorMethods.values;
+// `Object.assign` method
+// https://tc39.es/ecma262/#sec-object.assign
+// eslint-disable-next-line es/no-object-assign -- required for testing
+$({ target: 'Object', stat: true, forced: Object.assign !== assign }, {
+  assign: assign
+});
 
-for (var COLLECTION_NAME in DOMIterables) {
-  var Collection = global[COLLECTION_NAME];
-  var CollectionPrototype = Collection && Collection.prototype;
-  if (CollectionPrototype) {
-    // some Chrome versions have non-configurable methods on DOMTokenList
-    if (CollectionPrototype[ITERATOR] !== ArrayValues) try {
-      createNonEnumerableProperty(CollectionPrototype, ITERATOR, ArrayValues);
-    } catch (error) {
-      CollectionPrototype[ITERATOR] = ArrayValues;
-    }
-    if (!CollectionPrototype[TO_STRING_TAG]) {
-      createNonEnumerableProperty(CollectionPrototype, TO_STRING_TAG, COLLECTION_NAME);
-    }
-    if (DOMIterables[COLLECTION_NAME]) for (var METHOD_NAME in ArrayIteratorMethods) {
-      // some Chrome versions have non-configurable methods on DOMTokenList
-      if (CollectionPrototype[METHOD_NAME] !== ArrayIteratorMethods[METHOD_NAME]) try {
-        createNonEnumerableProperty(CollectionPrototype, METHOD_NAME, ArrayIteratorMethods[METHOD_NAME]);
-      } catch (error) {
-        CollectionPrototype[METHOD_NAME] = ArrayIteratorMethods[METHOD_NAME];
-      }
-    }
+
+/***/ }),
+
+/***/ 2023:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var notARegExp = __webpack_require__(3929);
+var requireObjectCoercible = __webpack_require__(4488);
+var toString = __webpack_require__(1340);
+var correctIsRegExpLogic = __webpack_require__(4964);
+
+// `String.prototype.includes` method
+// https://tc39.es/ecma262/#sec-string.prototype.includes
+$({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
+  includes: function includes(searchString /* , position = 0 */) {
+    return !!~toString(requireObjectCoercible(this))
+      .indexOf(toString(notARegExp(searchString)), arguments.length > 1 ? arguments[1] : undefined);
   }
+});
+
+
+/***/ }),
+
+/***/ 1817:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// `Symbol.prototype.description` getter
+// https://tc39.es/ecma262/#sec-symbol.prototype.description
+
+var $ = __webpack_require__(2109);
+var DESCRIPTORS = __webpack_require__(9781);
+var global = __webpack_require__(7854);
+var has = __webpack_require__(6656);
+var isObject = __webpack_require__(111);
+var defineProperty = __webpack_require__(3070).f;
+var copyConstructorProperties = __webpack_require__(9920);
+
+var NativeSymbol = global.Symbol;
+
+if (DESCRIPTORS && typeof NativeSymbol == 'function' && (!('description' in NativeSymbol.prototype) ||
+  // Safari 12 bug
+  NativeSymbol().description !== undefined
+)) {
+  var EmptyStringDescriptionStore = {};
+  // wrap Symbol constructor for correct work with undefined description
+  var SymbolWrapper = function Symbol() {
+    var description = arguments.length < 1 || arguments[0] === undefined ? undefined : String(arguments[0]);
+    var result = this instanceof SymbolWrapper
+      ? new NativeSymbol(description)
+      // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
+      : description === undefined ? NativeSymbol() : NativeSymbol(description);
+    if (description === '') EmptyStringDescriptionStore[result] = true;
+    return result;
+  };
+  copyConstructorProperties(SymbolWrapper, NativeSymbol);
+  var symbolPrototype = SymbolWrapper.prototype = NativeSymbol.prototype;
+  symbolPrototype.constructor = SymbolWrapper;
+
+  var symbolToString = symbolPrototype.toString;
+  var nativeSymbol = String(NativeSymbol('test')) == 'Symbol(test)';
+  var regexp = /^Symbol\((.*)\)[^)]+$/;
+  defineProperty(symbolPrototype, 'description', {
+    configurable: true,
+    get: function description() {
+      var symbol = isObject(this) ? this.valueOf() : this;
+      var string = symbolToString.call(symbol);
+      if (has(EmptyStringDescriptionStore, symbol)) return '';
+      var desc = nativeSymbol ? string.slice(7, -1) : string.replace(regexp, '$1');
+      return desc === '' ? undefined : desc;
+    }
+  });
+
+  $({ global: true, forced: true }, {
+    Symbol: SymbolWrapper
+  });
 }
 
 
@@ -1654,30 +1799,6 @@ for (var COLLECTION_NAME in DOMIterables) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -1690,20 +1811,279 @@ for (var COLLECTION_NAME in DOMIterables) {
 /******/ 		})();
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6992);
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3948);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_1__);
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
+var es_symbol_description = __webpack_require__(1817);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(6992);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__(2023);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
+var es_object_assign = __webpack_require__(9601);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
+
+
+
+
+var Iterator = function () {
+  var clear = function clear() {
+    this.length = 0;
+    return this;
+  };
+
+  var callable = function callable(fn) {
+    if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
+    return fn;
+  };
+
+  var Iterator = function Iterator(list, context) {
+    if (!(this instanceof Iterator)) {
+      return new Iterator(list, context);
+    }
+
+    Object.defineProperties(this, {
+      __list__: {
+        writable: true,
+        value: list
+      },
+      __context__: {
+        writable: true,
+        value: context
+      },
+      __nextIndex__: {
+        writable: true,
+        value: 0
+      }
+    });
+    if (!context) return;
+    callable(context.on);
+    context.on('_add', this._onAdd.bind(this));
+    context.on('_delete', this._onDelete.bind(this));
+    context.on('_clear', this._onClear.bind(this));
+  };
+
+  Object.defineProperties(Iterator.prototype, Object.assign({
+    constructor: {
+      value: Iterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _next: {
+      value: function () {
+        var i;
+        if (!this.__list__) return;
+
+        if (this.__redo__) {
+          i = this.__redo__.shift();
+          if (i !== undefined) return i;
+        }
+
+        if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
+
+        this._unBind();
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    next: {
+      value: function () {
+        return this._createResult(this._next());
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _createResult: {
+      value: function (i) {
+        if (i === undefined) return {
+          done: true,
+          value: undefined
+        };
+        return {
+          done: false,
+          value: this._resolve(i)
+        };
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function (i) {
+        return this.__list__[i];
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _unBind: {
+      value: function () {
+        this.__list__ = null;
+        delete this.__redo__;
+        if (!this.__context__) return;
+
+        this.__context__.off('_add', this._onAdd.bind(this));
+
+        this.__context__.off('_delete', this._onDelete.bind(this));
+
+        this.__context__.off('_clear', this._onClear.bind(this));
+
+        this.__context__ = null;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function () {
+        return '[object Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }, {
+    _onAdd: {
+      value: function (index) {
+        if (index >= this.__nextIndex__) return;
+        ++this.__nextIndex__;
+
+        if (!this.__redo__) {
+          Object.defineProperty(this, '__redo__', {
+            value: [index],
+            configurable: true,
+            enumerable: false,
+            writable: false
+          });
+          return;
+        }
+
+        this.__redo__.forEach(function (redo, i) {
+          if (redo >= index) this.__redo__[i] = ++redo;
+        }, this);
+
+        this.__redo__.push(index);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onDelete: {
+      value: function (index) {
+        var i;
+        if (index >= this.__nextIndex__) return;
+        --this.__nextIndex__;
+        if (!this.__redo__) return;
+        i = this.__redo__.indexOf(index);
+        if (i !== -1) this.__redo__.splice(i, 1);
+
+        this.__redo__.forEach(function (redo, i) {
+          if (redo > index) this.__redo__[i] = --redo;
+        }, this);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onClear: {
+      value: function () {
+        if (this.__redo__) clear.call(this.__redo__);
+        this.__nextIndex__ = 0;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }));
+  Object.defineProperty(Iterator.prototype, Symbol.iterator, {
+    value: function () {
+      return this;
+    },
+    configurable: true,
+    enumerable: false,
+    writable: true
+  });
+  Object.defineProperty(Iterator.prototype, Symbol.toStringTag, {
+    value: 'Iterator',
+    configurable: false,
+    enumerable: false,
+    writable: true
+  });
+  return Iterator;
+}();
+
+/* harmony default export */ const _Iterator = (Iterator);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
+
+
+
+var ArrayIterator = function () {
+  var ArrayIterator = function ArrayIterator(arr, kind) {
+    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
+    _Iterator.call(this, arr);
+    if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
+    Object.defineProperty(this, '__kind__', {
+      value: kind,
+      configurable: false,
+      enumerable: false,
+      writable: false
+    });
+  };
+
+  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
+  ArrayIterator.prototype = Object.create(_Iterator.prototype, {
+    constructor: {
+      value: ArrayIterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function (i) {
+        if (this.__kind__ === 'value') return this.__list__[i];
+        if (this.__kind__ === 'key+value') return [i, this.__list__[i]];
+        return i;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function () {
+        return '[object Array Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  });
+  return ArrayIterator;
+}();
+
+/* harmony default export */ const _ArrayIterator = (ArrayIterator);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
+
+
+
+
+(function (undefined) {
+  if (!("Symbol" in self && "iterator" in self.Symbol && function () {
+    var e = document.createDocumentFragment();
+    return e.appendChild(document.createElement("div")), !!e.childNodes[self.Symbol.iterator];
+  }())) {
+    NodeList.prototype[Symbol.iterator] = function () {
+      return new _ArrayIterator(this);
+    };
+  }
+}).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
+;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.2.10.1.NodeList.prototype.@@iterator/test.pure.js
 
 
 

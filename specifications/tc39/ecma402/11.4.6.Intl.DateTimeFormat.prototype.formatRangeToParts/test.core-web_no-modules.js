@@ -1254,48 +1254,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ 8324:
-/***/ (function(module) {
-
-// iterable DOM collections
-// flag - `iterable` interface - 'entries', 'keys', 'values', 'forEach' methods
-module.exports = {
-  CSSRuleList: 0,
-  CSSStyleDeclaration: 0,
-  CSSValueList: 0,
-  ClientRectList: 0,
-  DOMRectList: 0,
-  DOMStringList: 0,
-  DOMTokenList: 1,
-  DataTransferItemList: 0,
-  FileList: 0,
-  HTMLAllCollection: 0,
-  HTMLCollection: 0,
-  HTMLFormElement: 0,
-  HTMLSelectElement: 0,
-  MediaList: 0,
-  MimeTypeArray: 0,
-  NamedNodeMap: 0,
-  NodeList: 1,
-  PaintRequestList: 0,
-  Plugin: 0,
-  PluginArray: 0,
-  SVGLengthList: 0,
-  SVGNumberList: 0,
-  SVGPathSegList: 0,
-  SVGPointList: 0,
-  SVGStringList: 0,
-  SVGTransformList: 0,
-  SourceBufferList: 0,
-  StyleSheetList: 0,
-  TextTrackCueList: 0,
-  TextTrackList: 0,
-  TouchList: 0
-};
-
-
-/***/ }),
-
 /***/ 8886:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -3464,7 +3422,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.17.1',
+  version: '3.17.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -6310,68 +6268,6 @@ if (NATIVE_WEAK_MAP && IS_IE11) {
 }
 
 
-/***/ }),
-
-/***/ 4747:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var global = __webpack_require__(7854);
-var DOMIterables = __webpack_require__(8324);
-var forEach = __webpack_require__(8533);
-var createNonEnumerableProperty = __webpack_require__(8880);
-
-for (var COLLECTION_NAME in DOMIterables) {
-  var Collection = global[COLLECTION_NAME];
-  var CollectionPrototype = Collection && Collection.prototype;
-  // some Chrome versions have non-configurable methods on DOMTokenList
-  if (CollectionPrototype && CollectionPrototype.forEach !== forEach) try {
-    createNonEnumerableProperty(CollectionPrototype, 'forEach', forEach);
-  } catch (error) {
-    CollectionPrototype.forEach = forEach;
-  }
-}
-
-
-/***/ }),
-
-/***/ 3948:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var global = __webpack_require__(7854);
-var DOMIterables = __webpack_require__(8324);
-var ArrayIteratorMethods = __webpack_require__(6992);
-var createNonEnumerableProperty = __webpack_require__(8880);
-var wellKnownSymbol = __webpack_require__(5112);
-
-var ITERATOR = wellKnownSymbol('iterator');
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var ArrayValues = ArrayIteratorMethods.values;
-
-for (var COLLECTION_NAME in DOMIterables) {
-  var Collection = global[COLLECTION_NAME];
-  var CollectionPrototype = Collection && Collection.prototype;
-  if (CollectionPrototype) {
-    // some Chrome versions have non-configurable methods on DOMTokenList
-    if (CollectionPrototype[ITERATOR] !== ArrayValues) try {
-      createNonEnumerableProperty(CollectionPrototype, ITERATOR, ArrayValues);
-    } catch (error) {
-      CollectionPrototype[ITERATOR] = ArrayValues;
-    }
-    if (!CollectionPrototype[TO_STRING_TAG]) {
-      createNonEnumerableProperty(CollectionPrototype, TO_STRING_TAG, COLLECTION_NAME);
-    }
-    if (DOMIterables[COLLECTION_NAME]) for (var METHOD_NAME in ArrayIteratorMethods) {
-      // some Chrome versions have non-configurable methods on DOMTokenList
-      if (CollectionPrototype[METHOD_NAME] !== ArrayIteratorMethods[METHOD_NAME]) try {
-        createNonEnumerableProperty(CollectionPrototype, METHOD_NAME, ArrayIteratorMethods[METHOD_NAME]);
-      } catch (error) {
-        CollectionPrototype[METHOD_NAME] = ArrayIteratorMethods[METHOD_NAME];
-      }
-    }
-  }
-}
-
-
 /***/ })
 
 /******/ 	});
@@ -6460,11 +6356,8 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
-var web_dom_collections_iterator = __webpack_require__(3948);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.getCanonicalLocales.js
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 
 
@@ -10152,7 +10045,6 @@ var es_json_to_string_tag = __webpack_require__(3706);
 var es_math_to_string_tag = __webpack_require__(2703);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.Locale.js
 function Intl_Locale_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_Locale_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_Locale_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_Locale_typeof(obj); }
-
 
 
 
@@ -15177,12 +15069,8 @@ var es_string_replace = __webpack_require__(5306);
 var es_set = __webpack_require__(189);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__(9554);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
-var web_dom_collections_for_each = __webpack_require__(4747);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.PluralRules.js
 function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_PluralRules_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_PluralRules_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_PluralRules_typeof(obj); }
-
-
 
 
 
@@ -16177,8 +16065,6 @@ function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sy
 var es_string_match = __webpack_require__(4723);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.NumberFormat.js
 function Intl_NumberFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_NumberFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_NumberFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_NumberFormat_typeof(obj); }
-
-
 
 
 
@@ -18727,8 +18613,6 @@ var es_parse_int = __webpack_require__(1058);
 var es_date_now = __webpack_require__(3843);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.js
 function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_DateTimeFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_DateTimeFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_DateTimeFormat_typeof(obj); }
-
-
 
 
 
@@ -21325,7 +21209,6 @@ function Intl_PluralRules_locale_en_typeof(obj) { "@babel/helpers - typeof"; if 
 
 
 
-
 (function (undefined) {
   if (!("Intl" in self && Intl.PluralRules && Intl.PluralRules.supportedLocalesOf && function () {
     try {
@@ -21357,7 +21240,6 @@ function Intl_PluralRules_locale_en_typeof(obj) { "@babel/helpers - typeof"; if 
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Intl_PluralRules_locale_en_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Intl_PluralRules_locale_en_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Intl_PluralRules_locale_en_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.NumberFormat.~locale.en.js
-
 
 
 
@@ -24658,7 +24540,6 @@ function Intl_NumberFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Intl_NumberFormat_locale_en_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Intl_NumberFormat_locale_en_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Intl_NumberFormat_locale_en_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.~locale.en.js
-
 
 
 
