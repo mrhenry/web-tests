@@ -3363,7 +3363,19 @@ var es_string_search = __webpack_require__(4765);
 
 
 (function (undefined) {
-  if (!("function" == typeof document.head.animate)) {
+  if (!("function" == typeof document.head.animate && function () {
+    try {
+      return !!document.createElement("DIV").animate({
+        opacity: [0, 1]
+      }, {
+        direction: "alternate",
+        duration: 1,
+        iterations: 1
+      });
+    } catch (t) {
+      return !1;
+    }
+  }())) {
     !function () {
       var a = {},
           b = {};

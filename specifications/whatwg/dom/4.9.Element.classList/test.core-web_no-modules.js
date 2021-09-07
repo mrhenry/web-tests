@@ -4548,9 +4548,19 @@ function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"
       return !1;
     }
   }())) {
-    DOMTokenList.prototype[Symbol.iterator] = function () {
-      return new _ArrayIterator(this);
-    };
+    (function (global) {
+      global.DOMTokenList.prototype[global.Symbol.iterator] = function () {
+        return new _ArrayIterator(this);
+      };
+
+      var e = document.createElement('span');
+
+      if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype[global.Symbol.iterator]) {
+        e.classList.constructor.prototype[global.Symbol.iterator] = function () {
+          return new _ArrayIterator(this);
+        };
+      }
+    })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
@@ -4640,7 +4650,14 @@ function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof";
 
 (function (undefined) {
   if (!("DOMTokenList" in self && "forEach" in self.DOMTokenList.prototype)) {
-    DOMTokenList.prototype.forEach = Array.prototype.forEach;
+    (function (global) {
+      global.DOMTokenList.prototype.forEach = global.Array.prototype.forEach;
+      var e = document.createElement('span');
+
+      if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype.forEach) {
+        e.classList.constructor.prototype.forEach = global.Array.prototype.forEach;
+      }
+    })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.9.Element.classList/test.pure.js

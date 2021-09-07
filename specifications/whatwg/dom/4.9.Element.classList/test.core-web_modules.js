@@ -2668,12 +2668,12 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__(2023);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__(9601);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(6992);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
@@ -3100,7 +3100,6 @@ var _DOMTokenList = function () {
 
 
 
-
 (function (undefined) {
   if (!("Symbol" in self && "iterator" in self.Symbol && function () {
     try {
@@ -3110,9 +3109,19 @@ var _DOMTokenList = function () {
       return !1;
     }
   }())) {
-    DOMTokenList.prototype[Symbol.iterator] = function () {
-      return new _ArrayIterator(this);
-    };
+    (function (global) {
+      global.DOMTokenList.prototype[global.Symbol.iterator] = function () {
+        return new _ArrayIterator(this);
+      };
+
+      var e = document.createElement('span');
+
+      if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype[global.Symbol.iterator]) {
+        e.classList.constructor.prototype[global.Symbol.iterator] = function () {
+          return new _ArrayIterator(this);
+        };
+      }
+    })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.9.Element.classList/test.pure.js
