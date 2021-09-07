@@ -1,4 +1,4 @@
-INSERT INTO `user_agents` (
+INSERT OR IGNORE INTO `user_agents` (
 	`browser_version`,
 	`browser`,
 	`os_version`,
@@ -9,5 +9,5 @@ INSERT INTO `user_agents` (
 	?,
 	?,
 	?,
-	?,
+	?
 );

@@ -9,6 +9,14 @@ CREATE TABLE IF NOT EXISTS `results` (
 	`hash` TEXT NOT NULL,
 	`priority` NUMERIC NOT NULL,
 	`score` NUMERIC NOT NULL,
-	PRIMARY KEY(`feature_id`,`test`,`browser`,`browser_version`,`os`,`os_version`),
+
+	PRIMARY KEY(
+		`browser_version`,
+		`browser`,
+		`feature_id`,
+		`os_version`,
+		`os`,
+		`test`
+	),
 	FOREIGN KEY(`feature_id`) REFERENCES `features`(`id`)
 );

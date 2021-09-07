@@ -5,5 +5,11 @@ CREATE TABLE IF NOT EXISTS `user_agents` (
 	`os` TEXT NOT NULL,
 	`ua` TEXT NOT NULL,
 
-	PRIMARY KEY(`ua`)
+	PRIMARY KEY(
+		`browser_version`,
+		`browser`,
+		`os_version`,
+		`os`,
+		`ua`
+	)
 );

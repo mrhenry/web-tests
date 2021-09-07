@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -17,7 +16,7 @@ import (
 func main() {
 	db, err := store.NewSqliteDatabase("./web-tests.db", false)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	featureDirs := []string{}
@@ -36,7 +35,7 @@ func main() {
 		return nil
 	})
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	for _, featureDir := range featureDirs {
@@ -45,7 +44,7 @@ func main() {
 		{
 			f, err := os.Open(filepath.Join(featureDir, "meta.json"))
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			defer f.Close()
@@ -54,31 +53,19 @@ func main() {
 
 			err = decoder.Decode(&feature)
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			err = f.Close()
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			feature.Dir = featureDir
 
-			ok, err := store.ExistsFeature(context.Background(), db, feature)
+			err = store.UpsertFeature(context.Background(), db, feature)
 			if err != nil {
-				log.Fatal(err)
-			}
-
-			if !ok {
-				err = store.InsertFeature(context.Background(), db, feature)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				err = store.UpdateFeature(context.Background(), db, feature)
-				if err != nil {
-					log.Fatal(err)
-				}
+				panic(err)
 			}
 		}
 
@@ -96,14 +83,14 @@ func main() {
 				return nil
 			})
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			for _, resultPath := range resultPaths {
 				result := result.Result{}
 				fR, err := os.Open(resultPath)
 				if err != nil {
-					log.Fatal(err)
+					panic(err)
 				}
 
 				testName := testRegExp.FindStringSubmatch(resultPath)[1]
@@ -114,32 +101,20 @@ func main() {
 
 				err = decoder.Decode(&result)
 				if err != nil {
-					log.Fatal(err)
+					panic(err)
 				}
 
 				err = fR.Close()
 				if err != nil {
-					log.Fatal(err)
+					panic(err)
 				}
 
 				result.FeatureID = feature.ID
 				result.Test = testName
 
-				ok, err := store.ExistsResult(context.Background(), db, result)
+				err = store.UpsertResult(context.Background(), db, result)
 				if err != nil {
-					log.Fatal(err)
-				}
-
-				if !ok {
-					err = store.InsertResult(context.Background(), db, result)
-					if err != nil {
-						log.Fatal(err)
-					}
-				} else {
-					err = store.UpdateResult(context.Background(), db, result)
-					if err != nil {
-						log.Fatal(err)
-					}
+					panic(err)
 				}
 			}
 		}

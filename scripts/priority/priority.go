@@ -6,3 +6,9 @@ type Fingerprint struct {
 	BrowserKey     string `json:"browser_key"`
 	PolyfillIOHash string `json:"polyfill.io_hash"`
 }
+
+type PolyfillIOHash struct {
+	List []string `json:"list"`
+	UA   string   `json:"ua"`
+	Hash string   `json:"hash"`
+}

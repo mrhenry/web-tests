@@ -2,19 +2,18 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
-	"sort"
 	"sync"
 	"syscall"
 	"time"
 
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
+	"github.com/mrhenry/web-tests/scripts/store"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
 )
@@ -28,6 +27,11 @@ func main() {
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	db, err := store.NewSqliteDatabase("./data/data.db", false)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	doneChan := make(chan bool, 1)
 
@@ -64,7 +68,7 @@ func main() {
 		default:
 		}
 
-		run(processCtx, runnerCtx, i, browsers)
+		run(processCtx, runnerCtx, db, i, browsers)
 	}
 
 	go func() {
@@ -79,13 +83,13 @@ func main() {
 	<-doneChan
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, browsers []browserstack.Browser) {
+func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, browsers []browserstack.Browser) {
 	doneChan := make(chan bool, 1)
 	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
 	defer cancel()
 
 	mu := &sync.Mutex{}
-	uas := map[string]*browserua.BrowserUAs{}
+	uas := []browserua.UserAgent{}
 
 	go func() {
 		select {
@@ -152,7 +156,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 			mu.Lock()
 			defer mu.Unlock()
-			uas[browserUAs.Key] = browserUAs
+			uas = append(uas, browserUAs...)
 
 		}(browser)
 	}
@@ -180,13 +184,15 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	<-doneChan
 	mu.Lock()
 	defer mu.Unlock()
-	err = updateUAs(uas)
-	if err != nil {
-		log.Println(err)
+	for _, ua := range uas {
+		err := store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
-func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) (*browserua.BrowserUAs, error) {
+func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) ([]browserua.UserAgent, error) {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*2)
 	defer cancel()
 
@@ -222,10 +228,18 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 		return nil, err
 	}
 
-	return &browserua.BrowserUAs{
-		Key: browser.ResultKey(),
-		UAs: uaStrings,
-	}, nil
+	out := []browserua.UserAgent{}
+	for _, uaString := range uaStrings {
+		out = append(out, browserua.UserAgent{
+			BrowserVersion: browser.BrowserVersion,
+			Browser:        browser.Browser,
+			OSVersion:      browser.OSVersion,
+			OS:             browser.OS,
+			UserAgent:      uaString,
+		})
+	}
+
+	return out, nil
 }
 
 func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
@@ -243,8 +257,9 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 	}
 
 	chunks := [][]browserstack.Browser{}
-	for i := 0; i < len(browsers); i += 20 {
-		end := i + 20
+	limit := 20
+	for i := 0; i < len(browsers); i += limit {
+		end := i + limit
 
 		if end > len(browsers) {
 			end = len(browsers)
@@ -256,83 +271,13 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 	return chunks, nil
 }
 
-func updateUAs(uas map[string]*browserua.BrowserUAs) error {
-	existing := existingUAs()
-
-	f, err := os.Create("data/uas.json")
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-
-	for k, browser := range uas {
-		if b, ok := existing[k]; ok {
-			b.UAs = append(b.UAs, browser.UAs...)
-			b.UAs = uniqueStringSlice(b.UAs)
-			existing[k] = b
-		} else {
-			browser.UAs = uniqueStringSlice(browser.UAs)
-			existing[k] = browser
+func updateUAs(ctx context.Context, db *sql.DB, uas []browserua.UserAgent) error {
+	for _, ua := range uas {
+		err := store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			return err
 		}
-	}
-
-	b, err := json.MarshalIndent(existing, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	_, err = f.Write(b)
-	if err != nil {
-		return err
-	}
-
-	_, err = f.WriteString("\n")
-	if err != nil {
-		return err
 	}
 
 	return nil
-}
-
-func existingUAs() map[string]*browserua.BrowserUAs {
-
-	f, err := os.Open("data/uas.json")
-	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
-	}
-
-	defer f.Close()
-
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
-	}
-
-	existing := map[string]*browserua.BrowserUAs{}
-	err = json.Unmarshal(b, &existing)
-	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
-	}
-
-	return existing
-}
-
-func uniqueStringSlice(s []string) []string {
-	track := make(map[string]bool, len(s))
-	unique := make([]string, 0, len(s))
-	for _, elem := range s {
-		if elem == "" {
-			continue
-		}
-
-		if _, ok := track[elem]; !ok {
-			unique = append(unique, elem)
-			track[elem] = true
-		}
-	}
-
-	sort.Strings(unique)
-
-	return unique
 }

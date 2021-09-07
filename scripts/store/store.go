@@ -11,7 +11,9 @@ import (
 	_ "embed"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/mrhenry/web-tests/scripts/browserua"
 	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/priority"
 	"github.com/mrhenry/web-tests/scripts/result"
 )
 
@@ -82,13 +84,22 @@ func migrate(ctx context.Context, db *sql.DB) error {
 //go:embed insert_feature.sql
 var insertFeatureQuery string
 
-func InsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) error {
+func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) error {
+	ok, err := ExistsFeature(ctx, db, x)
+	if err != nil {
+		return err
+	}
+
+	if ok {
+		return UpdateFeature(ctx, db, x)
+	}
+
 	notes, _ := json.Marshal(x.Notes)
 	polyfillIO, _ := json.Marshal(x.PolyfillIO)
 	searchTerms, _ := json.Marshal(x.SearchTerms)
 	spec, _ := json.Marshal(x.Spec)
 
-	_, err := db.ExecContext(
+	_, err = db.ExecContext(
 		ctx,
 		insertFeatureQuery,
 
@@ -112,12 +123,24 @@ func InsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 var updateFeatureQuery string
 
 func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) error {
-	notes, _ := json.Marshal(x.Notes)
-	polyfillIO, _ := json.Marshal(x.PolyfillIO)
-	searchTerms, _ := json.Marshal(x.SearchTerms)
-	spec, _ := json.Marshal(x.Spec)
+	notes, err := json.Marshal(x.Notes)
+	if err != nil {
+		panic(err)
+	}
+	polyfillIO, err := json.Marshal(x.PolyfillIO)
+	if err != nil {
+		panic(err)
+	}
+	searchTerms, err := json.Marshal(x.SearchTerms)
+	if err != nil {
+		panic(err)
+	}
+	spec, err := json.Marshal(x.Spec)
+	if err != nil {
+		panic(err)
+	}
 
-	_, err := db.ExecContext(
+	_, err = db.ExecContext(
 		ctx,
 		updateFeatureQuery,
 
@@ -201,10 +224,15 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	return x, nil
 }
 
+//go:embed exists_feature.sql
+var existsFeatureQuery string
+
 func ExistsFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) (bool, error) {
+	count := 0
+
 	row := db.QueryRowContext(
 		ctx,
-		selectFeatureQuery,
+		existsFeatureQuery,
 
 		x.ID,
 	)
@@ -213,18 +241,37 @@ func ExistsFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		return false, nil
 	}
 	if row.Err() != nil {
-		log.Printf("Error %s when selecting a result", err)
+		log.Printf("Error %s when checking if feature exists", err)
+		return false, err
+	}
+	err = row.Scan(&count)
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+	if err != nil {
+		log.Printf("Error %s when scanning a selected result", err)
 		return false, err
 	}
 
-	return true, nil
+	return count > 0, nil
 }
 
 //go:embed insert_result.sql
 var insertResultQuery string
 
-func InsertResult(ctx context.Context, db *sql.DB, x result.Result) error {
-	_, err := db.ExecContext(
+func UpsertResult(ctx context.Context, db *sql.DB, x result.Result) error {
+	ok, err := ExistsResult(ctx, db, x)
+	if err != nil {
+		return err
+	}
+
+	if ok {
+		return UpdateResultWithPriorityShift(ctx, db, x)
+	}
+
+	x.Priority = 5
+
+	_, err = db.ExecContext(
 		ctx,
 		insertResultQuery,
 
@@ -252,6 +299,51 @@ var updateResultQuery string
 
 func UpdateResult(ctx context.Context, db *sql.DB, x result.Result) error {
 	_, err := db.ExecContext(
+		ctx,
+		updateResultQuery,
+
+		x.Hash,
+		x.Priority,
+		x.Score,
+
+		x.BrowserVersion,
+		x.Browser,
+		x.FeatureID,
+		x.OSVersion,
+		x.OS,
+		x.Test,
+	)
+	if err != nil {
+		log.Printf("Error %s when updating a result", err)
+		return err
+	}
+
+	return nil
+}
+
+func UpdateResultWithPriorityShift(ctx context.Context, db *sql.DB, x result.Result) error {
+	existing := result.Result{
+		BrowserVersion: x.BrowserVersion,
+		Browser:        x.Browser,
+		FeatureID:      x.FeatureID,
+		OSVersion:      x.OSVersion,
+		OS:             x.OS,
+		Test:           x.Test,
+	}
+
+	existing, err := SelectResult(ctx, db, x)
+	if err != nil {
+		return err
+	}
+
+	if existing.Score == x.Score {
+		x.Priority = x.Priority - 1
+		if x.Priority < 0 {
+			x.Priority = 0
+		}
+	}
+
+	_, err = db.ExecContext(
 		ctx,
 		updateResultQuery,
 
@@ -310,10 +402,15 @@ func SelectResult(ctx context.Context, db *sql.DB, x result.Result) (result.Resu
 	return x, nil
 }
 
+//go:embed exists_result.sql
+var existsResultQuery string
+
 func ExistsResult(ctx context.Context, db *sql.DB, x result.Result) (bool, error) {
+	count := 0
+
 	row := db.QueryRowContext(
 		ctx,
-		selectResultQuery,
+		existsResultQuery,
 
 		x.BrowserVersion,
 		x.Browser,
@@ -331,7 +428,213 @@ func ExistsResult(ctx context.Context, db *sql.DB, x result.Result) (bool, error
 		return false, err
 	}
 
-	return true, nil
+	err = row.Scan(&count)
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+	if err != nil {
+		log.Printf("Error %s when scanning a selected result", err)
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+//go:embed insert_user-agent.sql
+var insertUserAgentQuery string
+
+func InsertUserAgent(ctx context.Context, db *sql.DB, x browserua.UserAgent) error {
+	_, err := db.ExecContext(
+		ctx,
+		insertUserAgentQuery,
+
+		x.BrowserVersion,
+		x.Browser,
+		x.OSVersion,
+		x.OS,
+		x.UserAgent,
+	)
+	if err != nil {
+		log.Printf("Error %s when inserting a user agent", err)
+		return err
+	}
+
+	return nil
+}
+
+//go:embed select_all_user-agents.sql
+var selectAllUserAgentsQuery string
+
+func SelectAlUserAgents(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectAllUserAgentsQuery,
+	)
+	if err == sql.ErrNoRows {
+		return []browserua.UserAgent{}, nil
+	}
+
+	uas := []browserua.UserAgent{}
+	for rows.Next() {
+		ua := browserua.UserAgent{}
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent)
+		if err != nil {
+			log.Printf("Error %s when scanning all user agents", err)
+			return nil, err
+		}
+
+		uas = append(uas, ua)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents", err)
+		return nil, err
+	}
+
+	return uas, nil
+}
+
+//go:embed select_results_for_ua.sql
+var selectResultsForUAQuery string
+
+func SelectResultsForUA(ctx context.Context, db *sql.DB, ua browserua.UserAgent) ([]result.Result, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectResultsForUAQuery,
+		ua.UserAgent,
+	)
+	if err == sql.ErrNoRows {
+		return []result.Result{}, nil
+	}
+
+	results := []result.Result{}
+	for rows.Next() {
+		r := result.Result{}
+		err = rows.Scan(
+			&r.BrowserVersion,
+			&r.Browser,
+			&r.FeatureID,
+			&r.OSVersion,
+			&r.OS,
+			&r.Test,
+			&r.Hash,
+			&r.Priority,
+			&r.Score,
+		)
+		if err != nil {
+			log.Printf("Error %s when scanning results for ua", err)
+			return nil, err
+		}
+
+		results = append(results, r)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning results for ua", err)
+		return nil, err
+	}
+
+	return results, nil
+}
+
+//go:embed insert_polyfillio_hash.sql
+var insertPolyfillIOHashQuery string
+
+func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) error {
+	list, err := json.Marshal(x.List)
+	if err != nil {
+		panic(err)
+	}
+
+	existing := priority.PolyfillIOHash{
+		List: x.List,
+		UA:   x.UA,
+	}
+	existing, err = SelectPolyfillIOHash(ctx, db, existing)
+	if err == sql.ErrNoRows {
+		_, err = db.ExecContext(
+			ctx,
+			insertPolyfillIOHashQuery,
+
+			list,
+			x.UA,
+
+			x.Hash,
+		)
+		if err != nil {
+			log.Printf("Error %s when inserting a polyfill.io hash", err)
+			return err
+		}
+
+		return nil
+	}
+
+	if existing.Hash == x.Hash {
+		return nil
+	}
+
+	_, err = db.ExecContext(
+		ctx,
+		insertPolyfillIOHashQuery,
+
+		x.List,
+		x.UA,
+		x.Hash,
+	)
+	if err != nil {
+		log.Printf("Error %s when inserting a polyfill.io hash", err)
+		return err
+	}
+
+	results, err := SelectResultsForUA(ctx, db, browserua.UserAgent{UserAgent: x.UA})
+	if err != nil {
+		return err
+	}
+
+	for _, r := range results {
+		r.Priority = r.Priority + 1
+		if r.Priority > 10 {
+			r.Priority = 10
+		}
+		err = UpdateResult(ctx, db, r)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+//go:embed select_polyfillio_hash.sql
+var selectPolyfillIOHashQuery string
+
+func SelectPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) (priority.PolyfillIOHash, error) {
+	row := db.QueryRowContext(
+		ctx,
+		selectResultQuery,
+
+		x.List,
+		x.UA,
+	)
+	err := row.Err()
+	if err == sql.ErrNoRows {
+		return x, err
+	}
+	if row.Err() != nil {
+		log.Printf("Error %s when selecting a polyfill.io hash", err)
+		return x, err
+	}
+
+	err = row.Scan(&x.Hash)
+	if err == sql.ErrNoRows {
+		return x, err
+	}
+	if err != nil {
+		log.Printf("Error %s when scanning a selected polyfill.io hash", err)
+		return x, err
+	}
+
+	return x, nil
 }
 
 func GetTestsForBrowser(ctx context.Context, db *sql.DB, browser string, browserVersion string) {

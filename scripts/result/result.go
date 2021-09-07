@@ -9,6 +9,6 @@ type Result struct {
 	Test           string `json:"test"`
 
 	Hash     string  `json:"hash"`
-	Priority string  `json:"priority"`
+	Priority int     `json:"priority"`
 	Score    float64 `json:"score"`
 }

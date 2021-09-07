@@ -1,8 +1,16 @@
 CREATE TABLE IF NOT EXISTS `polyfillio_hashes` (
-	`feature_id` TEXT NOT NULL,
+	`polyfill_io_list` TEXT NOT NULL,
 	`ua` TEXT NOT NULL,
 
 	`hash` TEXT NOT NULL,
 
-	PRIMARY KEY(`feature_id`,`ua`)
+	PRIMARY KEY(
+		`polyfill_io_list`,
+		`ua`
+	)
+
+	UNIQUE(
+		`polyfill_io_list`,
+		`ua`
+	) ON CONFLICT REPLACE
 );

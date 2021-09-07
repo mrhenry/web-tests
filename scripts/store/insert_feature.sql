@@ -3,7 +3,7 @@ INSERT INTO `features` (
 	
 	`directory`,
 	`notes`,
-	`polyfill_io`,
+	`polyfill_io_list`,
 	`search_terms`,
 	`spec`
 ) VALUES (
@@ -14,4 +14,4 @@ INSERT INTO `features` (
 	?,
 	?,
 	?
-);
+)
