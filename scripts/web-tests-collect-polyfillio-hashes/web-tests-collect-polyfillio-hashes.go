@@ -8,13 +8,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"sort"
 	"strings"
 	"sync"
 
 	"github.com/mrhenry/web-tests/scripts/browserua"
-	"github.com/mrhenry/web-tests/scripts/feature"
 	"github.com/mrhenry/web-tests/scripts/priority"
 	"github.com/mrhenry/web-tests/scripts/store"
 	"golang.org/x/sync/semaphore"
@@ -31,7 +29,7 @@ func main() {
 		panic(err)
 	}
 
-	mapping, err := getMapping()
+	mapping, err := store.SelectAllFeatures(context.Background(), db)
 	if err != nil {
 		panic(err)
 	}
@@ -124,27 +122,4 @@ func getPolyfillIOContent(p []string, browser browserua.UserAgent) ([]byte, erro
 	}
 
 	return b, nil
-}
-
-func getMapping() (feature.Mapping, error) {
-	f, err := os.Open("lib/mapping.json")
-	if err != nil {
-		return nil, err
-	}
-
-	defer f.Close()
-
-	b, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-
-	out := feature.Mapping{}
-
-	err = json.Unmarshal(b, &out)
-	if err != nil {
-		return nil, err
-	}
-
-	return out, nil
 }

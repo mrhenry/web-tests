@@ -231,6 +231,79 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	return x, nil
 }
 
+//go:embed select_all_features.sql
+var selectAllFeaturesQuery string
+
+func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapping, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectAllFeaturesQuery,
+	)
+	if err == sql.ErrNoRows {
+		return []feature.FeatureInMapping{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	features := []feature.FeatureInMapping{}
+	for rows.Next() {
+		x := feature.FeatureInMapping{}
+		notesStr := ""
+		polyfillIOStr := ""
+		searchTermsStr := ""
+		specStr := ""
+
+		err = rows.Scan(&x.ID, &x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr)
+		if err == sql.ErrNoRows {
+			return nil, err
+		}
+		if err != nil {
+			log.Printf("Error %s when scanning a selected result", err)
+			return nil, err
+		}
+
+		if notesStr != "" {
+			err = json.Unmarshal([]byte(notesStr), &x.Notes)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if polyfillIOStr != "" {
+			err = json.Unmarshal([]byte(polyfillIOStr), &x.PolyfillIO)
+			if err != nil {
+				return nil, err
+			}
+
+			sort.Strings(x.PolyfillIO)
+		}
+
+		if searchTermsStr != "" {
+			err = json.Unmarshal([]byte(searchTermsStr), &x.SearchTerms)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if specStr != "" {
+			err = json.Unmarshal([]byte(specStr), &x.Spec)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		features = append(features, x)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents", err)
+		return nil, err
+	}
+
+	return features, nil
+}
+
 //go:embed exists_feature.sql
 var existsFeatureQuery string
 

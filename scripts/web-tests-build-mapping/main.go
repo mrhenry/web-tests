@@ -1,9 +1,8 @@
 package main
 
 import (
-	"bytes"
+	"context"
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -11,13 +10,18 @@ import (
 	"strings"
 
 	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/store"
 )
 
 func main() {
-	featureDirs := []string{}
-	features := feature.Mapping{}
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
+	if err != nil {
+		panic(err)
+	}
 
-	err := filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
+	featureDirs := []string{}
+
+	err = filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -59,35 +63,10 @@ func main() {
 		}
 
 		item.Dir = featureDir
-		features[item.ID] = item
-	}
 
-	{
-		f, err := os.Create("./lib/mapping.json")
+		err = store.UpsertFeature(context.Background(), db, item)
 		if err != nil {
-			log.Fatal(err)
-		}
-
-		defer f.Close()
-
-		b, err := json.MarshalIndent(features, "", "  ")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		_, err = io.Copy(f, bytes.NewBuffer(b))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		_, err = f.WriteString("\n")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = f.Close()
-		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 	}
 }
