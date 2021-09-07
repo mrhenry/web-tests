@@ -1,13 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
+	"database/sql"
 	"flag"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -22,6 +19,8 @@ import (
 	ua "github.com/mileusna/useragent"
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/result"
+	"github.com/mrhenry/web-tests/scripts/store"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
 )
@@ -32,6 +31,11 @@ func main() {
 
 	runnerCtx, runnerCancel := context.WithCancel(processCtx)
 	defer runnerCancel()
+
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
+	if err != nil {
+		panic(err)
+	}
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
@@ -63,7 +67,7 @@ func main() {
 
 	flag.Parse()
 
-	testChunks, err := testsChunked(testFilterArg)
+	testChunks, err := testsChunked(processCtx, db, testFilterArg)
 	if err != nil {
 		log.Println(err) // non-fatal for us
 		return
@@ -80,7 +84,7 @@ func main() {
 		default:
 		}
 
-		run(processCtx, runnerCtx, i, tests, browserFilterArg)
+		run(processCtx, runnerCtx, db, i, tests, browserFilterArg)
 	}
 
 	go func() {
@@ -95,7 +99,7 @@ func main() {
 	<-doneChan
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, tests []browserstack.Test, browserFilter string) {
+func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, tests []browserstack.Test, browserFilter string) {
 	doneChan := make(chan bool, 1)
 	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
 	defer cancel()
@@ -126,7 +130,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
-	mapping, err := getMapping()
+	mapping, err := getMapping(ctx, db)
 	if err != nil {
 		log.Println(err)
 		return
@@ -198,7 +202,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 			time.Sleep(time.Second * 5)
 
-			err = runTest(ctx, client, b, tests, sessionName, mapping)
+			err = runTest(ctx, db, client, b, tests, sessionName, mapping)
 			if err != nil {
 				log.Println(err) // non-fatal for us
 			}
@@ -228,7 +232,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	<-doneChan
 }
 
-func runTest(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping feature.Mapping) error {
+func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping feature.Mapping) error {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*10)
 	defer cancel()
 
@@ -313,7 +317,7 @@ func runTest(parentCtx context.Context, client *browserstack.Client, browser bro
 	}
 
 	for _, testResult := range testResults {
-		err = writeResults(browser, testResult, mapping)
+		err = writeResults(ctx, db, browser, testResult, mapping)
 		if err != nil {
 			return err
 		}
@@ -344,24 +348,31 @@ func getTestPaths() ([]string, error) {
 	return files, nil
 }
 
-func writeResults(browser browserstack.Browser, test browserstack.Test, mapping feature.Mapping) error {
+var writeSema = semaphore.NewWeighted(1)
+
+func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser, test browserstack.Test, mapping feature.Mapping) error {
+	if err := writeSema.Acquire(ctx, 1); err != nil {
+		return err
+	}
+
+	defer writeSema.Release(1)
+
+	r := result.Result{
+		OS:        browser.OS,
+		OSVersion: browser.OSVersion,
+	}
+
 	if test.DidRun() == false {
 		return nil
 	}
-
-	resultsDir := ""
 	if item, ok := mapping[test.MappingID()]; ok {
-		resultsDir = filepath.Join(item.Dir, "results", test.MappingTestName())
-		err := os.MkdirAll(resultsDir, os.ModePerm)
-		if err != nil {
-			return err
-		}
+		r.FeatureID = item.ID
+		r.Test = test.MappingTestName()
 	} else {
 		return fmt.Errorf("not found in mapping %s", test.MappingID())
 	}
 
 	ua := ua.Parse(test.UserAgent)
-	key := ""
 	version, err := reallyTolerantSemver(ua.Version)
 	if err != nil {
 		log.Println("version", ua.Version)
@@ -384,164 +395,88 @@ func writeResults(browser browserstack.Browser, test browserstack.Test, mapping 
 	if strings.ToLower(browser.OS) == "ios" {
 		browserName = "safari"
 		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
-		key = fmt.Sprintf("%s:%s", "ios", browserVersion)
 	} else if browserName == "safari" {
 		browserName = "safari"
 		browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
-		key = fmt.Sprintf("%s:%s", browserName, browserVersion)
+	}
+
+	r.Browser = browserName
+	r.BrowserVersion = browserVersion
+
+	newResult := false
+	r, err = store.SelectResult(ctx, db, r)
+	if err == sql.ErrNoRows {
+		newResult = true
+		err = nil
+	}
+	if err != nil {
+		return err
+	}
+
+	var newScore float64 = 0
+	if test.Success() {
+		newScore = 1
+	}
+
+	if newResult {
+		r.Score = newScore
+	}
+
+	if r.Score > 0.2 && test.Success() {
+		// Test is succeeding and seems to be going up.
+		r.Score = r.Score + 0.1
+	} else if r.Score > 0.1 && test.Success() {
+		// Test appears to be succeeding and might to be going up.
+		r.Score = r.Score + 0.05
+	} else if r.Score < 0.8 && !test.Success() {
+		// Test is failing and seems to be going down.
+		r.Score = r.Score - 0.02
+	} else if r.Score < 0.9 && !test.Success() {
+		// Test appears to be failing and might to be going down.
+		r.Score = r.Score - 0.02
 	} else {
-		key = fmt.Sprintf("%s:%s", browserName, browserVersion)
+		// Test might go either way.
+		r.Score = (r.Score - 0.01) + (newScore * 0.02)
 	}
 
-	resultsPath := filepath.Join(resultsDir, fmt.Sprintf("%s.json", key))
-
-	results := map[string]interface{}{
-		"os":              browser.OS,
-		"os_version":      browser.OSVersion,
-		"browser":         browserName,
-		"browser_version": browserVersion,
+	if r.Score > 1 {
+		r.Score = 1
 	}
 
-	{
-		f1, err := os.Open(resultsPath)
-		if os.IsNotExist(err) {
-			f1, err = os.Create(resultsPath)
-		}
-		if err != nil {
-			return err
-		}
-
-		defer f1.Close()
-
-		{
-			b, err := ioutil.ReadAll(f1)
-			if err != nil {
-				return err
-			}
-
-			if len(b) > 0 {
-				err = json.Unmarshal(b, &results)
-				if err != nil {
-					return err
-				}
-			}
-		}
-
-		var newScore float64 = 0
-		if test.Success() {
-			newScore = 1
-		}
-
-		if _, ok := results["score"]; !ok {
-			results["score"] = newScore
-		}
-
-		var score float64
-		v := results["score"]
-		if vv, ok := v.(float64); ok {
-			score = vv
-		} else if vv, ok := v.(int); ok {
-			score = float64(vv)
-		}
-
-		if score > 0.2 && test.Success() {
-			// Test is succeeding and seems to be going up.
-			score = score + 0.1
-		} else if score > 0.1 && test.Success() {
-			// Test appears to be succeeding and might to be going up.
-			score = score + 0.05
-		} else if score < 0.8 && !test.Success() {
-			// Test is failing and seems to be going down.
-			score = score - 0.02
-		} else if score < 0.9 && !test.Success() {
-			// Test appears to be failing and might to be going down.
-			score = score - 0.02
-		} else {
-			// Test might go either way.
-			score = (score - 0.01) + (newScore * 0.02)
-		}
-
-		if score > 1 {
-			score = 1
-		}
-
-		if score < 0.00099 {
-			score = 0
-		}
-
-		results["score"] = score
-		results["browser"] = browserName
-		results["browser_version"] = browserVersion
-
-		err = f1.Close()
-		if err != nil {
-			return err
-		}
+	if r.Score < 0.00099 {
+		r.Score = 0
 	}
 
-	{
-		f2, err := os.Create(resultsPath)
-		if err != nil {
-			return err
-		}
-
-		defer f2.Close()
-
-		b, err := json.MarshalIndent(results, "", "  ")
-		if err != nil {
-			return err
-		}
-
-		_, err = io.Copy(f2, bytes.NewBuffer(b))
-		if err != nil {
-			return err
-		}
-
-		_, err = f2.WriteString("\n")
-		if err != nil {
-			return err
-		}
-
-		err = f2.Close()
-		if err != nil {
-			return err
-		}
+	err = store.UpsertResult(ctx, db, r)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func getMapping() (feature.Mapping, error) {
-	f, err := os.Open("lib/mapping.json")
-	if err != nil {
-		return nil, err
-	}
-
-	defer f.Close()
-
-	b, err := ioutil.ReadAll(f)
+func getMapping(ctx context.Context, db *sql.DB) (feature.Mapping, error) {
+	allFeatures, err := store.SelectAllFeatures(ctx, db)
 	if err != nil {
 		return nil, err
 	}
 
 	out := feature.Mapping{}
-
-	err = json.Unmarshal(b, &out)
-	if err != nil {
-		return nil, err
+	for _, feature := range allFeatures {
+		out[feature.ID] = feature
 	}
 
 	return out, nil
 }
 
-func testsChunked(testFilter string) ([][]browserstack.Test, error) {
+func testsChunked(ctx context.Context, db *sql.DB, testFilter string) ([][]browserstack.Test, error) {
 	tests := []browserstack.Test{}
 	testPaths, err := getTestPaths()
 	if err != nil {
 		return nil, err
 	}
 
-	mapping, err := getMapping()
+	mapping, err := getMapping(ctx, db)
 	if err != nil {
 		return nil, err
 	}

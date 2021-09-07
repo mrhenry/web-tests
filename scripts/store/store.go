@@ -421,6 +421,11 @@ func UpdateResultWithPriorityShift(ctx context.Context, db *sql.DB, x result.Res
 		if x.Priority < 0 {
 			x.Priority = 0
 		}
+	} else {
+		x.Priority = x.Priority + 1
+		if x.Priority > 10 {
+			x.Priority = 10
+		}
 	}
 
 	_, err = db.ExecContext(
