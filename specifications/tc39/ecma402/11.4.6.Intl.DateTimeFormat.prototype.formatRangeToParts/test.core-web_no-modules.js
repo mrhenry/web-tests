@@ -18654,7 +18654,10 @@ function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof
   if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatToParts" in self.Intl.DateTimeFormat.prototype && "dayPeriod" === new self.Intl.DateTimeFormat("en", {
     hourCycle: "h11",
     hour: "numeric"
-  }).formatToParts(0)[2].type)) {
+  }).formatToParts(0)[2].type && "formatRangeToParts" in self.Intl.DateTimeFormat.prototype && "dayPeriod" === new self.Intl.DateTimeFormat("en", {
+    hourCycle: "h11",
+    hour: "numeric"
+  }).formatRangeToParts(0, 1)[2].type)) {
     (function () {
       var _extendStatics = function extendStatics(d, b) {
         _extendStatics = Object.setPrototypeOf || {
@@ -24550,7 +24553,7 @@ function Intl_NumberFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if
 function Intl_DateTimeFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_DateTimeFormat_locale_en_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_DateTimeFormat_locale_en_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_DateTimeFormat_locale_en_typeof(obj); }
 
 (function (undefined) {
-  if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatToParts" in self.Intl.DateTimeFormat && self.Intl.DateTimeFormat.supportedLocalesOf("en").length)) {
+  if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatRangeToParts" in self.Intl.DateTimeFormat && self.Intl.DateTimeFormat.supportedLocalesOf("en").length)) {
     if (Intl.DateTimeFormat && typeof Intl.DateTimeFormat.__addLocaleData === 'function') {
       Intl.DateTimeFormat.__addLocaleData({
         "data": {

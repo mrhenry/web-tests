@@ -4351,6 +4351,21 @@ addToUnscopables('entries');
 
 /***/ }),
 
+/***/ 5837:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+
+// `globalThis` object
+// https://tc39.es/ecma262/#sec-globalthis
+$({ global: true }, {
+  globalThis: global
+});
+
+
+/***/ }),
+
 /***/ 8674:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -6797,32 +6812,34 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__(8674);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.global-this.js
+var es_global_this = __webpack_require__(5837);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
 var es_array_iterator = __webpack_require__(6992);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.url.js
-var web_url = __webpack_require__(285);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
-var es_array_buffer_constructor = __webpack_require__(8264);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.slice.js
 var es_array_buffer_slice = __webpack_require__(9575);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
+var es_array_buffer_constructor = __webpack_require__(8264);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.uint8-array.js
 var es_typed_array_uint8_array = __webpack_require__(2472);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.sort.js
 var es_typed_array_sort = __webpack_require__(3824);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.to-locale-string.js
 var es_typed_array_to_locale_string = __webpack_require__(2974);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.url.js
+var web_url = __webpack_require__(285);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__(9714);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(5306);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3210);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(5306);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
 
 
@@ -6838,17 +6855,25 @@ var es_string_replace = __webpack_require__(5306);
 
 
 
+
 (function (undefined) {
-  if (!("fetch" in self)) {
+  if (!("fetch" in self && "Request" in self && function () {
+    try {
+      return "signal" in new Request("");
+    } catch (e) {
+      return !1;
+    }
+  }())) {
     (function (global, factory) {
       typeof exports === 'object' && "object" !== 'undefined' ? factory(exports) : typeof define === 'function' && __webpack_require__.amdO ? define(['exports'], factory) : factory(global.WHATWGFetch = {});
     })(this, function (exports) {
       'use strict';
 
+      var global = typeof globalThis !== 'undefined' && globalThis || typeof self !== 'undefined' && self || typeof global !== 'undefined' && global;
       var support = {
-        searchParams: 'URLSearchParams' in self,
-        iterable: 'Symbol' in self && 'iterator' in Symbol,
-        blob: 'FileReader' in self && 'Blob' in self && function () {
+        searchParams: 'URLSearchParams' in global,
+        iterable: 'Symbol' in global && 'iterator' in Symbol,
+        blob: 'FileReader' in global && 'Blob' in global && function () {
           try {
             new Blob();
             return true;
@@ -6856,8 +6881,8 @@ var es_string_replace = __webpack_require__(5306);
             return false;
           }
         }(),
-        formData: 'FormData' in self,
-        arrayBuffer: 'ArrayBuffer' in self
+        formData: 'FormData' in global,
+        arrayBuffer: 'ArrayBuffer' in global
       };
 
       function isDataView(obj) {
@@ -6877,8 +6902,8 @@ var es_string_replace = __webpack_require__(5306);
           name = String(name);
         }
 
-        if (/[^a-z0-9\-#$%&'*+.^_`|~]/i.test(name)) {
-          throw new TypeError('Invalid character in header field name');
+        if (/[^a-z0-9\-#$%&'*+.^_`|~!]/i.test(name) || name === '') {
+          throw new TypeError('Invalid character in header field name: "' + name + '"');
         }
 
         return name.toLowerCase();
@@ -7049,6 +7074,7 @@ var es_string_replace = __webpack_require__(5306);
         this.bodyUsed = false;
 
         this._initBody = function (body) {
+          this.bodyUsed = this.bodyUsed;
           this._bodyInit = body;
 
           if (!body) {
@@ -7102,7 +7128,17 @@ var es_string_replace = __webpack_require__(5306);
 
           this.arrayBuffer = function () {
             if (this._bodyArrayBuffer) {
-              return consumed(this) || Promise.resolve(this._bodyArrayBuffer);
+              var isConsumed = consumed(this);
+
+              if (isConsumed) {
+                return isConsumed;
+              }
+
+              if (ArrayBuffer.isView(this._bodyArrayBuffer)) {
+                return Promise.resolve(this._bodyArrayBuffer.buffer.slice(this._bodyArrayBuffer.byteOffset, this._bodyArrayBuffer.byteOffset + this._bodyArrayBuffer.byteLength));
+              } else {
+                return Promise.resolve(this._bodyArrayBuffer);
+              }
             } else {
               return this.blob().then(readBlobAsArrayBuffer);
             }
@@ -7148,6 +7184,10 @@ var es_string_replace = __webpack_require__(5306);
       }
 
       function Request(input, options) {
+        if (!(this instanceof Request)) {
+          throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.');
+        }
+
         options = options || {};
         var body = options.body;
 
@@ -7191,6 +7231,19 @@ var es_string_replace = __webpack_require__(5306);
         }
 
         this._initBody(body);
+
+        if (this.method === 'GET' || this.method === 'HEAD') {
+          if (options.cache === 'no-store' || options.cache === 'no-cache') {
+            var reParamSearch = /([?&])_=[^&]*/;
+
+            if (reParamSearch.test(this.url)) {
+              this.url = this.url.replace(reParamSearch, '$1_=' + new Date().getTime());
+            } else {
+              var reQueryString = /\?/;
+              this.url += (reQueryString.test(this.url) ? '&' : '?') + '_=' + new Date().getTime();
+            }
+          }
+        }
       }
 
       Request.prototype.clone = function () {
@@ -7215,7 +7268,9 @@ var es_string_replace = __webpack_require__(5306);
       function parseHeaders(rawHeaders) {
         var headers = new Headers();
         var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
-        preProcessedHeaders.split(/\r?\n/).forEach(function (line) {
+        preProcessedHeaders.split('\r').map(function (header) {
+          return header.indexOf('\n') === 0 ? header.substr(1, header.length) : header;
+        }).forEach(function (line) {
           var parts = line.split(':');
           var key = parts.shift().trim();
 
@@ -7230,6 +7285,10 @@ var es_string_replace = __webpack_require__(5306);
       Body.call(Request.prototype);
 
       function Response(bodyInit, options) {
+        if (!(this instanceof Response)) {
+          throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.');
+        }
+
         if (!options) {
           options = {};
         }
@@ -7237,7 +7296,7 @@ var es_string_replace = __webpack_require__(5306);
         this.type = 'default';
         this.status = options.status === undefined ? 200 : options.status;
         this.ok = this.status >= 200 && this.status < 300;
-        this.statusText = 'statusText' in options ? options.statusText : 'OK';
+        this.statusText = options.statusText === undefined ? '' : '' + options.statusText;
         this.headers = new Headers(options.headers);
         this.url = options.url || '';
 
@@ -7279,7 +7338,7 @@ var es_string_replace = __webpack_require__(5306);
         });
       };
 
-      exports.DOMException = self.DOMException;
+      exports.DOMException = global.DOMException;
 
       try {
         new exports.DOMException();
@@ -7317,22 +7376,38 @@ var es_string_replace = __webpack_require__(5306);
             };
             options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
             var body = 'response' in xhr ? xhr.response : xhr.responseText;
-            resolve(new Response(body, options));
+            setTimeout(function () {
+              resolve(new Response(body, options));
+            }, 0);
           };
 
           xhr.onerror = function () {
-            reject(new TypeError('Network request failed'));
+            setTimeout(function () {
+              reject(new TypeError('Network request failed'));
+            }, 0);
           };
 
           xhr.ontimeout = function () {
-            reject(new TypeError('Network request failed'));
+            setTimeout(function () {
+              reject(new TypeError('Network request failed'));
+            }, 0);
           };
 
           xhr.onabort = function () {
-            reject(new exports.DOMException('Aborted', 'AbortError'));
+            setTimeout(function () {
+              reject(new exports.DOMException('Aborted', 'AbortError'));
+            }, 0);
           };
 
-          xhr.open(request.method, request.url, true);
+          function fixUrl(url) {
+            try {
+              return url === '' && global.location.href ? global.location.href : url;
+            } catch (e) {
+              return url;
+            }
+          }
+
+          xhr.open(request.method, fixUrl(request.url), true);
 
           if (request.credentials === 'include') {
             xhr.withCredentials = true;
@@ -7340,13 +7415,23 @@ var es_string_replace = __webpack_require__(5306);
             xhr.withCredentials = false;
           }
 
-          if ('responseType' in xhr && support.blob) {
-            xhr.responseType = 'blob';
+          if ('responseType' in xhr) {
+            if (support.blob) {
+              xhr.responseType = 'blob';
+            } else if (support.arrayBuffer && request.headers.get('Content-Type') && request.headers.get('Content-Type').indexOf('application/octet-stream') !== -1) {
+              xhr.responseType = 'arraybuffer';
+            }
           }
 
-          request.headers.forEach(function (value, name) {
-            xhr.setRequestHeader(name, value);
-          });
+          if (init && typeof init.headers === 'object' && !(init.headers instanceof Headers)) {
+            Object.getOwnPropertyNames(init.headers).forEach(function (name) {
+              xhr.setRequestHeader(name, normalizeValue(init.headers[name]));
+            });
+          } else {
+            request.headers.forEach(function (value, name) {
+              xhr.setRequestHeader(name, value);
+            });
+          }
 
           if (request.signal) {
             request.signal.addEventListener('abort', abortXhr);
@@ -7363,10 +7448,10 @@ var es_string_replace = __webpack_require__(5306);
       }
 
       fetch.polyfill = true;
-      self.fetch = fetch;
-      self.Headers = Headers;
-      self.Request = Request;
-      self.Response = Response;
+      global.fetch = fetch;
+      global.Headers = Headers;
+      global.Request = Request;
+      global.Response = Response;
       exports.Headers = Headers;
       exports.Request = Request;
       exports.Response = Response;

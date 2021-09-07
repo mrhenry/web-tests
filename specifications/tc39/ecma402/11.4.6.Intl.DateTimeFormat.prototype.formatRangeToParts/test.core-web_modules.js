@@ -5,7 +5,7 @@
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 (function (undefined) {
-  if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatToParts" in self.Intl.DateTimeFormat && self.Intl.DateTimeFormat.supportedLocalesOf("en").length)) {
+  if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatRangeToParts" in self.Intl.DateTimeFormat && self.Intl.DateTimeFormat.supportedLocalesOf("en").length)) {
     if (Intl.DateTimeFormat && typeof Intl.DateTimeFormat.__addLocaleData === 'function') {
       Intl.DateTimeFormat.__addLocaleData({
         "data": {
@@ -21266,7 +21266,10 @@ var es_string_match = __webpack_require__(4723);
   if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatToParts" in self.Intl.DateTimeFormat.prototype && "dayPeriod" === new self.Intl.DateTimeFormat("en", {
     hourCycle: "h11",
     hour: "numeric"
-  }).formatToParts(0)[2].type)) {
+  }).formatToParts(0)[2].type && "formatRangeToParts" in self.Intl.DateTimeFormat.prototype && "dayPeriod" === new self.Intl.DateTimeFormat("en", {
+    hourCycle: "h11",
+    hour: "numeric"
+  }).formatRangeToParts(0, 1)[2].type)) {
     (function () {
       var _extendStatics = function extendStatics(d, b) {
         _extendStatics = Object.setPrototypeOf || {

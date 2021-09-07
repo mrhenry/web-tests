@@ -4927,6 +4927,12 @@ function IntersectionObserver_typeof(obj) { "@babel/helpers - typeof"; if (typeo
     (function (window, document) {
       'use strict';
 
+      var supportedNatively = 'IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype;
+
+      if (supportedNatively) {
+        return;
+      }
+
       var registry = [];
 
       function IntersectionObserverEntry(entry) {

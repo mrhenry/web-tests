@@ -4959,6 +4959,93 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
+var es_date_now = __webpack_require__(3843);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__(3710);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
+var web_timers = __webpack_require__(2564);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
+var es_symbol = __webpack_require__(2526);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
+var es_symbol_description = __webpack_require__(1817);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string = __webpack_require__(1539);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
+var es_symbol_iterator = __webpack_require__(2165);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(6992);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
+var es_string_iterator = __webpack_require__(8783);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/requestAnimationFrame.js
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+
+
+
+
+
+
+
+(function (undefined) {
+  if (!("requestAnimationFrame" in self)) {
+    (function (global) {
+      var rafPrefix;
+      var nowOffset = Date.now();
+
+      var pnow = function pnow() {
+        if (global.performance && typeof global.performance.now === 'function') {
+          return global.performance.now();
+        }
+
+        return Date.now() - nowOffset;
+      };
+
+      if ('mozRequestAnimationFrame' in global) {
+        rafPrefix = 'moz';
+      } else if ('webkitRequestAnimationFrame' in global) {
+        rafPrefix = 'webkit';
+      }
+
+      if (rafPrefix) {
+        global.requestAnimationFrame = function (callback) {
+          return global[rafPrefix + 'RequestAnimationFrame'](function () {
+            callback(pnow());
+          });
+        };
+
+        global.cancelAnimationFrame = global[rafPrefix + 'CancelAnimationFrame'];
+      } else {
+        var lastTime = Date.now();
+
+        global.requestAnimationFrame = function (callback) {
+          if (typeof callback !== 'function') {
+            throw new TypeError(callback + ' is not a function');
+          }
+
+          var currentTime = Date.now(),
+              delay = 16 + lastTime - currentTime;
+
+          if (delay < 0) {
+            delay = 0;
+          }
+
+          lastTime = currentTime;
+          return setTimeout(function () {
+            lastTime = Date.now();
+            callback(pnow());
+          }, delay);
+        };
+
+        global.cancelAnimationFrame = function (id) {
+          clearTimeout(id);
+        };
+      }
+    })(self);
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.fill.js
 var es_array_fill = __webpack_require__(3290);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
@@ -4987,36 +5074,18 @@ var es_array_last_index_of = __webpack_require__(4986);
 var es_array_is_array = __webpack_require__(9753);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
 var es_array_sort = __webpack_require__(2707);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
-var es_symbol = __webpack_require__(2526);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
-var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
-var es_object_to_string = __webpack_require__(1539);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
-var es_symbol_iterator = __webpack_require__(2165);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__(6992);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
-var es_string_iterator = __webpack_require__(8783);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.from.js
 var es_array_from = __webpack_require__(1038);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__(7327);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3710);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__(5306);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
 var es_object_define_property = __webpack_require__(9070);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__(2222);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
-var es_date_now = __webpack_require__(3843);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__(2564);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__(5827);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
@@ -5030,7 +5099,7 @@ var es_string_trim = __webpack_require__(3210);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.search.js
 var es_string_search = __webpack_require__(4765);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { WebAnimations_typeof = function _typeof(obj) { return typeof obj; }; } else { WebAnimations_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return WebAnimations_typeof(obj); }
 
 
 
@@ -5068,7 +5137,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 (function (undefined) {
-  if (!("function" == typeof document.head.animate)) {
+  if (!("function" == typeof document.head.animate && function () {
+    try {
+      return !!document.createElement("DIV").animate({
+        opacity: [0, 1]
+      }, {
+        direction: "alternate",
+        duration: 1,
+        iterations: 1
+      });
+    } catch (t) {
+      return !1;
+    }
+  }())) {
     !function () {
       var a = {},
           b = {};
@@ -7038,7 +7119,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                 }
 
                 if (/left|right|center|Object/.test(f[0]) && /top|bottom|center|Object/.test(f[1])) return f.map(function (a) {
-                  return "object" == _typeof(a) ? a : g[a];
+                  return "object" == WebAnimations_typeof(a) ? a : g[a];
                 });
               }
             }
@@ -7202,7 +7283,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }(a);
     }();
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : WebAnimations_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : WebAnimations_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : WebAnimations_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
 
 
@@ -7226,6 +7307,7 @@ function document_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol ===
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/web-animations-1/4.3.2.document.timeline/test.pure.js
+
 
 
 

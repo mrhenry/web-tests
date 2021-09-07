@@ -2217,6 +2217,12 @@ var es_string_split = __webpack_require__(3123);
     (function (window, document) {
       'use strict';
 
+      var supportedNatively = 'IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype;
+
+      if (supportedNatively) {
+        return;
+      }
+
       var registry = [];
 
       function IntersectionObserverEntry(entry) {
