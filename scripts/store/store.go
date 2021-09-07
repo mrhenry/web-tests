@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sort"
 	"time"
 
 	_ "embed"
@@ -94,6 +95,8 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		return UpdateFeature(ctx, db, x)
 	}
 
+	sort.Strings(x.PolyfillIO)
+
 	notes, _ := json.Marshal(x.Notes)
 	polyfillIO, _ := json.Marshal(x.PolyfillIO)
 	searchTerms, _ := json.Marshal(x.SearchTerms)
@@ -123,6 +126,8 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 var updateFeatureQuery string
 
 func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) error {
+	sort.Strings(x.PolyfillIO)
+
 	notes, err := json.Marshal(x.Notes)
 	if err != nil {
 		panic(err)
@@ -205,6 +210,8 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		if err != nil {
 			return x, err
 		}
+
+		sort.Strings(x.PolyfillIO)
 	}
 
 	if searchTermsStr != "" {
@@ -473,6 +480,9 @@ func SelectAlUserAgents(ctx context.Context, db *sql.DB) ([]browserua.UserAgent,
 	if err == sql.ErrNoRows {
 		return []browserua.UserAgent{}, nil
 	}
+	if err != nil {
+		return nil, err
+	}
 
 	uas := []browserua.UserAgent{}
 	for rows.Next() {
@@ -505,6 +515,9 @@ func SelectResultsForUA(ctx context.Context, db *sql.DB, ua browserua.UserAgent)
 	)
 	if err == sql.ErrNoRows {
 		return []result.Result{}, nil
+	}
+	if err != nil {
+		return nil, err
 	}
 
 	results := []result.Result{}
@@ -541,6 +554,7 @@ func SelectResultsForUA(ctx context.Context, db *sql.DB, ua browserua.UserAgent)
 var insertPolyfillIOHashQuery string
 
 func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) error {
+	sort.Strings(x.List)
 	list, err := json.Marshal(x.List)
 	if err != nil {
 		panic(err)
@@ -609,14 +623,20 @@ func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIO
 var selectPolyfillIOHashQuery string
 
 func SelectPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) (priority.PolyfillIOHash, error) {
+	sort.Strings(x.List)
+	list, err := json.Marshal(x.List)
+	if err != nil {
+		panic(err)
+	}
+
 	row := db.QueryRowContext(
 		ctx,
-		selectResultQuery,
+		selectPolyfillIOHashQuery,
 
-		x.List,
+		list,
 		x.UA,
 	)
-	err := row.Err()
+	err = row.Err()
 	if err == sql.ErrNoRows {
 		return x, err
 	}

@@ -7,15 +7,19 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 
+	"github.com/hashicorp/go-version"
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
 	"github.com/mrhenry/web-tests/scripts/store"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
+
+	ua "github.com/mileusna/useragent"
 )
 
 func main() {
@@ -28,7 +32,7 @@ func main() {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	db, err := store.NewSqliteDatabase("./data/data.db", false)
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -230,9 +234,37 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 
 	out := []browserua.UserAgent{}
 	for _, uaString := range uaStrings {
+		ua := ua.Parse(uaString)
+		version, err := reallyTolerantSemver(ua.Version)
+		if err != nil {
+			log.Println("version", ua.Version)
+			log.Println("browser version", browser.BrowserVersion)
+			log.Println("os version", browser.OSVersion)
+			log.Println(err)
+
+			if browser.OSVersion != "" {
+				version, err = reallyTolerantSemver(browser.OSVersion)
+			} else {
+				version, err = reallyTolerantSemver(browser.BrowserVersion)
+			}
+		}
+		if err != nil {
+			panic(err)
+		}
+
+		browserName := strings.ToLower(browser.Browser)
+		browserVersion := browser.BrowserVersion
+		if strings.ToLower(browser.OS) == "ios" {
+			browserName = "safari"
+			browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
+		} else if browserName == "safari" {
+			browserName = "safari"
+			browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
+		}
+
 		out = append(out, browserua.UserAgent{
-			BrowserVersion: browser.BrowserVersion,
-			Browser:        browser.Browser,
+			BrowserVersion: browserVersion,
+			Browser:        browserName,
 			OSVersion:      browser.OSVersion,
 			OS:             browser.OS,
 			UserAgent:      uaString,
@@ -280,4 +312,17 @@ func updateUAs(ctx context.Context, db *sql.DB, uas []browserua.UserAgent) error
 	}
 
 	return nil
+}
+
+func reallyTolerantSemver(v string) (*version.Version, error) {
+	switch strings.Count(v, ".") {
+	case 2:
+		return version.NewVersion(v)
+	case 1:
+		return version.NewVersion(v + ".0")
+	case 0:
+		return version.NewVersion(v + ".0.0")
+	default:
+		return version.NewVersion(v)
+	}
 }

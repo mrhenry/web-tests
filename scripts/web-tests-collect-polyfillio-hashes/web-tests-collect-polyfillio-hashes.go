@@ -6,10 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -21,80 +21,84 @@ import (
 )
 
 func main() {
-	db, err := store.NewSqliteDatabase("./data/data.db", false)
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	uas, err := store.SelectAlUserAgents(context.Background(), db)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	mapping, err := getMapping()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	mu := &sync.Mutex{}
 
 	sema := semaphore.NewWeighted(20)
 
-	i := 0
+	polyfillsMap := map[string][]string{}
 	for _, f := range mapping {
 		if len(f.PolyfillIO) > 0 {
+			sort.Strings(f.PolyfillIO)
+			b, err := json.Marshal(f.PolyfillIO)
+			if err != nil {
+				panic(err)
+			}
 
-			j := 0
-			for _, browser := range uas {
-				if err := sema.Acquire(context.Background(), 1); err != nil {
-					log.Fatal(err)
+			polyfillsMap[string(b)] = f.PolyfillIO
+		}
+	}
+
+	for _, polyfills := range polyfillsMap {
+		for _, browser := range uas {
+			if err := sema.Acquire(context.Background(), 1); err != nil {
+				panic(err)
+			}
+
+			go func(p []string, browser browserua.UserAgent) {
+				defer sema.Release(1)
+
+				browserB := map[string][]byte{}
+
+				b, err := getPolyfillIOContent(p, browser)
+				if err != nil {
+					panic(err)
 				}
 
-				go func(i int, iLen int, j int, jLen int, f feature.FeatureInMapping, browser browserua.UserAgent) {
-					defer sema.Release(1)
+				singleSum := sha256.Sum256(b)
 
-					browserB := map[string][]byte{}
+				browserB[fmt.Sprintf("%x", singleSum)] = b
 
-					b, err := getPolyfillIOContent(f, browser)
-					if err != nil {
-						panic(err)
-					}
+				parts := []byte{}
+				for _, b := range browserB {
+					parts = append(parts, b...)
+				}
 
-					singleSum := sha256.Sum256(b)
+				sum := sha256.Sum256(parts)
 
-					browserB[fmt.Sprintf("%x", singleSum)] = b
+				mu.Lock()
+				defer mu.Unlock()
+				store.InsertPolyfillIOHash(context.Background(), db, priority.PolyfillIOHash{
+					List: p,
+					UA:   browser.UserAgent,
+					Hash: fmt.Sprintf("%x", sum),
+				})
 
-					parts := []byte{}
-					for _, b := range browserB {
-						parts = append(parts, b...)
-					}
-
-					sum := sha256.Sum256(parts)
-
-					mu.Lock()
-					defer mu.Unlock()
-					store.InsertPolyfillIOHash(context.Background(), db, priority.PolyfillIOHash{
-						List: f.PolyfillIO,
-						UA:   browser.UserAgent,
-						Hash: fmt.Sprintf("%x", sum),
-					})
-
-				}(i, len(mapping), j, len(uas), f, browser)
-
-				j++
-			}
+			}(polyfills, browser)
 		}
-
-		i++
 	}
 
 	if err := sema.Acquire(context.Background(), 20); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
 
-func getPolyfillIOContent(f feature.FeatureInMapping, browser browserua.UserAgent) ([]byte, error) {
-	polyfills := url.QueryEscape(strings.Join(f.PolyfillIO, ","))
+func getPolyfillIOContent(p []string, browser browserua.UserAgent) ([]byte, error) {
+	polyfills := url.QueryEscape(strings.Join(p, ","))
 
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://polyfill.io/v3/polyfill.min.js?features=%s", polyfills), nil)
 	if err != nil {
