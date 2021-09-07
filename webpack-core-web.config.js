@@ -43,7 +43,11 @@ module.exports = [
 												"Firefox >= 60"
 											]
 										},
-										useBuiltIns: 'usage'
+										useBuiltIns: 'usage',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
 									}
 								]
 							]
@@ -87,7 +91,11 @@ module.exports = [
 												"Firefox >= 60"
 											]
 										},
-										useBuiltIns: 'usage'
+										useBuiltIns: 'usage',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
 									}
 								]
 							]
@@ -143,7 +151,11 @@ module.exports = [
 												"Firefox >= 4"
 											]
 										},
-										useBuiltIns: 'usage'
+										useBuiltIns: 'usage',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
 									}
 								]
 							]
@@ -189,7 +201,11 @@ module.exports = [
 												"Firefox >= 4"
 											]
 										},
-										useBuiltIns: 'usage'
+										useBuiltIns: 'usage',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
 									}
 								]
 							]
