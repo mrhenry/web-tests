@@ -73,7 +73,7 @@ func main() {
 		return
 	}
 
-	for i, tests := range testChunks {
+	for i := 0; i < 10; i++ {
 		if i > 0 {
 			time.Sleep(time.Second * 15)
 		}
@@ -84,7 +84,7 @@ func main() {
 		default:
 		}
 
-		run(processCtx, runnerCtx, db, i, tests, browserFilterArg)
+		run(processCtx, runnerCtx, db, i, testChunks[i], browserFilterArg)
 	}
 
 	go func() {

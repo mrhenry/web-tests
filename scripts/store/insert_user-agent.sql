@@ -1,10 +1,12 @@
-INSERT OR IGNORE INTO `user_agents` (
+INSERT OR REPLACE INTO `user_agents` (
 	`browser_version`,
 	`browser`,
 	`os_version`,
 	`os`,
-	`ua`
+	`ua`,
+	`browserstack`
 ) VALUES (
+	?,
 	?,
 	?,
 	?,

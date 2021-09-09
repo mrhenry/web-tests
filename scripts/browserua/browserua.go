@@ -11,4 +11,5 @@ type UserAgent struct {
 	OS             string `json:"os"`
 	OSVersion      string `json:"os_version"`
 	UserAgent      string `json:"ua"`
+	BrowserStack   int    `json:"browserstack"`
 }

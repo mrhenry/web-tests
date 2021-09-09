@@ -101,6 +101,7 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	polyfillIO, _ := json.Marshal(x.PolyfillIO)
 	searchTerms, _ := json.Marshal(x.SearchTerms)
 	spec, _ := json.Marshal(x.Spec)
+	tests, _ := json.Marshal(x.Tests)
 
 	_, err = db.ExecContext(
 		ctx,
@@ -113,6 +114,7 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		polyfillIO,
 		searchTerms,
 		spec,
+		tests,
 	)
 	if err != nil {
 		log.Printf("Error %s when inserting a feature", err)
@@ -144,6 +146,10 @@ func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	if err != nil {
 		panic(err)
 	}
+	tests, err := json.Marshal(x.Tests)
+	if err != nil {
+		panic(err)
+	}
 
 	_, err = db.ExecContext(
 		ctx,
@@ -154,6 +160,7 @@ func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		polyfillIO,
 		searchTerms,
 		spec,
+		tests,
 
 		x.ID,
 	)
@@ -188,8 +195,9 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	polyfillIOStr := ""
 	searchTermsStr := ""
 	specStr := ""
+	testsStr := ""
 
-	err = row.Scan(&x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr)
+	err = row.Scan(&x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr, &testsStr)
 	if err == sql.ErrNoRows {
 		return x, err
 	}
@@ -228,6 +236,13 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		}
 	}
 
+	if testsStr != "" {
+		err = json.Unmarshal([]byte(testsStr), &x.Tests)
+		if err != nil {
+			return x, err
+		}
+	}
+
 	return x, nil
 }
 
@@ -253,8 +268,9 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 		polyfillIOStr := ""
 		searchTermsStr := ""
 		specStr := ""
+		testsStr := ""
 
-		err = rows.Scan(&x.ID, &x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr)
+		err = rows.Scan(&x.ID, &x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr, &testsStr)
 		if err == sql.ErrNoRows {
 			return nil, err
 		}
@@ -288,6 +304,13 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 
 		if specStr != "" {
 			err = json.Unmarshal([]byte(specStr), &x.Spec)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if testsStr != "" {
+			err = json.Unmarshal([]byte(testsStr), &x.Tests)
 			if err != nil {
 				return nil, err
 			}
@@ -538,6 +561,7 @@ func InsertUserAgent(ctx context.Context, db *sql.DB, x browserua.UserAgent) err
 		x.OSVersion,
 		x.OS,
 		x.UserAgent,
+		x.BrowserStack,
 	)
 	if err != nil {
 		log.Printf("Error %s when inserting a user agent", err)
@@ -550,7 +574,7 @@ func InsertUserAgent(ctx context.Context, db *sql.DB, x browserua.UserAgent) err
 //go:embed select_all_user-agents.sql
 var selectAllUserAgentsQuery string
 
-func SelectAlUserAgents(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
+func SelectAllUserAgents(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
 	rows, err := db.QueryContext(
 		ctx,
 		selectAllUserAgentsQuery,
@@ -565,7 +589,116 @@ func SelectAlUserAgents(ctx context.Context, db *sql.DB) ([]browserua.UserAgent,
 	uas := []browserua.UserAgent{}
 	for rows.Next() {
 		ua := browserua.UserAgent{}
-		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent)
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent, &ua.BrowserStack)
+		if err != nil {
+			log.Printf("Error %s when scanning all user agents", err)
+			return nil, err
+		}
+
+		uas = append(uas, ua)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents", err)
+		return nil, err
+	}
+
+	return uas, nil
+}
+
+//go:embed select_all_user-agents_for_browser.sql
+var selectAllUserAgentsForBrowserQuery string
+
+func SelectAllUserAgentsForBrowser(ctx context.Context, db *sql.DB, browser browserua.UserAgent) ([]browserua.UserAgent, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectAllUserAgentsForBrowserQuery,
+		browser.BrowserVersion,
+		browser.Browser,
+		browser.OSVersion,
+		browser.OS,
+	)
+	if err == sql.ErrNoRows {
+		return []browserua.UserAgent{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	uas := []browserua.UserAgent{}
+	for rows.Next() {
+		ua := browserua.UserAgent{}
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent, &ua.BrowserStack)
+		if err != nil {
+			log.Printf("Error %s when scanning all user agents", err)
+			return nil, err
+		}
+
+		uas = append(uas, ua)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents", err)
+		return nil, err
+	}
+
+	return uas, nil
+}
+
+//go:embed select_all_browsers.sql
+var selectAllBrowsersQuery string
+
+func SelectAllBrowsers(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectAllBrowsersQuery,
+	)
+	if err == sql.ErrNoRows {
+		return []browserua.UserAgent{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	uas := []browserua.UserAgent{}
+	for rows.Next() {
+		ua := browserua.UserAgent{}
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent, &ua.BrowserStack)
+		if err != nil {
+			log.Printf("Error %s when scanning all browsers", err)
+			return nil, err
+		}
+
+		uas = append(uas, ua)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all browsers", err)
+		return nil, err
+	}
+
+	return uas, nil
+}
+
+//go:embed select_browsers_by_priority.sql
+var selectBrowsersByPriorityQuery string
+
+func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectBrowsersByPriorityQuery,
+	)
+	if err == sql.ErrNoRows {
+		return []browserua.UserAgent{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	uas := []browserua.UserAgent{}
+	for rows.Next() {
+		ua := browserua.UserAgent{}
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS)
 		if err != nil {
 			log.Printf("Error %s when scanning all user agents", err)
 			return nil, err
@@ -622,6 +755,52 @@ func SelectResultsForUA(ctx context.Context, db *sql.DB, ua browserua.UserAgent)
 
 	if rows.Err() != nil {
 		log.Printf("Error %s when scanning results for ua", err)
+		return nil, err
+	}
+
+	return results, nil
+}
+
+//go:embed select_results_for_feature.sql
+var selectResultsForFeatureQuery string
+
+func SelectResultsForFeature(ctx context.Context, db *sql.DB, feature feature.FeatureInMapping) ([]result.Result, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectResultsForFeatureQuery,
+		feature.ID,
+	)
+	if err == sql.ErrNoRows {
+		return []result.Result{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	results := []result.Result{}
+	for rows.Next() {
+		r := result.Result{}
+		err = rows.Scan(
+			&r.BrowserVersion,
+			&r.Browser,
+			&r.FeatureID,
+			&r.OSVersion,
+			&r.OS,
+			&r.Test,
+			&r.Hash,
+			&r.Priority,
+			&r.Score,
+		)
+		if err != nil {
+			log.Printf("Error %s when scanning results for feature", err)
+			return nil, err
+		}
+
+		results = append(results, r)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning results for feature", err)
 		return nil, err
 	}
 

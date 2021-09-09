@@ -4,5 +4,6 @@ SET
 	`notes` = ?,
 	`polyfill_io_list` = ?,
 	`search_terms` = ?,
-	`spec` = ?
+	`spec` = ?,
+	`tests` = ?
 WHERE `id` = ?;

@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/result"
 	"github.com/mrhenry/web-tests/scripts/store"
 )
 
@@ -67,6 +68,75 @@ func main() {
 		err = store.UpsertFeature(context.Background(), db, item)
 		if err != nil {
 			panic(err)
+		}
+
+		results, err := store.SelectResultsForFeature(context.Background(), db, item)
+		if err != nil {
+			panic(err)
+		}
+
+		hashMap := map[string]string{}
+
+		if len(results) > 0 {
+
+			for _, r := range results {
+				hash, ok := hashMap[r.Test]
+				if !ok {
+					hash, err = item.ContentHashForTest(r.Test)
+					if err != nil {
+						panic(err)
+					}
+
+					hashMap[r.Test] = hash
+				}
+
+				if hash != r.Hash {
+					r.Hash = hash
+					r.Priority = r.Priority + 1
+					if r.Priority > 10 {
+						r.Priority = 10
+					}
+					err = store.UpdateResult(context.Background(), db, r)
+					if err != nil {
+						panic(err)
+					}
+				}
+			}
+		} else {
+			allUAs, err := store.SelectAllBrowsers(context.Background(), db)
+			if err != nil {
+				panic(err)
+			}
+
+			for _, ua := range allUAs {
+				for test := range item.Tests {
+					hash, ok := hashMap[test]
+					if !ok {
+						hash, err = item.ContentHashForTest(test)
+						if err != nil {
+							panic(err)
+						}
+
+						hashMap[test] = hash
+					}
+
+					err = store.UpsertResult(context.Background(), db, result.Result{
+						Browser:        ua.Browser,
+						BrowserVersion: ua.BrowserVersion,
+						FeatureID:      item.ID,
+						OS:             ua.OS,
+						OSVersion:      ua.OSVersion,
+						Test:           test,
+
+						Hash:     hash,
+						Priority: 5,
+						Score:    0.5,
+					})
+					if err != nil {
+						panic(err)
+					}
+				}
+			}
 		}
 	}
 }

@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
+	"github.com/mrhenry/web-tests/scripts/result"
 	"github.com/mrhenry/web-tests/scripts/store"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
@@ -55,6 +56,11 @@ func main() {
 		default:
 		}
 	}()
+
+	err = setBrowsersAvailableOnBrowserStack(processCtx, db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	browserChunks, err := browsersChunked(processCtx)
 	if err != nil {
@@ -188,10 +194,48 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 	<-doneChan
 	mu.Lock()
 	defer mu.Unlock()
+
 	for _, ua := range uas {
-		err := store.InsertUserAgent(ctx, db, ua)
+		existing, err := store.SelectAllUserAgentsForBrowser(ctx, db, ua)
 		if err != nil {
 			log.Fatal(err)
+		}
+
+		if len(existing) > 0 {
+			err := store.InsertUserAgent(ctx, db, ua)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			features, err := store.SelectAllFeatures(ctx, db)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			for _, feature := range features {
+				for test := range feature.Tests {
+					hash, err := feature.ContentHashForTest(test)
+					if err != nil {
+						panic(err)
+					}
+
+					err = store.UpsertResult(ctx, db, result.Result{
+						Browser:        ua.Browser,
+						BrowserVersion: ua.BrowserVersion,
+						FeatureID:      feature.ID,
+						OS:             ua.OS,
+						OSVersion:      ua.OSVersion,
+						Test:           test,
+
+						Hash:     hash,
+						Priority: 5,
+						Score:    0.5,
+					})
+					if err != nil {
+						panic(err)
+					}
+				}
+			}
 		}
 	}
 }
@@ -268,6 +312,7 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 			OSVersion:      browser.OSVersion,
 			OS:             browser.OS,
 			UserAgent:      uaString,
+			BrowserStack:   1,
 		})
 	}
 
@@ -306,6 +351,44 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 func updateUAs(ctx context.Context, db *sql.DB, uas []browserua.UserAgent) error {
 	for _, ua := range uas {
 		err := store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func setBrowsersAvailableOnBrowserStack(ctx context.Context, db *sql.DB) error {
+	allUserAgents, err := store.SelectAllUserAgents(ctx, db)
+	if err != nil {
+		return err
+	}
+
+	userName := os.Getenv("BROWSERSTACK_USERNAME")
+	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
+
+	client := browserstack.New(browserstack.Config{
+		UserName:  userName,
+		AccessKey: accessKey,
+	})
+
+	browsers, err := client.ReducedBrowsers(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, ua := range allUserAgents {
+		ua.BrowserStack = 0
+		for _, browser := range browsers {
+			if ua.Browser == browser.Browser && ua.BrowserVersion == browser.BrowserVersion && ua.OS == browser.OS && ua.OSVersion == browser.OSVersion {
+				ua.BrowserStack = 1
+			} else if browser.OS == "ios" && ua.OS == "ios" && browser.OSVersion == ua.OSVersion {
+				ua.BrowserStack = 1
+			}
+		}
+
+		err = store.InsertUserAgent(ctx, db, ua)
 		if err != nil {
 			return err
 		}

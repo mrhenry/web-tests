@@ -1,2 +1,2 @@
-SELECT `browser_version`, `browser`, `os_version`, `os`, `ua`
-FROM `user_agents`
+SELECT `id`, `directory`, `notes`, `polyfill_io_list`, `search_terms`, `spec`, `tests`
+FROM `features`;

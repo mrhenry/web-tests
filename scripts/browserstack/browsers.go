@@ -86,7 +86,11 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 			continue // not an official release
 		}
 
-		if strings.Contains(b.BrowserVersion, "beta") {
+		if strings.Contains(strings.ToLower(b.BrowserVersion), "beta") {
+			continue // not an official release
+		}
+
+		if strings.Contains(strings.ToLower(b.OSVersion), "beta") {
 			continue // not an official release
 		}
 

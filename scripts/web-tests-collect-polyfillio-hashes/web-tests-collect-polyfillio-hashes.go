@@ -24,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	uas, err := store.SelectAlUserAgents(context.Background(), db)
+	uas, err := store.SelectAllUserAgents(context.Background(), db)
 	if err != nil {
 		panic(err)
 	}

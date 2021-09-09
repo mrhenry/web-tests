@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `features` (
 	`polyfill_io_list` TEXT NOT NULL,
 	`search_terms` TEXT NOT NULL,
 	`spec` TEXT NOT NULL,
+	`tests` TEXT NOT NULL,
 
 	PRIMARY KEY(
 		`id`

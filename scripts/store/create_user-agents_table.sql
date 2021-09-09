@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `user_agents` (
 	`os_version` TEXT NOT NULL,
 	`os` TEXT NOT NULL,
 	`ua` TEXT NOT NULL,
+	`browserstack` INTEGER NOT NULL,
 
 	PRIMARY KEY(
 		`browser_version`,

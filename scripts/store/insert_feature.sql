@@ -5,10 +5,12 @@ INSERT INTO `features` (
 	`notes`,
 	`polyfill_io_list`,
 	`search_terms`,
-	`spec`
+	`spec`,
+	`tests`
 ) VALUES (
 	?,
 
+	?,
 	?,
 	?,
 	?,
