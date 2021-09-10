@@ -59,10 +59,8 @@ func main() {
 	}()
 
 	var browserFilterArg string
-	var testFilterArg string
 
 	flag.StringVar(&browserFilterArg, "browser", "", "Only run on browser")
-	flag.StringVar(&testFilterArg, "run", "", "Only run tests matching")
 
 	flag.Parse()
 
@@ -443,7 +441,11 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 	}
 
 	if oldScore != r.Score {
-		log.Printf("%s - delta : %.3f - current : %.3f", featureName, r.Score-oldScore, r.Score)
+		if oldScore > r.Score {
+			log.Printf("\033[31m%s - %s - %s - delta : %.3f - current : %.3f\033[0m", featureName, browser.ResultKey(), r.Test, r.Score-oldScore, r.Score)
+		} else {
+			log.Printf("%s - %s - %s - delta : %.3f - current : %.3f", featureName, browser.ResultKey(), r.Test, r.Score-oldScore, r.Score)
+		}
 	}
 
 	err = store.UpsertResult(ctx, db, r)
