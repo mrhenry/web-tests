@@ -9,7 +9,6 @@ import (
 	"math/rand"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"sort"
 	"strings"
 	"syscall"
@@ -67,7 +66,6 @@ func main() {
 
 	flag.Parse()
 
-	testChunks, err := testsChunked(processCtx, db, testFilterArg)
 	if err != nil {
 		log.Println(err) // non-fatal for us
 		return
@@ -84,7 +82,7 @@ func main() {
 		default:
 		}
 
-		run(processCtx, runnerCtx, db, i, testChunks[i], browserFilterArg)
+		run(processCtx, runnerCtx, db, i, browserFilterArg)
 	}
 
 	go func() {
@@ -99,7 +97,7 @@ func main() {
 	<-doneChan
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, tests []browserstack.Test, browserFilter string) {
+func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, browserFilter string) {
 	doneChan := make(chan bool, 1)
 	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
 	defer cancel()
@@ -150,15 +148,20 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 	log.Println("tunnel ready")
 
-	browsers, err := client.ReducedBrowsers(ctx)
+	browsers, err := store.SelectBrowsersByPriority(ctx, db)
 	if err != nil {
-		log.Println(err)
-		return
+		panic(err)
 	}
 
 	if browserFilter != "" {
+		allBrowsers, err := client.ReducedBrowsers(ctx)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
 		filteredBrowsers := []browserstack.Browser{}
-		for _, b := range browsers {
+		for _, b := range allBrowsers {
 			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
 				filteredBrowsers = append(filteredBrowsers, b)
 			}
@@ -201,6 +204,11 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 			}
 
 			time.Sleep(time.Second * 5)
+
+			tests, err := store.SelectTestsByBrowserAndPriority(ctx, db, b)
+			if err != nil {
+				panic(err)
+			}
 
 			err = runTest(ctx, db, client, b, tests, sessionName, mapping)
 			if err != nil {
@@ -326,28 +334,6 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	return nil
 }
 
-func getTestPaths() ([]string, error) {
-	var files []string
-
-	err := filepath.Walk("./tests/", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if !strings.HasSuffix(path, ".html") {
-			return nil
-		}
-
-		files = append(files, path)
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return files, nil
-}
-
 var writeSema = semaphore.NewWeighted(1)
 
 func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser, test browserstack.Test, mapping feature.Mapping) error {
@@ -467,64 +453,6 @@ func getMapping(ctx context.Context, db *sql.DB) (feature.Mapping, error) {
 	}
 
 	return out, nil
-}
-
-func testsChunked(ctx context.Context, db *sql.DB, testFilter string) ([][]browserstack.Test, error) {
-	tests := []browserstack.Test{}
-	testPaths, err := getTestPaths()
-	if err != nil {
-		return nil, err
-	}
-
-	mapping, err := getMapping(ctx, db)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, p := range testPaths {
-		test := browserstack.Test{
-			Path: p,
-		}
-
-		if testFilter != "" {
-			if item, ok := mapping[test.MappingID()]; ok {
-				terms := item.Spec.Org + ":" + item.Spec.ID + ":" + item.Spec.Section + ":" + item.Spec.Name
-				for _, x := range item.SearchTerms {
-					terms = terms + ":" + x
-				}
-
-				if !strings.Contains(strings.ToLower(terms), strings.ToLower(testFilter)) {
-					continue
-				}
-			} else {
-				continue
-			}
-		}
-
-		tests = append(tests, test)
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(tests), func(i, j int) {
-		tests[i], tests[j] = tests[j], tests[i]
-	})
-
-	chunks := [][]browserstack.Test{}
-	for i := 0; i < len(tests); i += 25 {
-		end := i + 25
-
-		if end > len(tests) {
-			end = len(tests)
-		}
-
-		chunks = append(chunks, tests[i:end])
-	}
-
-	if len(chunks) > 10 {
-		tests = tests[:10]
-	}
-
-	return chunks, nil
 }
 
 func reallyTolerantSemver(v string) (*version.Version, error) {

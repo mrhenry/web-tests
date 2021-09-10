@@ -6,12 +6,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"path"
 	"sort"
 	"time"
 
 	_ "embed"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
 	"github.com/mrhenry/web-tests/scripts/feature"
 	"github.com/mrhenry/web-tests/scripts/priority"
@@ -683,21 +685,21 @@ func SelectAllBrowsers(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, 
 //go:embed select_browsers_by_priority.sql
 var selectBrowsersByPriorityQuery string
 
-func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, error) {
+func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserstack.Browser, error) {
 	rows, err := db.QueryContext(
 		ctx,
 		selectBrowsersByPriorityQuery,
 	)
 	if err == sql.ErrNoRows {
-		return []browserua.UserAgent{}, nil
+		return []browserstack.Browser{}, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	uas := []browserua.UserAgent{}
+	uas := []browserstack.Browser{}
 	for rows.Next() {
-		ua := browserua.UserAgent{}
+		ua := browserstack.Browser{}
 		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS)
 		if err != nil {
 			log.Printf("Error %s when scanning all user agents", err)
@@ -914,12 +916,43 @@ func SelectPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIO
 	return x, nil
 }
 
-func GetTestsForBrowser(ctx context.Context, db *sql.DB, browser string, browserVersion string) {
-	// get top 10 features by priority
-	// get 5 random features
-}
+//go:embed select_results_by_browser_and_priority.sql
+var selectResultsByBrowserAndPriorityQuery string
 
-func GetBrowsersToTest(ctx context.Context, db *sql.DB, browser string, browserVersion string) {
-	// get top 8 browser+version by aggregate priority
-	// get 2 random browser+version
+func SelectTestsByBrowserAndPriority(ctx context.Context, db *sql.DB, browser browserstack.Browser) ([]browserstack.Test, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectResultsByBrowserAndPriorityQuery,
+		browser.Browser,
+		browser.BrowserVersion,
+		browser.OS,
+		browser.OSVersion,
+	)
+	if err == sql.ErrNoRows {
+		return []browserstack.Test{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	tests := []browserstack.Test{}
+	for rows.Next() {
+		result := result.Result{}
+		err = rows.Scan(&result.FeatureID, &result.Test)
+		if err != nil {
+			log.Printf("Error %s when scanning results by browser and priority", err)
+			return nil, err
+		}
+
+		tests = append(tests, browserstack.Test{
+			Path: path.Join("./tests", fmt.Sprintf("%s:%s.html", result.FeatureID, result.Test)),
+		})
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents", err)
+		return nil, err
+	}
+
+	return tests, nil
 }

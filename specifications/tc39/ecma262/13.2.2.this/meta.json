@@ -16,8 +16,12 @@
     "this"
   ],
   "tests": {
-    "babel": "test.babel.js",
-    "pure": "test.pure.js"
+    "babel": {
+      "inline_script": "test.babel.js"
+    },
+    "pure": {
+      "inline_script": "test.pure.js"
+    }
   },
   "polyfill.io": []
 }

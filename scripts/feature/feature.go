@@ -23,9 +23,14 @@ type Feature struct {
 	Notes []struct {
 		Message string `json:"message"`
 	} `json:"notes"`
-	SearchTerms []string          `json:"search_terms"`
-	Tests       map[string]string `json:"tests"`
-	PolyfillIO  []string          `json:"polyfill.io"`
+	SearchTerms []string `json:"search_terms"`
+	Tests       map[string]struct {
+		InlineScript    string `json:"inline_script,omitempty"`
+		ModuleScript    string `json:"module_script,omitempty"`
+		NoModulesScript string `json:"nomodules_script,omitempty"`
+		HasPolyfillIO   bool   `json:"has_polyfillio,omitempty"`
+	} `json:"tests"`
+	PolyfillIO []string `json:"polyfill.io"`
 }
 
 type FeatureInMapping struct {
@@ -84,7 +89,7 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 	}
 
 	if test != "core-web" {
-		testPath := path.Join(x.Dir, x.Tests[test])
+		testPath := path.Join(x.Dir, x.Tests[test].InlineScript)
 		var dirB []byte
 
 		f, err := os.Open(testPath)
@@ -109,7 +114,7 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 	var dirB []byte
 
 	{
-		testPath := path.Join(x.Dir, fmt.Sprintf("%s_modules.js", x.Tests[test]))
+		testPath := path.Join(x.Dir, x.Tests[test].ModuleScript)
 
 		f, err := os.Open(testPath)
 		if err != nil {
@@ -128,7 +133,7 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 	}
 
 	{
-		testPath := path.Join(x.Dir, fmt.Sprintf("%s_no-modules.js", x.Tests[test]))
+		testPath := path.Join(x.Dir, x.Tests[test].NoModulesScript)
 
 		f, err := os.Open(testPath)
 		if err != nil {
