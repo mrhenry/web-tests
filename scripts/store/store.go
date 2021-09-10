@@ -8,6 +8,7 @@ import (
 	"log"
 	"path"
 	"sort"
+	"strings"
 	"time"
 
 	_ "embed"
@@ -685,21 +686,21 @@ func SelectAllBrowsers(ctx context.Context, db *sql.DB) ([]browserua.UserAgent, 
 //go:embed select_browsers_by_priority.sql
 var selectBrowsersByPriorityQuery string
 
-func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserstack.Browser, error) {
+func SelectBrowsersByPriority(ctx context.Context, db *sql.DB, allBrowsers []browserstack.Browser) ([]browserstack.Browser, error) {
 	rows, err := db.QueryContext(
 		ctx,
 		selectBrowsersByPriorityQuery,
 	)
 	if err == sql.ErrNoRows {
-		return []browserstack.Browser{}, nil
+		return allBrowsers, nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	uas := []browserstack.Browser{}
+	uas := []browserua.UserAgent{}
 	for rows.Next() {
-		ua := browserstack.Browser{}
+		ua := browserua.UserAgent{}
 		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS)
 		if err != nil {
 			log.Printf("Error %s when scanning all user agents by priority", err)
@@ -714,7 +715,28 @@ func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserstack.B
 		return nil, err
 	}
 
-	return uas, nil
+	out := []browserstack.Browser{}
+
+UA_LOOP:
+	for _, ua := range uas {
+		for _, browser := range allBrowsers {
+			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" {
+				if strings.Split(ua.OSVersion, ".")[0] == strings.Split(browser.OSVersion, ".")[0] {
+					out = append(out, browser)
+					continue UA_LOOP
+				}
+			}
+
+			if ua.Browser == browser.Browser && ua.Browser != "" && ua.BrowserVersion != "" {
+				if strings.Split(ua.BrowserVersion, ".")[0] == strings.Split(browser.BrowserVersion, ".")[0] {
+					out = append(out, browser)
+					continue UA_LOOP
+				}
+			}
+		}
+	}
+
+	return out, nil
 }
 
 //go:embed select_results_for_ua.sql

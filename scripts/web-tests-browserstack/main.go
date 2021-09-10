@@ -148,18 +148,18 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 	log.Println("tunnel ready")
 
-	browsers, err := store.SelectBrowsersByPriority(ctx, db)
+	allBrowsers, err := client.ReducedBrowsers(ctx)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	browsers, err := store.SelectBrowsersByPriority(ctx, db, allBrowsers)
 	if err != nil {
 		panic(err)
 	}
 
 	if browserFilter != "" {
-		allBrowsers, err := client.ReducedBrowsers(ctx)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
 		filteredBrowsers := []browserstack.Browser{}
 		for _, b := range allBrowsers {
 			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
@@ -397,6 +397,10 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 	}
 	if err != nil {
 		return err
+	}
+	if r.Score == -1 {
+		newResult = true
+		r.Score = 0
 	}
 
 	var newScore float64 = 0
