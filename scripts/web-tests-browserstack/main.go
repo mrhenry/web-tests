@@ -59,10 +59,8 @@ func main() {
 	}()
 
 	var browserFilterArg string
-	var testFilterArg string
 
 	flag.StringVar(&browserFilterArg, "browser", "", "Only run on browser")
-	flag.StringVar(&testFilterArg, "run", "", "Only run tests matching")
 
 	flag.Parse()
 

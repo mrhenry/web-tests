@@ -8,10 +8,6 @@ on:
         description: 'Browser filter'
         required: false
         default: ''
-      run:
-        description: 'Test filter'
-        required: false
-        default: ''
 
 jobs:
   build:
