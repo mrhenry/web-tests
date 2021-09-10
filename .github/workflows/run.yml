@@ -59,7 +59,7 @@ jobs:
           # Git config
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add ./specifications
+          git add ./web-tests.db
           git add ./docs
           git commit --allow-empty -m "run"
           git push --set-upstream origin main
