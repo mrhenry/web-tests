@@ -53,7 +53,7 @@ jobs:
           # Git config
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add ./data
+          git add ./web-tests.db
           git commit --allow-empty -m "collect context data"
           git push --set-upstream origin main
 
