@@ -16,6 +16,7 @@ import (
 func main() {
 	totalPoints := Points{}
 	totalTests := map[string]struct{}{}
+	totalFeatures := 0
 
 	out := ""
 
@@ -38,6 +39,8 @@ func main() {
 		if strings.Contains(feature.Dir, "example/test") {
 			continue
 		}
+
+		totalFeatures++
 
 		results := map[string]map[string]result.Result{}
 		tests := map[string]struct{}{}
@@ -308,7 +311,7 @@ func main() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalPoints.table(testsSlice, len(features)) + out + `
+	` + totalPoints.table(testsSlice, totalFeatures) + out + `
 </body>
 </html>`
 
