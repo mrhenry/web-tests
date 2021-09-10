@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"path"
 	"sort"
 	"strings"
@@ -714,6 +715,11 @@ func SelectBrowsersByPriority(ctx context.Context, db *sql.DB, allBrowsers []bro
 		log.Printf("Error %s when scanning all user agents by priority", err)
 		return nil, err
 	}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(uas), func(i, j int) {
+		uas[i], uas[j] = uas[j], uas[i]
+	})
 
 	out := []browserstack.Browser{}
 

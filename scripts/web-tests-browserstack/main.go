@@ -124,7 +124,7 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 	default:
 	}
 
-	sessionName := fmt.Sprintf("Web Tests (%d) – %s", chunkIndex, time.Now().Format(time.RFC3339))
+	sessionName := fmt.Sprintf("Web Tests (%d) – %s", chunkIndex+1, time.Now().Format(time.RFC3339))
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
