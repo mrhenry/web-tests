@@ -343,6 +343,8 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 
 	defer writeSema.Release(1)
 
+	featureName := ""
+
 	r := result.Result{
 		OS:        browser.OS,
 		OSVersion: browser.OSVersion,
@@ -354,6 +356,7 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 	if item, ok := mapping[test.MappingID()]; ok {
 		r.FeatureID = item.ID
 		r.Test = test.MappingTestName()
+		featureName = fmt.Sprintf("%s %s %s %s", item.Spec.Org, item.Spec.ID, item.Spec.Section, item.Spec.Name)
 	} else {
 		return fmt.Errorf("not found in mapping %s", test.MappingID())
 	}
@@ -403,6 +406,8 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 		r.Score = 0
 	}
 
+	oldScore := r.Score
+
 	var newScore float64 = 0
 	if test.Success() {
 		newScore = 1
@@ -435,6 +440,10 @@ func writeResults(ctx context.Context, db *sql.DB, browser browserstack.Browser,
 
 	if r.Score < 0.00099 {
 		r.Score = 0
+	}
+
+	if oldScore != r.Score {
+		log.Printf("%s - delta : %.3f - current : %.3f", featureName, r.Score-oldScore, r.Score)
 	}
 
 	err = store.UpsertResult(ctx, db, r)

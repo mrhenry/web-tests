@@ -194,25 +194,25 @@ func main() {
 				tableBody := "<tbody>"
 
 				for _, results := range byBrowser.byBrowser {
-					tableBody = tableBody + "<tr>"
-					tableBody = tableBody + "<td>" + results.browserWithVersion + "</td>\n"
+					tableBody = tableBody + "<tr>\n"
+					tableBody = tableBody + "<td>" + results.browserWithVersion + "</td>"
 
 					for _, test := range testsSlice {
 						result, ok := results.results[test]
 						if !ok {
-							tableBody = tableBody + "<td>?</td>\n"
+							tableBody = tableBody + "<td>?</td>"
 
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 1)
 							scores.addScore(test, weightedScore)
 						} else {
-							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>\n"
+							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>"
 
 							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
 							scores.addScore(test, weightedScore)
 						}
 					}
 
-					tableBody = tableBody + "</tr>\n"
+					tableBody = tableBody + "\n</tr>\n"
 				}
 
 				tableBody = tableBody + "</tbody>\n"
