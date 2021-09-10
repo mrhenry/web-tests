@@ -201,12 +201,12 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 			log.Fatal(err)
 		}
 
-		if len(existing) > 0 {
-			err := store.InsertUserAgent(ctx, db, ua)
-			if err != nil {
-				log.Fatal(err)
-			}
-		} else {
+		err = store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(existing) == 0 {
 			features, err := store.SelectAllFeatures(ctx, db)
 			if err != nil {
 				log.Fatal(err)
@@ -216,7 +216,7 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 				for test := range feature.Tests {
 					hash, err := feature.ContentHashForTest(test)
 					if err != nil {
-						panic(err)
+						log.Fatal(err)
 					}
 
 					err = store.UpsertResult(ctx, db, result.Result{
@@ -229,10 +229,10 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 						Hash:     hash,
 						Priority: 5,
-						Score:    0.5,
+						Score:    -1,
 					})
 					if err != nil {
-						panic(err)
+						log.Fatal(err)
 					}
 				}
 			}

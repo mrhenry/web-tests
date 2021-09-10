@@ -130,7 +130,7 @@ func main() {
 
 						Hash:     hash,
 						Priority: 5,
-						Score:    0.5,
+						Score:    -1,
 					})
 					if err != nil {
 						panic(err)

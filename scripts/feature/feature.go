@@ -8,7 +8,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 )
 
 type Feature struct {
@@ -84,13 +83,16 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 		return "", errors.New("feature has no directory")
 	}
 
-	if strings.HasSuffix(test, "_polyfillio") {
-		test = strings.TrimSuffix(test, "_polyfillio")
+	var dirB []byte
+
+	if x.Tests[test].HasPolyfillIO {
+		for _, polyfill := range x.PolyfillIO {
+			dirB = append(dirB, polyfill...)
+		}
 	}
 
-	if test != "core-web" {
+	if x.Tests[test].InlineScript != "" {
 		testPath := path.Join(x.Dir, x.Tests[test].InlineScript)
-		var dirB []byte
 
 		f, err := os.Open(testPath)
 		if err != nil {
@@ -106,14 +108,9 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 
 		dirB = append(dirB, testPath...)
 		dirB = append(dirB, b...)
-
-		sum := sha256.Sum256(dirB)
-		return fmt.Sprintf("%x", sum), nil
 	}
 
-	var dirB []byte
-
-	{
+	if x.Tests[test].ModuleScript != "" {
 		testPath := path.Join(x.Dir, x.Tests[test].ModuleScript)
 
 		f, err := os.Open(testPath)
@@ -132,7 +129,7 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 		dirB = append(dirB, b...)
 	}
 
-	{
+	if x.Tests[test].NoModulesScript != "" {
 		testPath := path.Join(x.Dir, x.Tests[test].NoModulesScript)
 
 		f, err := os.Open(testPath)

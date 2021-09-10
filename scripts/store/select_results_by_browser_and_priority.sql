@@ -2,9 +2,9 @@ SELECT feature_id, test FROM (
 	SELECT * FROM (
 		SELECT results.feature_id, results.test, results.priority
 		FROM results
-		WHERE results.browser = ? AND results.browser_version = ? AND results.os = ? AND results.os_version = ?
+		WHERE results.browser = ? AND results.browser_version = ? AND results.os = ? AND results.os_version = ? AND results.priority > 0
 		ORDER BY results.priority DESC
-		LIMIT 18
+		LIMIT 20
 	)
 	UNION
 	SELECT * FROM (
@@ -17,8 +17,8 @@ SELECT feature_id, test FROM (
 			AND results.os=user_agents.os
 			AND user_agents.browserstack = 1
 		ORDER BY RANDOM()
-		LIMIT 20
+		LIMIT 10
 	)
 )
 ORDER BY priority DESC
-LIMIT 20
+LIMIT 25

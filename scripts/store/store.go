@@ -277,7 +277,7 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 			return nil, err
 		}
 		if err != nil {
-			log.Printf("Error %s when scanning a selected result", err)
+			log.Printf("Error %s when scanning a selected feature", err)
 			return nil, err
 		}
 
@@ -322,7 +322,7 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 	}
 
 	if rows.Err() != nil {
-		log.Printf("Error %s when scanning all user agents", err)
+		log.Printf("Error %s when scanning all features", err)
 		return nil, err
 	}
 
@@ -630,9 +630,9 @@ func SelectAllUserAgentsForBrowser(ctx context.Context, db *sql.DB, browser brow
 	uas := []browserua.UserAgent{}
 	for rows.Next() {
 		ua := browserua.UserAgent{}
-		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS, &ua.UserAgent, &ua.BrowserStack)
+		err = rows.Scan(&ua.UserAgent, &ua.BrowserStack)
 		if err != nil {
-			log.Printf("Error %s when scanning all user agents", err)
+			log.Printf("Error %s when scanning all user agents for browser", err)
 			return nil, err
 		}
 
@@ -640,7 +640,7 @@ func SelectAllUserAgentsForBrowser(ctx context.Context, db *sql.DB, browser brow
 	}
 
 	if rows.Err() != nil {
-		log.Printf("Error %s when scanning all user agents", err)
+		log.Printf("Error %s when scanning all user agents for browser", err)
 		return nil, err
 	}
 
@@ -702,7 +702,7 @@ func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserstack.B
 		ua := browserstack.Browser{}
 		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS)
 		if err != nil {
-			log.Printf("Error %s when scanning all user agents", err)
+			log.Printf("Error %s when scanning all user agents by priority", err)
 			return nil, err
 		}
 
@@ -710,7 +710,7 @@ func SelectBrowsersByPriority(ctx context.Context, db *sql.DB) ([]browserstack.B
 	}
 
 	if rows.Err() != nil {
-		log.Printf("Error %s when scanning all user agents", err)
+		log.Printf("Error %s when scanning all user agents by priority", err)
 		return nil, err
 	}
 
@@ -950,7 +950,7 @@ func SelectTestsByBrowserAndPriority(ctx context.Context, db *sql.DB, browser br
 	}
 
 	if rows.Err() != nil {
-		log.Printf("Error %s when scanning all user agents", err)
+		log.Printf("Error %s results by browser and priority", err)
 		return nil, err
 	}
 

@@ -68,6 +68,10 @@ func main() {
 			sort.Sort(sort.StringSlice(testsSlice))
 
 			for _, r := range allResultsForFeature {
+				if r.Score == -1 {
+					continue
+				}
+
 				byBrowser, ok := results[resultKey(r)]
 				if !ok {
 					byBrowser = map[string]result.Result{}
@@ -215,7 +219,7 @@ func main() {
 
 				detailSummary = detailSummary + tableHeading + tableBody + "</div></table></details>\n"
 
-				featureDetails = featureDetails + `<div class="feature-results">` + detailSummary + `</div>\n`
+				featureDetails = featureDetails + `<div class="feature-results">` + detailSummary + `</div>` + "\n"
 			}
 		}
 
