@@ -2,21 +2,25 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
-	"sort"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 
+	"github.com/hashicorp/go-version"
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
+	"github.com/mrhenry/web-tests/scripts/result"
+	"github.com/mrhenry/web-tests/scripts/store"
 	"github.com/tebeka/selenium"
 	"golang.org/x/sync/semaphore"
+
+	ua "github.com/mileusna/useragent"
 )
 
 func main() {
@@ -28,6 +32,11 @@ func main() {
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	doneChan := make(chan bool, 1)
 
@@ -48,6 +57,11 @@ func main() {
 		}
 	}()
 
+	err = setBrowsersAvailableOnBrowserStack(processCtx, db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	browserChunks, err := browsersChunked(processCtx)
 	if err != nil {
 		log.Fatal(err)
@@ -64,7 +78,7 @@ func main() {
 		default:
 		}
 
-		run(processCtx, runnerCtx, i, browsers)
+		run(processCtx, runnerCtx, db, i, browsers)
 	}
 
 	go func() {
@@ -79,13 +93,13 @@ func main() {
 	<-doneChan
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, browsers []browserstack.Browser) {
+func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, browsers []browserstack.Browser) {
 	doneChan := make(chan bool, 1)
 	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
 	defer cancel()
 
 	mu := &sync.Mutex{}
-	uas := map[string]*browserua.BrowserUAs{}
+	uas := []browserua.UserAgent{}
 
 	go func() {
 		select {
@@ -152,7 +166,7 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 
 			mu.Lock()
 			defer mu.Unlock()
-			uas[browserUAs.Key] = browserUAs
+			uas = append(uas, browserUAs...)
 
 		}(browser)
 	}
@@ -180,13 +194,53 @@ func run(processCtx context.Context, runnerCtx context.Context, chunkIndex int, 
 	<-doneChan
 	mu.Lock()
 	defer mu.Unlock()
-	err = updateUAs(uas)
-	if err != nil {
-		log.Println(err)
+
+	for _, ua := range uas {
+		existing, err := store.SelectAllUserAgentsForBrowser(ctx, db, ua)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(existing) == 0 {
+			features, err := store.SelectAllFeatures(ctx, db)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			for _, feature := range features {
+				for test := range feature.Tests {
+					hash, err := feature.ContentHashForTest(test)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					err = store.UpsertResult(ctx, db, result.Result{
+						Browser:        ua.Browser,
+						BrowserVersion: ua.BrowserVersion,
+						FeatureID:      feature.ID,
+						OS:             ua.OS,
+						OSVersion:      ua.OSVersion,
+						Test:           test,
+
+						Hash:     hash,
+						Priority: 5,
+						Score:    -1,
+					})
+					if err != nil {
+						log.Fatal(err)
+					}
+				}
+			}
+		}
 	}
 }
 
-func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) (*browserua.BrowserUAs, error) {
+func getUAs(parentCtx context.Context, client *browserstack.Client, browser browserstack.Browser, sessionName string) ([]browserua.UserAgent, error) {
 	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*2)
 	defer cancel()
 
@@ -222,10 +276,47 @@ func getUAs(parentCtx context.Context, client *browserstack.Client, browser brow
 		return nil, err
 	}
 
-	return &browserua.BrowserUAs{
-		Key: browser.ResultKey(),
-		UAs: uaStrings,
-	}, nil
+	out := []browserua.UserAgent{}
+	for _, uaString := range uaStrings {
+		ua := ua.Parse(uaString)
+		version, err := reallyTolerantSemver(ua.Version)
+		if err != nil {
+			log.Println("version", ua.Version)
+			log.Println("browser version", browser.BrowserVersion)
+			log.Println("os version", browser.OSVersion)
+			log.Println(err)
+
+			if browser.OSVersion != "" {
+				version, err = reallyTolerantSemver(browser.OSVersion)
+			} else {
+				version, err = reallyTolerantSemver(browser.BrowserVersion)
+			}
+		}
+		if err != nil {
+			panic(err)
+		}
+
+		browserName := strings.ToLower(browser.Browser)
+		browserVersion := browser.BrowserVersion
+		if strings.ToLower(browser.OS) == "ios" {
+			browserName = "safari"
+			browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
+		} else if browserName == "safari" {
+			browserName = "safari"
+			browserVersion = fmt.Sprintf("%d.%d", version.Segments()[0], version.Segments()[1])
+		}
+
+		out = append(out, browserua.UserAgent{
+			BrowserVersion: browserVersion,
+			Browser:        browserName,
+			OSVersion:      browser.OSVersion,
+			OS:             browser.OS,
+			UserAgent:      uaString,
+			BrowserStack:   1,
+		})
+	}
+
+	return out, nil
 }
 
 func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
@@ -243,8 +334,9 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 	}
 
 	chunks := [][]browserstack.Browser{}
-	for i := 0; i < len(browsers); i += 20 {
-		end := i + 20
+	limit := 20
+	for i := 0; i < len(browsers); i += limit {
+		end := i + limit
 
 		if end > len(browsers) {
 			end = len(browsers)
@@ -256,83 +348,64 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 	return chunks, nil
 }
 
-func updateUAs(uas map[string]*browserua.BrowserUAs) error {
-	existing := existingUAs()
-
-	f, err := os.Create("data/uas.json")
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-
-	for k, browser := range uas {
-		if b, ok := existing[k]; ok {
-			b.UAs = append(b.UAs, browser.UAs...)
-			b.UAs = uniqueStringSlice(b.UAs)
-			existing[k] = b
-		} else {
-			browser.UAs = uniqueStringSlice(browser.UAs)
-			existing[k] = browser
+func updateUAs(ctx context.Context, db *sql.DB, uas []browserua.UserAgent) error {
+	for _, ua := range uas {
+		err := store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			return err
 		}
-	}
-
-	b, err := json.MarshalIndent(existing, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	_, err = f.Write(b)
-	if err != nil {
-		return err
-	}
-
-	_, err = f.WriteString("\n")
-	if err != nil {
-		return err
 	}
 
 	return nil
 }
 
-func existingUAs() map[string]*browserua.BrowserUAs {
-
-	f, err := os.Open("data/uas.json")
+func setBrowsersAvailableOnBrowserStack(ctx context.Context, db *sql.DB) error {
+	allUserAgents, err := store.SelectAllUserAgents(ctx, db)
 	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
+		return err
 	}
 
-	defer f.Close()
+	userName := os.Getenv("BROWSERSTACK_USERNAME")
+	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
-	b, err := ioutil.ReadAll(f)
+	client := browserstack.New(browserstack.Config{
+		UserName:  userName,
+		AccessKey: accessKey,
+	})
+
+	browsers, err := client.ReducedBrowsers(ctx)
 	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
+		return err
 	}
 
-	existing := map[string]*browserua.BrowserUAs{}
-	err = json.Unmarshal(b, &existing)
-	if err != nil {
-		return map[string]*browserua.BrowserUAs{}
+	for _, ua := range allUserAgents {
+		ua.BrowserStack = 0
+		for _, browser := range browsers {
+			if ua.Browser == browser.Browser && ua.BrowserVersion == browser.BrowserVersion && ua.OS == browser.OS && ua.OSVersion == browser.OSVersion {
+				ua.BrowserStack = 1
+			} else if browser.OS == "ios" && ua.OS == "ios" && browser.OSVersion == ua.OSVersion {
+				ua.BrowserStack = 1
+			}
+		}
+
+		err = store.InsertUserAgent(ctx, db, ua)
+		if err != nil {
+			return err
+		}
 	}
 
-	return existing
+	return nil
 }
 
-func uniqueStringSlice(s []string) []string {
-	track := make(map[string]bool, len(s))
-	unique := make([]string, 0, len(s))
-	for _, elem := range s {
-		if elem == "" {
-			continue
-		}
-
-		if _, ok := track[elem]; !ok {
-			unique = append(unique, elem)
-			track[elem] = true
-		}
+func reallyTolerantSemver(v string) (*version.Version, error) {
+	switch strings.Count(v, ".") {
+	case 2:
+		return version.NewVersion(v)
+	case 1:
+		return version.NewVersion(v + ".0")
+	case 0:
+		return version.NewVersion(v + ".0.0")
+	default:
+		return version.NewVersion(v)
 	}
-
-	sort.Strings(unique)
-
-	return unique
 }

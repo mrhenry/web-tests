@@ -845,7 +845,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.17.2',
+  version: '3.17.3',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -1071,6 +1071,30 @@ $({ global: true }, {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -1083,44 +1107,18 @@ $({ global: true }, {
 /******/ 		})();
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.global-this.js
-var es_global_this = __webpack_require__(5837);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/globalThis.js
-
-(function (undefined) {
-  if (!("object" == typeof globalThis)) {
-    (function () {
-      function isNotFirefoxContentScriptEnviroment(root) {
-        return root && root.Object == Object && root;
-      }
-
-      var freeGlobalThis = isNotFirefoxContentScriptEnviroment(typeof globalThis == "object" && globalThis);
-      var freeWindow = isNotFirefoxContentScriptEnviroment(typeof window == "object" && window);
-      var freeSelf = isNotFirefoxContentScriptEnviroment(typeof self == "object" && self);
-      var freeGlobal = isNotFirefoxContentScriptEnviroment(typeof __webpack_require__.g == "object" && __webpack_require__.g);
-      var globalThis = freeGlobalThis || freeWindow || freeSelf || freeGlobal || Function("return this")();
-
-      try {
-        Object.defineProperty(globalThis, "globalThis", {
-          configurable: true,
-          enumerable: false,
-          writable: true,
-          value: globalThis
-        });
-      } catch (e) {
-        globalThis.globalThis = globalThis;
-      }
-    })();
-  }
-}).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/tc39/ecma262/18.1.1.globalThis/test.pure.js
-
+/* harmony import */ var core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5837);
+/* harmony import */ var core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0__);
 
 
 (function (cb) {

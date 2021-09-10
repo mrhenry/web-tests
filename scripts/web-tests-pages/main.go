@@ -2,22 +2,21 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 
 	version "github.com/hashicorp/go-version"
-	"github.com/mrhenry/web-tests/scripts/feature"
+	"github.com/mrhenry/web-tests/scripts/result"
+	"github.com/mrhenry/web-tests/scripts/store"
 )
 
 func main() {
-	featureDirs := []string{}
 	totalPoints := Points{}
 	totalTests := map[string]struct{}{}
+	totalFeatures := 0
 
 	out := ""
 
@@ -26,73 +25,40 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if strings.Contains(path, "example/test") {
-			return filepath.SkipDir
-		}
-
-		if strings.HasSuffix(path, "meta.json") {
-			featureDirs = append(featureDirs, filepath.Dir(path))
-		}
-
-		return nil
-	})
+	db, err := store.NewSqliteDatabase("./web-tests.db", false)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, featureDir := range featureDirs {
-		feature := feature.FeatureInMapping{}
-		results := map[string]map[string]Result{}
+	features, err := store.SelectAllFeatures(context.Background(), db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, feature := range features {
+		if strings.Contains(feature.Dir, "example/test") {
+			continue
+		}
+
+		totalFeatures++
+
+		results := map[string]map[string]result.Result{}
 		tests := map[string]struct{}{}
 		testsSlice := []string{}
 
 		scores := Scores{}
 
-		{
-			f, err := os.Open(filepath.Join(featureDir, "meta.json"))
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			defer f.Close()
-
-			decoder := json.NewDecoder(f)
-
-			err = decoder.Decode(&feature)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			err = f.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-
 		featureDetails := ""
 
+		allResultsForFeature, err := store.SelectResultsForFeature(context.Background(), db, feature)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		{
-			resultPaths := []string{}
-			err = filepath.Walk(filepath.Join(featureDir, "results"), func(path string, info os.FileInfo, err error) error {
-				if err != nil {
-					return err
-				}
-
-				if strings.HasSuffix(path, ".json") {
-					resultPaths = append(resultPaths, path)
-					tests[filepath.Base(filepath.Dir(path))] = struct{}{}
-					totalTests[filepath.Base(filepath.Dir(path))] = struct{}{}
-				}
-
-				return nil
-			})
-			if err != nil {
-				log.Fatal(err)
+			for _, r := range allResultsForFeature {
+				tests[r.Test] = struct{}{}
+				totalTests[r.Test] = struct{}{}
 			}
 
 			for k := range tests {
@@ -101,48 +67,32 @@ func main() {
 
 			sort.Sort(sort.StringSlice(testsSlice))
 
-			for _, resultPath := range resultPaths {
-				result := Result{}
-				f, err := os.Open(resultPath)
-				if err != nil {
-					log.Fatal(err)
+			for _, r := range allResultsForFeature {
+				if r.Score == -1 {
+					continue
 				}
 
-				defer f.Close()
-
-				decoder := json.NewDecoder(f)
-
-				err = decoder.Decode(&result)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				err = f.Close()
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				byBrowser, ok := results[result.resultKey()]
+				byBrowser, ok := results[resultKey(r)]
 				if !ok {
-					byBrowser = map[string]Result{}
+					byBrowser = map[string]result.Result{}
 				}
 
-				byBrowser[filepath.Base(filepath.Dir(resultPath))] = result
+				byBrowser[r.Test] = r
 
-				results[result.resultKey()] = byBrowser
+				results[resultKey(r)] = byBrowser
 			}
 		}
 
 		{
 			resultsByBrowserVersion := []struct {
 				browser string
-				results map[string]Result
+				results map[string]result.Result
 			}{}
 
 			for browser, byBrowser := range results {
 				resultsByBrowserVersion = append(resultsByBrowserVersion, struct {
 					browser string
-					results map[string]Result
+					results map[string]result.Result
 				}{
 					browser: browser,
 					results: byBrowser,
@@ -171,7 +121,7 @@ func main() {
 				browser   string
 				byBrowser []struct {
 					browserWithVersion string
-					results            map[string]Result
+					results            map[string]result.Result
 				}
 			}{}
 
@@ -179,7 +129,7 @@ func main() {
 				lastBrowser := ""
 				currentResults := []struct {
 					browserWithVersion string
-					results            map[string]Result
+					results            map[string]result.Result
 				}{}
 
 				for i, byBrowser := range resultsByBrowserVersion {
@@ -188,7 +138,7 @@ func main() {
 							browser   string
 							byBrowser []struct {
 								browserWithVersion string
-								results            map[string]Result
+								results            map[string]result.Result
 							}
 						}{
 							browser:   lastBrowser,
@@ -197,7 +147,7 @@ func main() {
 
 						currentResults = []struct {
 							browserWithVersion string
-							results            map[string]Result
+							results            map[string]result.Result
 						}{}
 
 						lastBrowser = strings.Split(byBrowser.browser, "/")[0]
@@ -209,7 +159,7 @@ func main() {
 
 					currentResults = append(currentResults, struct {
 						browserWithVersion string
-						results            map[string]Result
+						results            map[string]result.Result
 					}{
 						browserWithVersion: byBrowser.browser,
 						results:            byBrowser.results,
@@ -220,7 +170,7 @@ func main() {
 							browser   string
 							byBrowser []struct {
 								browserWithVersion string
-								results            map[string]Result
+								results            map[string]result.Result
 							}
 						}{
 							browser:   strings.Split(byBrowser.browser, "/")[0],
@@ -236,15 +186,15 @@ func main() {
 				tableHeading := "<thead><tr><th></th>"
 
 				for _, test := range testsSlice {
-					tableHeading = tableHeading + "<th>" + test + "</th>"
+					tableHeading = tableHeading + "<th>" + test + "</th>\n"
 				}
 
-				tableHeading = tableHeading + "</tr></thead>"
+				tableHeading = tableHeading + "</tr></thead>\n"
 
 				tableBody := "<tbody>"
 
 				for _, results := range byBrowser.byBrowser {
-					tableBody = tableBody + "<tr>"
+					tableBody = tableBody + "<tr>\n"
 					tableBody = tableBody + "<td>" + results.browserWithVersion + "</td>"
 
 					for _, test := range testsSlice {
@@ -262,14 +212,14 @@ func main() {
 						}
 					}
 
-					tableBody = tableBody + "</tr>"
+					tableBody = tableBody + "\n</tr>\n"
 				}
 
-				tableBody = tableBody + "</tbody>"
+				tableBody = tableBody + "</tbody>\n"
 
-				detailSummary = detailSummary + tableHeading + tableBody + "</div></table></details>"
+				detailSummary = detailSummary + tableHeading + tableBody + "</div></table></details>\n"
 
-				featureDetails = featureDetails + `<div class="feature-results">` + detailSummary + `</div>`
+				featureDetails = featureDetails + `<div class="feature-results">` + detailSummary + `</div>` + "\n"
 			}
 		}
 
@@ -365,7 +315,7 @@ func main() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalPoints.table(testsSlice, len(featureDirs)) + out + `
+	` + totalPoints.table(testsSlice, totalFeatures) + out + `
 </body>
 </html>`
 
@@ -388,15 +338,7 @@ func main() {
 	}
 }
 
-type Result struct {
-	Browser        string  `json:"browser"`
-	BrowserVersion string  `json:"browser_version"`
-	OS             string  `json:"os"`
-	OSVersion      string  `json:"os_version"`
-	Score          float64 `json:"score"`
-}
-
-func (x Result) resultKey() string {
+func resultKey(x result.Result) string {
 	if x.OS != "" {
 		return fmt.Sprintf("%s/%s", x.OS, x.BrowserVersion)
 	}
@@ -466,10 +408,10 @@ func (x Scores) table(order []string) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%sN", numberOfNines(v)) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%sN", numberOfNines(v)) + `</tr>` + "\n"
 	}
 
-	return `<table><tbody>` + tableContents + `</tbody></table>`
+	return `<table><tbody>` + tableContents + `</tbody></table>` + "\n"
 }
 
 type Points map[string]int
@@ -519,10 +461,10 @@ func (x Points) table(order []string, featuresTested int) string {
 			continue
 		}
 
-		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%d", v) + ` / ` + fmt.Sprintf("%d", featuresTested) + `</tr>`
+		tableContents = tableContents + `<tr><td>` + test + `</td><td>` + fmt.Sprintf("%d", v) + ` / ` + fmt.Sprintf("%d", featuresTested) + `</tr>` + "\n"
 	}
 
-	return `<table><tbody>` + tableContents + `</tbody></table>`
+	return `<table><tbody>` + tableContents + `</tbody></table>` + "\n"
 }
 
 func scoreToInt(v float64) int {

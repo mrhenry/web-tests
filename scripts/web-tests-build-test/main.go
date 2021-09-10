@@ -36,16 +36,16 @@ func main() {
 	}
 
 	for k, v := range meta.Tests {
-		if k == "core-web" {
+		if v.ModuleScript != "" && v.NoModulesScript != "" {
 			{
-				f1, err := os.Open(v + "_modules.js")
+				f1, err := os.Open(v.ModuleScript)
 				if err != nil {
 					log.Fatal(err)
 				}
 
 				defer f1.Close()
 
-				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, "core-web_modules.js"))
+				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, strings.TrimPrefix(v.ModuleScript, "test.")))
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -69,14 +69,14 @@ func main() {
 			}
 
 			{
-				f1, err := os.Open(v + "_no-modules.js")
+				f1, err := os.Open(v.NoModulesScript)
 				if err != nil {
 					log.Fatal(err)
 				}
 
 				defer f1.Close()
 
-				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, "core-web_no-modules.js"))
+				f2, err := os.Create(fmt.Sprintf("../../../../test-assets/%s:%s", meta.ID, strings.TrimPrefix(v.NoModulesScript, "test.")))
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -149,8 +149,8 @@ func main() {
 	<script>
 		window.testLoaded = true;
 	</script>
-	<script type="module" src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_modules.js") + `"></script>
-	<script nomodule src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, "core-web_no-modules.js") + `"></script>
+	<script type="module" src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, strings.TrimPrefix(v.ModuleScript, "test.")) + `"></script>
+	<script nomodule src="` + fmt.Sprintf("../test-assets/%s:%s", meta.ID, strings.TrimPrefix(v.NoModulesScript, "test.")) + `"></script>
 </body>
 </html>
 `
@@ -175,7 +175,7 @@ func main() {
 			continue
 		}
 
-		f1, err := os.Open(v)
+		f1, err := os.Open(v.InlineScript)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -192,6 +192,12 @@ func main() {
 			log.Fatal(err)
 		}
 
+		polyfillIOScriptTag := ""
+		if v.HasPolyfillIO && len(meta.PolyfillIO) > 0 {
+			polyfills := url.QueryEscape(strings.Join(meta.PolyfillIO, ","))
+			polyfillIOScriptTag = `<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>`
+		}
+
 		{
 			test := `<!DOCTYPE html>
 <html>
@@ -201,6 +207,8 @@ func main() {
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
 	` + errorHandlers + `
+
+	` + polyfillIOScriptTag + `
 </head>
 <body>
 	` + fixtures + `
@@ -224,59 +232,6 @@ func main() {
 `
 
 			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s.html", meta.ID, k))
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			defer f2.Close()
-
-			_, err = f2.WriteString(test)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			err = f2.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-
-		if (k == "babel" || k == "pure") && len(meta.PolyfillIO) > 0 {
-			polyfills := url.QueryEscape(strings.Join(meta.PolyfillIO, ","))
-
-			test := `<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width" />
-	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-
-	` + errorHandlers + `
-	
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>
-</head>
-<body>
-	` + fixtures + `
-	<script>
-
-		function callback(success) {
-			if ('testSuccess' in window) {
-				return;
-			}
-
-			window.testSuccess = success;
-		}
-		
-		;` + string(b) + `;
-	</script>
-	<script>
-		window.testLoaded = true;
-	</script>
-</body>
-</html>
-`
-
-			f2, err := os.Create(fmt.Sprintf("../../../../tests/%s:%s_polyfillio.html", meta.ID, k))
 			if err != nil {
 				log.Fatal(err)
 			}
