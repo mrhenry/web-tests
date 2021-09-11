@@ -75,11 +75,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
         this._baz = this._baz + ' world';
       }
-    }, {
-      key: "baz",
-      value: function baz() {
-        return this._baz;
-      }
     }]);
 
     return Fooz;
@@ -88,7 +83,5 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   customElements.define('web-test-fooz', Fooz);
   document.body.appendChild(new Fooz());
   var fooz = document.getElementsByTagName('web-test-fooz')[0];
-  setTimeout(function () {
-    cb(fooz.baz() === 'hello world');
-  }, 100);
+  cb(fooz.baz() === 'hello world');
 })(callback);

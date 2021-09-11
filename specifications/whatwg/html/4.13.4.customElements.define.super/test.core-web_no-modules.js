@@ -8470,7 +8470,6 @@ function test_pure_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol ==
 
 
 
-
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
@@ -8546,11 +8545,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
         this._baz = this._baz + ' world';
       }
-    }, {
-      key: "baz",
-      value: function baz() {
-        return this._baz;
-      }
     }]);
 
     return Fooz;
@@ -8559,9 +8553,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   customElements.define('web-test-fooz', Fooz);
   document.body.appendChild(new Fooz());
   var fooz = document.getElementsByTagName('web-test-fooz')[0];
-  setTimeout(function () {
-    cb(fooz.baz() === 'hello world');
-  }, 100);
+  cb(fooz.baz() === 'hello world');
 })(callback);
 }();
 /******/ })()

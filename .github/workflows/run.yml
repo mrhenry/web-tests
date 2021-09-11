@@ -9,6 +9,9 @@ on:
         required: false
         default: ''
 
+concurrency: 
+  group: browserstack
+
 jobs:
   build:
     name: 'Run'

@@ -4397,9 +4397,7 @@ var es_promise = __webpack_require__(8674);
   customElements.define('web-test-foo', Foo);
   document.body.appendChild(new Foo());
   var foo = document.getElementsByTagName('web-test-foo')[0];
-  setTimeout(() => {
-    cb(foo.baz() === 'hello');
-  }, 100);
+  cb(foo.baz() === 'hello');
 })(callback);
 })();
 

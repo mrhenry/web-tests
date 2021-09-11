@@ -4,6 +4,9 @@ on:
     - cron: '0 20 * * 0'
   workflow_dispatch:
 
+concurrency: 
+  group: browserstack
+
 jobs:
   build:
     name: 'Collect Context Data'

@@ -56,7 +56,5 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   customElements.define('web-test-foo', Foo);
   document.body.appendChild(new Foo());
   var foo = document.getElementsByTagName('web-test-foo')[0];
-  setTimeout(function () {
-    cb(foo.baz() === 'hello');
-  }, 100);
+  cb(foo.baz() === 'hello');
 })(callback);
