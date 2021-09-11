@@ -105,6 +105,11 @@ func main() {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<script type="text/javascript">
+		if ('customElements' in window) {
+			customElements.forcePolyfill = true;
+		}
+	</script>
 	
 	` + errorHandlers + `
 	<script nomodule>
@@ -205,6 +210,11 @@ func main() {
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	<script type="text/javascript">
+		if ('customElements' in window) {
+			customElements.forcePolyfill = true;
+		}
+	</script>
 
 	` + errorHandlers + `
 
