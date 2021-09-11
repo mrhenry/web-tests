@@ -124,6 +124,10 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 			continue // too old
 		case "firefox/3.6":
 			continue // broken
+		case "safari/6.0":
+			continue // seemingly broken
+		case "safari/5.1":
+			continue // seemingly broken
 		default:
 
 			browsersMap[key] = b
