@@ -14,7 +14,6 @@ import (
 )
 
 func failingPolyfillIO() {
-	totalPoints := Points{}
 	totalTests := map[string]struct{}{}
 	totalFeatures := 0
 
@@ -242,7 +241,6 @@ func failingPolyfillIO() {
 			}
 		}
 
-		totalPoints.sum(scores)
 		scoresTable := scores.tableIfFailing(testsSlice)
 		if scoresTable == "" {
 			continue
@@ -338,7 +336,7 @@ func failingPolyfillIO() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalPoints.table(testsSlice, totalFeatures) + out + `
+	` + out + `
 </body>
 </html>`
 

@@ -14,7 +14,6 @@ import (
 )
 
 func failingCoreWeb() {
-	totalPoints := Points{}
 	totalTests := map[string]struct{}{}
 	totalFeatures := 0
 
@@ -238,7 +237,6 @@ func failingCoreWeb() {
 			}
 		}
 
-		totalPoints.sum(scores)
 		scoresTable := scores.tableIfFailing(testsSlice)
 		if scoresTable == "" {
 			continue
@@ -334,7 +332,7 @@ func failingCoreWeb() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalPoints.table(testsSlice, totalFeatures) + out + `
+	` + out + `
 </body>
 </html>`
 

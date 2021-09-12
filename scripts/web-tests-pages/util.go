@@ -118,7 +118,10 @@ func (x Scores) tableIfFailing(order []string) string {
 	return `<table><tbody>` + tableContents + `</tbody></table>` + "\n"
 }
 
-type Points map[string]int
+type Points struct {
+	p         map[string]int
+	threshold float64
+}
 
 func (x Points) sum(y Scores) {
 	avgScores := map[string]float64{}
@@ -150,8 +153,8 @@ func (x Points) sum(y Scores) {
 	}
 
 	for ck, score := range avgScores {
-		if score >= 0.99999 {
-			x[ck] = x[ck] + 1
+		if score >= x.threshold {
+			x.p[ck] = x.p[ck] + 1
 		}
 	}
 }
@@ -160,7 +163,7 @@ func (x Points) table(order []string, featuresTested int) string {
 	tableContents := ""
 
 	for _, test := range order {
-		v, ok := x[test]
+		v, ok := x.p[test]
 		if !ok {
 			continue
 		}

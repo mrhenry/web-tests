@@ -14,7 +14,14 @@ import (
 )
 
 func fullResult() {
-	totalPoints := Points{}
+	totalPoints5 := Points{
+		threshold: 0.99999,
+		p:         map[string]int{},
+	}
+	totalPoints4 := Points{
+		threshold: 0.9999,
+		p:         map[string]int{},
+	}
 	totalTests := map[string]struct{}{}
 	totalFeatures := 0
 
@@ -225,7 +232,8 @@ func fullResult() {
 			}
 		}
 
-		totalPoints.sum(scores)
+		totalPoints5.sum(scores)
+		totalPoints4.sum(scores)
 
 		featureSummary := `<summary id="` + feature.ID + `">` + feature.Spec.ID + " " + feature.Spec.Name + `<br>` + scores.table(testsSlice) + `</summary>`
 		out = out + `<details>` + featureSummary + featureDetails + `
@@ -317,7 +325,7 @@ func fullResult() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
-	` + totalPoints.table(testsSlice, totalFeatures) + out + `
+	` + "<p>Works for 99.999% of visitors</p>" + totalPoints5.table(testsSlice, totalFeatures) + "<p>Works for 99.99% of visitors</p>" + totalPoints4.table(testsSlice, totalFeatures) + out + `
 </body>
 </html>`
 
