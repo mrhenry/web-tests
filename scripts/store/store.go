@@ -728,6 +728,7 @@ UA_LOOP:
 		for _, browser := range allBrowsers {
 			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" {
 				if strings.Split(ua.OSVersion, ".")[0] == strings.Split(browser.OSVersion, ".")[0] {
+					browser.RealBrowser = &ua
 					out = append(out, browser)
 					continue UA_LOOP
 				}
@@ -735,6 +736,7 @@ UA_LOOP:
 
 			if ua.Browser == browser.Browser && ua.Browser != "" && ua.BrowserVersion != "" {
 				if strings.Split(ua.BrowserVersion, ".")[0] == strings.Split(browser.BrowserVersion, ".")[0] {
+					browser.RealBrowser = &ua
 					out = append(out, browser)
 					continue UA_LOOP
 				}
@@ -947,7 +949,7 @@ func SelectPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIO
 //go:embed select_results_by_browser_and_priority.sql
 var selectResultsByBrowserAndPriorityQuery string
 
-func SelectTestsByBrowserAndPriority(ctx context.Context, db *sql.DB, browser browserstack.Browser) ([]browserstack.Test, error) {
+func SelectTestsByBrowserAndPriority(ctx context.Context, db *sql.DB, browser browserua.UserAgent) ([]browserstack.Test, error) {
 	rows, err := db.QueryContext(
 		ctx,
 		selectResultsByBrowserAndPriorityQuery,

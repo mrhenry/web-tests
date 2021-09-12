@@ -12,15 +12,18 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mrhenry/web-tests/scripts/browserua"
 )
 
 type Browser struct {
-	Browser        string `json:"browser"`
-	BrowserVersion string `json:"browser_version"`
-	Device         string `json:"device"`
-	OS             string `json:"os"`
-	OSVersion      string `json:"os_version"`
-	RealMobile     bool   `json:"real_mobile"`
+	Browser        string               `json:"browser"`
+	BrowserVersion string               `json:"browser_version"`
+	Device         string               `json:"device"`
+	OS             string               `json:"os"`
+	OSVersion      string               `json:"os_version"`
+	RealMobile     bool                 `json:"real_mobile"`
+	RealBrowser    *browserua.UserAgent `json:"0"`
 }
 
 type BrowsersByTestSpeed []Browser

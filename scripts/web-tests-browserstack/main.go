@@ -203,7 +203,7 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 			time.Sleep(time.Second * 5)
 
-			tests, err := store.SelectTestsByBrowserAndPriority(ctx, db, b)
+			tests, err := store.SelectTestsByBrowserAndPriority(ctx, db, *b.RealBrowser)
 			if err != nil {
 				panic(err)
 			}
