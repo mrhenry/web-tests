@@ -1,8 +1,5 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
 var __webpack_exports__ = {};
-
-
 (function (cb) {
   var resolvedTimeZone = new Intl.DateTimeFormat('en', {
     timeZone: 'Australia/Sydney',
