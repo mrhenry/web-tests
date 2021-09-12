@@ -443,7 +443,9 @@ func UpdateResultWithPriorityShift(ctx context.Context, db *sql.DB, x result.Res
 		return err
 	}
 
-	if existing.Score == x.Score {
+	if x.Score == -1 {
+		x.Score = existing.Score
+	} else if existing.Score == x.Score {
 		x.Priority = x.Priority - 1
 		if x.Priority < 0 {
 			x.Priority = 0

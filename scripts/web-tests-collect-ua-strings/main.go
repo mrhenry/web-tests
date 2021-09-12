@@ -207,6 +207,9 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 		}
 
 		if len(existing) == 0 {
+			log.Println("new browser", ua.UserAgent)
+			log.Println(ua.Browser, ua.BrowserVersion, ua.OS, ua.OSVersion)
+
 			features, err := store.SelectAllFeatures(ctx, db)
 			if err != nil {
 				log.Fatal(err)
@@ -217,6 +220,18 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 					hash, err := feature.ContentHashForTest(test)
 					if err != nil {
 						log.Fatal(err)
+					}
+
+					ok, _ := store.ExistsResult(ctx, db, result.Result{
+						Browser:        ua.Browser,
+						BrowserVersion: ua.BrowserVersion,
+						FeatureID:      feature.ID,
+						OS:             ua.OS,
+						OSVersion:      ua.OSVersion,
+						Test:           test,
+					})
+					if ok {
+						continue
 					}
 
 					err = store.UpsertResult(ctx, db, result.Result{
