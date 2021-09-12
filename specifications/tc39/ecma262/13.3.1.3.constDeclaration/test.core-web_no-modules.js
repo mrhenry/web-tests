@@ -1,5 +1,8 @@
 /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
 var __webpack_exports__ = {};
+
+
 function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 
 (function (cb) {

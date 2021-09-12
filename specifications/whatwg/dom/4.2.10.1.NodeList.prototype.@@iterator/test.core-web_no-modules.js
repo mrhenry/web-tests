@@ -1,6 +1,372 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 8654:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+var Iterator = __webpack_require__(4649);
+
+__webpack_require__(2023);
+
+__webpack_require__(9070);
+
+__webpack_require__(8304);
+
+__webpack_require__(8011);
+
+var ArrayIterator = function () {
+  var ArrayIterator = function ArrayIterator(arr, kind) {
+    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
+    Iterator.call(this, arr);
+    if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
+    Object.defineProperty(this, '__kind__', {
+      value: kind,
+      configurable: false,
+      enumerable: false,
+      writable: false
+    });
+  };
+
+  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, Iterator.prototype);
+  ArrayIterator.prototype = Object.create(Iterator.prototype, {
+    constructor: {
+      value: ArrayIterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function value(i) {
+        if (this.__kind__ === 'value') return this.__list__[i];
+        if (this.__kind__ === 'key+value') return [i, this.__list__[i]];
+        return i;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function value() {
+        return '[object Array Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  });
+  return ArrayIterator;
+}();
+
+module.exports = ArrayIterator;
+
+/***/ }),
+
+/***/ 4649:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(3321);
+
+__webpack_require__(4812);
+
+__webpack_require__(9601);
+
+__webpack_require__(9070);
+
+__webpack_require__(9554);
+
+__webpack_require__(2772);
+
+__webpack_require__(561);
+
+__webpack_require__(2165);
+
+__webpack_require__(6992);
+
+__webpack_require__(1539);
+
+__webpack_require__(8783);
+
+__webpack_require__(2526);
+
+__webpack_require__(1817);
+
+__webpack_require__(3680);
+
+__webpack_require__(3706);
+
+__webpack_require__(408);
+
+var Iterator = function () {
+  var clear = function clear() {
+    this.length = 0;
+    return this;
+  };
+
+  var callable = function callable(fn) {
+    if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
+    return fn;
+  };
+
+  var Iterator = function Iterator(list, context) {
+    if (!(this instanceof Iterator)) {
+      return new Iterator(list, context);
+    }
+
+    Object.defineProperties(this, {
+      __list__: {
+        writable: true,
+        value: list
+      },
+      __context__: {
+        writable: true,
+        value: context
+      },
+      __nextIndex__: {
+        writable: true,
+        value: 0
+      }
+    });
+    if (!context) return;
+    callable(context.on);
+    context.on('_add', this._onAdd.bind(this));
+    context.on('_delete', this._onDelete.bind(this));
+    context.on('_clear', this._onClear.bind(this));
+  };
+
+  Object.defineProperties(Iterator.prototype, Object.assign({
+    constructor: {
+      value: Iterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _next: {
+      value: function value() {
+        var i;
+        if (!this.__list__) return;
+
+        if (this.__redo__) {
+          i = this.__redo__.shift();
+          if (i !== undefined) return i;
+        }
+
+        if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
+
+        this._unBind();
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    next: {
+      value: function value() {
+        return this._createResult(this._next());
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _createResult: {
+      value: function value(i) {
+        if (i === undefined) return {
+          done: true,
+          value: undefined
+        };
+        return {
+          done: false,
+          value: this._resolve(i)
+        };
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function value(i) {
+        return this.__list__[i];
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _unBind: {
+      value: function value() {
+        this.__list__ = null;
+        delete this.__redo__;
+        if (!this.__context__) return;
+
+        this.__context__.off('_add', this._onAdd.bind(this));
+
+        this.__context__.off('_delete', this._onDelete.bind(this));
+
+        this.__context__.off('_clear', this._onClear.bind(this));
+
+        this.__context__ = null;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function value() {
+        return '[object Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }, {
+    _onAdd: {
+      value: function value(index) {
+        if (index >= this.__nextIndex__) return;
+        ++this.__nextIndex__;
+
+        if (!this.__redo__) {
+          Object.defineProperty(this, '__redo__', {
+            value: [index],
+            configurable: true,
+            enumerable: false,
+            writable: false
+          });
+          return;
+        }
+
+        this.__redo__.forEach(function (redo, i) {
+          if (redo >= index) this.__redo__[i] = ++redo;
+        }, this);
+
+        this.__redo__.push(index);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onDelete: {
+      value: function value(index) {
+        var i;
+        if (index >= this.__nextIndex__) return;
+        --this.__nextIndex__;
+        if (!this.__redo__) return;
+        i = this.__redo__.indexOf(index);
+        if (i !== -1) this.__redo__.splice(i, 1);
+
+        this.__redo__.forEach(function (redo, i) {
+          if (redo > index) this.__redo__[i] = --redo;
+        }, this);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onClear: {
+      value: function value() {
+        if (this.__redo__) clear.call(this.__redo__);
+        this.__nextIndex__ = 0;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }));
+  Object.defineProperty(Iterator.prototype, Symbol.iterator, {
+    value: function value() {
+      return this;
+    },
+    configurable: true,
+    enumerable: false,
+    writable: true
+  });
+  Object.defineProperty(Iterator.prototype, Symbol.toStringTag, {
+    value: 'Iterator',
+    configurable: false,
+    enumerable: false,
+    writable: true
+  });
+  return Iterator;
+}();
+
+module.exports = Iterator;
+
+/***/ }),
+
+/***/ 9161:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+var ArrayIterator = __webpack_require__(8654);
+
+var Iterator = __webpack_require__(4649);
+
+__webpack_require__(2526);
+
+__webpack_require__(1817);
+
+__webpack_require__(1539);
+
+__webpack_require__(2165);
+
+__webpack_require__(6992);
+
+__webpack_require__(8783);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (undefined) {
+  if (!("Symbol" in self && "iterator" in self.Symbol && function () {
+    var e = document.createDocumentFragment();
+    return e.appendChild(document.createElement("div")), !!e.childNodes[self.Symbol.iterator];
+  }())) {
+    NodeList.prototype[Symbol.iterator] = function () {
+      return new ArrayIterator(this);
+    };
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+
+/***/ }),
+
+/***/ 1405:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(2526);
+
+__webpack_require__(1817);
+
+__webpack_require__(1539);
+
+__webpack_require__(2165);
+
+__webpack_require__(6992);
+
+__webpack_require__(8783);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (undefined) {
+  if (!("document" in self)) {
+    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
+      if (self.HTMLDocument) {
+        self.Document = self.HTMLDocument;
+      } else {
+        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
+        self.Document.prototype = document;
+      }
+    }
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+
+/***/ }),
+
 /***/ 3099:
 /***/ (function(module) {
 
@@ -3231,314 +3597,9 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.is-array.js
 var es_array_is_array = __webpack_require__(9753);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
-var es_string_includes = __webpack_require__(2023);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__(9070);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
-var es_object_set_prototype_of = __webpack_require__(8304);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
-var es_object_create = __webpack_require__(8011);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
-var es_object_define_properties = __webpack_require__(3321);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
-var es_function_bind = __webpack_require__(4812);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
-var es_object_assign = __webpack_require__(9601);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
-var es_array_for_each = __webpack_require__(9554);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
-var es_array_index_of = __webpack_require__(2772);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
-var es_array_splice = __webpack_require__(561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
-var es_symbol_to_string_tag = __webpack_require__(3680);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
-var es_json_to_string_tag = __webpack_require__(3706);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
-var es_math_to_string_tag = __webpack_require__(408);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Iterator = function () {
-  var clear = function clear() {
-    this.length = 0;
-    return this;
-  };
-
-  var callable = function callable(fn) {
-    if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
-    return fn;
-  };
-
-  var Iterator = function Iterator(list, context) {
-    if (!(this instanceof Iterator)) {
-      return new Iterator(list, context);
-    }
-
-    Object.defineProperties(this, {
-      __list__: {
-        writable: true,
-        value: list
-      },
-      __context__: {
-        writable: true,
-        value: context
-      },
-      __nextIndex__: {
-        writable: true,
-        value: 0
-      }
-    });
-    if (!context) return;
-    callable(context.on);
-    context.on('_add', this._onAdd.bind(this));
-    context.on('_delete', this._onDelete.bind(this));
-    context.on('_clear', this._onClear.bind(this));
-  };
-
-  Object.defineProperties(Iterator.prototype, Object.assign({
-    constructor: {
-      value: Iterator,
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _next: {
-      value: function value() {
-        var i;
-        if (!this.__list__) return;
-
-        if (this.__redo__) {
-          i = this.__redo__.shift();
-          if (i !== undefined) return i;
-        }
-
-        if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
-
-        this._unBind();
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    next: {
-      value: function value() {
-        return this._createResult(this._next());
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _createResult: {
-      value: function value(i) {
-        if (i === undefined) return {
-          done: true,
-          value: undefined
-        };
-        return {
-          done: false,
-          value: this._resolve(i)
-        };
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _resolve: {
-      value: function value(i) {
-        return this.__list__[i];
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _unBind: {
-      value: function value() {
-        this.__list__ = null;
-        delete this.__redo__;
-        if (!this.__context__) return;
-
-        this.__context__.off('_add', this._onAdd.bind(this));
-
-        this.__context__.off('_delete', this._onDelete.bind(this));
-
-        this.__context__.off('_clear', this._onClear.bind(this));
-
-        this.__context__ = null;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    toString: {
-      value: function value() {
-        return '[object Iterator]';
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  }, {
-    _onAdd: {
-      value: function value(index) {
-        if (index >= this.__nextIndex__) return;
-        ++this.__nextIndex__;
-
-        if (!this.__redo__) {
-          Object.defineProperty(this, '__redo__', {
-            value: [index],
-            configurable: true,
-            enumerable: false,
-            writable: false
-          });
-          return;
-        }
-
-        this.__redo__.forEach(function (redo, i) {
-          if (redo >= index) this.__redo__[i] = ++redo;
-        }, this);
-
-        this.__redo__.push(index);
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _onDelete: {
-      value: function value(index) {
-        var i;
-        if (index >= this.__nextIndex__) return;
-        --this.__nextIndex__;
-        if (!this.__redo__) return;
-        i = this.__redo__.indexOf(index);
-        if (i !== -1) this.__redo__.splice(i, 1);
-
-        this.__redo__.forEach(function (redo, i) {
-          if (redo > index) this.__redo__[i] = --redo;
-        }, this);
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _onClear: {
-      value: function value() {
-        if (this.__redo__) clear.call(this.__redo__);
-        this.__nextIndex__ = 0;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  }));
-  Object.defineProperty(Iterator.prototype, Symbol.iterator, {
-    value: function value() {
-      return this;
-    },
-    configurable: true,
-    enumerable: false,
-    writable: true
-  });
-  Object.defineProperty(Iterator.prototype, Symbol.toStringTag, {
-    value: 'Iterator',
-    configurable: false,
-    enumerable: false,
-    writable: true
-  });
-  return Iterator;
-}();
-
-/* harmony default export */ var _Iterator = (Iterator);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
-
-
-
-
-
-
-var ArrayIterator = function () {
-  var ArrayIterator = function ArrayIterator(arr, kind) {
-    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
-    _Iterator.call(this, arr);
-    if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
-    Object.defineProperty(this, '__kind__', {
-      value: kind,
-      configurable: false,
-      enumerable: false,
-      writable: false
-    });
-  };
-
-  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
-  ArrayIterator.prototype = Object.create(_Iterator.prototype, {
-    constructor: {
-      value: ArrayIterator,
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _resolve: {
-      value: function value(i) {
-        if (this.__kind__ === 'value') return this.__list__[i];
-        if (this.__kind__ === 'key+value') return [i, this.__list__[i]];
-        return i;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    toString: {
-      value: function value() {
-        return '[object Array Iterator]';
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  });
-  return ArrayIterator;
-}();
-
-/* harmony default export */ var _ArrayIterator = (ArrayIterator);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("Symbol" in self && "iterator" in self.Symbol && function () {
-    var e = document.createDocumentFragment();
-    return e.appendChild(document.createElement("div")), !!e.childNodes[self.Symbol.iterator];
-  }())) {
-    NodeList.prototype[Symbol.iterator] = function () {
-      return new _ArrayIterator(this);
-    };
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
+var NodeList_prototype_iterator = __webpack_require__(9161);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.forEach.js
-function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { NodeList_prototype_forEach_typeof = function _typeof(obj) { return typeof obj; }; } else { NodeList_prototype_forEach_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return NodeList_prototype_forEach_typeof(obj); }
 
 
 
@@ -3546,35 +3607,22 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; if 
 
 
 
+
+
+__webpack_require__(9554);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function (undefined) {
   if (!("forEach" in NodeList.prototype)) {
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function document_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { document_typeof = function _typeof(obj) { return typeof obj; }; } else { document_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return document_typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
+var modules_document = __webpack_require__(1405);
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.2.10.1.NodeList.prototype.@@iterator/test.pure.js
+
+
 
 
 

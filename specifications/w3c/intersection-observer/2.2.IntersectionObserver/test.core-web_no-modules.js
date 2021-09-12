@@ -1,6 +1,77 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 9937:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(2526);
+
+__webpack_require__(1817);
+
+__webpack_require__(1539);
+
+__webpack_require__(2165);
+
+__webpack_require__(6992);
+
+__webpack_require__(8783);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (undefined) {
+  if (!("Window" in self)) {
+    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
+      (function (global) {
+        if (global.constructor) {
+          global.Window = global.constructor;
+        } else {
+          (global.Window = global.constructor = new Function('return function Window() {}')()).prototype = self;
+        }
+      })(self);
+    }
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+
+/***/ }),
+
+/***/ 1405:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(2526);
+
+__webpack_require__(1817);
+
+__webpack_require__(1539);
+
+__webpack_require__(2165);
+
+__webpack_require__(6992);
+
+__webpack_require__(8783);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+(function (undefined) {
+  if (!("document" in self)) {
+    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
+      if (self.HTMLDocument) {
+        self.Document = self.HTMLDocument;
+      } else {
+        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
+        self.Document.prototype = document;
+      }
+    }
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+
+/***/ }),
+
 /***/ 3099:
 /***/ (function(module) {
 
@@ -4321,6 +4392,8 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/Window.js
+var modules_Window = __webpack_require__(9937);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -4333,49 +4406,25 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Window.js
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/getComputedStyle.js
 
 
 
 
 
 
+
+
+
+__webpack_require__(4916);
+
+__webpack_require__(4723);
+
+__webpack_require__(9600);
+
+__webpack_require__(5306);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-(function (undefined) {
-  if (!("Window" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      (function (global) {
-        if (global.constructor) {
-          global.Window = global.constructor;
-        } else {
-          (global.Window = global.constructor = new Function('return function Window() {}')()).prototype = self;
-        }
-      })(self);
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4916);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match.js
-var es_string_match = __webpack_require__(4723);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
-var es_array_join = __webpack_require__(9600);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(5306);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/getComputedStyle.js
-function getComputedStyle_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { getComputedStyle_typeof = function _typeof(obj) { return typeof obj; }; } else { getComputedStyle_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return getComputedStyle_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
 
 (function (undefined) {
   if (!("getComputedStyle" in self)) {
@@ -4468,40 +4517,22 @@ function getComputedStyle_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sy
       };
     })(self);
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : getComputedStyle_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : getComputedStyle_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : getComputedStyle_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function document_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { document_typeof = function _typeof(obj) { return typeof obj; }; } else { document_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return document_typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__(2564);
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
+var modules_document = __webpack_require__(1405);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
+
+
+
+
+
+
+
+
+
+__webpack_require__(2564);
+
 function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_typeof(obj); }
-
-
-
-
-
-
-
 
 (function (undefined) {
   if (!("Element" in self && "HTMLElement" in self)) {
@@ -4601,35 +4632,31 @@ function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === 
     })();
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__(9070);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__(7042);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3710);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
-var es_array_includes = __webpack_require__(6699);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
-var es_string_includes = __webpack_require__(2023);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
-var es_array_index_of = __webpack_require__(2772);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
-var es_array_splice = __webpack_require__(561);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Event.js
+
+
+
+
+
+
+
+
+
+__webpack_require__(9070);
+
+__webpack_require__(7042);
+
+__webpack_require__(3710);
+
+__webpack_require__(6699);
+
+__webpack_require__(2023);
+
+__webpack_require__(2772);
+
+__webpack_require__(561);
+
 function Event_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Event_typeof = function _typeof(obj) { return typeof obj; }; } else { Event_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Event_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (function (undefined) {
   if (!function (n) {
@@ -4847,18 +4874,21 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "f
     })();
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Event_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Event_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Event_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
-var es_date_now = __webpack_require__(3843);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/performance.now.js
+
+
+
+
+
+
+
+
+
+__webpack_require__(3843);
+
+__webpack_require__(3710);
+
 function performance_now_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { performance_now_typeof = function _typeof(obj) { return typeof obj; }; } else { performance_now_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return performance_now_typeof(obj); }
-
-
-
-
-
-
-
-
 
 (function (undefined) {
   if (!("performance" in self && "now" in self.performance)) {
@@ -4875,53 +4905,51 @@ function performance_now_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sym
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : performance_now_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : performance_now_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : performance_now_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
-var es_number_constructor = __webpack_require__(9653);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.to-fixed.js
-var es_number_to_fixed = __webpack_require__(6977);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
-var es_function_bind = __webpack_require__(4812);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
-var es_array_map = __webpack_require__(1249);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.some.js
-var es_array_some = __webpack_require__(5212);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
-var es_array_filter = __webpack_require__(7327);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.is-array.js
-var es_array_is_array = __webpack_require__(9753);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
-var es_array_sort = __webpack_require__(2707);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
-var es_string_split = __webpack_require__(3123);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-float.js
-var es_parse_float = __webpack_require__(4678);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
-var es_array_for_each = __webpack_require__(9554);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
+
+
+
+
+
+
+
+
+
+__webpack_require__(9653);
+
+__webpack_require__(6977);
+
+__webpack_require__(4812);
+
+__webpack_require__(9600);
+
+__webpack_require__(1249);
+
+__webpack_require__(5212);
+
+__webpack_require__(7327);
+
+__webpack_require__(7042);
+
+__webpack_require__(9753);
+
+__webpack_require__(2707);
+
+__webpack_require__(4916);
+
+__webpack_require__(3123);
+
+__webpack_require__(4678);
+
+__webpack_require__(2564);
+
+__webpack_require__(9554);
+
+__webpack_require__(2772);
+
+__webpack_require__(561);
+
 function IntersectionObserver_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { IntersectionObserver_typeof = function _typeof(obj) { return typeof obj; }; } else { IntersectionObserver_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return IntersectionObserver_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (function (undefined) {
   if (!("IntersectionObserver" in window && "IntersectionObserverEntry" in window && "intersectionRatio" in window.IntersectionObserverEntry.prototype)) {
@@ -5367,6 +5395,8 @@ function IntersectionObserver_typeof(obj) { "@babel/helpers - typeof"; if (typeo
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : IntersectionObserver_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : IntersectionObserver_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : IntersectionObserver_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
+
+
 
 
 

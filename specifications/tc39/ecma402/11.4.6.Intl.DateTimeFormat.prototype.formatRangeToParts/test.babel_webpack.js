@@ -1,5 +1,8 @@
 /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
 var __webpack_exports__ = {};
+
+
 (function (cb) {
   var parts = new Intl.DateTimeFormat('en', {
     hourCycle: 'h11',

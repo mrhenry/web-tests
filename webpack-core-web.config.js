@@ -135,6 +135,9 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							plugins: [
+								'transform-es2015-modules-simple-commonjs',
+							],
 							presets: [
 								[
 									'@babel/preset-env',
@@ -170,6 +173,7 @@ module.exports = [
 						options: {
 							comments: false,
 							plugins: [
+								'transform-es2015-modules-simple-commonjs',
 								[
 									'@mrhenry/core-web',
 									{
