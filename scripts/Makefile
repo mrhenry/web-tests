@@ -27,9 +27,9 @@ web-tests-collect-ua-strings: $(wildcard web-tests-collect-ua-strings/*)
 web-tests-collect-polyfillio-hashes: $(wildcard web-tests-collect-polyfillio-hashes/*)
 	go install ./web-tests-collect-polyfillio-hashes/...
 
-web-tests-store-data-in-sqlite: $(wildcard web-tests-store-data-in-sqlite/*)
-	go install ./web-tests-store-data-in-sqlite/...
+web-tests-passes: $(wildcard web-tests-passes/*)
+	go install ./web-tests-passes/...
 
-all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-store-data-in-sqlite
+all: web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes
 
-.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-store-data-in-sqlite
+.PHONY: all web-tests-browserstack web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes
