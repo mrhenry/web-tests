@@ -749,14 +749,15 @@ UA_LOOP:
 	return out, nil
 }
 
-//go:embed select_results_for_ua.sql
-var selectResultsForUAQuery string
+//go:embed select_results_for_ua_and_polyfill_list.sql
+var selectResultsForUAAndPolyfillListQuery string
 
-func SelectResultsForUA(ctx context.Context, db *sql.DB, ua browserua.UserAgent) ([]result.Result, error) {
+func SelectResultsForUAAndPolyfillList(ctx context.Context, db *sql.DB, ua browserua.UserAgent, polyfillList string) ([]result.Result, error) {
 	rows, err := db.QueryContext(
 		ctx,
-		selectResultsForUAQuery,
+		selectResultsForUAAndPolyfillListQuery,
 		ua.UserAgent,
+		"%"+polyfillList+"%",
 	)
 	if err == sql.ErrNoRows {
 		return []result.Result{}, nil
@@ -882,8 +883,9 @@ func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIO
 		ctx,
 		insertPolyfillIOHashQuery,
 
-		x.List,
+		list,
 		x.UA,
+
 		x.Hash,
 	)
 	if err != nil {
@@ -891,12 +893,16 @@ func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIO
 		return err
 	}
 
-	results, err := SelectResultsForUA(ctx, db, browserua.UserAgent{UserAgent: x.UA})
+	results, err := SelectResultsForUAAndPolyfillList(ctx, db, browserua.UserAgent{UserAgent: x.UA}, string(list))
 	if err != nil {
 		return err
 	}
 
 	for _, r := range results {
+		if !strings.HasSuffix(r.Test, "_polyfillio") {
+			continue
+		}
+
 		r.Priority = r.Priority + 1
 		if r.Priority > 10 {
 			r.Priority = 10

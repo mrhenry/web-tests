@@ -6,3 +6,6 @@ JOIN `user_agents` ON
 	AND `results`.`os_version`=`user_agents`.`os_version`
 	AND `results`.`os`=`user_agents`.`os`
 	AND `user_agents`.`ua` = ?
+JOIN `features` ON 
+	`results`.`feature_id` = `features`.`id`
+	AND `features`.`polyfill_io_list` LIKE ?
