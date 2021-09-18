@@ -356,7 +356,7 @@ func ExistsFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		return false, nil
 	}
 	if err != nil {
-		log.Printf("Error %s when scanning a selected result", err)
+		log.Printf("Error %s when checking if feature exists", err)
 		return false, err
 	}
 
@@ -993,4 +993,34 @@ func SelectTestsByBrowserAndPriority(ctx context.Context, db *sql.DB, browser br
 	}
 
 	return tests, nil
+}
+
+//go:embed select_sum_results_priority.sql
+var selectSumResultsPriorityQuery string
+
+func SelectSumResultsPriority(ctx context.Context, db *sql.DB) (int, error) {
+	sum := 0
+
+	row := db.QueryRowContext(
+		ctx,
+		selectSumResultsPriorityQuery,
+	)
+	err := row.Err()
+	if err == sql.ErrNoRows {
+		return -1, nil
+	}
+	if row.Err() != nil {
+		log.Printf("Error %s when selecting the sum of results priority", err)
+		return -1, err
+	}
+	err = row.Scan(&sum)
+	if err == sql.ErrNoRows {
+		return -1, nil
+	}
+	if err != nil {
+		log.Printf("Error %s when selecting the sum of results priority", err)
+		return -1, err
+	}
+
+	return sum, nil
 }

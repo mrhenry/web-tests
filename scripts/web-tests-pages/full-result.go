@@ -253,6 +253,11 @@ func fullResult() {
 
 	sort.Sort(sort.StringSlice(testsSlice))
 
+	prioritySum, err := store.SelectSumResultsPriority(context.Background(), db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	{
 		resultsHTML := `<!DOCTYPE html>
 <html>
@@ -325,6 +330,7 @@ func fullResult() {
 </head>
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
+	<p><i>Maybe stable after ` + fmt.Sprint(prioritySum) + ` more tests</i></p>
 	` + "<p>Works for 99.999% of visitors</p>" + totalPoints5.table(testsSlice, totalFeatures) + "<p>Works for 99.99% of visitors</p>" + totalPoints4.table(testsSlice, totalFeatures) + out + `
 </body>
 </html>`
