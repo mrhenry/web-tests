@@ -20,6 +20,8 @@ func main() {
 		panic(err)
 	}
 
+	defer store.CloseDB(db)
+
 	featureDirs := []string{}
 
 	err = filepath.Walk("./specifications", func(path string, info os.FileInfo, err error) error {

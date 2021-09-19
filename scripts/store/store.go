@@ -43,6 +43,18 @@ func NewSqliteDatabase(path string, readOnly bool) (*sql.DB, error) {
 	return db, nil
 }
 
+func CloseDB(db *sql.DB) {
+	_, err := db.Exec("VACUUM")
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = db.Close()
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 //go:embed create_features_table.sql
 var createFeaturesTableQuery string
 

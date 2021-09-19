@@ -24,6 +24,8 @@ func main() {
 		panic(err)
 	}
 
+	defer store.CloseDB(db)
+
 	uas, err := store.SelectAllUserAgents(context.Background(), db)
 	if err != nil {
 		panic(err)

@@ -38,6 +38,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	defer store.CloseDB(db)
+
 	doneChan := make(chan bool, 1)
 
 	go func() {
