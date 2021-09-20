@@ -1,13 +1,31 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3099:
-/***/ (function(module) {
+/***/ 9662:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-module.exports = function (it) {
-  if (typeof it != 'function') {
-    throw TypeError(String(it) + ' is not a function');
-  } return it;
+var isCallable = __webpack_require__(614);
+var tryToString = __webpack_require__(6330);
+
+// `Assert: IsCallable(argument) is true`
+module.exports = function (argument) {
+  if (isCallable(argument)) return argument;
+  throw TypeError(tryToString(argument) + ' is not a function');
+};
+
+
+/***/ }),
+
+/***/ 9483:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var isConstructor = __webpack_require__(4411);
+var tryToString = __webpack_require__(6330);
+
+// `Assert: IsConstructor(argument) is true`
+module.exports = function (argument) {
+  if (isConstructor(argument)) return argument;
+  throw TypeError(tryToString(argument) + ' is not a constructor');
 };
 
 
@@ -16,12 +34,11 @@ module.exports = function (it) {
 /***/ 6077:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var isObject = __webpack_require__(111);
+var isCallable = __webpack_require__(614);
 
-module.exports = function (it) {
-  if (!isObject(it) && it !== null) {
-    throw TypeError("Can't set " + String(it) + ' as a prototype');
-  } return it;
+module.exports = function (argument) {
+  if (typeof argument === 'object' || isCallable(argument)) return argument;
+  throw TypeError("Can't set " + String(argument) + ' as a prototype');
 };
 
 
@@ -58,9 +75,8 @@ module.exports = function (key) {
 /***/ (function(module) {
 
 module.exports = function (it, Constructor, name) {
-  if (!(it instanceof Constructor)) {
-    throw TypeError('Incorrect ' + (name ? name + ' ' : '') + 'invocation');
-  } return it;
+  if (it instanceof Constructor) return it;
+  throw TypeError('Incorrect ' + (name ? name + ' ' : '') + 'invocation');
 };
 
 
@@ -71,10 +87,10 @@ module.exports = function (it, Constructor, name) {
 
 var isObject = __webpack_require__(111);
 
-module.exports = function (it) {
-  if (!isObject(it)) {
-    throw TypeError(String(it) + ' is not an object');
-  } return it;
+// `Assert: Type(argument) is Object`
+module.exports = function (argument) {
+  if (isObject(argument)) return argument;
+  throw TypeError(String(argument) + ' is not an object');
 };
 
 
@@ -219,8 +235,9 @@ module.exports = function (METHOD_NAME, argument) {
 /***/ 7475:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var isObject = __webpack_require__(111);
 var isArray = __webpack_require__(3157);
+var isConstructor = __webpack_require__(4411);
+var isObject = __webpack_require__(111);
 var wellKnownSymbol = __webpack_require__(5112);
 
 var SPECIES = wellKnownSymbol('species');
@@ -232,7 +249,7 @@ module.exports = function (originalArray) {
   if (isArray(originalArray)) {
     C = originalArray.constructor;
     // cross-realm fallback
-    if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+    if (isConstructor(C) && (C === Array || isArray(C.prototype))) C = undefined;
     else if (isObject(C)) {
       C = C[SPECIES];
       if (C === null) C = undefined;
@@ -318,6 +335,7 @@ module.exports = function (it) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var TO_STRING_TAG_SUPPORT = __webpack_require__(1694);
+var isCallable = __webpack_require__(614);
 var classofRaw = __webpack_require__(4326);
 var wellKnownSymbol = __webpack_require__(5112);
 
@@ -341,7 +359,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     // builtinTag case
     : CORRECT_ARGUMENTS ? classofRaw(O)
     // ES3 arguments fallback
-    : (result = classofRaw(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : result;
+    : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
 };
 
 
@@ -569,6 +587,7 @@ var redefine = __webpack_require__(1320);
 var InternalMetadataModule = __webpack_require__(2423);
 var iterate = __webpack_require__(408);
 var anInstance = __webpack_require__(5787);
+var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
 var fails = __webpack_require__(7293);
 var checkCorrectnessOfIteration = __webpack_require__(7072);
@@ -605,7 +624,7 @@ module.exports = function (CONSTRUCTOR_NAME, wrapper, common) {
 
   var REPLACE = isForced(
     CONSTRUCTOR_NAME,
-    typeof NativeConstructor != 'function' || !(IS_WEAK || NativePrototype.forEach && !fails(function () {
+    !isCallable(NativeConstructor) || !(IS_WEAK || NativePrototype.forEach && !fails(function () {
       new NativeConstructor().entries().next();
     }))
   );
@@ -766,6 +785,9 @@ module.exports = function (bitmap, value) {
 "use strict";
 
 var $ = __webpack_require__(2109);
+var IS_PURE = __webpack_require__(1913);
+var FunctionName = __webpack_require__(6530);
+var isCallable = __webpack_require__(614);
 var createIteratorConstructor = __webpack_require__(4994);
 var getPrototypeOf = __webpack_require__(9518);
 var setPrototypeOf = __webpack_require__(7674);
@@ -773,10 +795,11 @@ var setToStringTag = __webpack_require__(8003);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var redefine = __webpack_require__(1320);
 var wellKnownSymbol = __webpack_require__(5112);
-var IS_PURE = __webpack_require__(1913);
 var Iterators = __webpack_require__(7497);
 var IteratorsCore = __webpack_require__(3383);
 
+var PROPER_FUNCTION_NAME = FunctionName.PROPER;
+var CONFIGURABLE_FUNCTION_NAME = FunctionName.CONFIGURABLE;
 var IteratorPrototype = IteratorsCore.IteratorPrototype;
 var BUGGY_SAFARI_ITERATORS = IteratorsCore.BUGGY_SAFARI_ITERATORS;
 var ITERATOR = wellKnownSymbol('iterator');
@@ -816,8 +839,8 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
       if (!IS_PURE && getPrototypeOf(CurrentIteratorPrototype) !== IteratorPrototype) {
         if (setPrototypeOf) {
           setPrototypeOf(CurrentIteratorPrototype, IteratorPrototype);
-        } else if (typeof CurrentIteratorPrototype[ITERATOR] != 'function') {
-          createNonEnumerableProperty(CurrentIteratorPrototype, ITERATOR, returnThis);
+        } else if (!isCallable(CurrentIteratorPrototype[ITERATOR])) {
+          redefine(CurrentIteratorPrototype, ITERATOR, returnThis);
         }
       }
       // Set @@toStringTag to native iterators
@@ -827,16 +850,14 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
   }
 
   // fix Array.prototype.{ values, @@iterator }.name in V8 / FF
-  if (DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
-    INCORRECT_VALUES_NAME = true;
-    defaultIterator = function values() { return nativeIterator.call(this); };
+  if (PROPER_FUNCTION_NAME && DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
+    if (!IS_PURE && CONFIGURABLE_FUNCTION_NAME) {
+      createNonEnumerableProperty(IterablePrototype, 'name', VALUES);
+    } else {
+      INCORRECT_VALUES_NAME = true;
+      defaultIterator = function values() { return nativeIterator.call(this); };
+    }
   }
-
-  // define iterator
-  if ((!IS_PURE || FORCED) && IterablePrototype[ITERATOR] !== defaultIterator) {
-    createNonEnumerableProperty(IterablePrototype, ITERATOR, defaultIterator);
-  }
-  Iterators[NAME] = defaultIterator;
 
   // export additional methods
   if (DEFAULT) {
@@ -851,6 +872,12 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
       }
     } else $({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
   }
+
+  // define iterator
+  if ((!IS_PURE || FORCED) && IterablePrototype[ITERATOR] !== defaultIterator) {
+    redefine(IterablePrototype, ITERATOR, defaultIterator, { name: DEFAULT });
+  }
+  Iterators[NAME] = defaultIterator;
 
   return methods;
 };
@@ -1042,6 +1069,7 @@ var isForced = __webpack_require__(4705);
   options.sham        - add a flag to not completely full polyfills
   options.enumerable  - export as enumerable property
   options.noTargetGet - prevent calling a getter on target
+  options.name        - the .name of the function if it does not match the key
 */
 module.exports = function (options, source) {
   var TARGET = options.target;
@@ -1109,11 +1137,11 @@ module.exports = !fails(function () {
 /***/ 9974:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var aFunction = __webpack_require__(3099);
+var aCallable = __webpack_require__(9662);
 
 // optional / simple context binding
 module.exports = function (fn, that, length) {
-  aFunction(fn);
+  aCallable(fn);
   if (that === undefined) return fn;
   switch (length) {
     case 0: return function () {
@@ -1142,7 +1170,7 @@ module.exports = function (fn, that, length) {
 
 "use strict";
 
-var aFunction = __webpack_require__(3099);
+var aCallable = __webpack_require__(9662);
 var isObject = __webpack_require__(111);
 
 var slice = [].slice;
@@ -1159,7 +1187,7 @@ var construct = function (C, argsLength, args) {
 // `Function.prototype.bind` method implementation
 // https://tc39.es/ecma262/#sec-function.prototype.bind
 module.exports = Function.bind || function bind(that /* , ...args */) {
-  var fn = aFunction(this);
+  var fn = aCallable(this);
   var partArgs = slice.call(arguments, 1);
   var boundFunction = function bound(/* args... */) {
     var args = partArgs.concat(slice.call(arguments));
@@ -1172,13 +1200,38 @@ module.exports = Function.bind || function bind(that /* , ...args */) {
 
 /***/ }),
 
+/***/ 6530:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var DESCRIPTORS = __webpack_require__(9781);
+var has = __webpack_require__(6656);
+
+var FunctionPrototype = Function.prototype;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
+
+var EXISTS = has(FunctionPrototype, 'name');
+// additional protection from minified / mangled / dropped function names
+var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
+
+module.exports = {
+  EXISTS: EXISTS,
+  PROPER: PROPER,
+  CONFIGURABLE: CONFIGURABLE
+};
+
+
+/***/ }),
+
 /***/ 5005:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
+var isCallable = __webpack_require__(614);
 
-var aFunction = function (variable) {
-  return typeof variable == 'function' ? variable : undefined;
+var aFunction = function (argument) {
+  return isCallable(argument) ? argument : undefined;
 };
 
 module.exports = function (namespace, method) {
@@ -1192,14 +1245,15 @@ module.exports = function (namespace, method) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var classof = __webpack_require__(648);
+var getMethod = __webpack_require__(8173);
 var Iterators = __webpack_require__(7497);
 var wellKnownSymbol = __webpack_require__(5112);
 
 var ITERATOR = wellKnownSymbol('iterator');
 
 module.exports = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
+  if (it != undefined) return getMethod(it, ITERATOR)
+    || getMethod(it, '@@iterator')
     || Iterators[classof(it)];
 };
 
@@ -1209,14 +1263,29 @@ module.exports = function (it) {
 /***/ 8554:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var aCallable = __webpack_require__(9662);
 var anObject = __webpack_require__(9670);
 var getIteratorMethod = __webpack_require__(1246);
 
-module.exports = function (it, usingIterator) {
-  var iteratorMethod = arguments.length < 2 ? getIteratorMethod(it) : usingIterator;
-  if (typeof iteratorMethod != 'function') {
-    throw TypeError(String(it) + ' is not iterable');
-  } return anObject(iteratorMethod.call(it));
+module.exports = function (argument, usingIterator) {
+  var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
+  if (aCallable(iteratorMethod)) return anObject(iteratorMethod.call(argument));
+  throw TypeError(String(argument) + ' is not iterable');
+};
+
+
+/***/ }),
+
+/***/ 8173:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var aCallable = __webpack_require__(9662);
+
+// `GetMethod` abstract operation
+// https://tc39.es/ecma262/#sec-getmethod
+module.exports = function (V, P) {
+  var func = V[P];
+  return func == null ? undefined : aCallable(func);
 };
 
 
@@ -1316,6 +1385,7 @@ module.exports = fails(function () {
 /***/ 9587:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
 var setPrototypeOf = __webpack_require__(7674);
 
@@ -1326,7 +1396,7 @@ module.exports = function ($this, dummy, Wrapper) {
     // it can work only with native `setPrototypeOf`
     setPrototypeOf &&
     // we haven't completely correct pre-ES6 way for getting `new.target`, so use this
-    typeof (NewTarget = dummy.constructor) == 'function' &&
+    isCallable(NewTarget = dummy.constructor) &&
     NewTarget !== Wrapper &&
     isObject(NewTargetPrototype = NewTarget.prototype) &&
     NewTargetPrototype !== Wrapper.prototype
@@ -1340,12 +1410,13 @@ module.exports = function ($this, dummy, Wrapper) {
 /***/ 2788:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var isCallable = __webpack_require__(614);
 var store = __webpack_require__(5465);
 
 var functionToString = Function.toString;
 
 // this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
-if (typeof store.inspectSource != 'function') {
+if (!isCallable(store.inspectSource)) {
   store.inspectSource = function (it) {
     return functionToString.call(it);
   };
@@ -1554,9 +1625,69 @@ var classof = __webpack_require__(4326);
 // `IsArray` abstract operation
 // https://tc39.es/ecma262/#sec-isarray
 // eslint-disable-next-line es/no-array-isarray -- safe
-module.exports = Array.isArray || function isArray(arg) {
-  return classof(arg) == 'Array';
+module.exports = Array.isArray || function isArray(argument) {
+  return classof(argument) == 'Array';
 };
+
+
+/***/ }),
+
+/***/ 614:
+/***/ (function(module) {
+
+// `isCallable` abstract operation
+// https://tc39.es/ecma262/#sec-iscallable
+module.exports = function (argument) {
+  return typeof argument === 'function';
+};
+
+
+/***/ }),
+
+/***/ 4411:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var fails = __webpack_require__(7293);
+var isCallable = __webpack_require__(614);
+var classof = __webpack_require__(648);
+var getBuiltIn = __webpack_require__(5005);
+var inspectSource = __webpack_require__(2788);
+
+var empty = [];
+var construct = getBuiltIn('Reflect', 'construct');
+var constructorRegExp = /^\s*(?:class|function)\b/;
+var exec = constructorRegExp.exec;
+var INCORRECT_TO_STRING = !constructorRegExp.exec(function () { /* empty */ });
+
+var isConstructorModern = function (argument) {
+  if (!isCallable(argument)) return false;
+  try {
+    construct(Object, empty, argument);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+var isConstructorLegacy = function (argument) {
+  if (!isCallable(argument)) return false;
+  switch (classof(argument)) {
+    case 'AsyncFunction':
+    case 'GeneratorFunction':
+    case 'AsyncGeneratorFunction': return false;
+    // we can't check .prototype since constructors produced by .bind haven't it
+  } return INCORRECT_TO_STRING || !!exec.call(constructorRegExp, inspectSource(argument));
+};
+
+// `IsConstructor` abstract operation
+// https://tc39.es/ecma262/#sec-isconstructor
+module.exports = !construct || fails(function () {
+  var called;
+  return isConstructorModern(isConstructorModern.call)
+    || !isConstructorModern(Object)
+    || !isConstructorModern(function () { called = true; })
+    || called;
+}) ? isConstructorLegacy : isConstructorModern;
 
 
 /***/ }),
@@ -1577,6 +1708,7 @@ module.exports = function (descriptor) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var fails = __webpack_require__(7293);
+var isCallable = __webpack_require__(614);
 
 var replacement = /#|\.prototype\./;
 
@@ -1584,7 +1716,7 @@ var isForced = function (feature, detection) {
   var value = data[normalize(feature)];
   return value == POLYFILL ? true
     : value == NATIVE ? false
-    : typeof detection == 'function' ? fails(detection)
+    : isCallable(detection) ? fails(detection)
     : !!detection;
 };
 
@@ -1602,10 +1734,12 @@ module.exports = isForced;
 /***/ }),
 
 /***/ 111:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var isCallable = __webpack_require__(614);
 
 module.exports = function (it) {
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
+  return typeof it === 'object' ? it !== null : isCallable(it);
 };
 
 
@@ -1622,6 +1756,7 @@ module.exports = false;
 /***/ 2190:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var isCallable = __webpack_require__(614);
 var getBuiltIn = __webpack_require__(5005);
 var USE_SYMBOL_AS_UID = __webpack_require__(3307);
 
@@ -1629,7 +1764,7 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
   return typeof it == 'symbol';
 } : function (it) {
   var $Symbol = getBuiltIn('Symbol');
-  return typeof $Symbol == 'function' && Object(it) instanceof $Symbol;
+  return isCallable($Symbol) && Object(it) instanceof $Symbol;
 };
 
 
@@ -1675,7 +1810,7 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
-    if (typeof iterFn != 'function') throw TypeError('Target is not iterable');
+    if (!iterFn) throw TypeError(String(iterable) + ' is not iterable');
     // optimisation for array iterators
     if (isArrayIteratorMethod(iterFn)) {
       for (index = 0, length = toLength(iterable.length); length > index; index++) {
@@ -1704,13 +1839,14 @@ module.exports = function (iterable, unboundFunction, options) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var anObject = __webpack_require__(9670);
+var getMethod = __webpack_require__(8173);
 
 module.exports = function (iterator, kind, value) {
   var innerResult, innerError;
   anObject(iterator);
   try {
-    innerResult = iterator['return'];
-    if (innerResult === undefined) {
+    innerResult = getMethod(iterator, 'return');
+    if (!innerResult) {
       if (kind === 'throw') throw value;
       return value;
     }
@@ -1734,9 +1870,10 @@ module.exports = function (iterator, kind, value) {
 "use strict";
 
 var fails = __webpack_require__(7293);
+var isCallable = __webpack_require__(614);
 var create = __webpack_require__(30);
 var getPrototypeOf = __webpack_require__(9518);
-var createNonEnumerableProperty = __webpack_require__(8880);
+var redefine = __webpack_require__(1320);
 var wellKnownSymbol = __webpack_require__(5112);
 var IS_PURE = __webpack_require__(1913);
 
@@ -1769,8 +1906,8 @@ else if (IS_PURE) IteratorPrototype = create(IteratorPrototype);
 
 // `%IteratorPrototype%[@@iterator]()` method
 // https://tc39.es/ecma262/#sec-%iteratorprototype%-@@iterator
-if (typeof IteratorPrototype[ITERATOR] !== 'function') {
-  createNonEnumerableProperty(IteratorPrototype, ITERATOR, function () {
+if (!isCallable(IteratorPrototype[ITERATOR])) {
+  redefine(IteratorPrototype, ITERATOR, function () {
     return this;
   });
 }
@@ -1815,11 +1952,12 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
+var isCallable = __webpack_require__(614);
 var inspectSource = __webpack_require__(2788);
 
 var WeakMap = global.WeakMap;
 
-module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
+module.exports = isCallable(WeakMap) && /native code/.test(inspectSource(WeakMap));
 
 
 /***/ }),
@@ -2054,6 +2192,7 @@ exports.f = Object.getOwnPropertySymbols;
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var has = __webpack_require__(6656);
+var isCallable = __webpack_require__(614);
 var toObject = __webpack_require__(7908);
 var sharedKey = __webpack_require__(6200);
 var CORRECT_PROTOTYPE_GETTER = __webpack_require__(8544);
@@ -2065,11 +2204,12 @@ var ObjectPrototype = Object.prototype;
 // https://tc39.es/ecma262/#sec-object.getprototypeof
 // eslint-disable-next-line es/no-object-getprototypeof -- safe
 module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
-  O = toObject(O);
-  if (has(O, IE_PROTO)) return O[IE_PROTO];
-  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectPrototype : null;
+  var object = toObject(O);
+  if (has(object, IE_PROTO)) return object[IE_PROTO];
+  var constructor = object.constructor;
+  if (isCallable(constructor) && object instanceof constructor) {
+    return constructor.prototype;
+  } return object instanceof Object ? ObjectPrototype : null;
 };
 
 
@@ -2190,15 +2330,16 @@ module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
 /***/ 2140:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
 
 // `OrdinaryToPrimitive` abstract operation
 // https://tc39.es/ecma262/#sec-ordinarytoprimitive
 module.exports = function (input, pref) {
   var fn, val;
-  if (pref === 'string' && typeof (fn = input.toString) == 'function' && !isObject(val = fn.call(input))) return val;
-  if (typeof (fn = input.valueOf) == 'function' && !isObject(val = fn.call(input))) return val;
-  if (pref !== 'string' && typeof (fn = input.toString) == 'function' && !isObject(val = fn.call(input))) return val;
+  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
+  if (isCallable(fn = input.valueOf) && !isObject(val = fn.call(input))) return val;
+  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
 
@@ -2250,11 +2391,13 @@ module.exports = function (target, src, options) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
-var createNonEnumerableProperty = __webpack_require__(8880);
+var isCallable = __webpack_require__(614);
 var has = __webpack_require__(6656);
+var createNonEnumerableProperty = __webpack_require__(8880);
 var setGlobal = __webpack_require__(3505);
 var inspectSource = __webpack_require__(2788);
 var InternalStateModule = __webpack_require__(9909);
+var CONFIGURABLE_FUNCTION_NAME = __webpack_require__(6530).CONFIGURABLE;
 
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
@@ -2264,14 +2407,18 @@ var TEMPLATE = String(String).split('String');
   var unsafe = options ? !!options.unsafe : false;
   var simple = options ? !!options.enumerable : false;
   var noTargetGet = options ? !!options.noTargetGet : false;
+  var name = options && options.name !== undefined ? options.name : key;
   var state;
-  if (typeof value == 'function') {
-    if (typeof key == 'string' && !has(value, 'name')) {
-      createNonEnumerableProperty(value, 'name', key);
+  if (isCallable(value)) {
+    if (String(name).slice(0, 7) === 'Symbol(') {
+      name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+    }
+    if (!has(value, 'name') || (CONFIGURABLE_FUNCTION_NAME && value.name !== name)) {
+      createNonEnumerableProperty(value, 'name', name);
     }
     state = enforceInternalState(value);
     if (!state.source) {
-      state.source = TEMPLATE.join(typeof key == 'string' ? key : '');
+      state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
     }
   }
   if (O === global) {
@@ -2287,7 +2434,7 @@ var TEMPLATE = String(String).split('String');
   else createNonEnumerableProperty(O, key, value);
 // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
 })(Function.prototype, 'toString', function toString() {
-  return typeof this == 'function' && getInternalState(this).source || inspectSource(this);
+  return isCallable(this) && getInternalState(this).source || inspectSource(this);
 });
 
 
@@ -2430,7 +2577,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.17.3',
+  version: '3.18.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -2556,6 +2703,7 @@ module.exports = function (argument) {
 
 var isObject = __webpack_require__(111);
 var isSymbol = __webpack_require__(2190);
+var getMethod = __webpack_require__(8173);
 var ordinaryToPrimitive = __webpack_require__(2140);
 var wellKnownSymbol = __webpack_require__(5112);
 
@@ -2565,9 +2713,9 @@ var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
 // https://tc39.es/ecma262/#sec-toprimitive
 module.exports = function (input, pref) {
   if (!isObject(input) || isSymbol(input)) return input;
-  var exoticToPrim = input[TO_PRIMITIVE];
+  var exoticToPrim = getMethod(input, TO_PRIMITIVE);
   var result;
-  if (exoticToPrim !== undefined) {
+  if (exoticToPrim) {
     if (pref === undefined) pref = 'default';
     result = exoticToPrim.call(input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
@@ -2614,11 +2762,25 @@ module.exports = String(test) === '[object z]';
 /***/ 1340:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var isSymbol = __webpack_require__(2190);
+var classof = __webpack_require__(648);
 
 module.exports = function (argument) {
-  if (isSymbol(argument)) throw TypeError('Cannot convert a Symbol value to a string');
+  if (classof(argument) === 'Symbol') throw TypeError('Cannot convert a Symbol value to a string');
   return String(argument);
+};
+
+
+/***/ }),
+
+/***/ 6330:
+/***/ (function(module) {
+
+module.exports = function (argument) {
+  try {
+    return String(argument);
+  } catch (error) {
+    return 'Object';
+  }
 };
 
 
@@ -2947,7 +3109,7 @@ if (!TO_STRING_TAG_SUPPORT) {
 
 var $ = __webpack_require__(2109);
 var getBuiltIn = __webpack_require__(5005);
-var aFunction = __webpack_require__(3099);
+var aConstructor = __webpack_require__(9483);
 var anObject = __webpack_require__(9670);
 var isObject = __webpack_require__(111);
 var create = __webpack_require__(30);
@@ -2971,9 +3133,9 @@ var FORCED = NEW_TARGET_BUG || ARGS_BUG;
 
 $({ target: 'Reflect', stat: true, forced: FORCED, sham: FORCED }, {
   construct: function construct(Target, args /* , newTarget */) {
-    aFunction(Target);
+    aConstructor(Target);
     anObject(args);
-    var newTarget = arguments.length < 3 ? Target : aFunction(arguments[2]);
+    var newTarget = arguments.length < 3 ? Target : aConstructor(arguments[2]);
     if (ARGS_BUG && !NEW_TARGET_BUG) return nativeConstruct(Target, args, newTarget);
     if (Target == newTarget) {
       // w/o altered newTarget, optimization for 0-4 arguments
@@ -3035,6 +3197,7 @@ $({ target: 'Reflect', stat: true }, {
 
 "use strict";
 
+var PROPER_FUNCTION_NAME = __webpack_require__(6530).PROPER;
 var redefine = __webpack_require__(1320);
 var anObject = __webpack_require__(9670);
 var $toString = __webpack_require__(1340);
@@ -3047,7 +3210,7 @@ var nativeToString = RegExpPrototype[TO_STRING];
 
 var NOT_GENERIC = fails(function () { return nativeToString.call({ source: 'a', flags: 'b' }) != '/a/b'; });
 // FF44- RegExp#toString has a wrong name
-var INCORRECT_NAME = nativeToString.name != TO_STRING;
+var INCORRECT_NAME = PROPER_FUNCTION_NAME && nativeToString.name != TO_STRING;
 
 // `RegExp.prototype.toString` method
 // https://tc39.es/ecma262/#sec-regexp.prototype.tostring
@@ -3113,13 +3276,14 @@ var $ = __webpack_require__(2109);
 var DESCRIPTORS = __webpack_require__(9781);
 var global = __webpack_require__(7854);
 var has = __webpack_require__(6656);
+var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
 var defineProperty = __webpack_require__(3070).f;
 var copyConstructorProperties = __webpack_require__(9920);
 
 var NativeSymbol = global.Symbol;
 
-if (DESCRIPTORS && typeof NativeSymbol == 'function' && (!('description' in NativeSymbol.prototype) ||
+if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in NativeSymbol.prototype) ||
   // Safari 12 bug
   NativeSymbol().description !== undefined
 )) {
@@ -3186,6 +3350,7 @@ var NATIVE_SYMBOL = __webpack_require__(133);
 var fails = __webpack_require__(7293);
 var has = __webpack_require__(6656);
 var isArray = __webpack_require__(3157);
+var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
 var isSymbol = __webpack_require__(2190);
 var anObject = __webpack_require__(9670);
@@ -3202,7 +3367,6 @@ var getOwnPropertySymbolsModule = __webpack_require__(5181);
 var getOwnPropertyDescriptorModule = __webpack_require__(1236);
 var definePropertyModule = __webpack_require__(3070);
 var propertyIsEnumerableModule = __webpack_require__(5296);
-var createNonEnumerableProperty = __webpack_require__(8880);
 var redefine = __webpack_require__(1320);
 var shared = __webpack_require__(2309);
 var sharedKey = __webpack_require__(6200);
@@ -3463,7 +3627,7 @@ if ($stringify) {
       $replacer = replacer;
       if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
       if (!isArray(replacer)) replacer = function (key, value) {
-        if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
+        if (isCallable($replacer)) value = $replacer.call(this, key, value);
         if (!isSymbol(value)) return value;
       };
       args[1] = replacer;
@@ -3475,7 +3639,10 @@ if ($stringify) {
 // `Symbol.prototype[@@toPrimitive]` method
 // https://tc39.es/ecma262/#sec-symbol.prototype-@@toprimitive
 if (!$Symbol[PROTOTYPE][TO_PRIMITIVE]) {
-  createNonEnumerableProperty($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+  var valueOf = $Symbol[PROTOTYPE].valueOf;
+  redefine($Symbol[PROTOTYPE], TO_PRIMITIVE, function () {
+    return valueOf.apply(this, arguments);
+  });
 }
 // `Symbol.prototype[@@toStringTag]` property
 // https://tc39.es/ecma262/#sec-symbol.prototype-@@tostringtag
