@@ -314,6 +314,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 				testResults = append(testResults, test)
 				if !test.DidRun() {
 					log.Println(browser.ResultKey(), test.Path, test.DidRun(), test.Success(), test.Duration())
+					log.Println(test.UserAgent)
 				}
 			}
 		}
