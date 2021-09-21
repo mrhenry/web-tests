@@ -739,6 +739,7 @@ func SelectBrowsersByPriority(ctx context.Context, db *sql.DB, allBrowsers []bro
 
 UA_LOOP:
 	for _, ua := range uas {
+		ua := ua
 		for _, browser := range allBrowsers {
 			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" {
 				if strings.Split(ua.OSVersion, ".")[0] == strings.Split(browser.OSVersion, ".")[0] {
