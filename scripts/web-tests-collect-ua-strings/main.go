@@ -59,11 +59,6 @@ func main() {
 		}
 	}()
 
-	err = setBrowsersAvailableOnBrowserStack(processCtx, db)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	browserChunks, err := browsersChunked(processCtx)
 	if err != nil {
 		log.Fatal(err)
@@ -368,44 +363,6 @@ func browsersChunked(ctx context.Context) ([][]browserstack.Browser, error) {
 func updateUAs(ctx context.Context, db *sql.DB, uas []browserua.UserAgent) error {
 	for _, ua := range uas {
 		err := store.InsertUserAgent(ctx, db, ua)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func setBrowsersAvailableOnBrowserStack(ctx context.Context, db *sql.DB) error {
-	allUserAgents, err := store.SelectAllUserAgents(ctx, db)
-	if err != nil {
-		return err
-	}
-
-	userName := os.Getenv("BROWSERSTACK_USERNAME")
-	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
-
-	client := browserstack.New(browserstack.Config{
-		UserName:  userName,
-		AccessKey: accessKey,
-	})
-
-	browsers, err := client.ReducedBrowsers(ctx)
-	if err != nil {
-		return err
-	}
-
-	for _, ua := range allUserAgents {
-		ua.BrowserStack = 0
-		for _, browser := range browsers {
-			if ua.Browser == browser.Browser && ua.BrowserVersion == browser.BrowserVersion && ua.OS == browser.OS && ua.OSVersion == browser.OSVersion {
-				ua.BrowserStack = 1
-			} else if browser.OS == "ios" && ua.OS == "ios" && browser.OSVersion == ua.OSVersion {
-				ua.BrowserStack = 1
-			}
-		}
-
-		err = store.InsertUserAgent(ctx, db, ua)
 		if err != nil {
 			return err
 		}
