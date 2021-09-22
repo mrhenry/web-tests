@@ -741,7 +741,7 @@ UA_LOOP:
 	for _, ua := range uas {
 		ua := ua
 		for _, browser := range allBrowsers {
-			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" {
+			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" && ua.OS == "ios" {
 				if strings.Split(ua.OSVersion, ".")[0] == strings.Split(browser.OSVersion, ".")[0] {
 					browser.RealBrowser = &ua
 					out = append(out, browser)
@@ -749,7 +749,7 @@ UA_LOOP:
 				}
 			}
 
-			if ua.Browser == browser.Browser && ua.Browser != "" && ua.BrowserVersion != "" {
+			if ua.Browser == browser.Browser && ua.Browser != "" && ua.BrowserVersion != "" && ua.OS != "ios" && browser.OS != "ios" {
 				if strings.Split(ua.BrowserVersion, ".")[0] == strings.Split(browser.BrowserVersion, ".")[0] {
 					browser.RealBrowser = &ua
 					out = append(out, browser)
