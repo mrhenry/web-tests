@@ -254,10 +254,6 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		"name":  fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
 	})
 
-	if !(strings.ToLower(browser.Browser) == "safari" && browser.BrowserVersion == "6.2") {
-		caps["browserstack.idleTimeout"] = 15
-	}
-
 	if browser.Device != "" {
 		caps["deviceName"] = browser.Device
 		// caps["browserstack.appium_version"] = "1.8.0"
