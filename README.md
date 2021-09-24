@@ -1,4 +1,4 @@
-# Web Tests
+# Web Tests [<img src="https://wp.assets.sh/uploads/sites/2963/2021/09/mrhenry-gezicht-small.png" alt="Mr. Henry's logo." width="90" height="90" align="right">][Web Tests]
 
 > Tests for a web eco system.
 
