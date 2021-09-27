@@ -2244,7 +2244,7 @@ module.exports = Array.isArray || function isArray(argument) {
 /***/ 614:
 /***/ (function(module) {
 
-// `isCallable` abstract operation
+// `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
 module.exports = function (argument) {
   return typeof argument === 'function';
@@ -3690,7 +3690,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.18.0',
+  version: '3.18.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -7635,12 +7635,12 @@ var HEX_START = /^0x/i;
 var OCT = /^[0-7]+$/;
 var DEC = /^\d+$/;
 var HEX = /^[\dA-Fa-f]+$/;
-/* eslint-disable no-control-regex -- safe */
+/* eslint-disable regexp/no-control-character -- safe */
 var FORBIDDEN_HOST_CODE_POINT = /[\0\t\n\r #%/:<>?@[\\\]^|]/;
 var FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT = /[\0\t\n\r #/:<>?@[\\\]^|]/;
 var LEADING_AND_TRAILING_C0_CONTROL_OR_SPACE = /^[\u0000-\u0020]+|[\u0000-\u0020]+$/g;
 var TAB_AND_NEW_LINE = /[\t\n\r]/g;
-/* eslint-enable no-control-regex -- safe */
+/* eslint-enable regexp/no-control-character -- safe */
 var EOF;
 
 var parseHost = function (url, input) {
