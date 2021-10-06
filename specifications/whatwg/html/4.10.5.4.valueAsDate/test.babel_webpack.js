@@ -149,13 +149,13 @@ module.exports = function (exec) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var DESCRIPTORS = __webpack_require__(781);
-var has = __webpack_require__(656);
+var hasOwn = __webpack_require__(597);
 
 var FunctionPrototype = Function.prototype;
 // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
-var EXISTS = has(FunctionPrototype, 'name');
+var EXISTS = hasOwn(FunctionPrototype, 'name');
 // additional protection from minified / mangled / dropped function names
 var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
@@ -222,13 +222,15 @@ module.exports =
 
 /***/ }),
 
-/***/ 656:
+/***/ 597:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var toObject = __webpack_require__(908);
 
 var hasOwnProperty = {}.hasOwnProperty;
 
+// `HasOwnProperty` abstract operation
+// https://tc39.es/ecma262/#sec-hasownproperty
 module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty.call(toObject(it), key);
 };
@@ -289,7 +291,7 @@ var NATIVE_WEAK_MAP = __webpack_require__(536);
 var global = __webpack_require__(854);
 var isObject = __webpack_require__(111);
 var createNonEnumerableProperty = __webpack_require__(880);
-var objectHas = __webpack_require__(656);
+var hasOwn = __webpack_require__(597);
 var shared = __webpack_require__(465);
 var sharedKey = __webpack_require__(200);
 var hiddenKeys = __webpack_require__(501);
@@ -332,16 +334,16 @@ if (NATIVE_WEAK_MAP || shared.state) {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (objectHas(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
   };
   get = function (it) {
-    return objectHas(it, STATE) ? it[STATE] : {};
+    return hasOwn(it, STATE) ? it[STATE] : {};
   };
   has = function (it) {
-    return objectHas(it, STATE);
+    return hasOwn(it, STATE);
   };
 }
 
@@ -491,7 +493,7 @@ module.exports = function (input, pref) {
 
 var global = __webpack_require__(854);
 var isCallable = __webpack_require__(614);
-var has = __webpack_require__(656);
+var hasOwn = __webpack_require__(597);
 var createNonEnumerableProperty = __webpack_require__(880);
 var setGlobal = __webpack_require__(505);
 var inspectSource = __webpack_require__(788);
@@ -512,7 +514,7 @@ var TEMPLATE = String(String).split('String');
     if (String(name).slice(0, 7) === 'Symbol(') {
       name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
     }
-    if (!has(value, 'name') || (CONFIGURABLE_FUNCTION_NAME && value.name !== name)) {
+    if (!hasOwn(value, 'name') || (CONFIGURABLE_FUNCTION_NAME && value.name !== name)) {
       createNonEnumerableProperty(value, 'name', name);
     }
     state = enforceInternalState(value);
@@ -607,7 +609,7 @@ var store = __webpack_require__(465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.18.1',
+  version: '3.18.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -720,7 +722,7 @@ module.exports = NATIVE_SYMBOL
 
 var global = __webpack_require__(854);
 var shared = __webpack_require__(309);
-var has = __webpack_require__(656);
+var hasOwn = __webpack_require__(597);
 var uid = __webpack_require__(711);
 var NATIVE_SYMBOL = __webpack_require__(133);
 var USE_SYMBOL_AS_UID = __webpack_require__(307);
@@ -730,8 +732,8 @@ var Symbol = global.Symbol;
 var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!has(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    if (NATIVE_SYMBOL && has(Symbol, name)) {
+  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
+    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
       WellKnownSymbolsStore[name] = Symbol[name];
     } else {
       WellKnownSymbolsStore[name] = createWellKnownSymbol('Symbol.' + name);
