@@ -19,7 +19,7 @@
         "@babel/core": "^7.15.8",
         "@babel/preset-env": "^7.15.8",
         "@mrhenry/babel-plugin-core-web": "^0.6.4",
-        "babel-loader": "^8.2.2",
+        "babel-loader": "^8.2.3",
         "core-js": "^3.18.3",
         "webpack": "^5.59.0",
         "webpack-cli": "^4.9.1"
