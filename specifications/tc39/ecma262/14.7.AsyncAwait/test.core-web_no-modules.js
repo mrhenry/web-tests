@@ -4,8 +4,11 @@
 /***/ 9662:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var isCallable = __webpack_require__(614);
 var tryToString = __webpack_require__(6330);
+
+var TypeError = global.TypeError;
 
 // `Assert: IsCallable(argument) is true`
 module.exports = function (argument) {
@@ -19,8 +22,11 @@ module.exports = function (argument) {
 /***/ 9483:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var isConstructor = __webpack_require__(4411);
 var tryToString = __webpack_require__(6330);
+
+var TypeError = global.TypeError;
 
 // `Assert: IsConstructor(argument) is true`
 module.exports = function (argument) {
@@ -34,10 +40,14 @@ module.exports = function (argument) {
 /***/ 6077:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var isCallable = __webpack_require__(614);
 
+var String = global.String;
+var TypeError = global.TypeError;
+
 module.exports = function (argument) {
-  if (typeof argument === 'object' || isCallable(argument)) return argument;
+  if (typeof argument == 'object' || isCallable(argument)) return argument;
   throw TypeError("Can't set " + String(argument) + ' as a prototype');
 };
 
@@ -45,11 +55,16 @@ module.exports = function (argument) {
 /***/ }),
 
 /***/ 5787:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-module.exports = function (it, Constructor, name) {
-  if (it instanceof Constructor) return it;
-  throw TypeError('Incorrect ' + (name ? name + ' ' : '') + 'invocation');
+var global = __webpack_require__(7854);
+var isPrototypeOf = __webpack_require__(7976);
+
+var TypeError = global.TypeError;
+
+module.exports = function (it, Prototype) {
+  if (isPrototypeOf(Prototype, it)) return it;
+  throw TypeError('Incorrect invocation');
 };
 
 
@@ -58,7 +73,11 @@ module.exports = function (it, Constructor, name) {
 /***/ 9670:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var isObject = __webpack_require__(111);
+
+var String = global.String;
+var TypeError = global.TypeError;
 
 // `Assert: Type(argument) is Object`
 module.exports = function (argument) {
@@ -104,6 +123,16 @@ module.exports = {
   // https://tc39.es/ecma262/#sec-array.prototype.indexof
   indexOf: createMethod(false)
 };
+
+
+/***/ }),
+
+/***/ 206:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+
+module.exports = uncurryThis([].slice);
 
 
 /***/ }),
@@ -154,12 +183,15 @@ module.exports = function (exec, SKIP_CLOSING) {
 /***/ }),
 
 /***/ 4326:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var toString = {}.toString;
+var uncurryThis = __webpack_require__(1702);
+
+var toString = uncurryThis({}.toString);
+var stringSlice = uncurryThis(''.slice);
 
 module.exports = function (it) {
-  return toString.call(it).slice(8, -1);
+  return stringSlice(toString(it), 8, -1);
 };
 
 
@@ -168,12 +200,15 @@ module.exports = function (it) {
 /***/ 648:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var TO_STRING_TAG_SUPPORT = __webpack_require__(1694);
 var isCallable = __webpack_require__(614);
 var classofRaw = __webpack_require__(4326);
 var wellKnownSymbol = __webpack_require__(5112);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
+var Object = global.Object;
+
 // ES3 wrong here
 var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) == 'Arguments';
 
@@ -357,16 +392,22 @@ var match, version;
 
 if (v8) {
   match = v8.split('.');
-  version = match[0] < 4 ? 1 : match[0] + match[1];
-} else if (userAgent) {
+  // in old Chrome, versions of V8 isn't V8 = Chrome / 10
+  // but their correct versions are not interesting for us
+  version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);
+}
+
+// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
+// so check `userAgent` even if `.v8` exists, but 0
+if (!version && userAgent) {
   match = userAgent.match(/Edge\/(\d+)/);
   if (!match || match[1] >= 74) {
     match = userAgent.match(/Chrome\/(\d+)/);
-    if (match) version = match[1];
+    if (match) version = +match[1];
   }
 }
 
-module.exports = version && +version;
+module.exports = version;
 
 
 /***/ }),
@@ -435,7 +476,7 @@ module.exports = function (options, source) {
     FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? '.' : '#') + key, options.forced);
     // contained in target
     if (!FORCED && targetProperty !== undefined) {
-      if (typeof sourceProperty === typeof targetProperty) continue;
+      if (typeof sourceProperty == typeof targetProperty) continue;
       copyConstructorProperties(sourceProperty, targetProperty);
     }
     // add a flag to not completely full polyfills
@@ -464,32 +505,48 @@ module.exports = function (exec) {
 
 /***/ }),
 
+/***/ 2104:
+/***/ (function(module) {
+
+var FunctionPrototype = Function.prototype;
+var apply = FunctionPrototype.apply;
+var bind = FunctionPrototype.bind;
+var call = FunctionPrototype.call;
+
+// eslint-disable-next-line es/no-reflect -- safe
+module.exports = typeof Reflect == 'object' && Reflect.apply || (bind ? call.bind(apply) : function () {
+  return call.apply(apply, arguments);
+});
+
+
+/***/ }),
+
 /***/ 9974:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var aCallable = __webpack_require__(9662);
 
+var bind = uncurryThis(uncurryThis.bind);
+
 // optional / simple context binding
-module.exports = function (fn, that, length) {
+module.exports = function (fn, that) {
   aCallable(fn);
-  if (that === undefined) return fn;
-  switch (length) {
-    case 0: return function () {
-      return fn.call(that);
-    };
-    case 1: return function (a) {
-      return fn.call(that, a);
-    };
-    case 2: return function (a, b) {
-      return fn.call(that, a, b);
-    };
-    case 3: return function (a, b, c) {
-      return fn.call(that, a, b, c);
-    };
-  }
-  return function (/* ...args */) {
+  return that === undefined ? fn : bind ? bind(fn, that) : function (/* ...args */) {
     return fn.apply(that, arguments);
   };
+};
+
+
+/***/ }),
+
+/***/ 6916:
+/***/ (function(module) {
+
+var call = Function.prototype.call;
+
+module.exports = call.bind ? call.bind(call) : function () {
+  return call.apply(call, arguments);
 };
 
 
@@ -514,6 +571,25 @@ module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
   CONFIGURABLE: CONFIGURABLE
+};
+
+
+/***/ }),
+
+/***/ 1702:
+/***/ (function(module) {
+
+var FunctionPrototype = Function.prototype;
+var bind = FunctionPrototype.bind;
+var call = FunctionPrototype.call;
+var callBind = bind && bind.bind(call);
+
+module.exports = bind ? function (fn) {
+  return fn && callBind(call, fn);
+} : function (fn) {
+  return fn && function () {
+    return call.apply(fn, arguments);
+  };
 };
 
 
@@ -558,14 +634,19 @@ module.exports = function (it) {
 /***/ 8554:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
 var aCallable = __webpack_require__(9662);
 var anObject = __webpack_require__(9670);
+var tryToString = __webpack_require__(6330);
 var getIteratorMethod = __webpack_require__(1246);
+
+var TypeError = global.TypeError;
 
 module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-  if (aCallable(iteratorMethod)) return anObject(iteratorMethod.call(argument));
-  throw TypeError(String(argument) + ' is not iterable');
+  if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
+  throw TypeError(tryToString(argument) + ' is not iterable');
 };
 
 
@@ -610,14 +691,15 @@ module.exports =
 /***/ 2597:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var toObject = __webpack_require__(7908);
 
-var hasOwnProperty = {}.hasOwnProperty;
+var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
 module.exports = Object.hasOwn || function hasOwn(it, key) {
-  return hasOwnProperty.call(toObject(it), key);
+  return hasOwnProperty(toObject(it), key);
 };
 
 
@@ -639,7 +721,7 @@ var global = __webpack_require__(7854);
 module.exports = function (a, b) {
   var console = global.console;
   if (console && console.error) {
-    arguments.length === 1 ? console.error(a) : console.error(a, b);
+    arguments.length == 1 ? console.error(a) : console.error(a, b);
   }
 };
 
@@ -677,10 +759,13 @@ module.exports = !DESCRIPTORS && !fails(function () {
 /***/ 8361:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
+var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
 var classof = __webpack_require__(4326);
 
-var split = ''.split;
+var Object = global.Object;
+var split = uncurryThis(''.split);
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 module.exports = fails(function () {
@@ -688,7 +773,7 @@ module.exports = fails(function () {
   // eslint-disable-next-line no-prototype-builtins -- safe
   return !Object('z').propertyIsEnumerable(0);
 }) ? function (it) {
-  return classof(it) == 'String' ? split.call(it, '') : Object(it);
+  return classof(it) == 'String' ? split(it, '') : Object(it);
 } : Object;
 
 
@@ -697,15 +782,16 @@ module.exports = fails(function () {
 /***/ 2788:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var isCallable = __webpack_require__(614);
 var store = __webpack_require__(5465);
 
-var functionToString = Function.toString;
+var functionToString = uncurryThis(Function.toString);
 
 // this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
 if (!isCallable(store.inspectSource)) {
   store.inspectSource = function (it) {
-    return functionToString.call(it);
+    return functionToString(it);
   };
 }
 
@@ -719,6 +805,7 @@ module.exports = store.inspectSource;
 
 var NATIVE_WEAK_MAP = __webpack_require__(8536);
 var global = __webpack_require__(7854);
+var uncurryThis = __webpack_require__(1702);
 var isObject = __webpack_require__(111);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var hasOwn = __webpack_require__(2597);
@@ -727,6 +814,7 @@ var sharedKey = __webpack_require__(6200);
 var hiddenKeys = __webpack_require__(3501);
 
 var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
+var TypeError = global.TypeError;
 var WeakMap = global.WeakMap;
 var set, get, has;
 
@@ -745,20 +833,20 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = store.get;
-  var wmhas = store.has;
-  var wmset = store.set;
+  var wmget = uncurryThis(store.get);
+  var wmhas = uncurryThis(store.has);
+  var wmset = uncurryThis(store.set);
   set = function (it, metadata) {
-    if (wmhas.call(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (wmhas(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset.call(store, it, metadata);
+    wmset(store, it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget.call(store, it) || {};
+    return wmget(store, it) || {};
   };
   has = function (it) {
-    return wmhas.call(store, it);
+    return wmhas(store, it);
   };
 } else {
   var STATE = sharedKey('state');
@@ -811,7 +899,7 @@ module.exports = function (it) {
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
 module.exports = function (argument) {
-  return typeof argument === 'function';
+  return typeof argument == 'function';
 };
 
 
@@ -820,22 +908,24 @@ module.exports = function (argument) {
 /***/ 4411:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
 var isCallable = __webpack_require__(614);
 var classof = __webpack_require__(648);
 var getBuiltIn = __webpack_require__(5005);
 var inspectSource = __webpack_require__(2788);
 
+var noop = function () { /* empty */ };
 var empty = [];
 var construct = getBuiltIn('Reflect', 'construct');
 var constructorRegExp = /^\s*(?:class|function)\b/;
-var exec = constructorRegExp.exec;
-var INCORRECT_TO_STRING = !constructorRegExp.exec(function () { /* empty */ });
+var exec = uncurryThis(constructorRegExp.exec);
+var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
 
 var isConstructorModern = function (argument) {
   if (!isCallable(argument)) return false;
   try {
-    construct(Object, empty, argument);
+    construct(noop, empty, argument);
     return true;
   } catch (error) {
     return false;
@@ -849,7 +939,7 @@ var isConstructorLegacy = function (argument) {
     case 'GeneratorFunction':
     case 'AsyncGeneratorFunction': return false;
     // we can't check .prototype since constructors produced by .bind haven't it
-  } return INCORRECT_TO_STRING || !!exec.call(constructorRegExp, inspectSource(argument));
+  } return INCORRECT_TO_STRING || !!exec(constructorRegExp, inspectSource(argument));
 };
 
 // `IsConstructor` abstract operation
@@ -900,7 +990,7 @@ module.exports = isForced;
 var isCallable = __webpack_require__(614);
 
 module.exports = function (it) {
-  return typeof it === 'object' ? it !== null : isCallable(it);
+  return typeof it == 'object' ? it !== null : isCallable(it);
 };
 
 
@@ -917,15 +1007,19 @@ module.exports = false;
 /***/ 2190:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var isCallable = __webpack_require__(614);
+var global = __webpack_require__(7854);
 var getBuiltIn = __webpack_require__(5005);
+var isCallable = __webpack_require__(614);
+var isPrototypeOf = __webpack_require__(7976);
 var USE_SYMBOL_AS_UID = __webpack_require__(3307);
+
+var Object = global.Object;
 
 module.exports = USE_SYMBOL_AS_UID ? function (it) {
   return typeof it == 'symbol';
 } : function (it) {
   var $Symbol = getBuiltIn('Symbol');
-  return isCallable($Symbol) && Object(it) instanceof $Symbol;
+  return isCallable($Symbol) && isPrototypeOf($Symbol.prototype, Object(it));
 };
 
 
@@ -934,25 +1028,33 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
 /***/ 408:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
+var bind = __webpack_require__(9974);
+var call = __webpack_require__(6916);
 var anObject = __webpack_require__(9670);
+var tryToString = __webpack_require__(6330);
 var isArrayIteratorMethod = __webpack_require__(7659);
 var lengthOfArrayLike = __webpack_require__(6244);
-var bind = __webpack_require__(9974);
+var isPrototypeOf = __webpack_require__(7976);
 var getIterator = __webpack_require__(8554);
 var getIteratorMethod = __webpack_require__(1246);
 var iteratorClose = __webpack_require__(9212);
+
+var TypeError = global.TypeError;
 
 var Result = function (stopped, result) {
   this.stopped = stopped;
   this.result = result;
 };
 
+var ResultPrototype = Result.prototype;
+
 module.exports = function (iterable, unboundFunction, options) {
   var that = options && options.that;
   var AS_ENTRIES = !!(options && options.AS_ENTRIES);
   var IS_ITERATOR = !!(options && options.IS_ITERATOR);
   var INTERRUPTED = !!(options && options.INTERRUPTED);
-  var fn = bind(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
+  var fn = bind(unboundFunction, that);
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
@@ -971,25 +1073,25 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
-    if (!iterFn) throw TypeError(String(iterable) + ' is not iterable');
+    if (!iterFn) throw TypeError(tryToString(iterable) + ' is not iterable');
     // optimisation for array iterators
     if (isArrayIteratorMethod(iterFn)) {
       for (index = 0, length = lengthOfArrayLike(iterable); length > index; index++) {
         result = callFn(iterable[index]);
-        if (result && result instanceof Result) return result;
+        if (result && isPrototypeOf(ResultPrototype, result)) return result;
       } return new Result(false);
     }
     iterator = getIterator(iterable, iterFn);
   }
 
   next = iterator.next;
-  while (!(step = next.call(iterator)).done) {
+  while (!(step = call(next, iterator)).done) {
     try {
       result = callFn(step.value);
     } catch (error) {
       iteratorClose(iterator, 'throw', error);
     }
-    if (typeof result == 'object' && result && result instanceof Result) return result;
+    if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
 };
 
@@ -999,6 +1101,7 @@ module.exports = function (iterable, unboundFunction, options) {
 /***/ 9212:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var call = __webpack_require__(6916);
 var anObject = __webpack_require__(9670);
 var getMethod = __webpack_require__(8173);
 
@@ -1011,7 +1114,7 @@ module.exports = function (iterator, kind, value) {
       if (kind === 'throw') throw value;
       return value;
     }
-    innerResult = innerResult.call(iterator);
+    innerResult = call(innerResult, iterator);
   } catch (error) {
     innerError = true;
     innerResult = error;
@@ -1051,6 +1154,7 @@ module.exports = function (obj) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
+var bind = __webpack_require__(9974);
 var getOwnPropertyDescriptor = __webpack_require__(1236).f;
 var macrotask = __webpack_require__(261).set;
 var IS_IOS = __webpack_require__(6833);
@@ -1102,9 +1206,9 @@ if (!queueMicrotask) {
     promise = Promise.resolve(undefined);
     // workaround of WebKit ~ iOS Safari 10.1 bug
     promise.constructor = Promise;
-    then = promise.then;
+    then = bind(promise.then, promise);
     notify = function () {
-      then.call(promise, flush);
+      then(flush);
     };
   // Node.js without promises
   } else if (IS_NODE) {
@@ -1118,9 +1222,10 @@ if (!queueMicrotask) {
   // - onreadystatechange
   // - setTimeout
   } else {
+    // strange IE + webpack dev server bug - use .bind(global)
+    macrotask = bind(macrotask, global);
     notify = function () {
-      // strange IE + webpack dev server bug - use .call(global)
-      macrotask.call(global, flush);
+      macrotask(flush);
     };
   }
 }
@@ -1211,11 +1316,13 @@ module.exports.f = function (C) {
 /***/ 3070:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var DESCRIPTORS = __webpack_require__(9781);
 var IE8_DOM_DEFINE = __webpack_require__(4664);
 var anObject = __webpack_require__(9670);
 var toPropertyKey = __webpack_require__(4948);
 
+var TypeError = global.TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
 
@@ -1240,6 +1347,7 @@ exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attrib
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 var DESCRIPTORS = __webpack_require__(9781);
+var call = __webpack_require__(6916);
 var propertyIsEnumerableModule = __webpack_require__(5296);
 var createPropertyDescriptor = __webpack_require__(9114);
 var toIndexedObject = __webpack_require__(5656);
@@ -1258,7 +1366,7 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
   if (IE8_DOM_DEFINE) try {
     return $getOwnPropertyDescriptor(O, P);
   } catch (error) { /* empty */ }
-  if (hasOwn(O, P)) return createPropertyDescriptor(!propertyIsEnumerableModule.f.call(O, P), O[P]);
+  if (hasOwn(O, P)) return createPropertyDescriptor(!call(propertyIsEnumerableModule.f, O, P), O[P]);
 };
 
 
@@ -1291,23 +1399,36 @@ exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
 
+/***/ 7976:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+
+module.exports = uncurryThis({}.isPrototypeOf);
+
+
+/***/ }),
+
 /***/ 6324:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(1702);
 var hasOwn = __webpack_require__(2597);
 var toIndexedObject = __webpack_require__(5656);
 var indexOf = __webpack_require__(1318).indexOf;
 var hiddenKeys = __webpack_require__(3501);
+
+var push = uncurryThis([].push);
 
 module.exports = function (object, names) {
   var O = toIndexedObject(object);
   var i = 0;
   var result = [];
   var key;
-  for (key in O) !hasOwn(hiddenKeys, key) && hasOwn(O, key) && result.push(key);
+  for (key in O) !hasOwn(hiddenKeys, key) && hasOwn(O, key) && push(result, key);
   // Don't enum bug & hidden keys
   while (names.length > i) if (hasOwn(O, key = names[i++])) {
-    ~indexOf(result, key) || result.push(key);
+    ~indexOf(result, key) || push(result, key);
   }
   return result;
 };
@@ -1341,6 +1462,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint-disable no-proto -- safe */
+var uncurryThis = __webpack_require__(1702);
 var anObject = __webpack_require__(9670);
 var aPossiblePrototype = __webpack_require__(6077);
 
@@ -1354,14 +1476,14 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var setter;
   try {
     // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-    setter = Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set;
-    setter.call(test, []);
+    setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
+    setter(test, []);
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
     anObject(O);
     aPossiblePrototype(proto);
-    if (CORRECT_SETTER) setter.call(O, proto);
+    if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
   };
@@ -1390,16 +1512,20 @@ module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
 /***/ 2140:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
 var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
+
+var TypeError = global.TypeError;
 
 // `OrdinaryToPrimitive` abstract operation
 // https://tc39.es/ecma262/#sec-ordinarytoprimitive
 module.exports = function (input, pref) {
   var fn, val;
-  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
-  if (isCallable(fn = input.valueOf) && !isObject(val = fn.call(input))) return val;
-  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
+  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
+  if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
+  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
 
@@ -1410,15 +1536,18 @@ module.exports = function (input, pref) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var getBuiltIn = __webpack_require__(5005);
+var uncurryThis = __webpack_require__(1702);
 var getOwnPropertyNamesModule = __webpack_require__(8006);
 var getOwnPropertySymbolsModule = __webpack_require__(5181);
 var anObject = __webpack_require__(9670);
+
+var concat = uncurryThis([].concat);
 
 // all object keys, includes non-enumerable and symbols
 module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
   var keys = getOwnPropertyNamesModule.f(anObject(it));
   var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
-  return getOwnPropertySymbols ? keys.concat(getOwnPropertySymbols(it)) : keys;
+  return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
 };
 
 
@@ -1524,7 +1653,11 @@ var TEMPLATE = String(String).split('String');
 /***/ }),
 
 /***/ 4488:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(7854);
+
+var TypeError = global.TypeError;
 
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
@@ -1541,10 +1674,12 @@ module.exports = function (it) {
 
 var global = __webpack_require__(7854);
 
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+
 module.exports = function (key, value) {
   try {
-    // eslint-disable-next-line es/no-object-defineproperty -- safe
-    Object.defineProperty(global, key, { value: value, configurable: true, writable: true });
+    defineProperty(global, key, { value: value, configurable: true, writable: true });
   } catch (error) {
     global[key] = value;
   } return value;
@@ -1636,7 +1771,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.18.3',
+  version: '3.19.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -1668,10 +1803,13 @@ module.exports = function (O, defaultConstructor) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
-var isCallable = __webpack_require__(614);
-var fails = __webpack_require__(7293);
+var apply = __webpack_require__(2104);
 var bind = __webpack_require__(9974);
+var isCallable = __webpack_require__(614);
+var hasOwn = __webpack_require__(2597);
+var fails = __webpack_require__(7293);
 var html = __webpack_require__(490);
+var arraySlice = __webpack_require__(206);
 var createElement = __webpack_require__(317);
 var IS_IOS = __webpack_require__(6833);
 var IS_NODE = __webpack_require__(5268);
@@ -1679,8 +1817,10 @@ var IS_NODE = __webpack_require__(5268);
 var set = global.setImmediate;
 var clear = global.clearImmediate;
 var process = global.process;
-var MessageChannel = global.MessageChannel;
 var Dispatch = global.Dispatch;
+var Function = global.Function;
+var MessageChannel = global.MessageChannel;
+var String = global.String;
 var counter = 0;
 var queue = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
@@ -1692,8 +1832,7 @@ try {
 } catch (error) { /* empty */ }
 
 var run = function (id) {
-  // eslint-disable-next-line no-prototype-builtins -- safe
-  if (queue.hasOwnProperty(id)) {
+  if (hasOwn(queue, id)) {
     var fn = queue[id];
     delete queue[id];
     fn();
@@ -1718,13 +1857,9 @@ var post = function (id) {
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
 if (!set || !clear) {
   set = function setImmediate(fn) {
-    var args = [];
-    var argumentsLength = arguments.length;
-    var i = 1;
-    while (argumentsLength > i) args.push(arguments[i++]);
+    var args = arraySlice(arguments, 1);
     queue[++counter] = function () {
-      // eslint-disable-next-line no-new-func -- spec requirement
-      (isCallable(fn) ? fn : Function(fn)).apply(undefined, args);
+      apply(isCallable(fn) ? fn : Function(fn), undefined, args);
     };
     defer(counter);
     return counter;
@@ -1748,7 +1883,7 @@ if (!set || !clear) {
     channel = new MessageChannel();
     port = channel.port2;
     channel.port1.onmessage = listener;
-    defer = bind(port.postMessage, port, 1);
+    defer = bind(port.postMessage, port);
   // Browsers with postMessage, skip WebWorkers
   // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
   } else if (
@@ -1853,7 +1988,10 @@ module.exports = function (argument) {
 /***/ 7908:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
 var requireObjectCoercible = __webpack_require__(4488);
+
+var Object = global.Object;
 
 // `ToObject` abstract operation
 // https://tc39.es/ecma262/#sec-toobject
@@ -1867,12 +2005,15 @@ module.exports = function (argument) {
 /***/ 7593:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
 var isObject = __webpack_require__(111);
 var isSymbol = __webpack_require__(2190);
 var getMethod = __webpack_require__(8173);
 var ordinaryToPrimitive = __webpack_require__(2140);
 var wellKnownSymbol = __webpack_require__(5112);
 
+var TypeError = global.TypeError;
 var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
 
 // `ToPrimitive` abstract operation
@@ -1883,7 +2024,7 @@ module.exports = function (input, pref) {
   var result;
   if (exoticToPrim) {
     if (pref === undefined) pref = 'default';
-    result = exoticToPrim.call(input, pref);
+    result = call(exoticToPrim, input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
     throw TypeError("Can't convert object to primitive value");
   }
@@ -1904,7 +2045,7 @@ var isSymbol = __webpack_require__(2190);
 // https://tc39.es/ecma262/#sec-topropertykey
 module.exports = function (argument) {
   var key = toPrimitive(argument, 'string');
-  return isSymbol(key) ? key : String(key);
+  return isSymbol(key) ? key : key + '';
 };
 
 
@@ -1926,7 +2067,11 @@ module.exports = String(test) === '[object z]';
 /***/ }),
 
 /***/ 6330:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(7854);
+
+var String = global.String;
 
 module.exports = function (argument) {
   try {
@@ -1940,13 +2085,16 @@ module.exports = function (argument) {
 /***/ }),
 
 /***/ 9711:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
 
 var id = 0;
 var postfix = Math.random();
+var toString = uncurryThis(1.0.toString);
 
 module.exports = function (key) {
-  return 'Symbol(' + String(key === undefined ? '' : key) + ')_' + (++id + postfix).toString(36);
+  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
 };
 
 
@@ -1977,14 +2125,18 @@ var USE_SYMBOL_AS_UID = __webpack_require__(3307);
 
 var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
+var symbolFor = Symbol && Symbol['for'];
 var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
   if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
+    var description = 'Symbol.' + name;
     if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
       WellKnownSymbolsStore[name] = Symbol[name];
+    } else if (USE_SYMBOL_AS_UID && symbolFor) {
+      WellKnownSymbolsStore[name] = symbolFor(description);
     } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol('Symbol.' + name);
+      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
     }
   } return WellKnownSymbolsStore[name];
 };
@@ -2017,6 +2169,7 @@ var $ = __webpack_require__(2109);
 var IS_PURE = __webpack_require__(1913);
 var global = __webpack_require__(7854);
 var getBuiltIn = __webpack_require__(5005);
+var call = __webpack_require__(6916);
 var NativePromise = __webpack_require__(3366);
 var redefine = __webpack_require__(1320);
 var redefineAll = __webpack_require__(2248);
@@ -2046,17 +2199,19 @@ var V8_VERSION = __webpack_require__(7392);
 
 var SPECIES = wellKnownSymbol('species');
 var PROMISE = 'Promise';
+
 var getInternalState = InternalStateModule.get;
 var setInternalState = InternalStateModule.set;
 var getInternalPromiseState = InternalStateModule.getterFor(PROMISE);
 var NativePromisePrototype = NativePromise && NativePromise.prototype;
 var PromiseConstructor = NativePromise;
-var PromiseConstructorPrototype = NativePromisePrototype;
+var PromisePrototype = NativePromisePrototype;
 var TypeError = global.TypeError;
 var document = global.document;
 var process = global.process;
 var newPromiseCapability = newPromiseCapabilityModule.f;
 var newGenericPromiseCapability = newPromiseCapability;
+
 var DISPATCH_EVENT = !!(document && document.createEvent && global.dispatchEvent);
 var NATIVE_REJECTION_EVENT = isCallable(global.PromiseRejectionEvent);
 var UNHANDLED_REJECTION = 'unhandledrejection';
@@ -2067,6 +2222,7 @@ var REJECTED = 2;
 var HANDLED = 1;
 var UNHANDLED = 2;
 var SUBCLASSING = false;
+
 var Internal, OwnPromiseCapability, PromiseWrapper, nativeThen;
 
 var FORCED = isForced(PROMISE, function () {
@@ -2077,7 +2233,7 @@ var FORCED = isForced(PROMISE, function () {
   // We can't detect it synchronously, so just check versions
   if (!GLOBAL_CORE_JS_PROMISE && V8_VERSION === 66) return true;
   // We need Promise#finally in the pure version for preventing prototype pollution
-  if (IS_PURE && !PromiseConstructorPrototype['finally']) return true;
+  if (IS_PURE && !PromisePrototype['finally']) return true;
   // We can't use @@species feature detection in V8 since it causes
   // deoptimization and performance degradation
   // https://github.com/zloirock/core-js/issues/679
@@ -2139,7 +2295,7 @@ var notify = function (state, isReject) {
           if (result === reaction.promise) {
             reject(TypeError('Promise-chain cycle'));
           } else if (then = isThenable(result)) {
-            then.call(result, resolve, reject);
+            call(then, result, resolve, reject);
           } else resolve(result);
         } else reject(value);
       } catch (error) {
@@ -2167,7 +2323,7 @@ var dispatchEvent = function (name, promise, reason) {
 };
 
 var onUnhandled = function (state) {
-  task.call(global, function () {
+  call(task, global, function () {
     var promise = state.facade;
     var value = state.value;
     var IS_UNHANDLED = isUnhandled(state);
@@ -2190,7 +2346,7 @@ var isUnhandled = function (state) {
 };
 
 var onHandleUnhandled = function (state) {
-  task.call(global, function () {
+  call(task, global, function () {
     var promise = state.facade;
     if (IS_NODE) {
       process.emit('rejectionHandled', promise);
@@ -2224,7 +2380,7 @@ var internalResolve = function (state, value, unwrap) {
       microtask(function () {
         var wrapper = { done: false };
         try {
-          then.call(value,
+          call(then, value,
             bind(internalResolve, wrapper, state),
             bind(internalReject, wrapper, state)
           );
@@ -2246,9 +2402,9 @@ var internalResolve = function (state, value, unwrap) {
 if (FORCED) {
   // 25.4.3.1 Promise(executor)
   PromiseConstructor = function Promise(executor) {
-    anInstance(this, PromiseConstructor, PROMISE);
+    anInstance(this, PromisePrototype);
     aCallable(executor);
-    Internal.call(this);
+    call(Internal, this);
     var state = getInternalState(this);
     try {
       executor(bind(internalResolve, state), bind(internalReject, state));
@@ -2256,7 +2412,7 @@ if (FORCED) {
       internalReject(state, error);
     }
   };
-  PromiseConstructorPrototype = PromiseConstructor.prototype;
+  PromisePrototype = PromiseConstructor.prototype;
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   Internal = function Promise(executor) {
     setInternalState(this, {
@@ -2270,17 +2426,18 @@ if (FORCED) {
       value: undefined
     });
   };
-  Internal.prototype = redefineAll(PromiseConstructorPrototype, {
+  Internal.prototype = redefineAll(PromisePrototype, {
     // `Promise.prototype.then` method
     // https://tc39.es/ecma262/#sec-promise.prototype.then
     then: function then(onFulfilled, onRejected) {
       var state = getInternalPromiseState(this);
+      var reactions = state.reactions;
       var reaction = newPromiseCapability(speciesConstructor(this, PromiseConstructor));
       reaction.ok = isCallable(onFulfilled) ? onFulfilled : true;
       reaction.fail = isCallable(onRejected) && onRejected;
       reaction.domain = IS_NODE ? process.domain : undefined;
       state.parent = true;
-      state.reactions.push(reaction);
+      reactions[reactions.length] = reaction;
       if (state.state != PENDING) notify(state, false);
       return reaction.promise;
     },
@@ -2311,13 +2468,13 @@ if (FORCED) {
       redefine(NativePromisePrototype, 'then', function then(onFulfilled, onRejected) {
         var that = this;
         return new PromiseConstructor(function (resolve, reject) {
-          nativeThen.call(that, resolve, reject);
+          call(nativeThen, that, resolve, reject);
         }).then(onFulfilled, onRejected);
       // https://github.com/zloirock/core-js/issues/640
       }, { unsafe: true });
 
       // makes sure that native promise-based APIs `Promise#catch` properly works with patched `Promise#then`
-      redefine(NativePromisePrototype, 'catch', PromiseConstructorPrototype['catch'], { unsafe: true });
+      redefine(NativePromisePrototype, 'catch', PromisePrototype['catch'], { unsafe: true });
     }
 
     // make `.constructor === Promise` work for native promise-based APIs
@@ -2327,7 +2484,7 @@ if (FORCED) {
 
     // make `instanceof Promise` work for native promise-based APIs
     if (setPrototypeOf) {
-      setPrototypeOf(NativePromisePrototype, PromiseConstructorPrototype);
+      setPrototypeOf(NativePromisePrototype, PromisePrototype);
     }
   }
 }
@@ -2347,7 +2504,7 @@ $({ target: PROMISE, stat: true, forced: FORCED }, {
   // https://tc39.es/ecma262/#sec-promise.reject
   reject: function reject(r) {
     var capability = newPromiseCapability(this);
-    capability.reject.call(undefined, r);
+    call(capability.reject, undefined, r);
     return capability.promise;
   }
 });
@@ -2376,9 +2533,8 @@ $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
       iterate(iterable, function (promise) {
         var index = counter++;
         var alreadyCalled = false;
-        values.push(undefined);
         remaining++;
-        $promiseResolve.call(C, promise).then(function (value) {
+        call($promiseResolve, C, promise).then(function (value) {
           if (alreadyCalled) return;
           alreadyCalled = true;
           values[index] = value;
@@ -2399,7 +2555,7 @@ $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
     var result = perform(function () {
       var $promiseResolve = aCallable(C.resolve);
       iterate(iterable, function (promise) {
-        $promiseResolve.call(C, promise).then(capability.resolve, reject);
+        call($promiseResolve, C, promise).then(capability.resolve, reject);
       });
     });
     if (result.error) reject(result.value);

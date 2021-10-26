@@ -4,8 +4,11 @@
 /***/ 662:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
 var isCallable = __webpack_require__(614);
 var tryToString = __webpack_require__(330);
+
+var TypeError = global.TypeError;
 
 // `Assert: IsCallable(argument) is true`
 module.exports = function (argument) {
@@ -19,7 +22,11 @@ module.exports = function (argument) {
 /***/ 670:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
 var isObject = __webpack_require__(111);
+
+var String = global.String;
+var TypeError = global.TypeError;
 
 // `Assert: Type(argument) is Object`
 module.exports = function (argument) {
@@ -117,16 +124,22 @@ var match, version;
 
 if (v8) {
   match = v8.split('.');
-  version = match[0] < 4 ? 1 : match[0] + match[1];
-} else if (userAgent) {
+  // in old Chrome, versions of V8 isn't V8 = Chrome / 10
+  // but their correct versions are not interesting for us
+  version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);
+}
+
+// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
+// so check `userAgent` even if `.v8` exists, but 0
+if (!version && userAgent) {
   match = userAgent.match(/Edge\/(\d+)/);
   if (!match || match[1] >= 74) {
     match = userAgent.match(/Chrome\/(\d+)/);
-    if (match) version = match[1];
+    if (match) version = +match[1];
   }
 }
 
-module.exports = version && +version;
+module.exports = version;
 
 
 /***/ }),
@@ -140,6 +153,18 @@ module.exports = function (exec) {
   } catch (error) {
     return true;
   }
+};
+
+
+/***/ }),
+
+/***/ 916:
+/***/ (function(module) {
+
+var call = Function.prototype.call;
+
+module.exports = call.bind ? call.bind(call) : function () {
+  return call.apply(call, arguments);
 };
 
 
@@ -164,6 +189,25 @@ module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
   CONFIGURABLE: CONFIGURABLE
+};
+
+
+/***/ }),
+
+/***/ 702:
+/***/ (function(module) {
+
+var FunctionPrototype = Function.prototype;
+var bind = FunctionPrototype.bind;
+var call = FunctionPrototype.call;
+var callBind = bind && bind.bind(call);
+
+module.exports = bind ? function (fn) {
+  return fn && callBind(call, fn);
+} : function (fn) {
+  return fn && function () {
+    return call.apply(fn, arguments);
+  };
 };
 
 
@@ -225,14 +269,15 @@ module.exports =
 /***/ 597:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(702);
 var toObject = __webpack_require__(908);
 
-var hasOwnProperty = {}.hasOwnProperty;
+var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
 module.exports = Object.hasOwn || function hasOwn(it, key) {
-  return hasOwnProperty.call(toObject(it), key);
+  return hasOwnProperty(toObject(it), key);
 };
 
 
@@ -267,15 +312,16 @@ module.exports = !DESCRIPTORS && !fails(function () {
 /***/ 788:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(702);
 var isCallable = __webpack_require__(614);
 var store = __webpack_require__(465);
 
-var functionToString = Function.toString;
+var functionToString = uncurryThis(Function.toString);
 
 // this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
 if (!isCallable(store.inspectSource)) {
   store.inspectSource = function (it) {
-    return functionToString.call(it);
+    return functionToString(it);
   };
 }
 
@@ -289,6 +335,7 @@ module.exports = store.inspectSource;
 
 var NATIVE_WEAK_MAP = __webpack_require__(536);
 var global = __webpack_require__(854);
+var uncurryThis = __webpack_require__(702);
 var isObject = __webpack_require__(111);
 var createNonEnumerableProperty = __webpack_require__(880);
 var hasOwn = __webpack_require__(597);
@@ -297,6 +344,7 @@ var sharedKey = __webpack_require__(200);
 var hiddenKeys = __webpack_require__(501);
 
 var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
+var TypeError = global.TypeError;
 var WeakMap = global.WeakMap;
 var set, get, has;
 
@@ -315,20 +363,20 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = store.get;
-  var wmhas = store.has;
-  var wmset = store.set;
+  var wmget = uncurryThis(store.get);
+  var wmhas = uncurryThis(store.has);
+  var wmset = uncurryThis(store.set);
   set = function (it, metadata) {
-    if (wmhas.call(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (wmhas(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset.call(store, it, metadata);
+    wmset(store, it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget.call(store, it) || {};
+    return wmget(store, it) || {};
   };
   has = function (it) {
-    return wmhas.call(store, it);
+    return wmhas(store, it);
   };
 } else {
   var STATE = sharedKey('state');
@@ -364,7 +412,7 @@ module.exports = {
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
 module.exports = function (argument) {
-  return typeof argument === 'function';
+  return typeof argument == 'function';
 };
 
 
@@ -376,7 +424,7 @@ module.exports = function (argument) {
 var isCallable = __webpack_require__(614);
 
 module.exports = function (it) {
-  return typeof it === 'object' ? it !== null : isCallable(it);
+  return typeof it == 'object' ? it !== null : isCallable(it);
 };
 
 
@@ -393,15 +441,19 @@ module.exports = false;
 /***/ 190:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var isCallable = __webpack_require__(614);
+var global = __webpack_require__(854);
 var getBuiltIn = __webpack_require__(5);
+var isCallable = __webpack_require__(614);
+var isPrototypeOf = __webpack_require__(976);
 var USE_SYMBOL_AS_UID = __webpack_require__(307);
+
+var Object = global.Object;
 
 module.exports = USE_SYMBOL_AS_UID ? function (it) {
   return typeof it == 'symbol';
 } : function (it) {
   var $Symbol = getBuiltIn('Symbol');
-  return isCallable($Symbol) && Object(it) instanceof $Symbol;
+  return isCallable($Symbol) && isPrototypeOf($Symbol.prototype, Object(it));
 };
 
 
@@ -444,11 +496,13 @@ module.exports = isCallable(WeakMap) && /native code/.test(inspectSource(WeakMap
 /***/ 70:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
 var DESCRIPTORS = __webpack_require__(781);
 var IE8_DOM_DEFINE = __webpack_require__(664);
 var anObject = __webpack_require__(670);
 var toPropertyKey = __webpack_require__(948);
 
+var TypeError = global.TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
 
@@ -469,19 +523,33 @@ exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attrib
 
 /***/ }),
 
+/***/ 976:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(702);
+
+module.exports = uncurryThis({}.isPrototypeOf);
+
+
+/***/ }),
+
 /***/ 140:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
+var call = __webpack_require__(916);
 var isCallable = __webpack_require__(614);
 var isObject = __webpack_require__(111);
+
+var TypeError = global.TypeError;
 
 // `OrdinaryToPrimitive` abstract operation
 // https://tc39.es/ecma262/#sec-ordinarytoprimitive
 module.exports = function (input, pref) {
   var fn, val;
-  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
-  if (isCallable(fn = input.valueOf) && !isObject(val = fn.call(input))) return val;
-  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = fn.call(input))) return val;
+  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
+  if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
+  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
 
@@ -542,7 +610,11 @@ var TEMPLATE = String(String).split('String');
 /***/ }),
 
 /***/ 488:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(854);
+
+var TypeError = global.TypeError;
 
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
@@ -559,10 +631,12 @@ module.exports = function (it) {
 
 var global = __webpack_require__(854);
 
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+
 module.exports = function (key, value) {
   try {
-    // eslint-disable-next-line es/no-object-defineproperty -- safe
-    Object.defineProperty(global, key, { value: value, configurable: true, writable: true });
+    defineProperty(global, key, { value: value, configurable: true, writable: true });
   } catch (error) {
     global[key] = value;
   } return value;
@@ -609,7 +683,7 @@ var store = __webpack_require__(465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.18.3',
+  version: '3.19.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -620,7 +694,10 @@ var store = __webpack_require__(465);
 /***/ 908:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
 var requireObjectCoercible = __webpack_require__(488);
+
+var Object = global.Object;
 
 // `ToObject` abstract operation
 // https://tc39.es/ecma262/#sec-toobject
@@ -634,12 +711,15 @@ module.exports = function (argument) {
 /***/ 593:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+var global = __webpack_require__(854);
+var call = __webpack_require__(916);
 var isObject = __webpack_require__(111);
 var isSymbol = __webpack_require__(190);
 var getMethod = __webpack_require__(173);
 var ordinaryToPrimitive = __webpack_require__(140);
 var wellKnownSymbol = __webpack_require__(112);
 
+var TypeError = global.TypeError;
 var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
 
 // `ToPrimitive` abstract operation
@@ -650,7 +730,7 @@ module.exports = function (input, pref) {
   var result;
   if (exoticToPrim) {
     if (pref === undefined) pref = 'default';
-    result = exoticToPrim.call(input, pref);
+    result = call(exoticToPrim, input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
     throw TypeError("Can't convert object to primitive value");
   }
@@ -671,14 +751,18 @@ var isSymbol = __webpack_require__(190);
 // https://tc39.es/ecma262/#sec-topropertykey
 module.exports = function (argument) {
   var key = toPrimitive(argument, 'string');
-  return isSymbol(key) ? key : String(key);
+  return isSymbol(key) ? key : key + '';
 };
 
 
 /***/ }),
 
 /***/ 330:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(854);
+
+var String = global.String;
 
 module.exports = function (argument) {
   try {
@@ -692,13 +776,16 @@ module.exports = function (argument) {
 /***/ }),
 
 /***/ 711:
-/***/ (function(module) {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(702);
 
 var id = 0;
 var postfix = Math.random();
+var toString = uncurryThis(1.0.toString);
 
 module.exports = function (key) {
-  return 'Symbol(' + String(key === undefined ? '' : key) + ')_' + (++id + postfix).toString(36);
+  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
 };
 
 
@@ -729,14 +816,18 @@ var USE_SYMBOL_AS_UID = __webpack_require__(307);
 
 var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
+var symbolFor = Symbol && Symbol['for'];
 var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
   if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
+    var description = 'Symbol.' + name;
     if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
       WellKnownSymbolsStore[name] = Symbol[name];
+    } else if (USE_SYMBOL_AS_UID && symbolFor) {
+      WellKnownSymbolsStore[name] = symbolFor(description);
     } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol('Symbol.' + name);
+      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
     }
   } return WellKnownSymbolsStore[name];
 };
@@ -747,21 +838,22 @@ module.exports = function (name) {
 /***/ 710:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__(702);
 var redefine = __webpack_require__(320);
 
 var DatePrototype = Date.prototype;
 var INVALID_DATE = 'Invalid Date';
 var TO_STRING = 'toString';
-var nativeDateToString = DatePrototype[TO_STRING];
-var getTime = DatePrototype.getTime;
+var un$DateToString = uncurryThis(DatePrototype[TO_STRING]);
+var getTime = uncurryThis(DatePrototype.getTime);
 
 // `Date.prototype.toString` method
 // https://tc39.es/ecma262/#sec-date.prototype.tostring
 if (String(new Date(NaN)) != INVALID_DATE) {
   redefine(DatePrototype, TO_STRING, function toString() {
-    var value = getTime.call(this);
+    var value = getTime(this);
     // eslint-disable-next-line no-self-compare -- NaN check
-    return value === value ? nativeDateToString.call(this) : INVALID_DATE;
+    return value === value ? un$DateToString(this) : INVALID_DATE;
   });
 }
 
