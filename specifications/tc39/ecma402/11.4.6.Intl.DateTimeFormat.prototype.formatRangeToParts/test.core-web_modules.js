@@ -9131,6 +9131,50 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 
 /***/ }),
 
+/***/ 7601:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+// TODO: Remove from `core-js@4` since it's moved to entry points
+__webpack_require__(4916);
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
+var uncurryThis = __webpack_require__(1702);
+var isCallable = __webpack_require__(614);
+var isObject = __webpack_require__(111);
+
+var DELEGATES_TO_EXEC = function () {
+  var execCalled = false;
+  var re = /[ac]/;
+  re.exec = function () {
+    execCalled = true;
+    return /./.exec.apply(this, arguments);
+  };
+  return re.test('abc') === true && execCalled;
+}();
+
+var Error = global.Error;
+var un$Test = uncurryThis(/./.test);
+
+// `RegExp.prototype.test` method
+// https://tc39.es/ecma262/#sec-regexp.prototype.test
+$({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
+  test: function (str) {
+    var exec = this.exec;
+    if (!isCallable(exec)) return un$Test(this, str);
+    var result = call(exec, this, str);
+    if (result !== null && !isObject(result)) {
+      throw new Error('RegExp exec method returned something other than an Object or null');
+    }
+    return !!result;
+  }
+});
+
+
+/***/ }),
+
 /***/ 9714:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -9665,6 +9709,8 @@ var __webpack_exports__ = {};
 var es_object_assign = __webpack_require__(9601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
@@ -9672,6 +9718,7 @@ var es_array_reduce = __webpack_require__(5827);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
 var es_array_sort = __webpack_require__(2707);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.getCanonicalLocales.js
+
 
 
 
@@ -13316,6 +13363,7 @@ var es_regexp_constructor = __webpack_require__(4603);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__(9714);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.Locale.js
+
 
 
 
@@ -19251,6 +19299,7 @@ var es_string_match = __webpack_require__(4723);
 
 
 
+
 (function (undefined) {
   if (!("Intl" in self && "NumberFormat" in self.Intl && function () {
     try {
@@ -21758,6 +21807,7 @@ var es_string_match = __webpack_require__(4723);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-int.js
 var es_parse_int = __webpack_require__(1058);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.js
+
 
 
 

@@ -2970,6 +2970,50 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 
 /***/ }),
 
+/***/ 7601:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+// TODO: Remove from `core-js@4` since it's moved to entry points
+__webpack_require__(4916);
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
+var uncurryThis = __webpack_require__(1702);
+var isCallable = __webpack_require__(614);
+var isObject = __webpack_require__(111);
+
+var DELEGATES_TO_EXEC = function () {
+  var execCalled = false;
+  var re = /[ac]/;
+  re.exec = function () {
+    execCalled = true;
+    return /./.exec.apply(this, arguments);
+  };
+  return re.test('abc') === true && execCalled;
+}();
+
+var Error = global.Error;
+var un$Test = uncurryThis(/./.test);
+
+// `RegExp.prototype.test` method
+// https://tc39.es/ecma262/#sec-regexp.prototype.test
+$({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
+  test: function (str) {
+    var exec = this.exec;
+    if (!isCallable(exec)) return un$Test(this, str);
+    var result = call(exec, this, str);
+    if (result !== null && !isObject(result)) {
+      throw new Error('RegExp exec method returned something other than an Object or null');
+    }
+    return !!result;
+  }
+});
+
+
+/***/ }),
+
 /***/ 8783:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -3698,10 +3742,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(2564);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
 function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_typeof(obj); }
+
+
 
 
 
@@ -3812,8 +3862,6 @@ function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === 
 var es_date_to_string = __webpack_require__(3710);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
 var es_object_get_own_property_descriptor = __webpack_require__(5003);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
@@ -3822,6 +3870,7 @@ var es_number_constructor = __webpack_require__(9653);
 var es_array_slice = __webpack_require__(7042);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
 function HTMLInputElement_prototype_valueAsDate_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { HTMLInputElement_prototype_valueAsDate_typeof = function _typeof(obj) { return typeof obj; }; } else { HTMLInputElement_prototype_valueAsDate_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return HTMLInputElement_prototype_valueAsDate_typeof(obj); }
+
 
 
 

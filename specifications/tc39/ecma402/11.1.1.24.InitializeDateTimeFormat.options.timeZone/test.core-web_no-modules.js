@@ -5781,6 +5781,83 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 
 /***/ }),
 
+/***/ 8386:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(7854);
+var DESCRIPTORS = __webpack_require__(9781);
+var UNSUPPORTED_Y = __webpack_require__(2999).UNSUPPORTED_Y;
+var classof = __webpack_require__(4326);
+var defineProperty = __webpack_require__(3070).f;
+var getInternalState = __webpack_require__(9909).get;
+
+var RegExpPrototype = RegExp.prototype;
+var TypeError = global.TypeError;
+
+// `RegExp.prototype.sticky` getter
+// https://tc39.es/ecma262/#sec-get-regexp.prototype.sticky
+if (DESCRIPTORS && UNSUPPORTED_Y) {
+  defineProperty(RegExpPrototype, 'sticky', {
+    configurable: true,
+    get: function () {
+      if (this === RegExpPrototype) return undefined;
+      // We can't use InternalStateModule.getterFor because
+      // we don't add metadata for regexps created by a literal.
+      if (classof(this) === 'RegExp') {
+        return !!getInternalState(this).sticky;
+      }
+      throw TypeError('Incompatible receiver, RegExp required');
+    }
+  });
+}
+
+
+/***/ }),
+
+/***/ 7601:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+// TODO: Remove from `core-js@4` since it's moved to entry points
+__webpack_require__(4916);
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var call = __webpack_require__(6916);
+var uncurryThis = __webpack_require__(1702);
+var isCallable = __webpack_require__(614);
+var isObject = __webpack_require__(111);
+
+var DELEGATES_TO_EXEC = function () {
+  var execCalled = false;
+  var re = /[ac]/;
+  re.exec = function () {
+    execCalled = true;
+    return /./.exec.apply(this, arguments);
+  };
+  return re.test('abc') === true && execCalled;
+}();
+
+var Error = global.Error;
+var un$Test = uncurryThis(/./.test);
+
+// `RegExp.prototype.test` method
+// https://tc39.es/ecma262/#sec-regexp.prototype.test
+$({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
+  test: function (str) {
+    var exec = this.exec;
+    if (!isCallable(exec)) return un$Test(this, str);
+    var result = call(exec, this, str);
+    if (result !== null && !isObject(result)) {
+      throw new Error('RegExp exec method returned something other than an Object or null');
+    }
+    return !!result;
+  }
+});
+
+
+/***/ }),
+
 /***/ 9714:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -6817,6 +6894,8 @@ var __webpack_exports__ = {};
 var es_object_assign = __webpack_require__(9601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
@@ -6825,6 +6904,8 @@ var es_object_keys = __webpack_require__(7941);
 var es_array_join = __webpack_require__(9600);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__(7327);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string = __webpack_require__(1539);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__(5827);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
@@ -6841,8 +6922,6 @@ var es_object_define_property = __webpack_require__(9070);
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(1817);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
-var es_object_to_string = __webpack_require__(1539);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
 var es_symbol_iterator = __webpack_require__(2165);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
@@ -6851,6 +6930,7 @@ var es_array_iterator = __webpack_require__(6992);
 var es_string_iterator = __webpack_require__(8783);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.getCanonicalLocales.js
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -10522,6 +10602,8 @@ var es_object_is = __webpack_require__(3304);
 var es_array_map = __webpack_require__(1249);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
 var es_regexp_constructor = __webpack_require__(4603);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.sticky.js
+var es_regexp_sticky = __webpack_require__(8386);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__(9714);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.weak-map.js
@@ -10538,6 +10620,8 @@ var es_json_to_string_tag = __webpack_require__(3706);
 var es_math_to_string_tag = __webpack_require__(2703);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.Locale.js
 function Intl_Locale_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_Locale_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_Locale_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_Locale_typeof(obj); }
+
+
 
 
 
@@ -15596,6 +15680,7 @@ function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sy
 
 
 
+
 (function (undefined) {
   if (!("Intl" in self && "PluralRules" in self.Intl)) {
     (function () {
@@ -16558,6 +16643,8 @@ function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sy
 var es_string_match = __webpack_require__(4723);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.NumberFormat.js
 function Intl_NumberFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_NumberFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_NumberFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_NumberFormat_typeof(obj); }
+
+
 
 
 
@@ -19106,6 +19193,8 @@ var es_parse_int = __webpack_require__(1058);
 var es_date_now = __webpack_require__(3843);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.js
 function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_DateTimeFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_DateTimeFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_DateTimeFormat_typeof(obj); }
+
+
 
 
 
