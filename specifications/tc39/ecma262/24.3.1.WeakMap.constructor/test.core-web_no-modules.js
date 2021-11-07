@@ -97,6 +97,23 @@ module.exports = function (argument) {
 
 /***/ }),
 
+/***/ 7556:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+// FF26- bug: ArrayBuffers are non-extensible, but Object.isExtensible does not report it
+var fails = __webpack_require__(7293);
+
+module.exports = fails(function () {
+  if (typeof ArrayBuffer == 'function') {
+    var buffer = new ArrayBuffer(8);
+    // eslint-disable-next-line es/no-object-isextensible, es/no-object-defineproperty -- safe
+    if (Object.isExtensible(buffer)) Object.defineProperty(buffer, 'a', { value: 8 });
+  }
+});
+
+
+/***/ }),
+
 /***/ 1318:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1298,17 +1315,13 @@ var hasOwn = __webpack_require__(2597);
 var defineProperty = __webpack_require__(3070).f;
 var getOwnPropertyNamesModule = __webpack_require__(8006);
 var getOwnPropertyNamesExternalModule = __webpack_require__(1156);
+var isExtensible = __webpack_require__(2050);
 var uid = __webpack_require__(9711);
 var FREEZING = __webpack_require__(6677);
 
 var REQUIRED = false;
 var METADATA = uid('meta');
 var id = 0;
-
-// eslint-disable-next-line es/no-object-isextensible -- safe
-var isExtensible = Object.isExtensible || function () {
-  return true;
-};
 
 var setMetadata = function (it) {
   defineProperty(it, METADATA, { value: {
@@ -2101,6 +2114,29 @@ module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O)
 
 /***/ }),
 
+/***/ 2050:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var fails = __webpack_require__(7293);
+var isObject = __webpack_require__(111);
+var classof = __webpack_require__(4326);
+var ARRAY_BUFFER_NON_EXTENSIBLE = __webpack_require__(7556);
+
+// eslint-disable-next-line es/no-object-isextensible -- safe
+var $isExtensible = Object.isExtensible;
+var FAILS_ON_PRIMITIVES = fails(function () { $isExtensible(1); });
+
+// `Object.isExtensible` method
+// https://tc39.es/ecma262/#sec-object.isextensible
+module.exports = (FAILS_ON_PRIMITIVES || ARRAY_BUFFER_NON_EXTENSIBLE) ? function isExtensible(it) {
+  if (!isObject(it)) return false;
+  if (ARRAY_BUFFER_NON_EXTENSIBLE && classof(it) == 'ArrayBuffer') return false;
+  return $isExtensible ? $isExtensible(it) : true;
+} : $isExtensible;
+
+
+/***/ }),
+
 /***/ 7976:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2429,7 +2465,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.19.0',
+  version: '3.19.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -2848,12 +2884,11 @@ var InternalMetadataModule = __webpack_require__(2423);
 var collection = __webpack_require__(7710);
 var collectionWeak = __webpack_require__(9320);
 var isObject = __webpack_require__(111);
+var isExtensible = __webpack_require__(2050);
 var enforceIternalState = __webpack_require__(9909).enforce;
 var NATIVE_WEAK_MAP = __webpack_require__(8536);
 
 var IS_IE11 = !global.ActiveXObject && 'ActiveXObject' in global;
-// eslint-disable-next-line es/no-object-isextensible -- safe
-var isExtensible = Object.isExtensible;
 var InternalWeakMap;
 
 var wrapper = function (init) {
