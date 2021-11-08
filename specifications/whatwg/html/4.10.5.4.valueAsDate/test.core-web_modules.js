@@ -42,7 +42,7 @@ module.exports = function (argument) {
 
 "use strict";
 
-var charAt = __webpack_require__(8710).charAt;
+var charAt = (__webpack_require__(8710).charAt);
 
 // `AdvanceStringIndex` abstract operation
 // https://tc39.es/ecma262/#sec-advancestringindex
@@ -321,7 +321,7 @@ module.exports = [
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(7854);
-var getOwnPropertyDescriptor = __webpack_require__(1236).f;
+var getOwnPropertyDescriptor = (__webpack_require__(1236).f);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var redefine = __webpack_require__(1320);
 var setGlobal = __webpack_require__(3505);
@@ -1188,7 +1188,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(1702);
 var hasOwn = __webpack_require__(2597);
 var toIndexedObject = __webpack_require__(5656);
-var indexOf = __webpack_require__(1318).indexOf;
+var indexOf = (__webpack_require__(1318).indexOf);
 var hiddenKeys = __webpack_require__(3501);
 
 var push = uncurryThis([].push);
@@ -1301,7 +1301,7 @@ var createNonEnumerableProperty = __webpack_require__(8880);
 var setGlobal = __webpack_require__(3505);
 var inspectSource = __webpack_require__(2788);
 var InternalStateModule = __webpack_require__(9909);
-var CONFIGURABLE_FUNCTION_NAME = __webpack_require__(6530).CONFIGURABLE;
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(6530).CONFIGURABLE);
 
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
@@ -1386,7 +1386,7 @@ var regexpFlags = __webpack_require__(7066);
 var stickyHelpers = __webpack_require__(2999);
 var shared = __webpack_require__(2309);
 var create = __webpack_require__(30);
-var getInternalState = __webpack_require__(9909).get;
+var getInternalState = (__webpack_require__(9909).get);
 var UNSUPPORTED_DOT_ALL = __webpack_require__(9441);
 var UNSUPPORTED_NCG = __webpack_require__(7168);
 

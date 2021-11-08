@@ -566,7 +566,7 @@ var createNonEnumerableProperty = __webpack_require__(880);
 var setGlobal = __webpack_require__(505);
 var inspectSource = __webpack_require__(788);
 var InternalStateModule = __webpack_require__(909);
-var CONFIGURABLE_FUNCTION_NAME = __webpack_require__(530).CONFIGURABLE;
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(530).CONFIGURABLE);
 
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;

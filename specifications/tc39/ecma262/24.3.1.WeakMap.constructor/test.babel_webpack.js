@@ -391,7 +391,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 
 var uncurryThis = __webpack_require__(1702);
 var redefineAll = __webpack_require__(2248);
-var getWeakData = __webpack_require__(2423).getWeakData;
+var getWeakData = (__webpack_require__(2423).getWeakData);
 var anObject = __webpack_require__(9670);
 var isObject = __webpack_require__(111);
 var anInstance = __webpack_require__(5787);
@@ -676,7 +676,7 @@ module.exports = !fails(function () {
 
 "use strict";
 
-var IteratorPrototype = __webpack_require__(3383).IteratorPrototype;
+var IteratorPrototype = (__webpack_require__(3383).IteratorPrototype);
 var create = __webpack_require__(30);
 var createPropertyDescriptor = __webpack_require__(9114);
 var setToStringTag = __webpack_require__(8003);
@@ -986,7 +986,7 @@ module.exports = [
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
-var getOwnPropertyDescriptor = __webpack_require__(1236).f;
+var getOwnPropertyDescriptor = (__webpack_require__(1236).f);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var redefine = __webpack_require__(1320);
 var setGlobal = __webpack_require__(3505);
@@ -1368,7 +1368,7 @@ var uncurryThis = __webpack_require__(1702);
 var hiddenKeys = __webpack_require__(3501);
 var isObject = __webpack_require__(111);
 var hasOwn = __webpack_require__(2597);
-var defineProperty = __webpack_require__(3070).f;
+var defineProperty = (__webpack_require__(3070).f);
 var getOwnPropertyNamesModule = __webpack_require__(8006);
 var getOwnPropertyNamesExternalModule = __webpack_require__(1156);
 var isExtensible = __webpack_require__(2050);
@@ -2091,7 +2091,7 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 /* eslint-disable es/no-object-getownpropertynames -- safe */
 var classof = __webpack_require__(4326);
 var toIndexedObject = __webpack_require__(5656);
-var $getOwnPropertyNames = __webpack_require__(8006).f;
+var $getOwnPropertyNames = (__webpack_require__(8006).f);
 var arraySlice = __webpack_require__(206);
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -2209,7 +2209,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(1702);
 var hasOwn = __webpack_require__(2597);
 var toIndexedObject = __webpack_require__(5656);
-var indexOf = __webpack_require__(1318).indexOf;
+var indexOf = (__webpack_require__(1318).indexOf);
 var hiddenKeys = __webpack_require__(3501);
 
 var push = uncurryThis([].push);
@@ -2386,7 +2386,7 @@ var createNonEnumerableProperty = __webpack_require__(8880);
 var setGlobal = __webpack_require__(3505);
 var inspectSource = __webpack_require__(2788);
 var InternalStateModule = __webpack_require__(9909);
-var CONFIGURABLE_FUNCTION_NAME = __webpack_require__(6530).CONFIGURABLE;
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(6530).CONFIGURABLE);
 
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
@@ -2468,7 +2468,7 @@ module.exports = function (key, value) {
 /***/ 8003:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(3070).f;
+var defineProperty = (__webpack_require__(3070).f);
 var hasOwn = __webpack_require__(2597);
 var wellKnownSymbol = __webpack_require__(5112);
 
@@ -2895,7 +2895,7 @@ if (!TO_STRING_TAG_SUPPORT) {
 
 "use strict";
 
-var charAt = __webpack_require__(8710).charAt;
+var charAt = (__webpack_require__(8710).charAt);
 var toString = __webpack_require__(1340);
 var InternalStateModule = __webpack_require__(9909);
 var defineIterator = __webpack_require__(654);
@@ -2941,7 +2941,7 @@ var collection = __webpack_require__(7710);
 var collectionWeak = __webpack_require__(9320);
 var isObject = __webpack_require__(111);
 var isExtensible = __webpack_require__(2050);
-var enforceIternalState = __webpack_require__(9909).enforce;
+var enforceIternalState = (__webpack_require__(9909).enforce);
 var NATIVE_WEAK_MAP = __webpack_require__(8536);
 
 var IS_IE11 = !global.ActiveXObject && 'ActiveXObject' in global;
