@@ -363,7 +363,7 @@ module.exports = !fails(function () {
 
 "use strict";
 
-var IteratorPrototype = __webpack_require__(3383).IteratorPrototype;
+var IteratorPrototype = (__webpack_require__(3383).IteratorPrototype);
 var create = __webpack_require__(30);
 var createPropertyDescriptor = __webpack_require__(9114);
 var setToStringTag = __webpack_require__(8003);
@@ -635,7 +635,7 @@ module.exports = [
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var global = __webpack_require__(7854);
-var getOwnPropertyDescriptor = __webpack_require__(1236).f;
+var getOwnPropertyDescriptor = (__webpack_require__(1236).f);
 var createNonEnumerableProperty = __webpack_require__(8880);
 var redefine = __webpack_require__(1320);
 var setGlobal = __webpack_require__(3505);
@@ -1688,7 +1688,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(1702);
 var hasOwn = __webpack_require__(2597);
 var toIndexedObject = __webpack_require__(5656);
-var indexOf = __webpack_require__(1318).indexOf;
+var indexOf = (__webpack_require__(1318).indexOf);
 var hiddenKeys = __webpack_require__(3501);
 
 var push = uncurryThis([].push);
@@ -1865,7 +1865,7 @@ var createNonEnumerableProperty = __webpack_require__(8880);
 var setGlobal = __webpack_require__(3505);
 var inspectSource = __webpack_require__(2788);
 var InternalStateModule = __webpack_require__(9909);
-var CONFIGURABLE_FUNCTION_NAME = __webpack_require__(6530).CONFIGURABLE;
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(6530).CONFIGURABLE);
 
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
@@ -1971,7 +1971,7 @@ module.exports = function (key, value) {
 /***/ 8003:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(3070).f;
+var defineProperty = (__webpack_require__(3070).f);
 var hasOwn = __webpack_require__(2597);
 var wellKnownSymbol = __webpack_require__(5112);
 
@@ -2612,7 +2612,7 @@ if (!TO_STRING_TAG_SUPPORT) {
 "use strict";
 
 var uncurryThis = __webpack_require__(1702);
-var PROPER_FUNCTION_NAME = __webpack_require__(6530).PROPER;
+var PROPER_FUNCTION_NAME = (__webpack_require__(6530).PROPER);
 var redefine = __webpack_require__(1320);
 var anObject = __webpack_require__(9670);
 var isPrototypeOf = __webpack_require__(7976);
@@ -2649,7 +2649,7 @@ if (NOT_GENERIC || INCORRECT_NAME) {
 
 "use strict";
 
-var charAt = __webpack_require__(8710).charAt;
+var charAt = (__webpack_require__(8710).charAt);
 var toString = __webpack_require__(1340);
 var InternalStateModule = __webpack_require__(9909);
 var defineIterator = __webpack_require__(654);
@@ -3088,7 +3088,7 @@ var hasOwn = __webpack_require__(2597);
 var assign = __webpack_require__(1574);
 var arrayFrom = __webpack_require__(8457);
 var arraySlice = __webpack_require__(206);
-var codeAt = __webpack_require__(8710).codeAt;
+var codeAt = (__webpack_require__(8710).codeAt);
 var toASCII = __webpack_require__(3197);
 var $toString = __webpack_require__(1340);
 var setToStringTag = __webpack_require__(8003);
