@@ -17,7 +17,7 @@
     "devDependencies": {
         "@babel/cli": "^7.16.0",
         "@babel/core": "^7.16.0",
-        "@babel/preset-env": "^7.16.0",
+        "@babel/preset-env": "^7.16.4",
         "@mrhenry/babel-plugin-core-web": "^0.6.5",
         "babel-loader": "^8.2.3",
         "core-js": "^3.19.1",
