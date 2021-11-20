@@ -4293,7 +4293,7 @@ var es_string_iterator = __webpack_require__(8783);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function (undefined) {
-  if (!("document" in self)) {
+  if (!("document" in self && "Document" in self)) {
     if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
       if (self.HTMLDocument) {
         self.Document = self.HTMLDocument;
@@ -4707,6 +4707,80 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
+function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_prototype_classList_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_prototype_classList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_prototype_classList_typeof(obj); }
+
+
+
+
+
+
+
+
+
+
+(function (undefined) {
+  if (!("document" in self && "classList" in document.documentElement && "Element" in self && "classList" in Element.prototype && function () {
+    var e = document.createElement("span");
+    return e.classList.add("a", "b"), e.classList.contains("b");
+  }())) {
+    (function (global) {
+      var dpSupport = true;
+
+      var defineGetter = function defineGetter(object, name, fn, configurable) {
+        if (Object.defineProperty) Object.defineProperty(object, name, {
+          configurable: false === dpSupport ? true : !!configurable,
+          get: fn
+        });else object.__defineGetter__(name, fn);
+      };
+
+      try {
+        defineGetter({}, "support");
+      } catch (e) {
+        dpSupport = false;
+      }
+
+      var addProp = function addProp(o, name, attr) {
+        defineGetter(o.prototype, name, function () {
+          var tokenList;
+          var THIS = this,
+              gibberishProperty = "__defineGetter__" + "DEFINE_PROPERTY" + name;
+          if (THIS[gibberishProperty]) return tokenList;
+          THIS[gibberishProperty] = true;
+
+          if (false === dpSupport) {
+            var visage;
+            var mirror = addProp.mirror || document.createElement("div");
+            var reflections = mirror.childNodes;
+            var l = reflections.length;
+
+            for (var i = 0; i < l; ++i) {
+              if (reflections[i]._R === THIS) {
+                visage = reflections[i];
+                break;
+              }
+            }
+
+            visage || (visage = mirror.appendChild(document.createElement("div")));
+            tokenList = DOMTokenList.call(visage, THIS, attr);
+          } else tokenList = new helpers_DOMTokenList(THIS, attr);
+
+          defineGetter(THIS, name, function () {
+            return tokenList;
+          });
+          delete THIS[gibberishProperty];
+          return tokenList;
+        }, true);
+      };
+
+      addProp(global.Element, "classList", "className");
+      addProp(global.HTMLElement, "classList", "className");
+      addProp(global.HTMLLinkElement, "relList", "rel");
+      addProp(global.HTMLAnchorElement, "relList", "rel");
+      addProp(global.HTMLAreaElement, "relList", "rel");
+    })(self);
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_classList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_classList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_classList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__(2023);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
@@ -5024,80 +5098,6 @@ function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
-function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_prototype_classList_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_prototype_classList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_prototype_classList_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("document" in self && "classList" in document.documentElement && "Element" in self && "classList" in Element.prototype && function () {
-    var e = document.createElement("span");
-    return e.classList.add("a", "b"), e.classList.contains("b");
-  }())) {
-    (function (global) {
-      var dpSupport = true;
-
-      var defineGetter = function defineGetter(object, name, fn, configurable) {
-        if (Object.defineProperty) Object.defineProperty(object, name, {
-          configurable: false === dpSupport ? true : !!configurable,
-          get: fn
-        });else object.__defineGetter__(name, fn);
-      };
-
-      try {
-        defineGetter({}, "support");
-      } catch (e) {
-        dpSupport = false;
-      }
-
-      var addProp = function addProp(o, name, attr) {
-        defineGetter(o.prototype, name, function () {
-          var tokenList;
-          var THIS = this,
-              gibberishProperty = "__defineGetter__" + "DEFINE_PROPERTY" + name;
-          if (THIS[gibberishProperty]) return tokenList;
-          THIS[gibberishProperty] = true;
-
-          if (false === dpSupport) {
-            var visage;
-            var mirror = addProp.mirror || document.createElement("div");
-            var reflections = mirror.childNodes;
-            var l = reflections.length;
-
-            for (var i = 0; i < l; ++i) {
-              if (reflections[i]._R === THIS) {
-                visage = reflections[i];
-                break;
-              }
-            }
-
-            visage || (visage = mirror.appendChild(document.createElement("div")));
-            tokenList = DOMTokenList.call(visage, THIS, attr);
-          } else tokenList = new helpers_DOMTokenList(THIS, attr);
-
-          defineGetter(THIS, name, function () {
-            return tokenList;
-          });
-          delete THIS[gibberishProperty];
-          return tokenList;
-        }, true);
-      };
-
-      addProp(global.Element, "classList", "className");
-      addProp(global.HTMLElement, "classList", "className");
-      addProp(global.HTMLLinkElement, "relList", "rel");
-      addProp(global.HTMLAnchorElement, "relList", "rel");
-      addProp(global.HTMLAreaElement, "relList", "rel");
-    })(self);
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_classList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_classList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_classList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
 function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { DOMTokenList_prototype_forEach_typeof = function _typeof(obj) { return typeof obj; }; } else { DOMTokenList_prototype_forEach_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return DOMTokenList_prototype_forEach_typeof(obj); }
 

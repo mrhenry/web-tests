@@ -3731,7 +3731,7 @@ var es_string_iterator = __webpack_require__(8783);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function (undefined) {
-  if (!("document" in self)) {
+  if (!("document" in self && "Document" in self)) {
     if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
       if (self.HTMLDocument) {
         self.Document = self.HTMLDocument;

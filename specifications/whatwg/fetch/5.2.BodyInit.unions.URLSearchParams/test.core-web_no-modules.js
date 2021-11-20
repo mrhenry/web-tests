@@ -7744,7 +7744,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 function document_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { document_typeof = function _typeof(obj) { return typeof obj; }; } else { document_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return document_typeof(obj); }
 
 (function (undefined) {
-  if (!("document" in self)) {
+  if (!("document" in self && "Document" in self)) {
     if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
       if (self.HTMLDocument) {
         self.Document = self.HTMLDocument;
