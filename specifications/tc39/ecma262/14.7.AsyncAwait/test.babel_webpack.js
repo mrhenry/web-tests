@@ -1771,7 +1771,7 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.19.2',
+  version: '3.19.3',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -2200,7 +2200,7 @@ var V8_VERSION = __webpack_require__(7392);
 var SPECIES = wellKnownSymbol('species');
 var PROMISE = 'Promise';
 
-var getInternalState = InternalStateModule.get;
+var getInternalState = InternalStateModule.getterFor(PROMISE);
 var setInternalState = InternalStateModule.set;
 var getInternalPromiseState = InternalStateModule.getterFor(PROMISE);
 var NativePromisePrototype = NativePromise && NativePromise.prototype;
