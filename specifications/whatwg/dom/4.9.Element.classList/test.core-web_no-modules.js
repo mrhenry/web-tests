@@ -4325,7 +4325,7 @@ var es_string_iterator = __webpack_require__(8783);
 
 
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 (function (undefined) {
   if (!("document" in self && "Document" in self)) {
@@ -4346,7 +4346,7 @@ var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(2564);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
-function Element_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_typeof(obj); }
+function Element_typeof(obj) { "@babel/helpers - typeof"; return Element_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_typeof(obj); }
 
 
 
@@ -4474,7 +4474,7 @@ var es_array_join = __webpack_require__(9600);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__(9554);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
-function _DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _DOMTokenList_typeof = function _typeof(obj) { return typeof obj; }; } else { _DOMTokenList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _DOMTokenList_typeof(obj); }
+function _DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return _DOMTokenList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _DOMTokenList_typeof(obj); }
 
 
 
@@ -4669,7 +4669,7 @@ var _DOMTokenList = function () {
 
 
 
-function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { DOMTokenList_typeof = function _typeof(obj) { return typeof obj; }; } else { DOMTokenList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return DOMTokenList_typeof(obj); }
+function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_typeof(obj); }
 
 
 (function (undefined) {
@@ -4743,7 +4743,7 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
-function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Element_prototype_classList_typeof = function _typeof(obj) { return typeof obj; }; } else { Element_prototype_classList_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Element_prototype_classList_typeof(obj); }
+function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_classList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_classList_typeof(obj); }
 
 
 
@@ -5098,7 +5098,7 @@ var ArrayIterator = function () {
 
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
-function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { DOMTokenList_prototype_iterator_typeof = function _typeof(obj) { return typeof obj; }; } else { DOMTokenList_prototype_iterator_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return DOMTokenList_prototype_iterator_typeof(obj); }
+function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_prototype_iterator_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_prototype_iterator_typeof(obj); }
 
 
 
@@ -5134,7 +5134,7 @@ function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
-function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { DOMTokenList_prototype_forEach_typeof = function _typeof(obj) { return typeof obj; }; } else { DOMTokenList_prototype_forEach_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return DOMTokenList_prototype_forEach_typeof(obj); }
+function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_prototype_forEach_typeof(obj); }
 
 
 

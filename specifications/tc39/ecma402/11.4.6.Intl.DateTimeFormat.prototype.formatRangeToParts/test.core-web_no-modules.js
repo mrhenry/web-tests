@@ -7000,7 +7000,7 @@ var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.getCanonicalLocales.js
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -10690,7 +10690,7 @@ var es_json_to_string_tag = __webpack_require__(3706);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
 var es_math_to_string_tag = __webpack_require__(2703);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.Locale.js
-function Intl_Locale_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_Locale_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_Locale_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_Locale_typeof(obj); }
+function Intl_Locale_typeof(obj) { "@babel/helpers - typeof"; return Intl_Locale_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_Locale_typeof(obj); }
 
 
 
@@ -15718,7 +15718,7 @@ var es_set = __webpack_require__(189);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__(9554);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.PluralRules.js
-function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_PluralRules_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_PluralRules_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_PluralRules_typeof(obj); }
+function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; return Intl_PluralRules_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_PluralRules_typeof(obj); }
 
 
 
@@ -16713,7 +16713,7 @@ function Intl_PluralRules_typeof(obj) { "@babel/helpers - typeof"; if (typeof Sy
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.match.js
 var es_string_match = __webpack_require__(4723);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.NumberFormat.js
-function Intl_NumberFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_NumberFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_NumberFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_NumberFormat_typeof(obj); }
+function Intl_NumberFormat_typeof(obj) { "@babel/helpers - typeof"; return Intl_NumberFormat_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_NumberFormat_typeof(obj); }
 
 
 
@@ -19263,7 +19263,7 @@ var es_parse_int = __webpack_require__(1058);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
 var es_date_now = __webpack_require__(3843);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.DateTimeFormat.js
-function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_DateTimeFormat_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_DateTimeFormat_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_DateTimeFormat_typeof(obj); }
+function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; return Intl_DateTimeFormat_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_DateTimeFormat_typeof(obj); }
 
 
 
@@ -21853,7 +21853,7 @@ function Intl_DateTimeFormat_typeof(obj) { "@babel/helpers - typeof"; if (typeof
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Intl_DateTimeFormat_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Intl_DateTimeFormat_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Intl_DateTimeFormat_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Intl.PluralRules.~locale.en.js
-function Intl_PluralRules_locale_en_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_PluralRules_locale_en_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_PluralRules_locale_en_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_PluralRules_locale_en_typeof(obj); }
+function Intl_PluralRules_locale_en_typeof(obj) { "@babel/helpers - typeof"; return Intl_PluralRules_locale_en_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_PluralRules_locale_en_typeof(obj); }
 
 
 
@@ -21903,7 +21903,7 @@ function Intl_PluralRules_locale_en_typeof(obj) { "@babel/helpers - typeof"; if 
 
 
 
-function Intl_NumberFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_NumberFormat_locale_en_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_NumberFormat_locale_en_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_NumberFormat_locale_en_typeof(obj); }
+function Intl_NumberFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; return Intl_NumberFormat_locale_en_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_NumberFormat_locale_en_typeof(obj); }
 
 (function (undefined) {
   if (!("Intl" in self && Intl.NumberFormat && function () {
@@ -25203,7 +25203,7 @@ function Intl_NumberFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if
 
 
 
-function Intl_DateTimeFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { Intl_DateTimeFormat_locale_en_typeof = function _typeof(obj) { return typeof obj; }; } else { Intl_DateTimeFormat_locale_en_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return Intl_DateTimeFormat_locale_en_typeof(obj); }
+function Intl_DateTimeFormat_locale_en_typeof(obj) { "@babel/helpers - typeof"; return Intl_DateTimeFormat_locale_en_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Intl_DateTimeFormat_locale_en_typeof(obj); }
 
 (function (undefined) {
   if (!("Intl" in self && "DateTimeFormat" in self.Intl && "formatRangeToParts" in self.Intl.DateTimeFormat && self.Intl.DateTimeFormat.supportedLocalesOf("en").length)) {
