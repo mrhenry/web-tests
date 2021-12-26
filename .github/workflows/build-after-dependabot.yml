@@ -12,11 +12,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Download web-tests.db
-        uses: actions/download-artifact@v2
-        with:
-          name: web-tests-db
-
       - name: setup node
         uses: actions/setup-node@v2.2.0
         with:
@@ -44,9 +39,3 @@ jobs:
           git commit --allow-empty -m "rebuild"
           git push --set-upstream origin ${GITHUB_REF}
 
-      - name: 'Upload web-tests.db'
-        uses: actions/upload-artifact@v2
-        with:
-          name: web-tests-db
-          path: web-tests.db
-          retention-days: 90
