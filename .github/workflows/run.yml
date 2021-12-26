@@ -21,6 +21,11 @@ jobs:
         uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 1
+
+      - name: Download web-tests.db
+        uses: actions/download-artifact@v2
+        with:
+          name: web-tests-db
         
       - uses: actions/setup-go@v2
         with:
@@ -67,3 +72,9 @@ jobs:
           git commit --allow-empty -m "run"
           git push --set-upstream origin main
 
+      - name: 'Upload web-tests.db'
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-tests-db
+          path: web-tests.db
+          retention-days: 90

@@ -21,6 +21,11 @@ jobs:
         with:
           go-version: '^1.16'
 
+      - name: Download web-tests.db
+        uses: actions/download-artifact@v2
+        with:
+          name: web-tests-db
+
       - name: 'BrowserStack Env Setup'
         uses: 'browserstack/github-actions/setup-env@master'
         with:
@@ -60,3 +65,9 @@ jobs:
           git commit --allow-empty -m "collect context data"
           git push --set-upstream origin main
 
+      - name: 'Upload web-tests.db'
+        uses: actions/upload-artifact@v2
+        with:
+          name: web-tests-db
+          path: web-tests.db
+          retention-days: 90
