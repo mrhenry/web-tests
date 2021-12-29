@@ -10,7 +10,7 @@
 		equal: function (a, b) {
 			if (Array.isArray(a) && Array.isArray(b)) {
 				if (a.length !== b.length) {
-					console.log(a, b);
+					// console.log(a, ' - ', b);
 					throw new Error('Arrays are not equal');
 				}
 
@@ -22,26 +22,34 @@
 			}
 
 			if (a !== b) {
-				console.log(a, b);
-				throw new Error('Expected A to equal B');
+				// console.log(a, ' - ', b);
+				throw new Error('Expected A to equal to B');
 			}
 		},
 		notEqual: function (a, b) {
-			try {
-				assert.equal(a, b);
-			} catch (_) {
+			if (Array.isArray(a) && Array.isArray(b)) {
+				if (a.length !== b.length) {
+					return;
+				}
+
+				for (var i = 0; i < a.length; i++) {
+					assert.notEqual(a[i], b[i]);
+				}
+
 				return;
 			}
 
-			console.log(a, b);
-			throw new Error('Expected A to not equal B');
+			if (a === b) {
+				// console.log(a, ' - ', b);
+				throw new Error('Expected A to be different from B');
+			}
 		},
 		ok: function (a) {
 			if (!!a) {
 				return;
 			}
 
-			console.log(a);
+			// console.log(a);
 			throw new Error('Expected something truthy for A');
 		}
 	}
@@ -57,33 +65,33 @@
 
 	// Test that |selector| returns the given elements in #main.
 	function testSelectorAllFromMain(assert, selector, expected) {
-		assert.step(`${selector} matches expected elements from #main`);
+		assert.step(selector + ' matches expected elements from #main');
 		var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
 		assert.equal(formatElements(actual), formatElements(expected));
 	}
 
 	// Test that |selector| returns the given elements in the given scope element
 	function testSelectorAllFromScope(assert, scope, selector, expected) {
-		assert.step(`${selector} matches expected elements from scope ${scope.id || scope.tagName}`);
+		assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
 		var actual = Array.from(scope.querySelectorAll(selector));
 		assert.equal(formatElements(actual), formatElements(expected));
 	}
 
 	// Test that |selector| returns the given element in #main.
 	function testSelector(assert, selector, expected) {
-		assert.step(`${selector} matches expected element`);
+		assert.step(selector + ' matches expected element');
 		assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
 	}
 
 	// Test that |selector| returns the given closest element.
 	function testClosest(assert, node, selector, expected) {
-		assert.step(`closest(${selector}) returns expected element`);
+		assert.step('closest(' + selector + ') returns expected element');
 		assert.equal(node.closest(selector), expected);
 	}
 
 	// Test that |selector| returns matching status.
 	function testMatches(assert, node, selector, expected) {
-		assert.step(`${selector} matches expectedly`);
+		assert.step(selector + ' matches expectedly');
 		assert.equal(node.matches(selector), expected);
 	}
 
@@ -91,7 +99,7 @@
 	function compareSelectorAll(assert, scope, selector1, selector2) {
 		var result1 = Array.from(scope.querySelectorAll(selector1));
 		var result2 = Array.from(scope.querySelectorAll(selector2));
-		assert.step(`${selector1} and ${selector2} returns same elements on ${scope.id}`);
+		assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
 		assert.equal(formatElements(result1), formatElements(result2));
 	}
 
@@ -99,7 +107,7 @@
 	function compareSelectorAllNotEqual(assert, scope, selector1, selector2) {
 		var result1 = Array.from(scope.querySelectorAll(selector1));
 		var result2 = Array.from(scope.querySelectorAll(selector2));
-		assert.step(`not : ${selector1} and ${selector2} returns same elements on ${scope.id}`);
+		assert.step('not : ' + selector1 + ' and ' + selector2 + 'returns same elements on ' + scope.id);
 		assert.notEqual(formatElements(result1), formatElements(result2));
 	}
 
@@ -119,25 +127,7 @@
 
 	assert.test(":has basic", function () {
 		var fixture = document.getElementById("the-fixture");
-		fixture.innerHTML = `<main id="main">
-		<div id="a" class="ancestor">
-			<div id="b" class="parent ancestor">
-				<div id="c" class="sibling descendant">
-					<div id="d" class="descendant"></div>
-				</div>
-				<div id="e" class="target descendant"></div>
-			</div>
-			<div id="f" class="parent ancestor">
-				<div id="g" class="target descendant"></div>
-			</div>
-			<div id="h" class="parent ancestor">
-				<div id="i" class="target descendant"></div>
-				<div id="j" class="sibling descendant">
-					<div id="k" class="descendant"></div>
-				</div>
-			</div>
-		</div>
-	</main>`;
+		fixture.innerHTML = '<main id="main"><div id="a" class="ancestor"><div id="b" class="parent ancestor"><div id="c" class="sibling descendant"><div id="d" class="descendant"></div></div><div id="e" class="target descendant"></div></div><div id="f" class="parent ancestor"><div id="g" class="target descendant"></div></div><div id="h" class="parent ancestor"><div id="i" class="target descendant"></div><div id="j" class="sibling descendant"><div id="k" class="descendant"></div></div></div></div></main>';
 
 		var a = document.getElementById("a");
 		var b = document.getElementById("b");
@@ -183,27 +173,7 @@
 
 	assert.test(":has argument with explicit scope (tentative)", function () {
 		var fixture = document.getElementById("the-fixture");
-		fixture.innerHTML = `<main>
-		<div id=d01 class="a">
-			<div id=scope1 class="b">
-				<div id=d02 class="c">
-					<div id=d03 class="c">
-						<div id=d04 class="d"></div>
-					</div>
-				</div>
-				<div id=d05 class="e"></div>
-			</div>
-		</div>
-		<div id=d06>
-			<div id=scope2 class="b">
-				<div id=d07 class="c">
-					<div id=d08 class="c">
-						<div id=d09></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>`;
+		fixture.innerHTML = '<main><div id=d01 class="a"><div id=scope1 class="b"><div id=d02 class="c"><div id=d03 class="c"><div id=d04 class="d"></div></div></div><div id=d05 class="e"></div></div></div><div id=d06><div id=scope2 class="b"><div id=d07 class="c"><div id=d08 class="c"><div id=d09></div></div></div></div></div></div>';
 
 		var scope1 = document.getElementById("scope1");
 		var scope2 = document.getElementById("scope2");
@@ -256,126 +226,7 @@
 
 	assert.test(":has relative argument (a)", function () {
 		var fixture = document.getElementById("the-fixture");
-		fixture.innerHTML = `<main id=main>
-		<div id=d01>
-			<div id=d02 class="x">
-				<div id=d03 class="a"></div>
-				<div id=d04></div>
-				<div id=d05 class="b"></div>
-			</div>
-			<div id=d06 class="x">
-				<div id=d07 class="x">
-					<div id=d08 class="a"></div>
-				</div>
-			</div>
-			<div id=d09 class="x">
-				<div id=d10 class="a">
-					<div id=d11 class="b"></div>
-				</div>
-			</div>
-			<div id=d12 class="x">
-				<div id=d13 class="a">
-					<div id=d14>
-						<div id=d15 class="b"></div>
-					</div>
-				</div>
-				<div id=d16 class="b"></div>
-			</div>
-		</div>
-		<div id=d17>
-			<div id=d18 class="x"></div>
-			<div id=d19 class="x"></div>
-			<div id=d20 class="a"></div>
-			<div id=d21 class="x"></div>
-			<div id=d22 class="a">
-				<div id=d23 class="b"></div>
-			</div>
-			<div id=d24 class="x"></div>
-			<div id=d25 class="a">
-				<div id=d26>
-					<div id=d27 class="b"></div>
-				</div>
-			</div>
-			<div id=d28 class="x"></div>
-			<div id=d29 class="a"></div>
-			<div id=d30 class="b">
-				<div id=d31 class="c"></div>
-			</div>
-			<div id=d32 class="x"></div>
-			<div id=d33 class="a"></div>
-			<div id=d34 class="b">
-				<div id=d35>
-					<div id=d36 class="c"></div>
-				</div>
-			</div>
-			<div id=d37 class="x"></div>
-			<div id=d38 class="a"></div>
-			<div id=d39 class="b"></div>
-			<div id=d40 class="x"></div>
-			<div id=d41 class="a"></div>
-			<div id=d42></div>
-			<div id=d43 class="b">
-				<div id=d44 class="x">
-					<div id=d45 class="c"></div>
-				</div>
-			</div>
-			<div id=d46 class="x"></div>
-			<div id=d47 class="a">
-			</div>
-		</div>
-		<div id="extra-d01">
-			<div id=d48 class="x">
-			<div id=d49 class="x">
-				<div id=d50 class="x d">
-					<div id=d51 class="x d">
-						<div id=d52 class="x">
-							<div id=d53 class="x e">
-								<div id=d54 class="f"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			</div>
-			<div id=d55 class="x"></div>
-			<div id=d56 class="x d"></div>
-			<div id=d57 class="x d"></div>
-			<div id=d58 class="x"></div>
-			<div id=d59 class="x e"></div>
-			<div id=d60 class="f"></div>
-		</div>
-		<div id="extra-d02">
-			<div id=d61 class="x"></div>
-			<div id=d62 class="x y"></div>
-			<div id=d63 class="x y">
-				<div id=d64 class="y g">
-					<div id=d65 class="y">
-						<div id=d66 class="y h">
-							<div id=d67 class="i"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id=d68 class="x y">
-				<div id=d69 class="x"></div>
-				<div id=d70 class="x"></div>
-				<div id=d71 class="x y">
-					<div id=d72 class="y g">
-						<div id=d73 class="y">
-							<div id=d74 class="y h">
-								<div id=d75 class="i"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id=d76 class="x"></div>
-				<div id=d77 class="j">
-					<div id=d78><div id=d79></div></div>
-				</div>
-			</div>
-			<div id=d80 class="j"></div>
-		</div>
-		</main>`;
+		fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
 	
 		var d02 = document.getElementById("d02");
 		var d06 = document.getElementById("d06");
@@ -467,126 +318,7 @@
 
 	assert.test(":has relative argument (b)", function () {
 		var fixture = document.getElementById("the-fixture");
-		fixture.innerHTML = `<main id=main>
-		<div id=d01>
-			<div id=d02 class="x">
-				<div id=d03 class="a"></div>
-				<div id=d04></div>
-				<div id=d05 class="b"></div>
-			</div>
-			<div id=d06 class="x">
-				<div id=d07 class="x">
-					<div id=d08 class="a"></div>
-				</div>
-			</div>
-			<div id=d09 class="x">
-				<div id=d10 class="a">
-					<div id=d11 class="b"></div>
-				</div>
-			</div>
-			<div id=d12 class="x">
-				<div id=d13 class="a">
-					<div id=d14>
-						<div id=d15 class="b"></div>
-					</div>
-				</div>
-				<div id=d16 class="b"></div>
-			</div>
-		</div>
-		<div id=d17>
-			<div id=d18 class="x"></div>
-			<div id=d19 class="x"></div>
-			<div id=d20 class="a"></div>
-			<div id=d21 class="x"></div>
-			<div id=d22 class="a">
-				<div id=d23 class="b"></div>
-			</div>
-			<div id=d24 class="x"></div>
-			<div id=d25 class="a">
-				<div id=d26>
-					<div id=d27 class="b"></div>
-				</div>
-			</div>
-			<div id=d28 class="x"></div>
-			<div id=d29 class="a"></div>
-			<div id=d30 class="b">
-				<div id=d31 class="c"></div>
-			</div>
-			<div id=d32 class="x"></div>
-			<div id=d33 class="a"></div>
-			<div id=d34 class="b">
-				<div id=d35>
-					<div id=d36 class="c"></div>
-				</div>
-			</div>
-			<div id=d37 class="x"></div>
-			<div id=d38 class="a"></div>
-			<div id=d39 class="b"></div>
-			<div id=d40 class="x"></div>
-			<div id=d41 class="a"></div>
-			<div id=d42></div>
-			<div id=d43 class="b">
-				<div id=d44 class="x">
-					<div id=d45 class="c"></div>
-				</div>
-			</div>
-			<div id=d46 class="x"></div>
-			<div id=d47 class="a">
-			</div>
-		</div>
-		<div id="extra-d01">
-			<div id=d48 class="x">
-			<div id=d49 class="x">
-				<div id=d50 class="x d">
-					<div id=d51 class="x d">
-						<div id=d52 class="x">
-							<div id=d53 class="x e">
-								<div id=d54 class="f"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			</div>
-			<div id=d55 class="x"></div>
-			<div id=d56 class="x d"></div>
-			<div id=d57 class="x d"></div>
-			<div id=d58 class="x"></div>
-			<div id=d59 class="x e"></div>
-			<div id=d60 class="f"></div>
-		</div>
-		<div id="extra-d02">
-			<div id=d61 class="x"></div>
-			<div id=d62 class="x y"></div>
-			<div id=d63 class="x y">
-				<div id=d64 class="y g">
-					<div id=d65 class="y">
-						<div id=d66 class="y h">
-							<div id=d67 class="i"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id=d68 class="x y">
-				<div id=d69 class="x"></div>
-				<div id=d70 class="x"></div>
-				<div id=d71 class="x y">
-					<div id=d72 class="y g">
-						<div id=d73 class="y">
-							<div id=d74 class="y h">
-								<div id=d75 class="i"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id=d76 class="x"></div>
-				<div id=d77 class="j">
-					<div id=d78><div id=d79></div></div>
-				</div>
-			</div>
-			<div id=d80 class="j"></div>
-		</div>
-		</main>`;
+		fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
 	
 		var d01 = document.getElementById("d01");
 		var d02 = document.getElementById("d02");

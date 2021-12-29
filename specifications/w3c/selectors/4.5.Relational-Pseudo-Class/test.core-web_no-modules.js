@@ -4636,59 +4636,6 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Window.js
-
-
-
-
-
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-(function (undefined) {
-  if (!("Window" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      (function (global) {
-        if (global.constructor) {
-          global.Window = global.constructor;
-        } else {
-          (global.Window = global.constructor = new Function('return function Window() {}')()).prototype = self;
-        }
-      })(self);
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/console.js
-
-
-
-
-
-
-
-function console_typeof(obj) { "@babel/helpers - typeof"; return console_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, console_typeof(obj); }
-
-(function (undefined) {
-  if (!("console" in self)) {
-    self.console = self.console || {};
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : console_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : console_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : console_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/console.log.js
-
-
-
-
-
-
-
-function console_log_typeof(obj) { "@babel/helpers - typeof"; return console_log_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, console_log_typeof(obj); }
-
-(function (undefined) {
-  if (!("console" in self && "log" in self.console)) {
-    console.log = function log() {};
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : console_log_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : console_log_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : console_log_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__(2023);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
@@ -4975,7 +4922,7 @@ var ArrayIterator = function () {
 
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
-function NodeList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"; return NodeList_prototype_iterator_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, NodeList_prototype_iterator_typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -4994,7 +4941,7 @@ function NodeList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"; re
       return new _ArrayIterator(this);
     };
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.forEach.js
 function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; return NodeList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, NodeList_prototype_forEach_typeof(obj); }
 
@@ -5793,10 +5740,6 @@ var es_array_from = __webpack_require__(1038);
 
 
 
-
-
-
-
 (function (cb) {
   var assert = {
     test: function test(message, callback) {
@@ -5806,7 +5749,6 @@ var es_array_from = __webpack_require__(1038);
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
-          console.log(a, b);
           throw new Error('Arrays are not equal');
         }
 
@@ -5818,26 +5760,31 @@ var es_array_from = __webpack_require__(1038);
       }
 
       if (a !== b) {
-        console.log(a, b);
-        throw new Error('Expected A to equal B');
+        throw new Error('Expected A to equal to B');
       }
     },
     notEqual: function notEqual(a, b) {
-      try {
-        assert.equal(a, b);
-      } catch (_) {
+      if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) {
+          return;
+        }
+
+        for (var i = 0; i < a.length; i++) {
+          assert.notEqual(a[i], b[i]);
+        }
+
         return;
       }
 
-      console.log(a, b);
-      throw new Error('Expected A to not equal B');
+      if (a === b) {
+        throw new Error('Expected A to be different from B');
+      }
     },
     ok: function ok(a) {
       if (!!a) {
         return;
       }
 
-      console.log(a);
       throw new Error('Expected something truthy for A');
     }
   };
@@ -5853,43 +5800,43 @@ var es_array_from = __webpack_require__(1038);
   }
 
   function testSelectorAllFromMain(assert, selector, expected) {
-    assert.step("".concat(selector, " matches expected elements from #main"));
+    assert.step(selector + ' matches expected elements from #main');
     var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
 
   function testSelectorAllFromScope(assert, scope, selector, expected) {
-    assert.step("".concat(selector, " matches expected elements from scope ").concat(scope.id || scope.tagName));
+    assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
     var actual = Array.from(scope.querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
 
   function testSelector(assert, selector, expected) {
-    assert.step("".concat(selector, " matches expected element"));
+    assert.step(selector + ' matches expected element');
     assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
   }
 
   function testClosest(assert, node, selector, expected) {
-    assert.step("closest(".concat(selector, ") returns expected element"));
+    assert.step('closest(' + selector + ') returns expected element');
     assert.equal(node.closest(selector), expected);
   }
 
   function testMatches(assert, node, selector, expected) {
-    assert.step("".concat(selector, " matches expectedly"));
+    assert.step(selector + ' matches expectedly');
     assert.equal(node.matches(selector), expected);
   }
 
   function compareSelectorAll(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step("".concat(selector1, " and ").concat(selector2, " returns same elements on ").concat(scope.id));
+    assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
 
   function compareSelectorAllNotEqual(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step("not : ".concat(selector1, " and ").concat(selector2, " returns same elements on ").concat(scope.id));
+    assert.step('not : ' + selector1 + ' and ' + selector2 + 'returns same elements on ' + scope.id);
     assert.notEqual(formatElements(result1), formatElements(result2));
   }
 
@@ -5908,7 +5855,7 @@ var es_array_from = __webpack_require__(1038);
   });
   assert.test(":has basic", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=\"main\">\n\t\t<div id=\"a\" class=\"ancestor\">\n\t\t\t<div id=\"b\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"c\" class=\"sibling descendant\">\n\t\t\t\t\t<div id=\"d\" class=\"descendant\"></div>\n\t\t\t\t</div>\n\t\t\t\t<div id=\"e\" class=\"target descendant\"></div>\n\t\t\t</div>\n\t\t\t<div id=\"f\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"g\" class=\"target descendant\"></div>\n\t\t\t</div>\n\t\t\t<div id=\"h\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"i\" class=\"target descendant\"></div>\n\t\t\t\t<div id=\"j\" class=\"sibling descendant\">\n\t\t\t\t\t<div id=\"k\" class=\"descendant\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</main>";
+    fixture.innerHTML = '<main id="main"><div id="a" class="ancestor"><div id="b" class="parent ancestor"><div id="c" class="sibling descendant"><div id="d" class="descendant"></div></div><div id="e" class="target descendant"></div></div><div id="f" class="parent ancestor"><div id="g" class="target descendant"></div></div><div id="h" class="parent ancestor"><div id="i" class="target descendant"></div><div id="j" class="sibling descendant"><div id="k" class="descendant"></div></div></div></div></main>';
     var a = document.getElementById("a");
     var b = document.getElementById("b");
     var c = document.getElementById("c");
@@ -5949,7 +5896,7 @@ var es_array_from = __webpack_require__(1038);
   });
   assert.test(":has argument with explicit scope (tentative)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main>\n\t\t<div id=d01 class=\"a\">\n\t\t\t<div id=scope1 class=\"b\">\n\t\t\t\t<div id=d02 class=\"c\">\n\t\t\t\t\t<div id=d03 class=\"c\">\n\t\t\t\t\t\t<div id=d04 class=\"d\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d05 class=\"e\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d06>\n\t\t\t<div id=scope2 class=\"b\">\n\t\t\t\t<div id=d07 class=\"c\">\n\t\t\t\t\t<div id=d08 class=\"c\">\n\t\t\t\t\t\t<div id=d09></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>";
+    fixture.innerHTML = '<main><div id=d01 class="a"><div id=scope1 class="b"><div id=d02 class="c"><div id=d03 class="c"><div id=d04 class="d"></div></div></div><div id=d05 class="e"></div></div></div><div id=d06><div id=scope2 class="b"><div id=d07 class="c"><div id=d08 class="c"><div id=d09></div></div></div></div></div></div>';
     var scope1 = document.getElementById("scope1");
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
@@ -5991,7 +5938,7 @@ var es_array_from = __webpack_require__(1038);
   });
   assert.test(":has relative argument (a)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=main>\n\t\t<div id=d01>\n\t\t\t<div id=d02 class=\"x\">\n\t\t\t\t<div id=d03 class=\"a\"></div>\n\t\t\t\t<div id=d04></div>\n\t\t\t\t<div id=d05 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d06 class=\"x\">\n\t\t\t\t<div id=d07 class=\"x\">\n\t\t\t\t\t<div id=d08 class=\"a\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d09 class=\"x\">\n\t\t\t\t<div id=d10 class=\"a\">\n\t\t\t\t\t<div id=d11 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d12 class=\"x\">\n\t\t\t\t<div id=d13 class=\"a\">\n\t\t\t\t\t<div id=d14>\n\t\t\t\t\t\t<div id=d15 class=\"b\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d16 class=\"b\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d17>\n\t\t\t<div id=d18 class=\"x\"></div>\n\t\t\t<div id=d19 class=\"x\"></div>\n\t\t\t<div id=d20 class=\"a\"></div>\n\t\t\t<div id=d21 class=\"x\"></div>\n\t\t\t<div id=d22 class=\"a\">\n\t\t\t\t<div id=d23 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d24 class=\"x\"></div>\n\t\t\t<div id=d25 class=\"a\">\n\t\t\t\t<div id=d26>\n\t\t\t\t\t<div id=d27 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d28 class=\"x\"></div>\n\t\t\t<div id=d29 class=\"a\"></div>\n\t\t\t<div id=d30 class=\"b\">\n\t\t\t\t<div id=d31 class=\"c\"></div>\n\t\t\t</div>\n\t\t\t<div id=d32 class=\"x\"></div>\n\t\t\t<div id=d33 class=\"a\"></div>\n\t\t\t<div id=d34 class=\"b\">\n\t\t\t\t<div id=d35>\n\t\t\t\t\t<div id=d36 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d37 class=\"x\"></div>\n\t\t\t<div id=d38 class=\"a\"></div>\n\t\t\t<div id=d39 class=\"b\"></div>\n\t\t\t<div id=d40 class=\"x\"></div>\n\t\t\t<div id=d41 class=\"a\"></div>\n\t\t\t<div id=d42></div>\n\t\t\t<div id=d43 class=\"b\">\n\t\t\t\t<div id=d44 class=\"x\">\n\t\t\t\t\t<div id=d45 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d46 class=\"x\"></div>\n\t\t\t<div id=d47 class=\"a\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=\"extra-d01\">\n\t\t\t<div id=d48 class=\"x\">\n\t\t\t<div id=d49 class=\"x\">\n\t\t\t\t<div id=d50 class=\"x d\">\n\t\t\t\t\t<div id=d51 class=\"x d\">\n\t\t\t\t\t\t<div id=d52 class=\"x\">\n\t\t\t\t\t\t\t<div id=d53 class=\"x e\">\n\t\t\t\t\t\t\t\t<div id=d54 class=\"f\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d55 class=\"x\"></div>\n\t\t\t<div id=d56 class=\"x d\"></div>\n\t\t\t<div id=d57 class=\"x d\"></div>\n\t\t\t<div id=d58 class=\"x\"></div>\n\t\t\t<div id=d59 class=\"x e\"></div>\n\t\t\t<div id=d60 class=\"f\"></div>\n\t\t</div>\n\t\t<div id=\"extra-d02\">\n\t\t\t<div id=d61 class=\"x\"></div>\n\t\t\t<div id=d62 class=\"x y\"></div>\n\t\t\t<div id=d63 class=\"x y\">\n\t\t\t\t<div id=d64 class=\"y g\">\n\t\t\t\t\t<div id=d65 class=\"y\">\n\t\t\t\t\t\t<div id=d66 class=\"y h\">\n\t\t\t\t\t\t\t<div id=d67 class=\"i\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d68 class=\"x y\">\n\t\t\t\t<div id=d69 class=\"x\"></div>\n\t\t\t\t<div id=d70 class=\"x\"></div>\n\t\t\t\t<div id=d71 class=\"x y\">\n\t\t\t\t\t<div id=d72 class=\"y g\">\n\t\t\t\t\t\t<div id=d73 class=\"y\">\n\t\t\t\t\t\t\t<div id=d74 class=\"y h\">\n\t\t\t\t\t\t\t\t<div id=d75 class=\"i\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d76 class=\"x\"></div>\n\t\t\t\t<div id=d77 class=\"j\">\n\t\t\t\t\t<div id=d78><div id=d79></div></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d80 class=\"j\"></div>\n\t\t</div>\n\t\t</main>";
+    fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
     var d02 = document.getElementById("d02");
     var d06 = document.getElementById("d06");
     var d07 = document.getElementById("d07");
@@ -6072,7 +6019,7 @@ var es_array_from = __webpack_require__(1038);
   });
   assert.test(":has relative argument (b)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=main>\n\t\t<div id=d01>\n\t\t\t<div id=d02 class=\"x\">\n\t\t\t\t<div id=d03 class=\"a\"></div>\n\t\t\t\t<div id=d04></div>\n\t\t\t\t<div id=d05 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d06 class=\"x\">\n\t\t\t\t<div id=d07 class=\"x\">\n\t\t\t\t\t<div id=d08 class=\"a\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d09 class=\"x\">\n\t\t\t\t<div id=d10 class=\"a\">\n\t\t\t\t\t<div id=d11 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d12 class=\"x\">\n\t\t\t\t<div id=d13 class=\"a\">\n\t\t\t\t\t<div id=d14>\n\t\t\t\t\t\t<div id=d15 class=\"b\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d16 class=\"b\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d17>\n\t\t\t<div id=d18 class=\"x\"></div>\n\t\t\t<div id=d19 class=\"x\"></div>\n\t\t\t<div id=d20 class=\"a\"></div>\n\t\t\t<div id=d21 class=\"x\"></div>\n\t\t\t<div id=d22 class=\"a\">\n\t\t\t\t<div id=d23 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d24 class=\"x\"></div>\n\t\t\t<div id=d25 class=\"a\">\n\t\t\t\t<div id=d26>\n\t\t\t\t\t<div id=d27 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d28 class=\"x\"></div>\n\t\t\t<div id=d29 class=\"a\"></div>\n\t\t\t<div id=d30 class=\"b\">\n\t\t\t\t<div id=d31 class=\"c\"></div>\n\t\t\t</div>\n\t\t\t<div id=d32 class=\"x\"></div>\n\t\t\t<div id=d33 class=\"a\"></div>\n\t\t\t<div id=d34 class=\"b\">\n\t\t\t\t<div id=d35>\n\t\t\t\t\t<div id=d36 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d37 class=\"x\"></div>\n\t\t\t<div id=d38 class=\"a\"></div>\n\t\t\t<div id=d39 class=\"b\"></div>\n\t\t\t<div id=d40 class=\"x\"></div>\n\t\t\t<div id=d41 class=\"a\"></div>\n\t\t\t<div id=d42></div>\n\t\t\t<div id=d43 class=\"b\">\n\t\t\t\t<div id=d44 class=\"x\">\n\t\t\t\t\t<div id=d45 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d46 class=\"x\"></div>\n\t\t\t<div id=d47 class=\"a\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=\"extra-d01\">\n\t\t\t<div id=d48 class=\"x\">\n\t\t\t<div id=d49 class=\"x\">\n\t\t\t\t<div id=d50 class=\"x d\">\n\t\t\t\t\t<div id=d51 class=\"x d\">\n\t\t\t\t\t\t<div id=d52 class=\"x\">\n\t\t\t\t\t\t\t<div id=d53 class=\"x e\">\n\t\t\t\t\t\t\t\t<div id=d54 class=\"f\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d55 class=\"x\"></div>\n\t\t\t<div id=d56 class=\"x d\"></div>\n\t\t\t<div id=d57 class=\"x d\"></div>\n\t\t\t<div id=d58 class=\"x\"></div>\n\t\t\t<div id=d59 class=\"x e\"></div>\n\t\t\t<div id=d60 class=\"f\"></div>\n\t\t</div>\n\t\t<div id=\"extra-d02\">\n\t\t\t<div id=d61 class=\"x\"></div>\n\t\t\t<div id=d62 class=\"x y\"></div>\n\t\t\t<div id=d63 class=\"x y\">\n\t\t\t\t<div id=d64 class=\"y g\">\n\t\t\t\t\t<div id=d65 class=\"y\">\n\t\t\t\t\t\t<div id=d66 class=\"y h\">\n\t\t\t\t\t\t\t<div id=d67 class=\"i\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d68 class=\"x y\">\n\t\t\t\t<div id=d69 class=\"x\"></div>\n\t\t\t\t<div id=d70 class=\"x\"></div>\n\t\t\t\t<div id=d71 class=\"x y\">\n\t\t\t\t\t<div id=d72 class=\"y g\">\n\t\t\t\t\t\t<div id=d73 class=\"y\">\n\t\t\t\t\t\t\t<div id=d74 class=\"y h\">\n\t\t\t\t\t\t\t\t<div id=d75 class=\"i\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d76 class=\"x\"></div>\n\t\t\t\t<div id=d77 class=\"j\">\n\t\t\t\t\t<div id=d78><div id=d79></div></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d80 class=\"j\"></div>\n\t\t</div>\n\t\t</main>";
+    fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
     var d01 = document.getElementById("d01");
     var d02 = document.getElementById("d02");
     var d06 = document.getElementById("d06");

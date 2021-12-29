@@ -148,32 +148,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ 1194:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var fails = __webpack_require__(7293);
-var wellKnownSymbol = __webpack_require__(5112);
-var V8_VERSION = __webpack_require__(7392);
-
-var SPECIES = wellKnownSymbol('species');
-
-module.exports = function (METHOD_NAME) {
-  // We can't use this feature detection in V8 since it causes
-  // deoptimization and serious performance degradation
-  // https://github.com/zloirock/core-js/issues/677
-  return V8_VERSION >= 51 || !fails(function () {
-    var array = [];
-    var constructor = array.constructor = {};
-    constructor[SPECIES] = function () {
-      return { foo: 1 };
-    };
-    return array[METHOD_NAME](Boolean).foo !== 1;
-  });
-};
-
-
-/***/ }),
-
 /***/ 9341:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -263,50 +237,6 @@ var merge = function (array, left, right, comparefn) {
 };
 
 module.exports = mergeSort;
-
-
-/***/ }),
-
-/***/ 7475:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var global = __webpack_require__(7854);
-var isArray = __webpack_require__(3157);
-var isConstructor = __webpack_require__(4411);
-var isObject = __webpack_require__(111);
-var wellKnownSymbol = __webpack_require__(5112);
-
-var SPECIES = wellKnownSymbol('species');
-var Array = global.Array;
-
-// a part of `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function (originalArray) {
-  var C;
-  if (isArray(originalArray)) {
-    C = originalArray.constructor;
-    // cross-realm fallback
-    if (isConstructor(C) && (C === Array || isArray(C.prototype))) C = undefined;
-    else if (isObject(C)) {
-      C = C[SPECIES];
-      if (C === null) C = undefined;
-    }
-  } return C === undefined ? Array : C;
-};
-
-
-/***/ }),
-
-/***/ 5417:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var arraySpeciesConstructor = __webpack_require__(7475);
-
-// `ArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#sec-arrayspeciescreate
-module.exports = function (originalArray, length) {
-  return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
-};
 
 
 /***/ }),
@@ -2543,77 +2473,6 @@ module.exports = function (name) {
 
 /***/ }),
 
-/***/ 2222:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__(2109);
-var global = __webpack_require__(7854);
-var fails = __webpack_require__(7293);
-var isArray = __webpack_require__(3157);
-var isObject = __webpack_require__(111);
-var toObject = __webpack_require__(7908);
-var lengthOfArrayLike = __webpack_require__(6244);
-var createProperty = __webpack_require__(6135);
-var arraySpeciesCreate = __webpack_require__(5417);
-var arrayMethodHasSpeciesSupport = __webpack_require__(1194);
-var wellKnownSymbol = __webpack_require__(5112);
-var V8_VERSION = __webpack_require__(7392);
-
-var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
-var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
-var MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
-var TypeError = global.TypeError;
-
-// We can't use this feature detection in V8 since it causes
-// deoptimization and serious performance degradation
-// https://github.com/zloirock/core-js/issues/679
-var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function () {
-  var array = [];
-  array[IS_CONCAT_SPREADABLE] = false;
-  return array.concat()[0] !== array;
-});
-
-var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
-
-var isConcatSpreadable = function (O) {
-  if (!isObject(O)) return false;
-  var spreadable = O[IS_CONCAT_SPREADABLE];
-  return spreadable !== undefined ? !!spreadable : isArray(O);
-};
-
-var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-
-// `Array.prototype.concat` method
-// https://tc39.es/ecma262/#sec-array.prototype.concat
-// with adding support of @@isConcatSpreadable and @@species
-$({ target: 'Array', proto: true, forced: FORCED }, {
-  // eslint-disable-next-line no-unused-vars -- required for `.length`
-  concat: function concat(arg) {
-    var O = toObject(this);
-    var A = arraySpeciesCreate(O, 0);
-    var n = 0;
-    var i, k, length, len, E;
-    for (i = -1, length = arguments.length; i < length; i++) {
-      E = i === -1 ? O : arguments[i];
-      if (isConcatSpreadable(E)) {
-        len = lengthOfArrayLike(E);
-        if (n + len > MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
-        for (k = 0; k < len; k++, n++) if (k in E) createProperty(A, n, E[k]);
-      } else {
-        if (n >= MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
-        createProperty(A, n++, E);
-      }
-    }
-    A.length = n;
-    return A;
-  }
-});
-
-
-/***/ }),
-
 /***/ 1038:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2972,13 +2831,10 @@ var __webpack_exports__ = {};
 /* harmony import */ var core_js_modules_es_array_from_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_from_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8783);
 /* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2222);
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4916);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(7601);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_7__);
-
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4916);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7601);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_6__);
 
 
 
@@ -2996,7 +2852,6 @@ var __webpack_exports__ = {};
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
-          console.log(a, b);
           throw new Error('Arrays are not equal');
         }
 
@@ -3008,26 +2863,31 @@ var __webpack_exports__ = {};
       }
 
       if (a !== b) {
-        console.log(a, b);
-        throw new Error('Expected A to equal B');
+        throw new Error('Expected A to equal to B');
       }
     },
     notEqual: function notEqual(a, b) {
-      try {
-        assert.equal(a, b);
-      } catch (_) {
+      if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) {
+          return;
+        }
+
+        for (var i = 0; i < a.length; i++) {
+          assert.notEqual(a[i], b[i]);
+        }
+
         return;
       }
 
-      console.log(a, b);
-      throw new Error('Expected A to not equal B');
+      if (a === b) {
+        throw new Error('Expected A to be different from B');
+      }
     },
     ok: function ok(a) {
       if (!!a) {
         return;
       }
 
-      console.log(a);
       throw new Error('Expected something truthy for A');
     }
   };
@@ -3043,43 +2903,43 @@ var __webpack_exports__ = {};
   }
 
   function testSelectorAllFromMain(assert, selector, expected) {
-    assert.step("".concat(selector, " matches expected elements from #main"));
+    assert.step(selector + ' matches expected elements from #main');
     var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
 
   function testSelectorAllFromScope(assert, scope, selector, expected) {
-    assert.step("".concat(selector, " matches expected elements from scope ").concat(scope.id || scope.tagName));
+    assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
     var actual = Array.from(scope.querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
 
   function testSelector(assert, selector, expected) {
-    assert.step("".concat(selector, " matches expected element"));
+    assert.step(selector + ' matches expected element');
     assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
   }
 
   function testClosest(assert, node, selector, expected) {
-    assert.step("closest(".concat(selector, ") returns expected element"));
+    assert.step('closest(' + selector + ') returns expected element');
     assert.equal(node.closest(selector), expected);
   }
 
   function testMatches(assert, node, selector, expected) {
-    assert.step("".concat(selector, " matches expectedly"));
+    assert.step(selector + ' matches expectedly');
     assert.equal(node.matches(selector), expected);
   }
 
   function compareSelectorAll(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step("".concat(selector1, " and ").concat(selector2, " returns same elements on ").concat(scope.id));
+    assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
 
   function compareSelectorAllNotEqual(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step("not : ".concat(selector1, " and ").concat(selector2, " returns same elements on ").concat(scope.id));
+    assert.step('not : ' + selector1 + ' and ' + selector2 + 'returns same elements on ' + scope.id);
     assert.notEqual(formatElements(result1), formatElements(result2));
   }
 
@@ -3098,7 +2958,7 @@ var __webpack_exports__ = {};
   });
   assert.test(":has basic", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=\"main\">\n\t\t<div id=\"a\" class=\"ancestor\">\n\t\t\t<div id=\"b\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"c\" class=\"sibling descendant\">\n\t\t\t\t\t<div id=\"d\" class=\"descendant\"></div>\n\t\t\t\t</div>\n\t\t\t\t<div id=\"e\" class=\"target descendant\"></div>\n\t\t\t</div>\n\t\t\t<div id=\"f\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"g\" class=\"target descendant\"></div>\n\t\t\t</div>\n\t\t\t<div id=\"h\" class=\"parent ancestor\">\n\t\t\t\t<div id=\"i\" class=\"target descendant\"></div>\n\t\t\t\t<div id=\"j\" class=\"sibling descendant\">\n\t\t\t\t\t<div id=\"k\" class=\"descendant\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</main>";
+    fixture.innerHTML = '<main id="main"><div id="a" class="ancestor"><div id="b" class="parent ancestor"><div id="c" class="sibling descendant"><div id="d" class="descendant"></div></div><div id="e" class="target descendant"></div></div><div id="f" class="parent ancestor"><div id="g" class="target descendant"></div></div><div id="h" class="parent ancestor"><div id="i" class="target descendant"></div><div id="j" class="sibling descendant"><div id="k" class="descendant"></div></div></div></div></main>';
     var a = document.getElementById("a");
     var b = document.getElementById("b");
     var c = document.getElementById("c");
@@ -3139,7 +2999,7 @@ var __webpack_exports__ = {};
   });
   assert.test(":has argument with explicit scope (tentative)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main>\n\t\t<div id=d01 class=\"a\">\n\t\t\t<div id=scope1 class=\"b\">\n\t\t\t\t<div id=d02 class=\"c\">\n\t\t\t\t\t<div id=d03 class=\"c\">\n\t\t\t\t\t\t<div id=d04 class=\"d\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d05 class=\"e\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d06>\n\t\t\t<div id=scope2 class=\"b\">\n\t\t\t\t<div id=d07 class=\"c\">\n\t\t\t\t\t<div id=d08 class=\"c\">\n\t\t\t\t\t\t<div id=d09></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>";
+    fixture.innerHTML = '<main><div id=d01 class="a"><div id=scope1 class="b"><div id=d02 class="c"><div id=d03 class="c"><div id=d04 class="d"></div></div></div><div id=d05 class="e"></div></div></div><div id=d06><div id=scope2 class="b"><div id=d07 class="c"><div id=d08 class="c"><div id=d09></div></div></div></div></div></div>';
     var scope1 = document.getElementById("scope1");
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
@@ -3181,7 +3041,7 @@ var __webpack_exports__ = {};
   });
   assert.test(":has relative argument (a)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=main>\n\t\t<div id=d01>\n\t\t\t<div id=d02 class=\"x\">\n\t\t\t\t<div id=d03 class=\"a\"></div>\n\t\t\t\t<div id=d04></div>\n\t\t\t\t<div id=d05 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d06 class=\"x\">\n\t\t\t\t<div id=d07 class=\"x\">\n\t\t\t\t\t<div id=d08 class=\"a\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d09 class=\"x\">\n\t\t\t\t<div id=d10 class=\"a\">\n\t\t\t\t\t<div id=d11 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d12 class=\"x\">\n\t\t\t\t<div id=d13 class=\"a\">\n\t\t\t\t\t<div id=d14>\n\t\t\t\t\t\t<div id=d15 class=\"b\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d16 class=\"b\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d17>\n\t\t\t<div id=d18 class=\"x\"></div>\n\t\t\t<div id=d19 class=\"x\"></div>\n\t\t\t<div id=d20 class=\"a\"></div>\n\t\t\t<div id=d21 class=\"x\"></div>\n\t\t\t<div id=d22 class=\"a\">\n\t\t\t\t<div id=d23 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d24 class=\"x\"></div>\n\t\t\t<div id=d25 class=\"a\">\n\t\t\t\t<div id=d26>\n\t\t\t\t\t<div id=d27 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d28 class=\"x\"></div>\n\t\t\t<div id=d29 class=\"a\"></div>\n\t\t\t<div id=d30 class=\"b\">\n\t\t\t\t<div id=d31 class=\"c\"></div>\n\t\t\t</div>\n\t\t\t<div id=d32 class=\"x\"></div>\n\t\t\t<div id=d33 class=\"a\"></div>\n\t\t\t<div id=d34 class=\"b\">\n\t\t\t\t<div id=d35>\n\t\t\t\t\t<div id=d36 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d37 class=\"x\"></div>\n\t\t\t<div id=d38 class=\"a\"></div>\n\t\t\t<div id=d39 class=\"b\"></div>\n\t\t\t<div id=d40 class=\"x\"></div>\n\t\t\t<div id=d41 class=\"a\"></div>\n\t\t\t<div id=d42></div>\n\t\t\t<div id=d43 class=\"b\">\n\t\t\t\t<div id=d44 class=\"x\">\n\t\t\t\t\t<div id=d45 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d46 class=\"x\"></div>\n\t\t\t<div id=d47 class=\"a\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=\"extra-d01\">\n\t\t\t<div id=d48 class=\"x\">\n\t\t\t<div id=d49 class=\"x\">\n\t\t\t\t<div id=d50 class=\"x d\">\n\t\t\t\t\t<div id=d51 class=\"x d\">\n\t\t\t\t\t\t<div id=d52 class=\"x\">\n\t\t\t\t\t\t\t<div id=d53 class=\"x e\">\n\t\t\t\t\t\t\t\t<div id=d54 class=\"f\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d55 class=\"x\"></div>\n\t\t\t<div id=d56 class=\"x d\"></div>\n\t\t\t<div id=d57 class=\"x d\"></div>\n\t\t\t<div id=d58 class=\"x\"></div>\n\t\t\t<div id=d59 class=\"x e\"></div>\n\t\t\t<div id=d60 class=\"f\"></div>\n\t\t</div>\n\t\t<div id=\"extra-d02\">\n\t\t\t<div id=d61 class=\"x\"></div>\n\t\t\t<div id=d62 class=\"x y\"></div>\n\t\t\t<div id=d63 class=\"x y\">\n\t\t\t\t<div id=d64 class=\"y g\">\n\t\t\t\t\t<div id=d65 class=\"y\">\n\t\t\t\t\t\t<div id=d66 class=\"y h\">\n\t\t\t\t\t\t\t<div id=d67 class=\"i\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d68 class=\"x y\">\n\t\t\t\t<div id=d69 class=\"x\"></div>\n\t\t\t\t<div id=d70 class=\"x\"></div>\n\t\t\t\t<div id=d71 class=\"x y\">\n\t\t\t\t\t<div id=d72 class=\"y g\">\n\t\t\t\t\t\t<div id=d73 class=\"y\">\n\t\t\t\t\t\t\t<div id=d74 class=\"y h\">\n\t\t\t\t\t\t\t\t<div id=d75 class=\"i\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d76 class=\"x\"></div>\n\t\t\t\t<div id=d77 class=\"j\">\n\t\t\t\t\t<div id=d78><div id=d79></div></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d80 class=\"j\"></div>\n\t\t</div>\n\t\t</main>";
+    fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
     var d02 = document.getElementById("d02");
     var d06 = document.getElementById("d06");
     var d07 = document.getElementById("d07");
@@ -3262,7 +3122,7 @@ var __webpack_exports__ = {};
   });
   assert.test(":has relative argument (b)", function () {
     var fixture = document.getElementById("the-fixture");
-    fixture.innerHTML = "<main id=main>\n\t\t<div id=d01>\n\t\t\t<div id=d02 class=\"x\">\n\t\t\t\t<div id=d03 class=\"a\"></div>\n\t\t\t\t<div id=d04></div>\n\t\t\t\t<div id=d05 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d06 class=\"x\">\n\t\t\t\t<div id=d07 class=\"x\">\n\t\t\t\t\t<div id=d08 class=\"a\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d09 class=\"x\">\n\t\t\t\t<div id=d10 class=\"a\">\n\t\t\t\t\t<div id=d11 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d12 class=\"x\">\n\t\t\t\t<div id=d13 class=\"a\">\n\t\t\t\t\t<div id=d14>\n\t\t\t\t\t\t<div id=d15 class=\"b\"></div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d16 class=\"b\"></div>\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=d17>\n\t\t\t<div id=d18 class=\"x\"></div>\n\t\t\t<div id=d19 class=\"x\"></div>\n\t\t\t<div id=d20 class=\"a\"></div>\n\t\t\t<div id=d21 class=\"x\"></div>\n\t\t\t<div id=d22 class=\"a\">\n\t\t\t\t<div id=d23 class=\"b\"></div>\n\t\t\t</div>\n\t\t\t<div id=d24 class=\"x\"></div>\n\t\t\t<div id=d25 class=\"a\">\n\t\t\t\t<div id=d26>\n\t\t\t\t\t<div id=d27 class=\"b\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d28 class=\"x\"></div>\n\t\t\t<div id=d29 class=\"a\"></div>\n\t\t\t<div id=d30 class=\"b\">\n\t\t\t\t<div id=d31 class=\"c\"></div>\n\t\t\t</div>\n\t\t\t<div id=d32 class=\"x\"></div>\n\t\t\t<div id=d33 class=\"a\"></div>\n\t\t\t<div id=d34 class=\"b\">\n\t\t\t\t<div id=d35>\n\t\t\t\t\t<div id=d36 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d37 class=\"x\"></div>\n\t\t\t<div id=d38 class=\"a\"></div>\n\t\t\t<div id=d39 class=\"b\"></div>\n\t\t\t<div id=d40 class=\"x\"></div>\n\t\t\t<div id=d41 class=\"a\"></div>\n\t\t\t<div id=d42></div>\n\t\t\t<div id=d43 class=\"b\">\n\t\t\t\t<div id=d44 class=\"x\">\n\t\t\t\t\t<div id=d45 class=\"c\"></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d46 class=\"x\"></div>\n\t\t\t<div id=d47 class=\"a\">\n\t\t\t</div>\n\t\t</div>\n\t\t<div id=\"extra-d01\">\n\t\t\t<div id=d48 class=\"x\">\n\t\t\t<div id=d49 class=\"x\">\n\t\t\t\t<div id=d50 class=\"x d\">\n\t\t\t\t\t<div id=d51 class=\"x d\">\n\t\t\t\t\t\t<div id=d52 class=\"x\">\n\t\t\t\t\t\t\t<div id=d53 class=\"x e\">\n\t\t\t\t\t\t\t\t<div id=d54 class=\"f\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d55 class=\"x\"></div>\n\t\t\t<div id=d56 class=\"x d\"></div>\n\t\t\t<div id=d57 class=\"x d\"></div>\n\t\t\t<div id=d58 class=\"x\"></div>\n\t\t\t<div id=d59 class=\"x e\"></div>\n\t\t\t<div id=d60 class=\"f\"></div>\n\t\t</div>\n\t\t<div id=\"extra-d02\">\n\t\t\t<div id=d61 class=\"x\"></div>\n\t\t\t<div id=d62 class=\"x y\"></div>\n\t\t\t<div id=d63 class=\"x y\">\n\t\t\t\t<div id=d64 class=\"y g\">\n\t\t\t\t\t<div id=d65 class=\"y\">\n\t\t\t\t\t\t<div id=d66 class=\"y h\">\n\t\t\t\t\t\t\t<div id=d67 class=\"i\"></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d68 class=\"x y\">\n\t\t\t\t<div id=d69 class=\"x\"></div>\n\t\t\t\t<div id=d70 class=\"x\"></div>\n\t\t\t\t<div id=d71 class=\"x y\">\n\t\t\t\t\t<div id=d72 class=\"y g\">\n\t\t\t\t\t\t<div id=d73 class=\"y\">\n\t\t\t\t\t\t\t<div id=d74 class=\"y h\">\n\t\t\t\t\t\t\t\t<div id=d75 class=\"i\"></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div id=d76 class=\"x\"></div>\n\t\t\t\t<div id=d77 class=\"j\">\n\t\t\t\t\t<div id=d78><div id=d79></div></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div id=d80 class=\"j\"></div>\n\t\t</div>\n\t\t</main>";
+    fixture.innerHTML = '<main id=main><div id=d01><div id=d02 class="x"><div id=d03 class="a"></div><div id=d04></div><div id=d05 class="b"></div></div><div id=d06 class="x"><div id=d07 class="x"><div id=d08 class="a"></div></div></div><div id=d09 class="x"><div id=d10 class="a"><div id=d11 class="b"></div></div></div><div id=d12 class="x"><div id=d13 class="a"><div id=d14><div id=d15 class="b"></div></div></div><div id=d16 class="b"></div></div></div><div id=d17><div id=d18 class="x"></div><div id=d19 class="x"></div><div id=d20 class="a"></div><div id=d21 class="x"></div><div id=d22 class="a"><div id=d23 class="b"></div></div><div id=d24 class="x"></div><div id=d25 class="a"><div id=d26><div id=d27 class="b"></div></div></div><div id=d28 class="x"></div><div id=d29 class="a"></div><div id=d30 class="b"><div id=d31 class="c"></div></div><div id=d32 class="x"></div><div id=d33 class="a"></div><div id=d34 class="b"><div id=d35><div id=d36 class="c"></div></div></div><div id=d37 class="x"></div><div id=d38 class="a"></div><div id=d39 class="b"></div><div id=d40 class="x"></div><div id=d41 class="a"></div><div id=d42></div><div id=d43 class="b"><div id=d44 class="x"><div id=d45 class="c"></div></div></div><div id=d46 class="x"></div><div id=d47 class="a"></div></div><div id="extra-d01"><div id=d48 class="x"><div id=d49 class="x"><div id=d50 class="x d"><div id=d51 class="x d"><div id=d52 class="x"><div id=d53 class="x e"><div id=d54 class="f"></div></div></div></div></div></div></div><div id=d55 class="x"></div><div id=d56 class="x d"></div><div id=d57 class="x d"></div><div id=d58 class="x"></div><div id=d59 class="x e"></div><div id=d60 class="f"></div></div><div id="extra-d02"><div id=d61 class="x"></div><div id=d62 class="x y"></div><div id=d63 class="x y"><div id=d64 class="y g"><div id=d65 class="y"><div id=d66 class="y h"><div id=d67 class="i"></div></div></div></div></div><div id=d68 class="x y"><div id=d69 class="x"></div><div id=d70 class="x"></div><div id=d71 class="x y"><div id=d72 class="y g"><div id=d73 class="y"><div id=d74 class="y h"><div id=d75 class="i"></div></div></div></div></div><div id=d76 class="x"></div><div id=d77 class="j"><div id=d78><div id=d79></div></div></div></div><div id=d80 class="j"></div></div></main>';
     var d01 = document.getElementById("d01");
     var d02 = document.getElementById("d02");
     var d06 = document.getElementById("d06");
