@@ -25,24 +25,6 @@
         throw new Error('Expected A to equal to B');
       }
     },
-    notEqual: function notEqual(a, b) {
-      if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-          return;
-        }
-
-        for (var i = 0; i < a.length; i++) {
-          assert.notEqual(a[i], b[i]);
-        }
-
-        return;
-      }
-
-      if (a === b) {
-        // console.log(a, ' - ', b);
-        throw new Error('Expected A to be different from B');
-      }
-    },
     ok: function ok(a) {
       if (!!a) {
         return;
@@ -101,14 +83,6 @@
     var result2 = Array.from(scope.querySelectorAll(selector2));
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
-  } // To test expected diffs from spec/wpt
-
-
-  function compareSelectorAllNotEqual(assert, scope, selector1, selector2) {
-    var result1 = Array.from(scope.querySelectorAll(selector1));
-    var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step('not : ' + selector1 + ' and ' + selector2 + 'returns same elements on ' + scope.id);
-    assert.notEqual(formatElements(result1), formatElements(result2));
   }
 
   var supportsIsQueries = false;
@@ -176,14 +150,14 @@
     var d03 = document.getElementById("d03"); // descendants of a scope element cannot have the scope element as its descendant
 
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
-    testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", [d02]);
+    testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []); // there can be more simple and efficient alternative for a ':scope' in ':has'
 
-    testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", []);
+    testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
 
     if (supportsIsQueries) {
-      compareSelectorAllNotEqual(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
+      compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
       testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]);
       compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");

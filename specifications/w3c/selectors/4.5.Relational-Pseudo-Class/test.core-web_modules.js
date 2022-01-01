@@ -3504,410 +3504,474 @@ var es_string_trim = __webpack_require__(3210);
 
 (function (global) {
   try {
-    document.querySelector(':has(*, :does-not-exist, > *)');
-  } catch (_) {
-    var querySelectorWithHasElement = polyfill(global.Element.prototype.querySelector);
+    global.document.querySelector(':has(*, :does-not-exist, > *)');
 
-    global.Element.prototype.querySelector = function querySelector(selectors) {
-      return querySelectorWithHasElement.apply(this, arguments);
+    if (!global.document.querySelector(':has(:scope *)')) {
+      return;
+    }
+  } catch (_) {}
+
+  var querySelectorWithHasElement = polyfill(global.Element.prototype.querySelector);
+
+  global.Element.prototype.querySelector = function querySelector(selectors) {
+    return querySelectorWithHasElement.apply(this, arguments);
+  };
+
+  var querySelectorAllWithHasElement = polyfill(global.Element.prototype.querySelectorAll);
+
+  global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
+    return querySelectorAllWithHasElement.apply(this, arguments);
+  };
+
+  if (global.Element.prototype.matches) {
+    var matchesWithHasElement = polyfill(global.Element.prototype.matches);
+
+    global.Element.prototype.matches = function matches(selectors) {
+      return matchesWithHasElement.apply(this, arguments);
+    };
+  }
+
+  if (global.Element.prototype.closest) {
+    var closestWithHasElement = polyfill(global.Element.prototype.closest);
+
+    global.Element.prototype.closest = function closest(selectors) {
+      return closestWithHasElement.apply(this, arguments);
+    };
+  }
+
+  if ('Document' in global && 'prototype' in global.Document) {
+    var querySelectorWithHasDocument = polyfill(global.Document.prototype.querySelector);
+
+    global.Document.prototype.querySelector = function querySelector(selectors) {
+      return querySelectorWithHasDocument.apply(this, arguments);
     };
 
-    var querySelectorAllWithHasElement = polyfill(global.Element.prototype.querySelectorAll);
+    var querySelectorAllWithHasDocument = polyfill(global.Document.prototype.querySelectorAll);
 
-    global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
-      return querySelectorAllWithHasElement.apply(this, arguments);
+    global.Document.prototype.querySelectorAll = function querySelectorAll(selectors) {
+      return querySelectorAllWithHasDocument.apply(this, arguments);
     };
 
-    if (global.Element.prototype.matches) {
-      var matchesWithHasElement = polyfill(global.Element.prototype.matches);
+    if (global.Document.prototype.matches) {
+      var matchesWithHasDocument = polyfill(global.Document.prototype.matches);
 
-      global.Element.prototype.matches = function matches(selectors) {
-        return matchesWithHasElement.apply(this, arguments);
+      global.Document.prototype.matches = function matches(selectors) {
+        return matchesWithHasDocument.apply(this, arguments);
       };
     }
 
-    if (global.Element.prototype.closest) {
-      var closestWithHasElement = polyfill(global.Element.prototype.closest);
+    if (global.Document.prototype.closest) {
+      var closestWithHasDocument = polyfill(global.Document.prototype.closest);
 
-      global.Element.prototype.closest = function closest(selectors) {
-        return closestWithHasElement.apply(this, arguments);
+      global.Document.prototype.closest = function closest(selectors) {
+        return closestWithHasDocument.apply(this, arguments);
       };
     }
+  }
 
-    if ('Document' in global && 'prototype' in global.Document) {
-      var querySelectorWithHasDocument = polyfill(global.Document.prototype.querySelector);
+  function pseudoClassHasInnerQuery(query) {
+    var current = '';
+    var depth = 0;
+    var escaped = false;
+    var quoted = false;
+    var quotedMark = false;
+    var inHas = false;
 
-      global.Document.prototype.querySelector = function querySelector(selectors) {
-        return querySelectorWithHasDocument.apply(this, arguments);
-      };
+    for (var i = 0; i < query.length; i++) {
+      var char = query[i];
 
-      var querySelectorAllWithHasDocument = polyfill(global.Document.prototype.querySelectorAll);
-
-      global.Document.prototype.querySelectorAll = function querySelectorAll(selectors) {
-        return querySelectorAllWithHasDocument.apply(this, arguments);
-      };
-
-      if (global.Document.prototype.matches) {
-        var matchesWithHasDocument = polyfill(global.Document.prototype.matches);
-
-        global.Document.prototype.matches = function matches(selectors) {
-          return matchesWithHasDocument.apply(this, arguments);
-        };
+      if (escaped) {
+        current += char;
+        escaped = false;
+        continue;
       }
 
-      if (global.Document.prototype.closest) {
-        var closestWithHasDocument = polyfill(global.Document.prototype.closest);
-
-        global.Document.prototype.closest = function closest(selectors) {
-          return closestWithHasDocument.apply(this, arguments);
-        };
+      if (current === ':has(' && !inHas) {
+        inHas = true;
+        current = '';
       }
-    }
 
-    function pseudoClassHasInnerQuery(query) {
-      var current = '';
-      var depth = 0;
-      var escaped = false;
-      var inHas = false;
+      switch (char) {
+        case ':':
+          if (quoted) {
+            current += char;
+            continue;
+          }
 
-      for (var i = 0; i < query.length; i++) {
-        var char = query[i];
+          if (!inHas) {
+            current = '';
+          }
 
-        if (escaped) {
           current += char;
-          escaped = false;
           continue;
-        }
 
-        if (current === ':has(' && !inHas) {
-          inHas = true;
+        case '(':
+          if (inHas) {
+            depth++;
+          }
+
+          current += char;
+          continue;
+
+        case ')':
+          if (inHas) {
+            if (depth === 0) {
+              return current;
+            }
+
+            depth--;
+          }
+
+          current += char;
+          continue;
+
+        case '\\':
+          current += char;
+          escaped = true;
+          continue;
+
+        case '"':
+        case "'":
+          if (quoted && char === quotedMark) {
+            current += char;
+            quoted = false;
+            continue;
+          }
+
+          current += char;
+          quoted = true;
+          quotedMark = char;
+          continue;
+
+        default:
+          current += char;
+          continue;
+      }
+    }
+
+    return false;
+  }
+
+  function replaceScopeWithAttr(query, attr) {
+    var parts = [];
+    var current = '';
+    var escaped = false;
+    var quoted = false;
+    var quotedMark = false;
+
+    for (var i = 0; i < query.length; i++) {
+      var char = query[i];
+
+      if (escaped) {
+        current += char;
+        escaped = false;
+        continue;
+      }
+
+      if (current === ':scope' && !/^[\w|\\]/.test(char || '')) {
+        parts.push(current.slice(0, current.length - 6));
+        parts.push('[' + attr + ']');
+        current = '';
+      }
+
+      switch (char) {
+        case ':':
+          if (quoted) {
+            current += char;
+            continue;
+          }
+
+          parts.push(current);
           current = '';
-        }
-
-        switch (char) {
-          case ':':
-            if (!inHas) {
-              current = '';
-            }
-
-            current += char;
-            continue;
-
-          case '(':
-            if (inHas) {
-              depth++;
-            }
-
-            current += char;
-            continue;
-
-          case ')':
-            if (inHas) {
-              if (depth === 0) {
-                return current;
-              }
-
-              depth--;
-            }
-
-            current += char;
-            continue;
-
-          case '\\':
-            current += char;
-            escaped = true;
-            continue;
-
-          default:
-            current += char;
-            continue;
-        }
-      }
-
-      return false;
-    }
-
-    function queryContainsScopePseudoClass(query) {
-      var current = '';
-      var escaped = false;
-
-      for (var i = 0; i < query.length; i++) {
-        var char = query[i];
-
-        if (escaped) {
           current += char;
-          escaped = false;
           continue;
-        }
 
-        if (current === ':scope' && !/^\w/.test(query[i + 1] || '')) {
-          return true;
-        }
-
-        switch (char) {
-          case ':':
-            current = '';
-            current += char;
-            continue;
-
-          case '\\':
-            current += char;
-            escaped = true;
-            continue;
-
-          default:
-            current += char;
-            continue;
-        }
-      }
-
-      return false;
-    }
-
-    function charIsNestedMarkMirror(char, mark) {
-      if (mark === '(' && char === ')') {
-        return true;
-      }
-
-      if (mark === '[' && char === ']') {
-        return true;
-      }
-
-      return false;
-    }
-
-    function splitSelector(query) {
-      var selectors = [];
-      var current = '';
-      var escaped = false;
-      var quoted = false;
-      var quotedMark = false;
-      var nestedMark = false;
-      var nestedDepth = 0;
-
-      for (var i = 0; i < query.length; i++) {
-        var char = query[i];
-
-        if (escaped) {
+        case '\\':
           current += char;
-          escaped = false;
+          escaped = true;
           continue;
-        }
 
-        switch (char) {
-          case ',':
-            if (quoted) {
-              current += char;
-              continue;
-            }
-
-            if (nestedDepth > 0) {
-              current += char;
-              continue;
-            }
-
-            selectors.push(current);
-            current = '';
-            continue;
-
-          case '\\':
+        case '"':
+        case "'":
+          if (quoted && char === quotedMark) {
             current += char;
-            escaped = true;
+            quoted = false;
             continue;
+          }
 
-          case '"':
-          case "'":
-            if (quoted && char === quotedMark) {
-              current += char;
-              quoted = false;
-              continue;
-            }
+          current += char;
+          quoted = true;
+          quotedMark = char;
+          continue;
 
+        default:
+          current += char;
+          continue;
+      }
+    }
+
+    if (parts.length === 0) {
+      return query;
+    }
+
+    return parts.join('') + current;
+  }
+
+  function charIsNestedMarkMirror(char, mark) {
+    if (mark === '(' && char === ')') {
+      return true;
+    }
+
+    if (mark === '[' && char === ']') {
+      return true;
+    }
+
+    return false;
+  }
+
+  function splitSelector(query) {
+    var selectors = [];
+    var current = '';
+    var escaped = false;
+    var quoted = false;
+    var quotedMark = false;
+    var nestedMark = false;
+    var nestedDepth = 0;
+
+    for (var i = 0; i < query.length; i++) {
+      var char = query[i];
+
+      if (escaped) {
+        current += char;
+        escaped = false;
+        continue;
+      }
+
+      switch (char) {
+        case ',':
+          if (quoted) {
             current += char;
-            quoted = true;
-            quotedMark = char;
             continue;
+          }
 
-          case '(':
-          case ')':
-          case '[':
-          case ']':
-            if (quoted) {
-              current += char;
-              continue;
+          if (nestedDepth > 0) {
+            current += char;
+            continue;
+          }
+
+          selectors.push(current);
+          current = '';
+          continue;
+
+        case '\\':
+          current += char;
+          escaped = true;
+          continue;
+
+        case '"':
+        case "'":
+          if (quoted && char === quotedMark) {
+            current += char;
+            quoted = false;
+            continue;
+          }
+
+          current += char;
+          quoted = true;
+          quotedMark = char;
+          continue;
+
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+          if (quoted) {
+            current += char;
+            continue;
+          }
+
+          if (charIsNestedMarkMirror(char, nestedMark)) {
+            current += char;
+            nestedDepth--;
+
+            if (nestedDepth === 0) {
+              nestedMark = false;
             }
 
-            if (charIsNestedMarkMirror(char, nestedMark)) {
-              current += char;
-              nestedDepth--;
+            continue;
+          }
 
-              if (nestedDepth === 0) {
-                nestedMark = false;
-              }
-
-              continue;
-            }
-
-            if (char === nestedMark) {
-              current += char;
-              nestedDepth++;
-              continue;
-            }
-
+          if (char === nestedMark) {
             current += char;
             nestedDepth++;
-            nestedMark = char;
             continue;
-
-          default:
-            current += char;
-            continue;
-        }
-      }
-
-      selectors.push(current);
-      return selectors;
-    }
-
-    function replaceAllWithTempAttr(query, callback) {
-      var inner = pseudoClassHasInnerQuery(query);
-
-      if (!inner) {
-        return query;
-      }
-
-      var innerQuery = inner;
-      var attr = 'q-has' + Math.floor(Math.random() * 9000000) + 1000000;
-      var innerReplacement = '[' + attr + ']';
-      var x = query;
-
-      if (inner.indexOf(':has(') > -1) {
-        innerQuery = replaceAllWithTempAttr(inner, callback);
-      }
-
-      x = x.replace(':has(' + inner + ')', innerReplacement);
-      callback(innerQuery, attr);
-
-      if (x.indexOf(':has(') > -1) {
-        var y = replaceAllWithTempAttr(x, callback);
-
-        if (y) {
-          return y;
-        }
-      }
-
-      return x;
-    }
-
-    function walkNode(rootNode, callback) {
-      if ('setAttribute' in rootNode && 'querySelector' in rootNode) {
-        callback(rootNode);
-      }
-
-      if (rootNode.hasChildNodes()) {
-        var nodes = rootNode.childNodes;
-
-        for (var i = 0; i < nodes.length; ++i) {
-          walkNode(nodes[i], callback);
-        }
-      }
-    }
-
-    function polyfill(qsa, returnAfterFirst) {
-      return function (selectors) {
-        if (selectors.indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectors)) {
-          return qsa.apply(this, arguments);
-        }
-
-        var rootNode;
-
-        if ('getRootNode' in this) {
-          rootNode = this.getRootNode();
-        } else {
-          var r = this;
-
-          while (r) {
-            rootNode = r;
-            r = r.parentNode;
           }
+
+          current += char;
+          nestedDepth++;
+          nestedMark = char;
+          continue;
+
+        default:
+          current += char;
+          continue;
+      }
+    }
+
+    selectors.push(current);
+    return selectors;
+  }
+
+  function replaceAllWithTempAttr(query, callback) {
+    var inner = pseudoClassHasInnerQuery(query);
+
+    if (!inner) {
+      return query;
+    }
+
+    var innerQuery = inner;
+    var attr = 'q-has' + Math.floor(Math.random() * 9000000) + 1000000;
+    var innerReplacement = '[' + attr + ']';
+    var x = query;
+
+    if (inner.indexOf(':has(') > -1) {
+      innerQuery = replaceAllWithTempAttr(inner, callback);
+    }
+
+    x = x.replace(':has(' + inner + ')', innerReplacement);
+    callback(innerQuery, attr);
+
+    if (x.indexOf(':has(') > -1) {
+      var y = replaceAllWithTempAttr(x, callback);
+
+      if (y) {
+        return y;
+      }
+    }
+
+    return x;
+  }
+
+  function walkNode(rootNode, callback) {
+    if ('setAttribute' in rootNode && 'querySelector' in rootNode) {
+      callback(rootNode);
+    }
+
+    if (rootNode.hasChildNodes()) {
+      var nodes = rootNode.childNodes;
+
+      for (var i = 0; i < nodes.length; ++i) {
+        walkNode(nodes[i], callback);
+      }
+    }
+  }
+
+  function polyfill(qsa) {
+    return function (selectors) {
+      if (selectors.indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectors)) {
+        return qsa.apply(this, arguments);
+      }
+
+      var rootNode;
+
+      if ('getRootNode' in this) {
+        rootNode = this.getRootNode();
+      } else {
+        var r = this;
+
+        while (r) {
+          rootNode = r;
+          r = r.parentNode;
         }
+      }
 
-        var attrs = [];
-        var newQuery = replaceAllWithTempAttr(selectors, function (inner, attr) {
-          attrs.push(attr);
-          var selectorParts = splitSelector(inner);
+      var focus = this;
 
-          for (var x = 0; x < selectorParts.length; x++) {
-            var selectorPart = selectorParts[x].trim();
-            var absoluteSelectorPart = selectorPart;
+      if (focus === global.document) {
+        focus = global.document.documentElement;
+      }
 
-            if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
-              absoluteSelectorPart = selectorPart.slice(1).trim();
-            } else if (!queryContainsScopePseudoClass(selectorPart)) {
-              absoluteSelectorPart = ':scope ' + selectorPart;
-            }
+      var scopeAttr = 'q-has-scope' + Math.floor(Math.random() * 9000000) + 1000000;
+      focus.setAttribute(scopeAttr, '');
+      selectors = replaceScopeWithAttr(selectors, scopeAttr);
+      var attrs = [];
+      var newQuery = replaceAllWithTempAttr(selectors, function (inner, attr) {
+        attrs.push(attr);
+        var selectorParts = splitSelector(inner);
 
-            try {
-              walkNode(rootNode, function (node) {
-                if (!node.querySelector(absoluteSelectorPart)) {
-                  return;
-                }
+        for (var x = 0; x < selectorParts.length; x++) {
+          var selectorPart = selectorParts[x].trim();
+          var absoluteSelectorPart = selectorPart;
 
-                switch (selectorPart[0]) {
-                  case '~':
-                  case '+':
-                    {
-                      var siblings = node.childNodes;
+          if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
+            absoluteSelectorPart = selectorPart.slice(1).trim();
+          } else {
+            absoluteSelectorPart = ':scope ' + selectorPart;
+          }
 
-                      for (var i = 0; i < siblings.length; i++) {
-                        var sibling = siblings[i];
+          try {
+            walkNode(rootNode, function (node) {
+              if (!node.querySelector(absoluteSelectorPart)) {
+                return;
+              }
 
-                        if (!('setAttribute' in sibling)) {
-                          continue;
-                        }
+              switch (selectorPart[0]) {
+                case '~':
+                case '+':
+                  {
+                    var siblings = node.childNodes;
 
-                        var idAttr = 'q-has-id' + Math.floor(Math.random() * 9000000) + 1000000;
-                        sibling.setAttribute(idAttr, '');
+                    for (var i = 0; i < siblings.length; i++) {
+                      var sibling = siblings[i];
 
-                        if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
-                          sibling.setAttribute(attr, '');
-                        }
-
-                        sibling.removeAttribute(idAttr);
+                      if (!('setAttribute' in sibling)) {
+                        continue;
                       }
-                    }
-                    break;
 
-                  case '>':
-                    {
                       var idAttr = 'q-has-id' + Math.floor(Math.random() * 9000000) + 1000000;
-                      node.setAttribute(idAttr, '');
+                      sibling.setAttribute(idAttr, '');
 
-                      if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
-                        node.setAttribute(attr, '');
+                      if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
+                        sibling.setAttribute(attr, '');
                       }
 
-                      node.removeAttribute(idAttr);
+                      sibling.removeAttribute(idAttr);
                     }
-                    break;
+                  }
+                  break;
 
-                  default:
-                    node.setAttribute(attr, '');
-                    break;
-                }
-              });
-            } catch (_) {}
-          }
-        });
-        arguments[0] = newQuery;
-        var elementOrNodeList = qsa.apply(this, arguments);
+                case '>':
+                  {
+                    var idAttr = 'q-has-id' + Math.floor(Math.random() * 9000000) + 1000000;
+                    node.setAttribute(idAttr, '');
+
+                    if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
+                      node.setAttribute(attr, '');
+                    }
+
+                    node.removeAttribute(idAttr);
+                  }
+                  break;
+
+                default:
+                  node.setAttribute(attr, '');
+                  break;
+              }
+            });
+          } catch (_) {}
+        }
+      });
+      arguments[0] = newQuery;
+      var elementOrNodeList = qsa.apply(this, arguments);
+
+      if (attrs.length > 0) {
         var attrsForQuery = [];
 
         for (var j = 0; j < attrs.length; j++) {
           attrsForQuery.push('[' + attrs[j] + ']');
         }
 
-        var elements = document.querySelectorAll(attrsForQuery.join(','));
+        var elements = global.document.querySelectorAll(attrsForQuery.join(','));
 
         for (var k = 0; k < elements.length; k++) {
           var element = elements[k];
@@ -3916,10 +3980,11 @@ var es_string_trim = __webpack_require__(3210);
             element.removeAttribute(attrs[l]);
           }
         }
+      }
 
-        return elementOrNodeList;
-      };
-    }
+      focus.removeAttribute(scopeAttr, '');
+      return elementOrNodeList;
+    };
   }
 })(self);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
@@ -3953,23 +4018,6 @@ var es_array_sort = __webpack_require__(2707);
 
       if (a !== b) {
         throw new Error('Expected A to equal to B');
-      }
-    },
-    notEqual: function (a, b) {
-      if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-          return;
-        }
-
-        for (var i = 0; i < a.length; i++) {
-          assert.notEqual(a[i], b[i]);
-        }
-
-        return;
-      }
-
-      if (a === b) {
-        throw new Error('Expected A to be different from B');
       }
     },
     ok: function (a) {
@@ -4023,13 +4071,6 @@ var es_array_sort = __webpack_require__(2707);
     var result2 = Array.from(scope.querySelectorAll(selector2));
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
-  }
-
-  function compareSelectorAllNotEqual(assert, scope, selector1, selector2) {
-    var result1 = Array.from(scope.querySelectorAll(selector1));
-    var result2 = Array.from(scope.querySelectorAll(selector2));
-    assert.step('not : ' + selector1 + ' and ' + selector2 + 'returns same elements on ' + scope.id);
-    assert.notEqual(formatElements(result1), formatElements(result2));
   }
 
   var supportsIsQueries = false;
@@ -4094,13 +4135,13 @@ var es_array_sort = __webpack_require__(2707);
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
-    testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", [d02]);
+    testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
-    testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", []);
+    testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
 
     if (supportsIsQueries) {
-      compareSelectorAllNotEqual(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
+      compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
       testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]);
       compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
