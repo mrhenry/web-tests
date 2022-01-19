@@ -1,0 +1,24 @@
+{
+  "id": "376c3786-63c9-47a9-b4b7-5b20f579751f",
+  "spec": {
+    "org": "example",
+    "id": "test",
+    "section": "3",
+    "name": "Example test",
+    "url": "#TODO"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  }
+}

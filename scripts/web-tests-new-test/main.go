@@ -22,7 +22,9 @@ func main() {
 	var name string
 	var org string
 	var section string
+	var isPostCSS bool
 
+	flag.BoolVar(&isPostCSS, "postcss", false, "Is a PostCSS test")
 	flag.StringVar(&dirName, "dir", "", "Name of the feature dir")
 	flag.StringVar(&id, "id", "", "Name of the specification")
 	flag.StringVar(&name, "name", "", "Name of the feature (single word)")
@@ -70,6 +72,9 @@ func main() {
 	}
 
 	exampleFeatureDirPath := filepath.Join("./specifications/example/test/1.feature")
+	if isPostCSS {
+		exampleFeatureDirPath = filepath.Join("./specifications/example/test/3.feature-css")
+	}
 
 	err = filepath.Walk(exampleFeatureDirPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
