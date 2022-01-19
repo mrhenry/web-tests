@@ -24,6 +24,8 @@ type Feature struct {
 	} `json:"notes"`
 	SearchTerms []string `json:"search_terms"`
 	Tests       map[string]struct {
+		InlineCSS       string `json:"inline_css,omitempty"`
+		InlineHTML      string `json:"inline_html,omitempty"`
 		InlineScript    string `json:"inline_script,omitempty"`
 		ModuleScript    string `json:"module_script,omitempty"`
 		NoModulesScript string `json:"nomodules_script,omitempty"`
@@ -89,6 +91,44 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 		for _, polyfill := range x.PolyfillIO {
 			dirB = append(dirB, polyfill...)
 		}
+	}
+
+	if x.Tests[test].InlineCSS != "" {
+		testPath := path.Join(x.Dir, x.Tests[test].InlineCSS)
+
+		f, err := os.Open(testPath)
+		if err != nil {
+			return "", err
+		}
+
+		defer f.Close()
+
+		b, err := ioutil.ReadAll(f)
+		if err != nil {
+			return "", err
+		}
+
+		dirB = append(dirB, testPath...)
+		dirB = append(dirB, b...)
+	}
+
+	if x.Tests[test].InlineHTML != "" {
+		testPath := path.Join(x.Dir, x.Tests[test].InlineScript)
+
+		f, err := os.Open(testPath)
+		if err != nil {
+			return "", err
+		}
+
+		defer f.Close()
+
+		b, err := ioutil.ReadAll(f)
+		if err != nil {
+			return "", err
+		}
+
+		dirB = append(dirB, testPath...)
+		dirB = append(dirB, b...)
 	}
 
 	if x.Tests[test].InlineScript != "" {

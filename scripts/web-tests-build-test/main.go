@@ -180,21 +180,64 @@ func main() {
 			continue
 		}
 
-		f1, err := os.Open(v.InlineScript)
-		if err != nil {
-			log.Fatal(err)
+		inlineCSSBytes := []byte{}
+		if v.InlineCSS != "" {
+			inlineCSSFile, err := os.Open(v.InlineCSS)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer inlineCSSFile.Close()
+
+			inlineCSSBytes, err = ioutil.ReadAll(inlineCSSFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = inlineCSSFile.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
-		defer f1.Close()
+		inlineHTMLBytes := []byte{}
+		if v.InlineHTML != "" {
+			inlineHTMLFile, err := os.Open(v.InlineHTML)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-		b, err := ioutil.ReadAll(f1)
-		if err != nil {
-			log.Fatal(err)
+			defer inlineHTMLFile.Close()
+
+			inlineHTMLBytes, err = ioutil.ReadAll(inlineHTMLFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = inlineHTMLFile.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
-		err = f1.Close()
-		if err != nil {
-			log.Fatal(err)
+		inlineScriptBytes := []byte{}
+		if v.InlineScript != "" {
+			inlineScriptFile, err := os.Open(v.InlineScript)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer inlineScriptFile.Close()
+
+			inlineScriptBytes, err = ioutil.ReadAll(inlineScriptFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = inlineScriptFile.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		polyfillIOScriptTag := ""
@@ -221,7 +264,13 @@ func main() {
 	` + polyfillIOScriptTag + `
 </head>
 <body>
+
 	` + fixtures + `
+
+	<style>` + string(inlineCSSBytes) + `</style>
+
+	` + string(inlineHTMLBytes) + `
+
 	<script>
 
 		function callback(success) {
@@ -232,7 +281,7 @@ func main() {
 			window.testSuccess = success;
 		}
 		
-		;` + string(b) + `;
+		;` + string(inlineScriptBytes) + `;
 	</script>
 	<script>
 		window.testLoaded = true;

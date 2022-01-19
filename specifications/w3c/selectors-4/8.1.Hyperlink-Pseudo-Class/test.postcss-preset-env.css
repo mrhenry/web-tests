@@ -1,0 +1,12 @@
+:link,:visited {
+	color: #f00;
+}
+:-webkit-any-link {
+	color: #f00;
+}
+:-moz-any-link {
+	color: #f00;
+}
+:any-link {
+	color: #f00;
+}

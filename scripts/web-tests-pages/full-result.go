@@ -331,7 +331,7 @@ func fullResult() {
 <body>
 	<a href="https://github.com/mrhenry/web-tests">https://github.com/mrhenry/web-tests</a><br>
 	<p><i>Maybe stable after ` + fmt.Sprint(prioritySum) + ` more tests</i></p>
-	` + "<p>Helps X features work for 99.999% of visitors</p>" + totalPoints5.table(testsSlice, totalFeatures) + "<p>Helps X features work for 99.99% of visitors</p>" + totalPoints4.table(testsSlice, totalFeatures) + out + `
+	` + out + `
 </body>
 </html>`
 

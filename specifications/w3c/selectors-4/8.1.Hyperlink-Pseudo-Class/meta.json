@@ -1,0 +1,24 @@
+{
+  "id": "75fe312b-386d-4648-b6cf-1a588a5cee3b",
+  "spec": {
+    "org": "w3c",
+    "id": "selectors-4",
+    "section": "8.1",
+    "name": "The Hyperlink Pseudo-class",
+    "url": "https://www.w3.org/TR/selectors-4/#the-any-link-pseudo"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  }
+}

@@ -107,6 +107,8 @@ type FeaturePostMigration struct {
 	} `json:"notes"`
 	SearchTerms []string `json:"search_terms"`
 	Tests       map[string]struct {
+		InlineCSS       string `json:"inline_css,omitempty"`
+		InlineHTML      string `json:"inline_html,omitempty"`
 		InlineScript    string `json:"inline_script,omitempty"`
 		ModuleScript    string `json:"module_script,omitempty"`
 		NoModulesScript string `json:"nomodules_script,omitempty"`
