@@ -1,0 +1,19 @@
+* {
+	color: yellow;
+}
+
+:not(.b ~ *) {
+	color: green;
+}
+
+:not(:not(#e):not(#f)) {
+	color: red;
+}
+
+:not(:not(#e + #f)) {
+	color: blue;
+}
+
+#f + #g :not(:not(#g > #h ~ #i)) {
+	color: white;
+}
