@@ -1,4 +1,4 @@
-:link,:visited {
+:link, :visited, area[href] {
 	color: #f00;
 }
 :-webkit-any-link {
