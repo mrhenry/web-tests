@@ -2124,10 +2124,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.20.3',
+  version: '3.21.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.20.3/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.21.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3254,6 +3254,7 @@ var codeAt = (__webpack_require__(8710).codeAt);
 var toASCII = __webpack_require__(3197);
 var $toString = __webpack_require__(1340);
 var setToStringTag = __webpack_require__(8003);
+var validateArgumentsLength = __webpack_require__(8053);
 var URLSearchParamsModule = __webpack_require__(1637);
 var InternalStateModule = __webpack_require__(9909);
 
@@ -4175,7 +4176,7 @@ URLState.prototype = {
 // https://url.spec.whatwg.org/#url-class
 var URLConstructor = function URL(url /* , base */) {
   var that = anInstance(this, URLPrototype);
-  var base = arguments.length > 1 ? arguments[1] : undefined;
+  var base = validateArgumentsLength(arguments.length, 1) > 1 ? arguments[1] : undefined;
   var state = setInternalState(that, new URLState(url, false, base));
   if (!DESCRIPTORS) {
     that.href = state.serialize();
