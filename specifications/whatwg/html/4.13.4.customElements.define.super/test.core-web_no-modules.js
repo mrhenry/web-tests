@@ -3555,10 +3555,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.20.3',
+  version: '3.21.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.20.3/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.21.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3640,6 +3640,7 @@ var fails = __webpack_require__(7293);
 var html = __webpack_require__(490);
 var arraySlice = __webpack_require__(206);
 var createElement = __webpack_require__(317);
+var validateArgumentsLength = __webpack_require__(8053);
 var IS_IOS = __webpack_require__(6833);
 var IS_NODE = __webpack_require__(5268);
 
@@ -3685,10 +3686,12 @@ var post = function (id) {
 
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
 if (!set || !clear) {
-  set = function setImmediate(fn) {
+  set = function setImmediate(handler) {
+    validateArgumentsLength(arguments.length, 1);
+    var fn = isCallable(handler) ? handler : Function(handler);
     var args = arraySlice(arguments, 1);
     queue[++counter] = function () {
-      apply(isCallable(fn) ? fn : Function(fn), undefined, args);
+      apply(fn, undefined, args);
     };
     defer(counter);
     return counter;
@@ -3973,6 +3976,21 @@ module.exports = DESCRIPTORS && fails(function () {
     writable: false
   }).prototype != 42;
 });
+
+
+/***/ }),
+
+/***/ 8053:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var global = __webpack_require__(7854);
+
+var TypeError = global.TypeError;
+
+module.exports = function (passed, required) {
+  if (passed < required) throw TypeError('Not enough arguments');
+  return passed;
+};
 
 
 /***/ }),
@@ -6025,17 +6043,19 @@ var apply = __webpack_require__(2104);
 var isCallable = __webpack_require__(614);
 var userAgent = __webpack_require__(8113);
 var arraySlice = __webpack_require__(206);
+var validateArgumentsLength = __webpack_require__(8053);
 
 var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
 var Function = global.Function;
 
 var wrap = function (scheduler) {
   return function (handler, timeout /* , ...arguments */) {
-    var boundArgs = arguments.length > 2;
+    var boundArgs = validateArgumentsLength(arguments.length, 1) > 2;
+    var fn = isCallable(handler) ? handler : Function(handler);
     var args = boundArgs ? arraySlice(arguments, 2) : undefined;
     return scheduler(boundArgs ? function () {
-      apply(isCallable(handler) ? handler : Function(handler), this, args);
-    } : handler, timeout);
+      apply(fn, this, args);
+    } : fn, timeout);
   };
 };
 
