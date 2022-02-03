@@ -19,7 +19,7 @@
         "@babel/cli": "^7.16.8",
         "@babel/core": "^7.16.10",
         "@babel/preset-env": "^7.16.11",
-        "@mrhenry/babel-plugin-core-web": "^0.6.8",
+        "@mrhenry/babel-plugin-core-web": "^0.6.10",
         "babel-loader": "^8.2.3",
         "core-js": "^3.21.0",
         "postcss": "^8.4.6",
