@@ -16,7 +16,7 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@babel/cli": "^7.16.8",
+        "@babel/cli": "^7.17.6",
         "@babel/core": "^7.16.10",
         "@babel/preset-env": "^7.16.11",
         "@mrhenry/babel-plugin-core-web": "^0.6.8",
