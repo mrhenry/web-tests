@@ -1853,227 +1853,6 @@ var TEMPLATE = String(String).split('String');
 
 /***/ }),
 
-/***/ 2261:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-/* eslint-disable regexp/no-empty-capturing-group, regexp/no-empty-group, regexp/no-lazy-ends -- testing */
-/* eslint-disable regexp/no-useless-quantifier -- testing */
-var call = __webpack_require__(6916);
-var uncurryThis = __webpack_require__(1702);
-var toString = __webpack_require__(1340);
-var regexpFlags = __webpack_require__(7066);
-var stickyHelpers = __webpack_require__(2999);
-var shared = __webpack_require__(2309);
-var create = __webpack_require__(30);
-var getInternalState = (__webpack_require__(9909).get);
-var UNSUPPORTED_DOT_ALL = __webpack_require__(9441);
-var UNSUPPORTED_NCG = __webpack_require__(7168);
-
-var nativeReplace = shared('native-string-replace', String.prototype.replace);
-var nativeExec = RegExp.prototype.exec;
-var patchedExec = nativeExec;
-var charAt = uncurryThis(''.charAt);
-var indexOf = uncurryThis(''.indexOf);
-var replace = uncurryThis(''.replace);
-var stringSlice = uncurryThis(''.slice);
-
-var UPDATES_LAST_INDEX_WRONG = (function () {
-  var re1 = /a/;
-  var re2 = /b*/g;
-  call(nativeExec, re1, 'a');
-  call(nativeExec, re2, 'a');
-  return re1.lastIndex !== 0 || re2.lastIndex !== 0;
-})();
-
-var UNSUPPORTED_Y = stickyHelpers.BROKEN_CARET;
-
-// nonparticipating capturing group, copied from es5-shim's String#split patch.
-var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
-
-var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
-
-if (PATCH) {
-  patchedExec = function exec(string) {
-    var re = this;
-    var state = getInternalState(re);
-    var str = toString(string);
-    var raw = state.raw;
-    var result, reCopy, lastIndex, match, i, object, group;
-
-    if (raw) {
-      raw.lastIndex = re.lastIndex;
-      result = call(patchedExec, raw, str);
-      re.lastIndex = raw.lastIndex;
-      return result;
-    }
-
-    var groups = state.groups;
-    var sticky = UNSUPPORTED_Y && re.sticky;
-    var flags = call(regexpFlags, re);
-    var source = re.source;
-    var charsAdded = 0;
-    var strCopy = str;
-
-    if (sticky) {
-      flags = replace(flags, 'y', '');
-      if (indexOf(flags, 'g') === -1) {
-        flags += 'g';
-      }
-
-      strCopy = stringSlice(str, re.lastIndex);
-      // Support anchored sticky behavior.
-      if (re.lastIndex > 0 && (!re.multiline || re.multiline && charAt(str, re.lastIndex - 1) !== '\n')) {
-        source = '(?: ' + source + ')';
-        strCopy = ' ' + strCopy;
-        charsAdded++;
-      }
-      // ^(? + rx + ) is needed, in combination with some str slicing, to
-      // simulate the 'y' flag.
-      reCopy = new RegExp('^(?:' + source + ')', flags);
-    }
-
-    if (NPCG_INCLUDED) {
-      reCopy = new RegExp('^' + source + '$(?!\\s)', flags);
-    }
-    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
-
-    match = call(nativeExec, sticky ? reCopy : re, strCopy);
-
-    if (sticky) {
-      if (match) {
-        match.input = stringSlice(match.input, charsAdded);
-        match[0] = stringSlice(match[0], charsAdded);
-        match.index = re.lastIndex;
-        re.lastIndex += match[0].length;
-      } else re.lastIndex = 0;
-    } else if (UPDATES_LAST_INDEX_WRONG && match) {
-      re.lastIndex = re.global ? match.index + match[0].length : lastIndex;
-    }
-    if (NPCG_INCLUDED && match && match.length > 1) {
-      // Fix browsers whose `exec` methods don't consistently return `undefined`
-      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
-      call(nativeReplace, match[0], reCopy, function () {
-        for (i = 1; i < arguments.length - 2; i++) {
-          if (arguments[i] === undefined) match[i] = undefined;
-        }
-      });
-    }
-
-    if (match && groups) {
-      match.groups = object = create(null);
-      for (i = 0; i < groups.length; i++) {
-        group = groups[i];
-        object[group[0]] = match[group[1]];
-      }
-    }
-
-    return match;
-  };
-}
-
-module.exports = patchedExec;
-
-
-/***/ }),
-
-/***/ 7066:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var anObject = __webpack_require__(9670);
-
-// `RegExp.prototype.flags` getter implementation
-// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
-module.exports = function () {
-  var that = anObject(this);
-  var result = '';
-  if (that.global) result += 'g';
-  if (that.ignoreCase) result += 'i';
-  if (that.multiline) result += 'm';
-  if (that.dotAll) result += 's';
-  if (that.unicode) result += 'u';
-  if (that.sticky) result += 'y';
-  return result;
-};
-
-
-/***/ }),
-
-/***/ 2999:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var fails = __webpack_require__(7293);
-var global = __webpack_require__(7854);
-
-// babel-minify and Closure Compiler transpiles RegExp('a', 'y') -> /a/y and it causes SyntaxError
-var $RegExp = global.RegExp;
-
-var UNSUPPORTED_Y = fails(function () {
-  var re = $RegExp('a', 'y');
-  re.lastIndex = 2;
-  return re.exec('abcd') != null;
-});
-
-// UC Browser bug
-// https://github.com/zloirock/core-js/issues/1008
-var MISSED_STICKY = UNSUPPORTED_Y || fails(function () {
-  return !$RegExp('a', 'y').sticky;
-});
-
-var BROKEN_CARET = UNSUPPORTED_Y || fails(function () {
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=773687
-  var re = $RegExp('^r', 'gy');
-  re.lastIndex = 2;
-  return re.exec('str') != null;
-});
-
-module.exports = {
-  BROKEN_CARET: BROKEN_CARET,
-  MISSED_STICKY: MISSED_STICKY,
-  UNSUPPORTED_Y: UNSUPPORTED_Y
-};
-
-
-/***/ }),
-
-/***/ 9441:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var fails = __webpack_require__(7293);
-var global = __webpack_require__(7854);
-
-// babel-minify and Closure Compiler transpiles RegExp('.', 's') -> /./s and it causes SyntaxError
-var $RegExp = global.RegExp;
-
-module.exports = fails(function () {
-  var re = $RegExp('.', 's');
-  return !(re.dotAll && re.exec('\n') && re.flags === 's');
-});
-
-
-/***/ }),
-
-/***/ 7168:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var fails = __webpack_require__(7293);
-var global = __webpack_require__(7854);
-
-// babel-minify and Closure Compiler transpiles RegExp('(?<a>b)', 'g') -> /(?<a>b)/g and it causes SyntaxError
-var $RegExp = global.RegExp;
-
-module.exports = fails(function () {
-  var re = $RegExp('(?<a>b)', 'g');
-  return re.exec('b').groups.a !== 'b' ||
-    'b'.replace(re, '$<a>c') !== 'bc';
-});
-
-
-/***/ }),
-
 /***/ 4488:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2449,21 +2228,6 @@ module.exports = DESCRIPTORS && fails(function () {
 
 /***/ }),
 
-/***/ 8053:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var global = __webpack_require__(7854);
-
-var TypeError = global.TypeError;
-
-module.exports = function (passed, required) {
-  if (passed < required) throw TypeError('Not enough arguments');
-  return passed;
-};
-
-
-/***/ }),
-
 /***/ 6061:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -2602,67 +2366,6 @@ var toString = __webpack_require__(288);
 if (!TO_STRING_TAG_SUPPORT) {
   redefine(Object.prototype, 'toString', toString, { unsafe: true });
 }
-
-
-/***/ }),
-
-/***/ 4916:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__(2109);
-var exec = __webpack_require__(2261);
-
-// `RegExp.prototype.exec` method
-// https://tc39.es/ecma262/#sec-regexp.prototype.exec
-$({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
-  exec: exec
-});
-
-
-/***/ }),
-
-/***/ 7601:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-// TODO: Remove from `core-js@4` since it's moved to entry points
-__webpack_require__(4916);
-var $ = __webpack_require__(2109);
-var global = __webpack_require__(7854);
-var call = __webpack_require__(6916);
-var uncurryThis = __webpack_require__(1702);
-var isCallable = __webpack_require__(614);
-var isObject = __webpack_require__(111);
-
-var DELEGATES_TO_EXEC = function () {
-  var execCalled = false;
-  var re = /[ac]/;
-  re.exec = function () {
-    execCalled = true;
-    return /./.exec.apply(this, arguments);
-  };
-  return re.test('abc') === true && execCalled;
-}();
-
-var Error = global.Error;
-var un$Test = uncurryThis(/./.test);
-
-// `RegExp.prototype.test` method
-// https://tc39.es/ecma262/#sec-regexp.prototype.test
-$({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
-  test: function (str) {
-    var exec = this.exec;
-    if (!isCallable(exec)) return un$Test(this, str);
-    var result = call(exec, this, str);
-    if (result !== null && !isObject(result)) {
-      throw new Error('RegExp exec method returned something other than an Object or null');
-    }
-    return !!result;
-  }
-});
 
 
 /***/ }),
@@ -3115,45 +2818,6 @@ setToStringTag($Symbol, SYMBOL);
 hiddenKeys[HIDDEN] = true;
 
 
-/***/ }),
-
-/***/ 2564:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var $ = __webpack_require__(2109);
-var global = __webpack_require__(7854);
-var apply = __webpack_require__(2104);
-var isCallable = __webpack_require__(614);
-var userAgent = __webpack_require__(8113);
-var arraySlice = __webpack_require__(206);
-var validateArgumentsLength = __webpack_require__(8053);
-
-var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
-var Function = global.Function;
-
-var wrap = function (scheduler) {
-  return function (handler, timeout /* , ...arguments */) {
-    var boundArgs = validateArgumentsLength(arguments.length, 1) > 2;
-    var fn = isCallable(handler) ? handler : Function(handler);
-    var args = boundArgs ? arraySlice(arguments, 2) : undefined;
-    return scheduler(boundArgs ? function () {
-      apply(fn, this, args);
-    } : fn, timeout);
-  };
-};
-
-// ie9- setTimeout & setInterval additional parameters fix
-// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-$({ global: true, bind: true, forced: MSIE }, {
-  // `setTimeout` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-  setTimeout: wrap(global.setTimeout),
-  // `setInterval` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-  setInterval: wrap(global.setInterval)
-});
-
-
 /***/ })
 
 /******/ 	});
@@ -3201,6 +2865,8 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
+var es_object_create = __webpack_require__(8011);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -3213,32 +2879,8 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self && "Document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
-var es_object_create = __webpack_require__(8011);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
-function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return DocumentFragment_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DocumentFragment_typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -3264,126 +2906,8 @@ function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return Docume
       global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
     })(self);
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : DocumentFragment_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DocumentFragment_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DocumentFragment_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4916);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
-var es_regexp_test = __webpack_require__(7601);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__(2564);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
-function Element_typeof(obj) { "@babel/helpers - typeof"; return Element_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("Element" in self && "HTMLElement" in self)) {
-    (function () {
-      if ('Element' in self && 'HTMLElement' in self) {
-        return;
-      }
-
-      if (window.Element && !window.HTMLElement) {
-        window.HTMLElement = window.Element;
-        return;
-      }
-
-      window.Element = window.HTMLElement = new Function('return function Element() {}')();
-      var vbody = document.appendChild(document.createElement('body'));
-      var frame = vbody.appendChild(document.createElement('iframe'));
-      var frameDocument = frame.contentWindow.document;
-      var prototype = Element.prototype = frameDocument.appendChild(frameDocument.createElement('*'));
-      var cache = {};
-
-      var shiv = function shiv(element, deep) {
-        var childNodes = element.childNodes || [],
-            index = -1,
-            key,
-            value,
-            childNode;
-
-        if (element.nodeType === 1 && element.constructor !== Element) {
-          element.constructor = Element;
-
-          for (key in cache) {
-            value = cache[key];
-            element[key] = value;
-          }
-        }
-
-        while (childNode = deep && childNodes[++index]) {
-          shiv(childNode, deep);
-        }
-
-        return element;
-      };
-
-      var elements = document.getElementsByTagName('*');
-      var nativeCreateElement = document.createElement;
-      var interval;
-      var loopLimit = 100;
-      prototype.attachEvent('onpropertychange', function (event) {
-        var propertyName = event.propertyName,
-            nonValue = !Object.prototype.hasOwnProperty.call(cache, propertyName),
-            newValue = prototype[propertyName],
-            oldValue = cache[propertyName],
-            index = -1,
-            element;
-
-        while (element = elements[++index]) {
-          if (element.nodeType === 1) {
-            if (nonValue || element[propertyName] === oldValue) {
-              element[propertyName] = newValue;
-            }
-          }
-        }
-
-        cache[propertyName] = newValue;
-      });
-      prototype.constructor = Element;
-
-      if (!prototype.hasAttribute) {
-        prototype.hasAttribute = function hasAttribute(name) {
-          return this.getAttribute(name) !== null;
-        };
-      }
-
-      function bodyCheck() {
-        if (!loopLimit--) clearTimeout(interval);
-
-        if (document.body && !document.body.prototype && /(complete|interactive)/.test(document.readyState)) {
-          shiv(document, true);
-          if (interval && document.body.prototype) clearTimeout(interval);
-          return !!document.body.prototype;
-        }
-
-        return false;
-      }
-
-      if (!bodyCheck()) {
-        document.onreadystatechange = bodyCheck;
-        interval = setInterval(bodyCheck, 25);
-      }
-
-      document.createElement = function createElement(nodeName) {
-        var element = nativeCreateElement(String(nodeName).toLowerCase());
-        return shiv(element);
-      };
-
-      document.removeChild(vbody);
-    })();
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : Element_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.7.DocumentFragment/test.pure.js
-
-
 
 
 (function (cb) {

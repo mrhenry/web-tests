@@ -4325,30 +4325,7 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; ret
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function document_typeof(obj) { "@babel/helpers - typeof"; return document_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, document_typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self && "Document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.2.10.1.NodeList.prototype.@@iterator/test.pure.js
-
 
 
 

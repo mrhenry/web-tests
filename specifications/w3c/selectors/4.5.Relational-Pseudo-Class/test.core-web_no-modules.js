@@ -3205,21 +3205,6 @@ module.exports = DESCRIPTORS && fails(function () {
 
 /***/ }),
 
-/***/ 8053:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var global = __webpack_require__(7854);
-
-var TypeError = global.TypeError;
-
-module.exports = function (passed, required) {
-  if (passed < required) throw TypeError('Not enough arguments');
-  return passed;
-};
-
-
-/***/ }),
-
 /***/ 6061:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -3267,77 +3252,6 @@ module.exports = function (name) {
 // a string of all valid unicode whitespaces
 module.exports = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002' +
   '\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
-
-
-/***/ }),
-
-/***/ 2222:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__(2109);
-var global = __webpack_require__(7854);
-var fails = __webpack_require__(7293);
-var isArray = __webpack_require__(3157);
-var isObject = __webpack_require__(111);
-var toObject = __webpack_require__(7908);
-var lengthOfArrayLike = __webpack_require__(6244);
-var createProperty = __webpack_require__(6135);
-var arraySpeciesCreate = __webpack_require__(5417);
-var arrayMethodHasSpeciesSupport = __webpack_require__(1194);
-var wellKnownSymbol = __webpack_require__(5112);
-var V8_VERSION = __webpack_require__(7392);
-
-var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
-var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
-var MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
-var TypeError = global.TypeError;
-
-// We can't use this feature detection in V8 since it causes
-// deoptimization and serious performance degradation
-// https://github.com/zloirock/core-js/issues/679
-var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function () {
-  var array = [];
-  array[IS_CONCAT_SPREADABLE] = false;
-  return array.concat()[0] !== array;
-});
-
-var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
-
-var isConcatSpreadable = function (O) {
-  if (!isObject(O)) return false;
-  var spreadable = O[IS_CONCAT_SPREADABLE];
-  return spreadable !== undefined ? !!spreadable : isArray(O);
-};
-
-var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
-
-// `Array.prototype.concat` method
-// https://tc39.es/ecma262/#sec-array.prototype.concat
-// with adding support of @@isConcatSpreadable and @@species
-$({ target: 'Array', proto: true, forced: FORCED }, {
-  // eslint-disable-next-line no-unused-vars -- required for `.length`
-  concat: function concat(arg) {
-    var O = toObject(this);
-    var A = arraySpeciesCreate(O, 0);
-    var n = 0;
-    var i, k, length, len, E;
-    for (i = -1, length = arguments.length; i < length; i++) {
-      E = i === -1 ? O : arguments[i];
-      if (isConcatSpreadable(E)) {
-        len = lengthOfArrayLike(E);
-        if (n + len > MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
-        for (k = 0; k < len; k++, n++) if (k in E) createProperty(A, n, E[k]);
-      } else {
-        if (n >= MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
-        createProperty(A, n++, E);
-      }
-    }
-    A.length = n;
-    return A;
-  }
-});
 
 
 /***/ }),
@@ -4623,45 +4537,6 @@ var defineWellKnownSymbol = __webpack_require__(7235);
 defineWellKnownSymbol('toStringTag');
 
 
-/***/ }),
-
-/***/ 2564:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-var $ = __webpack_require__(2109);
-var global = __webpack_require__(7854);
-var apply = __webpack_require__(2104);
-var isCallable = __webpack_require__(614);
-var userAgent = __webpack_require__(8113);
-var arraySlice = __webpack_require__(206);
-var validateArgumentsLength = __webpack_require__(8053);
-
-var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
-var Function = global.Function;
-
-var wrap = function (scheduler) {
-  return function (handler, timeout /* , ...arguments */) {
-    var boundArgs = validateArgumentsLength(arguments.length, 1) > 2;
-    var fn = isCallable(handler) ? handler : Function(handler);
-    var args = boundArgs ? arraySlice(arguments, 2) : undefined;
-    return scheduler(boundArgs ? function () {
-      apply(fn, this, args);
-    } : fn, timeout);
-  };
-};
-
-// ie9- setTimeout & setInterval additional parameters fix
-// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-$({ global: true, bind: true, forced: MSIE }, {
-  // `setTimeout` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-  setTimeout: wrap(global.setTimeout),
-  // `setInterval` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-  setInterval: wrap(global.setInterval)
-});
-
-
 /***/ })
 
 /******/ 	});
@@ -5042,212 +4917,6 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; ret
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function document_typeof(obj) { "@babel/helpers - typeof"; return document_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, document_typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self && "Document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : document_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4916);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
-var es_regexp_test = __webpack_require__(7601);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__(2564);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.js
-function Element_typeof(obj) { "@babel/helpers - typeof"; return Element_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("Element" in self && "HTMLElement" in self)) {
-    (function () {
-      if ('Element' in self && 'HTMLElement' in self) {
-        return;
-      }
-
-      if (window.Element && !window.HTMLElement) {
-        window.HTMLElement = window.Element;
-        return;
-      }
-
-      window.Element = window.HTMLElement = new Function('return function Element() {}')();
-      var vbody = document.appendChild(document.createElement('body'));
-      var frame = vbody.appendChild(document.createElement('iframe'));
-      var frameDocument = frame.contentWindow.document;
-      var prototype = Element.prototype = frameDocument.appendChild(frameDocument.createElement('*'));
-      var cache = {};
-
-      var shiv = function shiv(element, deep) {
-        var childNodes = element.childNodes || [],
-            index = -1,
-            key,
-            value,
-            childNode;
-
-        if (element.nodeType === 1 && element.constructor !== Element) {
-          element.constructor = Element;
-
-          for (key in cache) {
-            value = cache[key];
-            element[key] = value;
-          }
-        }
-
-        while (childNode = deep && childNodes[++index]) {
-          shiv(childNode, deep);
-        }
-
-        return element;
-      };
-
-      var elements = document.getElementsByTagName('*');
-      var nativeCreateElement = document.createElement;
-      var interval;
-      var loopLimit = 100;
-      prototype.attachEvent('onpropertychange', function (event) {
-        var propertyName = event.propertyName,
-            nonValue = !Object.prototype.hasOwnProperty.call(cache, propertyName),
-            newValue = prototype[propertyName],
-            oldValue = cache[propertyName],
-            index = -1,
-            element;
-
-        while (element = elements[++index]) {
-          if (element.nodeType === 1) {
-            if (nonValue || element[propertyName] === oldValue) {
-              element[propertyName] = newValue;
-            }
-          }
-        }
-
-        cache[propertyName] = newValue;
-      });
-      prototype.constructor = Element;
-
-      if (!prototype.hasAttribute) {
-        prototype.hasAttribute = function hasAttribute(name) {
-          return this.getAttribute(name) !== null;
-        };
-      }
-
-      function bodyCheck() {
-        if (!loopLimit--) clearTimeout(interval);
-
-        if (document.body && !document.body.prototype && /(complete|interactive)/.test(document.readyState)) {
-          shiv(document, true);
-          if (interval && document.body.prototype) clearTimeout(interval);
-          return !!document.body.prototype;
-        }
-
-        return false;
-      }
-
-      if (!bodyCheck()) {
-        document.onreadystatechange = bodyCheck;
-        interval = setInterval(bodyCheck, 25);
-      }
-
-      document.createElement = function createElement(nodeName) {
-        var element = nativeCreateElement(String(nodeName).toLowerCase());
-        return shiv(element);
-      };
-
-      document.removeChild(vbody);
-    })();
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : Element_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__(7042);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
-var es_array_concat = __webpack_require__(2222);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.querySelector.js
-function document_querySelector_typeof(obj) { "@babel/helpers - typeof"; return document_querySelector_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, document_querySelector_typeof(obj); }
-
-
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("document" in self && "querySelector" in self.document)) {
-    (function () {
-      var head = document.getElementsByTagName('head')[0];
-
-      function getElementsByQuery(node, selector, one) {
-        var generator = document.createElement('div'),
-            id = 'qsa' + String(Math.random()).slice(3),
-            style,
-            elements;
-        generator.innerHTML = 'x<style>' + selector + '{qsa:' + id + ';}';
-        style = head.appendChild(generator.lastChild);
-        elements = getElements(node, selector, one, id);
-        head.removeChild(style);
-        return one ? elements[0] : elements;
-      }
-
-      function getElements(node, selector, one, id) {
-        var validNode = /1|9/.test(node.nodeType),
-            childNodes = node.childNodes,
-            elements = [],
-            index = -1,
-            childNode;
-
-        if (validNode && node.currentStyle && node.currentStyle.qsa === id) {
-          if (elements.push(node) && one) {
-            return elements;
-          }
-        }
-
-        while (childNode = childNodes[++index]) {
-          elements = elements.concat(getElements(childNode, selector, one, id));
-
-          if (one && elements.length) {
-            return elements;
-          }
-        }
-
-        return elements;
-      }
-
-      Document.prototype.querySelector = Element.prototype.querySelector = function querySelectorAll(selector) {
-        return getElementsByQuery(this, selector, true);
-      };
-
-      Document.prototype.querySelectorAll = Element.prototype.querySelectorAll = function querySelectorAll(selector) {
-        return getElementsByQuery(this, selector, false);
-      };
-    })();
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : document_querySelector_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : document_querySelector_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : document_querySelector_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.matches.js
 
 
@@ -5296,6 +4965,10 @@ function Element_prototype_closest_typeof(obj) { "@babel/helpers - typeof"; retu
     };
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_closest_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_closest_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_closest_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4916);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__(5306);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-scope.js
@@ -5368,6 +5041,8 @@ var es_string_replace = __webpack_require__(5306);
     }
   }
 })(self);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
+var es_array_slice = __webpack_require__(7042);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__(9600);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
@@ -5701,11 +5376,15 @@ var es_string_trim = __webpack_require__(3210);
     return selectors;
   }
 
-  function replaceAllWithTempAttr(query, callback) {
+  function replaceAllWithTempAttr(query, nested, callback) {
     var inner = pseudoClassHasInnerQuery(query);
 
     if (!inner) {
       return query;
+    }
+
+    if (nested) {
+      return query.replace(":has(" + inner + ")", "[does-not-exist]");
     }
 
     var innerQuery = inner;
@@ -5714,14 +5393,34 @@ var es_string_trim = __webpack_require__(3210);
     var x = query;
 
     if (inner.indexOf(':has(') > -1) {
-      innerQuery = replaceAllWithTempAttr(inner, callback);
+      var innerParts = splitSelector(inner);
+      var newInnerParts = [];
+      var validInnerPartsCounter = 0;
+
+      for (var i = 0; i < innerParts.length; i++) {
+        var innerPart = innerParts[i];
+        var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
+
+        if (innerPartReplaced !== innerPart) {
+          newInnerParts.push(':not(*)');
+        } else {
+          newInnerParts.push(innerPart);
+          validInnerPartsCounter++;
+        }
+      }
+
+      if (!validInnerPartsCounter) {
+        return query;
+      }
+
+      return x.replace(':has(' + inner + ')', newInnerParts.join(', '));
     }
 
     x = x.replace(':has(' + inner + ')', innerReplacement);
     callback(innerQuery, attr);
 
     if (x.indexOf(':has(') > -1) {
-      var y = replaceAllWithTempAttr(x, callback);
+      var y = replaceAllWithTempAttr(x, false, callback);
 
       if (y) {
         return y;
@@ -5774,7 +5473,7 @@ var es_string_trim = __webpack_require__(3210);
       focus.setAttribute(scopeAttr, '');
       selectors = replaceScopeWithAttr(selectors, scopeAttr);
       var attrs = [];
-      var newQuery = replaceAllWithTempAttr(selectors, function (inner, attr) {
+      var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
         attrs.push(attr);
         var selectorParts = splitSelector(inner);
 
@@ -5873,9 +5572,6 @@ var es_array_sort = __webpack_require__(2707);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.from.js
 var es_array_from = __webpack_require__(1038);
 ;// CONCATENATED MODULE: ./specifications/w3c/selectors/4.5.Relational-Pseudo-Class/test.pure.js
-
-
-
 
 
 
@@ -6009,8 +5705,6 @@ var es_array_from = __webpack_require__(1038);
     }
 
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", [a, b]);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", [g, i, j]);
     testSelectorAllFromMain(assert, ":has(> .parent)", [a]);
     testSelectorAllFromMain(assert, ":has(> .target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(> .parent, > .target)", [a, b, f, h]);
@@ -6037,11 +5731,7 @@ var es_array_from = __webpack_require__(1038);
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
       testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]);
-      compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
-      compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ".c:has(.d)");
       testSelectorAllFromScope(assert, scope2, ".c:has(:is(:scope .d))", []);
-      compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
-      compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
     }
   });
   assert.test(":has matches to uninserted elements", function () {
@@ -6134,12 +5824,6 @@ var es_array_from = __webpack_require__(1038);
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", [d62, d70]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", [d62, d63, d70]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", [d77, d80]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", [d77, d80]);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", [d61, d62, d69, d70]);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", [d61, d62, d63, d69, d70]);
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -6251,12 +5935,6 @@ var es_array_from = __webpack_require__(1038);
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", [d62, d70]);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", [extraD01, d62, d63, d70]);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", [d77, d80]);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", [d77, d80]);
-    testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", [d61, d62, d69, d70]);
-    testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", [extraD01, d01, d17, d61, d62, d63, d69, d70]);
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });

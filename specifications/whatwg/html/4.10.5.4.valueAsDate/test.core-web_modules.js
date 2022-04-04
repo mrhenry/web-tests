@@ -2374,11 +2374,11 @@ var es_string_split = __webpack_require__(3123);
 
         try {
           e.type = r[0];
-        } catch (a) {}
+        } catch (e) {}
 
         if (e.setAttribute("type", r[0]), e.value = r[1], e.valueAsDate.getTime() !== r[2].getTime()) return !1;
       }
-    } catch (u) {
+    } catch (e) {
       return !1;
     }
 

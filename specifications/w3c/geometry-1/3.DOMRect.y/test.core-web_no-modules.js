@@ -3078,7 +3078,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
   if (!("DOMRect" in self && function (e) {
     try {
       return new e();
-    } catch (t) {
+    } catch (e) {
       return !1;
     }
   }(self.DOMRect))) {

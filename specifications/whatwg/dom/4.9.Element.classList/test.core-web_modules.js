@@ -3711,7 +3711,7 @@ var _DOMTokenList = function () {
     try {
       var t = document.createElement("div");
       return !(!t.classList || !t.classList[self.Symbol.iterator]);
-    } catch (e) {
+    } catch (t) {
       return !1;
     }
   }())) {

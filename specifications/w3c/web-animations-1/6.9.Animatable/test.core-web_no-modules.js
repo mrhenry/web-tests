@@ -5634,6 +5634,12 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
+var es_date_now = __webpack_require__(3843);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__(3710);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
+var web_timers = __webpack_require__(2564);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -5646,36 +5652,8 @@ var es_symbol_iterator = __webpack_require__(2165);
 var es_array_iterator = __webpack_require__(6992);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(8783);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/document.js
-
-
-
-
-
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-(function (undefined) {
-  if (!("document" in self && "Document" in self)) {
-    if (typeof WorkerGlobalScope === "undefined" && typeof importScripts !== "function") {
-      if (self.HTMLDocument) {
-        self.Document = self.HTMLDocument;
-      } else {
-        self.Document = self.HTMLDocument = document.constructor = new Function('return function Document() {}')();
-        self.Document.prototype = document;
-      }
-    }
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
-var es_date_now = __webpack_require__(3843);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3710);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
-var web_timers = __webpack_require__(2564);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/requestAnimationFrame.js
-function requestAnimationFrame_typeof(obj) { "@babel/helpers - typeof"; return requestAnimationFrame_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, requestAnimationFrame_typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -5742,7 +5720,7 @@ function requestAnimationFrame_typeof(obj) { "@babel/helpers - typeof"; return r
       }
     })(self);
   }
-}).call('object' === (typeof window === "undefined" ? "undefined" : requestAnimationFrame_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : requestAnimationFrame_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : requestAnimationFrame_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+}).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.fill.js
 var es_array_fill = __webpack_require__(3290);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
@@ -7988,7 +7966,6 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : WebAnimations_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : WebAnimations_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : WebAnimations_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/web-animations-1/6.9.Animatable/test.pure.js
-
 
 
 

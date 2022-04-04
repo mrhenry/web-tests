@@ -131,10 +131,8 @@
 		}
 
 		testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
-		testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", [a, b]);
-		testSelectorAllFromMain(assert,
-			":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant",
-			[g, i, j]);
+		// testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", [a, b]);
+		// testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", [g, i, j]);
 		testSelectorAllFromMain(assert, ":has(> .parent)", [a]);
 		testSelectorAllFromMain(assert, ":has(> .target)", [b, f, h]);
 		testSelectorAllFromMain(assert, ":has(> .parent, > .target)", [a, b, f, h]);
@@ -167,11 +165,11 @@
 			compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
 			compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
 			testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]);
-			compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
-			compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ".c:has(.d)");
+			// compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
+			// compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ".c:has(.d)");
 			testSelectorAllFromScope(assert, scope2, ".c:has(:is(:scope .d))", []);
-			compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
-			compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
+			// compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
+			// compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
 		}
 	});
 
@@ -278,12 +276,12 @@
 		testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
 		testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
 		testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-		testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", [d62, d70]);
-		testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", [d62, d63, d70]);
-		testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", [d77, d80]);
-		testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", [d77, d80]);
-		testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", [d61, d62, d69, d70]);
-		testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", [d61, d62, d63, d69, d70]);
+		// testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", [d62, d70]);
+		// testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", [d62, d63, d70]);
+		// testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", [d77, d80]);
+		// testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", [d77, d80]);
+		// testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", [d61, d62, d69, d70]);
+		// testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", [d61, d62, d63, d69, d70]);
 
 		testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
 
@@ -411,12 +409,12 @@
 		testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
 		testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
 		testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-		testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", [d62, d70]);
-		testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", [extraD01, d62, d63, d70]);
-		testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", [d77, d80]);
-		testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", [d77, d80]);
-		testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", [d61, d62, d69, d70]);
-		testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", [extraD01, d01, d17, d61, d62, d63, d69, d70]);
+		// testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", [d62, d70]);
+		// testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", [extraD01, d62, d63, d70]);
+		// testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", [d77, d80]);
+		// testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", [d77, d80]);
+		// testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", [d61, d62, d69, d70]);
+		// testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", [extraD01, d01, d17, d61, d62, d63, d69, d70]);
 
 		testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
 
