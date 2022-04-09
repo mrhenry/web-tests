@@ -162,8 +162,8 @@
       testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]); // compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
       // compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ".c:has(.d)");
 
-      testSelectorAllFromScope(assert, scope2, ".c:has(:is(:scope .d))", []); // 	compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
-      // 	compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
+      testSelectorAllFromScope(assert, scope2, ".c:has(:is(:scope .d))", []); // compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
+      // compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
     }
   });
   assert.test(":has matches to uninserted elements", function () {
