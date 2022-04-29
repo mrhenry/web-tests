@@ -3547,7 +3547,7 @@ var es_string_replace = __webpack_require__(5306);
         var hasScope = selectors && scopeTest.test(selectors);
 
         if (hasScope) {
-          var attr = 'q' + Math.floor(Math.random() * 9000000) + 1000000;
+          var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
           arguments[0] = selectors.replace(scopeReplacer, '[' + attr + ']');
           this.setAttribute(attr, '');
           var elementOrNodeList = qsa.apply(this, arguments);
@@ -3900,7 +3900,7 @@ var es_string_trim = __webpack_require__(3210);
     }
 
     var innerQuery = inner;
-    var attr = 'q-has' + Math.floor(Math.random() * 9000000) + 1000000;
+    var attr = 'q-has' + (Math.floor(Math.random() * 9000000) + 1000000);
     var innerReplacement = '[' + attr + ']';
     var x = query;
 
@@ -3975,105 +3975,132 @@ var es_string_trim = __webpack_require__(3210);
         }
       }
 
-      var focus = this;
+      var _focus = this;
 
-      if (focus === global.document) {
-        focus = global.document.documentElement;
+      if (_focus === global.document) {
+        _focus = global.document.documentElement;
       }
 
-      var scopeAttr = 'q-has-scope' + Math.floor(Math.random() * 9000000) + 1000000;
-      focus.setAttribute(scopeAttr, '');
-      selectors = replaceScopeWithAttr(selectors, scopeAttr);
-      var attrs = [];
-      var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
-        attrs.push(attr);
-        var selectorParts = splitSelector(inner);
+      var scopeAttr = 'q-has-scope' + (Math.floor(Math.random() * 9000000) + 1000000);
 
-        for (var x = 0; x < selectorParts.length; x++) {
-          var selectorPart = selectorParts[x].trim();
-          var absoluteSelectorPart = selectorPart;
+      _focus.setAttribute(scopeAttr, '');
 
-          if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
-            absoluteSelectorPart = selectorPart.slice(1).trim();
-          } else {
-            absoluteSelectorPart = ':scope ' + selectorPart;
-          }
+      try {
+        selectors = replaceScopeWithAttr(selectors, scopeAttr);
+        var attrs = [scopeAttr];
+        var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
+          attrs.push(attr);
+          var selectorParts = splitSelector(inner);
 
-          try {
-            walkNode(rootNode, function (node) {
-              if (!node.querySelector(absoluteSelectorPart)) {
-                return;
-              }
+          for (var x = 0; x < selectorParts.length; x++) {
+            var selectorPart = selectorParts[x].trim();
+            var absoluteSelectorPart = selectorPart;
 
-              switch (selectorPart[0]) {
-                case '~':
-                case '+':
-                  {
-                    var siblings = node.childNodes;
+            if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
+              absoluteSelectorPart = selectorPart.slice(1).trim();
+            } else {
+              absoluteSelectorPart = ':scope ' + selectorPart;
+            }
 
-                    for (var i = 0; i < siblings.length; i++) {
-                      var sibling = siblings[i];
+            try {
+              walkNode(rootNode, function (node) {
+                if (!node.querySelector(absoluteSelectorPart)) {
+                  return;
+                }
 
-                      if (!('setAttribute' in sibling)) {
-                        continue;
+                switch (selectorPart[0]) {
+                  case '~':
+                  case '+':
+                    {
+                      var siblings = node.childNodes;
+
+                      for (var i = 0; i < siblings.length; i++) {
+                        var sibling = siblings[i];
+
+                        if (!('setAttribute' in sibling)) {
+                          continue;
+                        }
+
+                        var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
+                        sibling.setAttribute(idAttr, '');
+
+                        if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
+                          sibling.setAttribute(attr, '');
+                        }
+
+                        sibling.removeAttribute(idAttr);
+                      }
+                    }
+                    break;
+
+                  case '>':
+                    {
+                      var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
+                      node.setAttribute(idAttr, '');
+
+                      if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
+                        node.setAttribute(attr, '');
                       }
 
-                      var idAttr = 'q-has-id' + Math.floor(Math.random() * 9000000) + 1000000;
-                      sibling.setAttribute(idAttr, '');
-
-                      if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
-                        sibling.setAttribute(attr, '');
-                      }
-
-                      sibling.removeAttribute(idAttr);
+                      node.removeAttribute(idAttr);
                     }
-                  }
-                  break;
+                    break;
 
-                case '>':
-                  {
-                    var idAttr = 'q-has-id' + Math.floor(Math.random() * 9000000) + 1000000;
-                    node.setAttribute(idAttr, '');
+                  default:
+                    node.setAttribute(attr, '');
+                    break;
+                }
+              });
+            } catch (_) {}
+          }
+        });
+        arguments[0] = newQuery;
+        var elementOrNodeList = qsa.apply(this, arguments);
 
-                    if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
-                      node.setAttribute(attr, '');
-                    }
+        _focus.removeAttribute(scopeAttr);
 
-                    node.removeAttribute(idAttr);
-                  }
-                  break;
+        if (attrs.length > 0) {
+          var attrsForQuery = [];
 
-                default:
-                  node.setAttribute(attr, '');
-                  break;
-              }
-            });
-          } catch (_) {}
-        }
-      });
-      arguments[0] = newQuery;
-      var elementOrNodeList = qsa.apply(this, arguments);
+          for (var j = 0; j < attrs.length; j++) {
+            attrsForQuery.push('[' + attrs[j] + ']');
+          }
 
-      if (attrs.length > 0) {
-        var attrsForQuery = [];
+          var elements = global.document.querySelectorAll(attrsForQuery.join(','));
 
-        for (var j = 0; j < attrs.length; j++) {
-          attrsForQuery.push('[' + attrs[j] + ']');
-        }
+          for (var k = 0; k < elements.length; k++) {
+            var element = elements[k];
 
-        var elements = global.document.querySelectorAll(attrsForQuery.join(','));
-
-        for (var k = 0; k < elements.length; k++) {
-          var element = elements[k];
-
-          for (var l = 0; l < attrs.length; l++) {
-            element.removeAttribute(attrs[l]);
+            for (var l = 0; l < attrs.length; l++) {
+              element.removeAttribute(attrs[l]);
+            }
           }
         }
+
+        return elementOrNodeList;
+      } catch (err) {
+        _focus.removeAttribute(scopeAttr);
+
+        if (attrs.length > 0) {
+          var attrsForQuery = [];
+
+          for (var j = 0; j < attrs.length; j++) {
+            attrsForQuery.push('[' + attrs[j] + ']');
+          }
+
+          var elements = global.document.querySelectorAll(attrsForQuery.join(','));
+
+          for (var k = 0; k < elements.length; k++) {
+            var element = elements[k];
+
+            for (var l = 0; l < attrs.length; l++) {
+              element.removeAttribute(attrs[l]);
+            }
+          }
+        }
+
+        throw err;
       }
-
-      focus.removeAttribute(scopeAttr, '');
-      return elementOrNodeList;
     };
   }
 })(self);
