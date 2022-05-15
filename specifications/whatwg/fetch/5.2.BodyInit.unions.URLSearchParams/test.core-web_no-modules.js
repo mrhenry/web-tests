@@ -2747,15 +2747,17 @@ module.exports = function (obj) {
 var fails = __webpack_require__(7293);
 var isCallable = __webpack_require__(614);
 var hasOwn = __webpack_require__(2597);
-var defineProperty = (__webpack_require__(3070).f);
+var DESCRIPTORS = __webpack_require__(9781);
 var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(6530).CONFIGURABLE);
 var inspectSource = __webpack_require__(2788);
 var InternalStateModule = __webpack_require__(9909);
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
+// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
 
-var CONFIGURABLE_LENGTH = !fails(function () {
+var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
 });
 
@@ -2773,6 +2775,11 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   if (CONFIGURABLE_LENGTH && options && hasOwn(options, 'arity') && value.length !== options.arity) {
     defineProperty(value, 'length', { value: options.arity });
   }
+  if (options && hasOwn(options, 'constructor') && options.constructor) {
+    if (DESCRIPTORS) try {
+      defineProperty(value, 'prototype', { writable: false });
+    } catch (error) { /* empty */ }
+  } else value.prototype = undefined;
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
     state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
@@ -4022,10 +4029,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.22.4',
+  version: '3.22.5',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.22.4/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.22.5/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4771,11 +4778,11 @@ if (DESCRIPTORS) {
       createNonEnumerableProperty(TypedArrayConstructorPrototype, TYPED_ARRAY_TAG, CONSTRUCTOR_NAME);
     }
 
+    var FORCED = TypedArrayConstructor != NativeTypedArrayConstructor;
+
     exported[CONSTRUCTOR_NAME] = TypedArrayConstructor;
 
-    $({
-      global: true, forced: TypedArrayConstructor != NativeTypedArrayConstructor, sham: !NATIVE_ARRAY_BUFFER_VIEWS
-    }, exported);
+    $({ global: true, constructor: true, forced: FORCED, sham: !NATIVE_ARRAY_BUFFER_VIEWS }, exported);
 
     if (!(BYTES_PER_ELEMENT in TypedArrayConstructor)) {
       createNonEnumerableProperty(TypedArrayConstructor, BYTES_PER_ELEMENT, BYTES);
@@ -5025,7 +5032,7 @@ var NativeArrayBuffer = global[ARRAY_BUFFER];
 
 // `ArrayBuffer` constructor
 // https://tc39.es/ecma262/#sec-arraybuffer-constructor
-$({ global: true, forced: NativeArrayBuffer !== ArrayBuffer }, {
+$({ global: true, constructor: true, forced: NativeArrayBuffer !== ArrayBuffer }, {
   ArrayBuffer: ArrayBuffer
 });
 
@@ -5349,7 +5356,7 @@ var NATIVE_ARRAY_BUFFER = __webpack_require__(4019);
 
 // `DataView` constructor
 // https://tc39.es/ecma262/#sec-dataview-constructor
-$({ global: true, forced: !NATIVE_ARRAY_BUFFER }, {
+$({ global: true, constructor: true, forced: !NATIVE_ARRAY_BUFFER }, {
   DataView: ArrayBufferModule.DataView
 });
 
@@ -5978,7 +5985,7 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
   }
 }
 
-$({ global: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
+$({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
   Promise: PromiseConstructor
 });
 
@@ -6759,7 +6766,7 @@ if (!NATIVE_SYMBOL) {
   }
 }
 
-$({ global: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
+$({ global: true, constructor: true, wrap: true, forced: !NATIVE_SYMBOL, sham: !NATIVE_SYMBOL }, {
   Symbol: $Symbol
 });
 
@@ -6865,7 +6872,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
     }
   });
 
-  $({ global: true, forced: true }, {
+  $({ global: true, constructor: true, forced: true }, {
     Symbol: SymbolWrapper
   });
 }
@@ -8018,7 +8025,7 @@ defineBuiltIn(URLSearchParamsPrototype, 'toString', function toString() {
 
 setToStringTag(URLSearchParamsConstructor, URL_SEARCH_PARAMS);
 
-$({ global: true, forced: !USE_NATIVE_URL }, {
+$({ global: true, constructor: true, forced: !USE_NATIVE_URL }, {
   URLSearchParams: URLSearchParamsConstructor
 });
 
@@ -8061,7 +8068,7 @@ if (!USE_NATIVE_URL && isCallable(Headers)) {
     RequestPrototype.constructor = RequestConstructor;
     RequestConstructor.prototype = RequestPrototype;
 
-    $({ global: true, forced: true, noTargetGet: true }, {
+    $({ global: true, constructor: true, noTargetGet: true, forced: true }, {
       Request: RequestConstructor
     });
   }
