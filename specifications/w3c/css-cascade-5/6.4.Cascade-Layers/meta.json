@@ -3,7 +3,7 @@
   "spec": {
     "org": "w3c",
     "id": "css-cascade-5",
-    "section": "6.5",
+    "section": "6.4",
     "name": "Cascade Layers",
     "url": "https://www.w3.org/TR/css-cascade-5/#layering"
   },

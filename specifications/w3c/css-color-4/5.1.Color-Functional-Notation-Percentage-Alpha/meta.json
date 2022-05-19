@@ -1,0 +1,25 @@
+{
+  "id": "68d99879-2186-449a-b2fd-7f5586c994c0",
+  "spec": {
+    "org": "w3c",
+    "id": "css-color-4",
+    "section": "5.1",
+    "name": "Color Functional Notation Percentage Alpha",
+    "url": "https://www.w3.org/TR/css-color-4/#rgb-functions"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  },
+  "polyfill.io": []
+}
