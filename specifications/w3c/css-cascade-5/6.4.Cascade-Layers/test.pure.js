@@ -8,5 +8,10 @@
 		return;
 	}
 
+	if (style.backgroundColor !== green) {
+		cb(false);
+		return;
+	}
+
 	cb(true);
 })(callback);

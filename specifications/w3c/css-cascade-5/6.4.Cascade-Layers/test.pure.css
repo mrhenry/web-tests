@@ -5,11 +5,13 @@
 @layer A {
 	#some-id#some-id {
 		color: red;
+		background-color: red;
 	}
 }
 
 @layer B {
 	#some-id {
 		color: purple;
+		background-color: green;
 	}
 }

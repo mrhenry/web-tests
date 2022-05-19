@@ -4,8 +4,10 @@
 
 #some-id#some-id {
 		color: red;
+		background-color: red;
 	}
 
 #some-id:not(#\##\##\#) {
 		color: purple;
+		background-color: green;
 	}
