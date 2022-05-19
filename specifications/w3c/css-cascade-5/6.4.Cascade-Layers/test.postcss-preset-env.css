@@ -1,0 +1,11 @@
+.some-class:not(#\##\##\##\##\##\#) {
+	color: green;
+}
+
+#some-id#some-id {
+		color: red;
+	}
+
+#some-id:not(#\##\##\#) {
+		color: purple;
+	}

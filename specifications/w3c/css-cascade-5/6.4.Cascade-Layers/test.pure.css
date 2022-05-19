@@ -1,0 +1,15 @@
+.some-class {
+	color: green;
+}
+
+@layer A {
+	#some-id#some-id {
+		color: red;
+	}
+}
+
+@layer B {
+	#some-id {
+		color: purple;
+	}
+}

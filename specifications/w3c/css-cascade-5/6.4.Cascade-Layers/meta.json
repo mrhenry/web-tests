@@ -1,0 +1,25 @@
+{
+  "id": "558aefe6-66f5-4a7b-a12b-dcdcfea87fa9",
+  "spec": {
+    "org": "w3c",
+    "id": "css-cascade-5",
+    "section": "6.5",
+    "name": "Cascade Layers",
+    "url": "https://www.w3.org/TR/css-cascade-5/#layering"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  },
+  "polyfill.io": []
+}
