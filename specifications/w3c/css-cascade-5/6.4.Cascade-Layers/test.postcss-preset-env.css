@@ -1,4 +1,4 @@
-.some-class:not(#\##\##\##\##\##\#) {
+.some-class:not(#\#):not(#\#):not(#\#):not(#\#):not(#\#):not(#\#) {
 	color: green;
 }
 
@@ -7,7 +7,7 @@
 		background-color: red;
 	}
 
-#some-id:not(#\##\##\#) {
+#some-id:not(#\#):not(#\#):not(#\#) {
 		color: purple;
 		background-color: green;
 	}
