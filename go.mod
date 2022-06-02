@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/blang/semver/v4 v4.0.0
 	github.com/google/uuid v1.3.0
-	github.com/hashicorp/go-version v1.4.0
+	github.com/hashicorp/go-version v1.5.0
 	github.com/mattn/go-sqlite3 v1.14.13
 	github.com/mileusna/useragent v1.0.2
 	github.com/tebeka/selenium v0.9.9
