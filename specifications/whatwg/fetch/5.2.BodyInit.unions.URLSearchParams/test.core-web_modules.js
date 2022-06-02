@@ -3971,6 +3971,25 @@ module.exports = function (index, length) {
 
 /***/ }),
 
+/***/ 4599:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var toPrimitive = __webpack_require__(7593);
+
+var $TypeError = TypeError;
+
+// `ToBigInt` abstract operation
+// https://tc39.es/ecma262/#sec-tobigint
+module.exports = function (argument) {
+  var prim = toPrimitive(argument, 'number');
+  if (typeof prim == 'number') throw $TypeError("Can't convert number to bigint");
+  // eslint-disable-next-line es-x/no-bigint -- safe
+  return BigInt(prim);
+};
+
+
+/***/ }),
+
 /***/ 7067:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -5724,6 +5743,43 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
 
 /***/ }),
 
+/***/ 3105:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var ArrayBufferViewCore = __webpack_require__(260);
+var $fill = __webpack_require__(1285);
+var toBigInt = __webpack_require__(4599);
+var classof = __webpack_require__(648);
+var call = __webpack_require__(6916);
+var uncurryThis = __webpack_require__(1702);
+var fails = __webpack_require__(7293);
+
+var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
+var slice = uncurryThis(''.slice);
+
+// V8 ~ Chrome < 59, Safari < 14.1, FF < 55, Edge <=18
+var CONVERSION_BUG = fails(function () {
+  var count = 0;
+  // eslint-disable-next-line es-x/no-typed-arrays -- safe
+  new Int8Array(2).fill({ valueOf: function () { return count++; } });
+  return count !== 1;
+});
+
+// `%TypedArray%.prototype.fill` method
+// https://tc39.es/ecma262/#sec-%typedarray%.prototype.fill
+exportTypedArrayMethod('fill', function fill(value /* , start, end */) {
+  var length = arguments.length;
+  aTypedArray(this);
+  var actualValue = slice(classof(this), 0, 3) === 'Big' ? toBigInt(value) : +value;
+  return call($fill, this, actualValue, length > 1 ? arguments[1] : undefined, length > 2 ? arguments[2] : undefined);
+}, CONVERSION_BUG);
+
+
+/***/ }),
+
 /***/ 3462:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -6387,6 +6443,8 @@ var es_regexp_exec = __webpack_require__(4916);
 var es_regexp_test = __webpack_require__(7601);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.uint8-array.js
 var es_typed_array_uint8_array = __webpack_require__(2472);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.fill.js
+var es_typed_array_fill = __webpack_require__(3105);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.set.js
 var es_typed_array_set = __webpack_require__(3462);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.sort.js
@@ -6404,6 +6462,7 @@ var es_string_split = __webpack_require__(3123);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3210);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
+
 
 
 
