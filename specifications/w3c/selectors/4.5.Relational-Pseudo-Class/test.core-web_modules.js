@@ -3613,6 +3613,7 @@ var es_string_trim = __webpack_require__(3210);
 (function (global) {
   try {
     global.document.querySelector(':has(*, :does-not-exist, > *)');
+    global.document.querySelector(':has(:has(any))');
 
     if (!global.document.querySelector(':has(:scope *)')) {
       return;
@@ -3938,7 +3939,7 @@ var es_string_trim = __webpack_require__(3210);
     }
 
     if (nested) {
-      return query.replace(":has(" + inner + ")", "[does-not-exist]");
+      return false;
     }
 
     var innerQuery = inner;
@@ -3949,22 +3950,16 @@ var es_string_trim = __webpack_require__(3210);
     if (inner.indexOf(':has(') > -1) {
       var innerParts = splitSelector(inner);
       var newInnerParts = [];
-      var validInnerPartsCounter = 0;
 
       for (var i = 0; i < innerParts.length; i++) {
         var innerPart = innerParts[i];
         var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
 
-        if (innerPartReplaced !== innerPart) {
+        if (!innerPartReplaced) {
           newInnerParts.push(':not(*)');
         } else {
           newInnerParts.push(innerPart);
-          validInnerPartsCounter++;
         }
-      }
-
-      if (!validInnerPartsCounter) {
-        return query;
       }
 
       return x.replace(':has(' + inner + ')', newInnerParts.join(', '));
@@ -4275,6 +4270,8 @@ var es_array_sort = __webpack_require__(2707);
     }
 
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
+    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
+    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
     testSelectorAllFromMain(assert, ":has(> .parent)", [a]);
     testSelectorAllFromMain(assert, ":has(> .target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(> .parent, > .target)", [a, b, f, h]);
@@ -4284,7 +4281,7 @@ var es_array_sort = __webpack_require__(2707);
     testClosest(assert, k, ".ancestor:has(.descendant)", h);
     testMatches(assert, h, ":has(.target ~ .sibling .descendant)", true);
   });
-  assert.test(":has argument with explicit scope (tentative)", function () {
+  assert.test(":has argument with explicit scope", function () {
     var fixture = document.getElementById("the-fixture");
     fixture.innerHTML = '<main><div id=d01 class="a"><div id=scope1 class="b"><div id=d02 class="c"><div id=d03 class="c"><div id=d04 class="d"></div></div></div><div id=d05 class="e"></div></div></div><div id=d06><div id=scope2 class="b"><div id=d07 class="c"><div id=d08 class="c"><div id=d09></div></div></div></div></div></div>';
     var scope1 = document.getElementById("scope1");
@@ -4301,7 +4298,11 @@ var es_array_sort = __webpack_require__(2707);
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
       testSelectorAllFromScope(assert, scope1, ".c:has(:is(:scope .d))", [d02, d03]);
+      compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
+      compareSelectorAll(assert, scope1, ".c:has(:is(:scope .d))", ".c:has(.d)");
       testSelectorAllFromScope(assert, scope2, ".c:has(:is(:scope .d))", []);
+      compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ":scope .c:has(.d)");
+      compareSelectorAll(assert, scope2, ".c:has(:is(:scope .d))", ".c:has(.d)");
     }
   });
   assert.test(":has matches to uninserted elements", function () {
@@ -4394,6 +4395,12 @@ var es_array_sort = __webpack_require__(2707);
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
+    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", []);
+    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", []);
+    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", []);
+    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", []);
+    testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", []);
+    testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", []);
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -4505,6 +4512,12 @@ var es_array_sort = __webpack_require__(2707);
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
+    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", []);
+    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", []);
+    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", []);
+    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", []);
+    testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", []);
+    testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", []);
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });

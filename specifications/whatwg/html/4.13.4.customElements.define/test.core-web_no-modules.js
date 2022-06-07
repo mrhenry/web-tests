@@ -7085,6 +7085,18 @@ function Element_prototype_remove_typeof(obj) { "@babel/helpers - typeof"; retur
     if ("Text" in self) {
       Text.prototype.remove = Element.prototype.remove;
     }
+
+    (function () {
+      var originalRemove = HTMLSelectElement.prototype.remove;
+
+      HTMLSelectElement.prototype.remove = function remove(index) {
+        if (arguments.length === 0) {
+          return Element.prototype.remove.call(this);
+        }
+
+        return originalRemove.call(this, index);
+      };
+    })();
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_remove_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_remove_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_remove_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.replaceWith.js
