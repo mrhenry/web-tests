@@ -32,7 +32,7 @@ module.exports = [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '^3.6.3',
+										corejs: '3.999999.999999',
 										bugfixes: true,
 										targets: {
 											browsers: [
@@ -80,7 +80,7 @@ module.exports = [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '^3.6.3',
+										corejs: '3.999999.999999',
 										bugfixes: true,
 										targets: {
 											browsers: [
@@ -139,7 +139,7 @@ module.exports = [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '^3.6.3',
+										corejs: '3.999999.999999',
 										bugfixes: true,
 										targets: {
 											browsers: [
@@ -189,7 +189,7 @@ module.exports = [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '^3.6.3',
+										corejs: '3.999999.999999',
 										bugfixes: true,
 										targets: {
 											browsers: [

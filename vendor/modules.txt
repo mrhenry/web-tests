@@ -12,7 +12,7 @@ github.com/hashicorp/go-version
 # github.com/mattn/go-sqlite3 v1.14.13
 ## explicit
 github.com/mattn/go-sqlite3
-# github.com/mileusna/useragent v1.0.2
+# github.com/mileusna/useragent v1.1.0
 ## explicit
 github.com/mileusna/useragent
 # github.com/tebeka/selenium v0.9.9
@@ -22,6 +22,6 @@ github.com/tebeka/selenium/chrome
 github.com/tebeka/selenium/firefox
 github.com/tebeka/selenium/internal/zip
 github.com/tebeka/selenium/log
-# golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+# golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f
 ## explicit
 golang.org/x/sync/semaphore
