@@ -26,20 +26,6 @@ jobs:
         with:
           go-version: '^1.16'
 
-      - name: 'BrowserStack Env Setup'
-        uses: 'browserstack/github-actions/setup-env@master'
-        with:
-          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
-          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          build-name: BUILD_INFO
-          project-name: REPO_NAME
-
-      - name: 'BrowserStack Local Setup'
-        uses: 'browserstack/github-actions/setup-local@master'
-        with:
-          local-testing: start
-          local-identifier: random
-
       - name: make
         run: make html-tests-from-existing-sources -j 2
 
@@ -48,11 +34,6 @@ jobs:
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-
-      - name: 'Stop BrowserStack Local'
-        uses: 'browserstack/github-actions/setup-local@master'
-        with:
-          local-testing: 'stop'
 
       - name: pages
         run: web-tests-pages
