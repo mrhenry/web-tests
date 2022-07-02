@@ -49,9 +49,8 @@ var remoteErrors = map[int]string{
 type remoteWD struct {
 	id, urlPrefix string
 	capabilities  Capabilities
-	w3cCompatible bool
-	// storedActions stores KeyActions and PointerActions for later execution.
-	storedActions  Actions
+
+	w3cCompatible  bool
 	browser        string
 	browserVersion semver.Version
 }
@@ -231,7 +230,6 @@ func NewRemote(capabilities Capabilities, urlPrefix string) (WebDriver, error) {
 	if b := capabilities["browserName"]; b != nil {
 		wd.browser = b.(string)
 	}
-
 	if _, err := wd.NewSession(); err != nil {
 		return nil, err
 	}
@@ -537,8 +535,8 @@ func (wd *remoteWD) SwitchSession(sessionID string) error {
 	return nil
 }
 
-func (wd *remoteWD) SetW3CCompatibility(isCompatible bool) {
-	wd.w3cCompatible = isCompatible
+func (wd *remoteWD) SetW3CCompatibility(compatible bool) {
+	wd.w3cCompatible = compatible
 }
 
 func (wd *remoteWD) Capabilities() (Capabilities, error) {
@@ -911,51 +909,31 @@ func (wd *remoteWD) ActiveElement() (WebElement, error) {
 // ChromeDriver returns the expiration date as a float. Handle both formats
 // via a type switch.
 type cookie struct {
-	Name     string      `json:"name"`
-	Value    string      `json:"value"`
-	Path     string      `json:"path"`
-	Domain   string      `json:"domain"`
-	Secure   bool        `json:"secure"`
-	Expiry   interface{} `json:"expiry"`
-	HTTPOnly bool        `json:"httpOnly"`
-	SameSite string      `json:"sameSite",omitempty`
+	Name   string      `json:"name"`
+	Value  string      `json:"value"`
+	Path   string      `json:"path"`
+	Domain string      `json:"domain"`
+	Secure bool        `json:"secure"`
+	Expiry interface{} `json:"expiry"`
 }
 
 func (c cookie) sanitize() Cookie {
-	parseExpiry := func(e interface{}) uint {
-		switch expiry := c.Expiry.(type) {
-		case int:
-			if expiry > 0 {
-				return uint(expiry)
-			}
-		case float64:
-			return uint(expiry)
-		}
-		return 0
+	sanitized := Cookie{
+		Name:   c.Name,
+		Value:  c.Value,
+		Path:   c.Path,
+		Domain: c.Domain,
+		Secure: c.Secure,
 	}
-
-	parseSameSite := func(s string) SameSite {
-		if s == "" {
-			return ""
+	switch expiry := c.Expiry.(type) {
+	case int:
+		if expiry > 0 {
+			sanitized.Expiry = uint(expiry)
 		}
-		for _, v := range []SameSite{SameSiteNone, SameSiteLax, SameSiteStrict} {
-			if strings.EqualFold(string(v), s) {
-				return v
-			}
-		}
-		return SameSiteLax
+	case float64:
+		sanitized.Expiry = uint(expiry)
 	}
-
-	return Cookie{
-		Name:     c.Name,
-		Value:    c.Value,
-		Path:     c.Path,
-		Domain:   c.Domain,
-		Secure:   c.Secure,
-		Expiry:   parseExpiry(c.Expiry),
-		HTTPOnly: c.HTTPOnly,
-		SameSite: parseSameSite(c.SameSite),
-	}
+	return sanitized
 }
 
 func (wd *remoteWD) GetCookie(name string) (Cookie, error) {
@@ -1009,8 +987,24 @@ func (wd *remoteWD) GetCookies() ([]Cookie, error) {
 
 	cookies := make([]Cookie, len(reply.Value))
 	for i, c := range reply.Value {
-		cookies[i] = c.sanitize()
+		sanitized := Cookie{
+			Name:   c.Name,
+			Value:  c.Value,
+			Path:   c.Path,
+			Domain: c.Domain,
+			Secure: c.Secure,
+		}
+		switch expiry := c.Expiry.(type) {
+		case int:
+			if expiry > 0 {
+				sanitized.Expiry = uint(expiry)
+			}
+		case float64:
+			sanitized.Expiry = uint(expiry)
+		}
+		cookies[i] = sanitized
 	}
+
 	return cookies, nil
 }
 
@@ -1101,104 +1095,8 @@ func (wd *remoteWD) KeyUp(keys string) error {
 	return wd.keyAction("keyUp", keys)
 }
 
-// KeyPauseAction builds a KeyAction which pauses for the supplied duration.
-func KeyPauseAction(duration time.Duration) KeyAction {
-	return KeyAction{
-		"type":     "pause",
-		"duration": uint(duration / time.Millisecond),
-	}
-}
-
-// KeyUpAction builds a KeyAction press.
-func KeyUpAction(key string) KeyAction {
-	return KeyAction{
-		"type":  "keyUp",
-		"value": key,
-	}
-}
-
-// KeyDownAction builds a KeyAction which presses and holds
-// the specified key.
-func KeyDownAction(key string) KeyAction {
-	return KeyAction{
-		"type":  "keyDown",
-		"value": key,
-	}
-}
-
-// PointerPause builds a PointerAction which pauses for the supplied duration.
-func PointerPauseAction(duration time.Duration) PointerAction {
-	return PointerAction{
-		"type":     "pause",
-		"duration": uint(duration / time.Millisecond),
-	}
-}
-
-// PointerMove builds a PointerAction which moves the pointer.
-func PointerMoveAction(duration time.Duration, offset Point, origin PointerMoveOrigin) PointerAction {
-	return PointerAction{
-		"type":     "pointerMove",
-		"duration": uint(duration / time.Millisecond),
-		"origin":   origin,
-		"x":        offset.X,
-		"y":        offset.Y,
-	}
-}
-
-// PointerUp builds an action which releases the specified pointer key.
-func PointerUpAction(button MouseButton) PointerAction {
-	return PointerAction{
-		"type":   "pointerUp",
-		"button": button,
-	}
-}
-
-// PointerDown builds a PointerAction which presses
-// and holds the specified pointer key.
-func PointerDownAction(button MouseButton) PointerAction {
-	return PointerAction{
-		"type":   "pointerDown",
-		"button": button,
-	}
-}
-
-func (wd *remoteWD) StoreKeyActions(inputID string, actions ...KeyAction) {
-	rawActions := []map[string]interface{}{}
-	for _, action := range actions {
-		rawActions = append(rawActions, action)
-	}
-	wd.storedActions = append(wd.storedActions, map[string]interface{}{
-		"type":    "key",
-		"id":      inputID,
-		"actions": rawActions,
-	})
-}
-
-func (wd *remoteWD) StorePointerActions(inputID string, pointer PointerType, actions ...PointerAction) {
-	rawActions := []map[string]interface{}{}
-	for _, action := range actions {
-		rawActions = append(rawActions, action)
-	}
-	wd.storedActions = append(wd.storedActions, map[string]interface{}{
-		"type":       "pointer",
-		"id":         inputID,
-		"parameters": map[string]string{"pointerType": string(pointer)},
-		"actions":    rawActions,
-	})
-}
-
-func (wd *remoteWD) PerformActions() error {
-	err := wd.voidCommand("/session/%s/actions", map[string]interface{}{
-		"actions": wd.storedActions,
-	})
-	wd.storedActions = nil
-	return err
-}
-
-func (wd *remoteWD) ReleaseActions() error {
-	return voidCommand("DELETE", wd.requestURL("/session/%s/actions", wd.id), nil)
-}
-
+// TODO(minusnine): Implement PerformActions and ReleaseActions, for more
+// direct access to the W3C specification.
 func (wd *remoteWD) DismissAlert() error {
 	return wd.voidCommand("/session/%s/alert/dismiss", nil)
 }
@@ -1212,7 +1110,11 @@ func (wd *remoteWD) AlertText() (string, error) {
 }
 
 func (wd *remoteWD) SetAlertText(text string) error {
-	data := map[string]string{"text": text}
+	data, err := json.Marshal(map[string]string{"text": text})
+	if err != nil {
+		return err
+	}
+
 	return wd.voidCommand("/session/%s/alert/text", data)
 }
 
@@ -1460,12 +1362,7 @@ func (elem *remoteWE) IsDisplayed() (bool, error) {
 	return elem.boolQuery("/session/%%s/element/%s/displayed")
 }
 
-func (elem *remoteWE) GetProperty(name string) (string, error) {
-	template := "/session/%%s/element/%s/property/%s"
-	urlTemplate := fmt.Sprintf(template, elem.id, name)
-
-	return elem.parent.stringCommand(urlTemplate)
-}
+// TODO(minusnine): Add Property(name string) (string, error).
 
 func (elem *remoteWE) GetAttribute(name string) (string, error) {
 	template := "/session/%%s/element/%s/attribute/%s"

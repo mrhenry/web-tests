@@ -22,11 +22,9 @@ const (
 	ByCSSSelector     = "css selector"
 )
 
-type MouseButton int
-
 // Mouse buttons.
 const (
-	LeftButton MouseButton = iota
+	LeftButton = iota
 	MiddleButton
 	RightButton
 )
@@ -205,55 +203,13 @@ type Size struct {
 
 // Cookie represents an HTTP cookie.
 type Cookie struct {
-	Name     string   `json:"name"`
-	Value    string   `json:"value"`
-	Path     string   `json:"path"`
-	Domain   string   `json:"domain"`
-	Secure   bool     `json:"secure"`
-	Expiry   uint     `json:"expiry"`
-	HTTPOnly bool     `json:"httpOnly"`
-	SameSite SameSite `json:"sameSite,omitempty"`
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Path   string `json:"path"`
+	Domain string `json:"domain"`
+	Secure bool   `json:"secure"`
+	Expiry uint   `json:"expiry"`
 }
-
-// SameSite is the type for the SameSite field in Cookie.
-type SameSite string
-
-const (
-	SameSiteNone   SameSite = "None"
-	SameSiteLax    SameSite = "Lax"
-	SameSiteStrict SameSite = "Strict"
-	SameSiteEmpty  SameSite = ""
-)
-
-// PointerType is the type of pointer used by StorePointerActions.
-// There are 3 different types according to the WC3 implementation.
-type PointerType string
-
-const (
-	MousePointer PointerType = "mouse"
-	PenPointer               = "pen"
-	TouchPointer             = "touch"
-)
-
-// PointerMoveOrigin controls how the offset for
-// the pointer move action is calculated.
-type PointerMoveOrigin string
-
-const (
-	// FromViewport calculates the offset from the viewport at 0,0.
-	FromViewport PointerMoveOrigin = "viewport"
-	// FromPointer calculates the offset from the current pointer position.
-	FromPointer = "pointer"
-)
-
-// KeyAction represents an activity involving a keyboard key.
-type KeyAction map[string]interface{}
-
-// PointerAction represents an activity involving a pointer.
-type PointerAction map[string]interface{}
-
-// Actions stores KeyActions and PointerActions for later execution.
-type Actions []map[string]interface{}
 
 // WebDriver defines methods supported by WebDriver drivers.
 type WebDriver interface {
@@ -275,8 +231,7 @@ type WebDriver interface {
 	// SwitchSession switches to the given session ID.
 	SwitchSession(sessionID string) error
 
-	// Toggle W3C compliance.
-	SetW3CCompatibility(bool)
+	SetW3CCompatibility(compatible bool)
 
 	// Capabilities returns the current session's capabilities.
 	Capabilities() (Capabilities, error)
@@ -365,26 +320,6 @@ type WebDriver interface {
 	// ButtonUp causes the left mouse button to be released.
 	ButtonUp() error
 
-	// StoreKeyActions store provided actions until they are executed
-	// by PerformActions or released by ReleaseActions.
-	// inputID is a string used as a unique virtual device identifier for this
-	// and future actions, the value can be set to any valid string
-	// and used to refer to this specific device in future calls.
-	StoreKeyActions(inputID string, actions ...KeyAction)
-
-	// StorePointerActions store provided actions until they are executed
-	// by PerformActions or released by ReleaseActions.
-	// inputID is a string used as a unique virtual device identifier for this
-	// and future actions, the value can be set to any valid string
-	// and used to refer to this specific device in future calls.
-	StorePointerActions(inputID string, pointer PointerType, actions ...PointerAction)
-
-	// PerformActions executes actions previously stored by calls to StorePointerActions and StoreKeyActions.
-	PerformActions() error
-	// ReleaseActions releases keys and pointer buttons if they are pressed,
-	// triggering any events as if they were performed by a regular action.
-	ReleaseActions() error
-
 	// SendModifier sends the modifier key to the active element. The modifier
 	// can be one of ShiftKey, ControlKey, AltKey, MetaKey.
 	//
@@ -464,11 +399,8 @@ type WebElement interface {
 	IsEnabled() (bool, error)
 	// IsDisplayed returns true if the element is displayed.
 	IsDisplayed() (bool, error)
-	// GetAttribute returns the named HTML attribute of the element.
+	// GetAttribute returns the named attribute of the element.
 	GetAttribute(name string) (string, error)
-	// GetProperty returns the DOM property of the element. The DOM property
-	// values can change (e.g. input value), the HTML attributes can't.
-	GetProperty(name string) (string, error)
 	// Location returns the element's location.
 	Location() (*Point, error)
 	// LocationInView returns the element's location once it has been scrolled
