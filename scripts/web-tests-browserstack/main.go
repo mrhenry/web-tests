@@ -161,7 +161,7 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 	if browserFilter != "" {
 		filteredBrowsers := []browserstack.Browser{}
-		for _, b := range allBrowsers {
+		for _, b := range browsers {
 			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
 				filteredBrowsers = append(filteredBrowsers, b)
 			}
@@ -247,12 +247,19 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	caps := client.SetCaps(selenium.Capabilities{
 		"browserstack.local": "true",
 		"browserstack.video": "false",
-		// "browserstack.debug":           "true",
-		// "browserstack.console":         "errors",
-		// "browserstack.networkLogs":     "errors",
+		// "browserstack.debug":       "true",
+		// "browserstack.console":     "verbose",
+		// "browserstack.networkLogs": "true",
 		"build": sessionName,
 		"name":  fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
 	})
+
+	w3cCompatible := true
+	if browser.OS == "ios" {
+		if browser.OSVersion == "11" || browser.OSVersion == "10" {
+			w3cCompatible = false
+		}
+	}
 
 	if browser.Device != "" {
 		caps["deviceName"] = browser.Device
@@ -316,7 +323,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		}
 	}()
 
-	err := client.RunTest(ctx, caps, in, out)
+	err := client.RunTest(ctx, caps, w3cCompatible, in, out)
 	if err != nil {
 		return err
 	}

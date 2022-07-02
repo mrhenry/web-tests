@@ -15,12 +15,12 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v2.2.0
         with:
-          node-version: 16
+          node-version: 18
           cache: 'npm'
         
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.16'
+          go-version: '^1.18'
 
       - name: make
         run: |

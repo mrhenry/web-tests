@@ -59,7 +59,7 @@ func (x Test) MappingTestName() string {
 	return parts[1]
 }
 
-func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, in chan Test, out chan Test) error {
+func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, w3cCompatible bool, in chan Test, out chan Test) error {
 	select {
 	case <-parentCtx.Done():
 		return parentCtx.Err()
@@ -202,6 +202,10 @@ func (x *Client) RunTest(parentCtx context.Context, caps selenium.Capabilities, 
 
 	if wd == nil {
 		return errors.New("webdriver remote not started")
+	}
+
+	if !w3cCompatible {
+		wd.SetW3CCompatibility(false)
 	}
 
 	defer wd.Quit()

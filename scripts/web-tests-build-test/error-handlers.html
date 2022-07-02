@@ -1,0 +1,17 @@
+<script>
+	window.onerror = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+
+	window.onunhandledrejection = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+</script>

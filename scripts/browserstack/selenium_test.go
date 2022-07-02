@@ -99,7 +99,7 @@ func TestRunTest(t *testing.T) {
 		}
 	}()
 
-	err = client.RunTest(context.Background(), caps, in, out)
+	err = client.RunTest(context.Background(), caps, true, in, out)
 	if err != nil {
 		t.Fatal(err)
 	}
