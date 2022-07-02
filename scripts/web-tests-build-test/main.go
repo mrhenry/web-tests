@@ -10,8 +10,6 @@ import (
 	"os"
 	"strings"
 
-	_ "embed"
-
 	"github.com/mrhenry/web-tests/scripts/feature"
 )
 
@@ -312,8 +310,38 @@ func main() {
 	}
 }
 
-//go:embed error-handlers.html
-var errorHandlers string
+const fixtures = `
+<style>
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<div id="the-fixture"></div>
+<div class="a-fixture"></div>
+<div style="position: relative; width: 100%; height: 100px;">
+	<div id="the-fixture--positioned" style="position: absolute; width: 50px; height: 50px; left: 25px; top: 25px; background-color: blue;">
+	</div>
+</div>
+`
 
-//go:embed error-handlers.html
-var fixtures string
+const errorHandlers = `
+<script>
+	window.onerror = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+
+	window.onunhandledrejection = function() {
+		if ('testSuccess' in window) {
+			return;
+		}
+		
+		window.testSuccess = false;
+	};
+</script>
+`

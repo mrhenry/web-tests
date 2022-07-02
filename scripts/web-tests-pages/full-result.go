@@ -43,10 +43,6 @@ func fullResult() {
 	}
 
 	for _, feature := range features {
-		if strings.Contains(feature.Dir, "example/test") {
-			continue
-		}
-
 		if feature.ID != "dfe2dfb3-716b-4af7-9fc6-aa4ccfb75b49" { // don't count "ecma262 The this Keyword"
 			totalFeatures++
 		}
