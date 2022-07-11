@@ -1793,6 +1793,7 @@ var ResultPrototype = Result.prototype;
 module.exports = function (iterable, unboundFunction, options) {
   var that = options && options.that;
   var AS_ENTRIES = !!(options && options.AS_ENTRIES);
+  var IS_RECORD = !!(options && options.IS_RECORD);
   var IS_ITERATOR = !!(options && options.IS_ITERATOR);
   var INTERRUPTED = !!(options && options.INTERRUPTED);
   var fn = bind(unboundFunction, that);
@@ -1810,7 +1811,9 @@ module.exports = function (iterable, unboundFunction, options) {
     } return INTERRUPTED ? fn(value, stop) : fn(value);
   };
 
-  if (IS_ITERATOR) {
+  if (IS_RECORD) {
+    iterator = iterable.iterator;
+  } else if (IS_ITERATOR) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
@@ -1825,7 +1828,7 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = getIterator(iterable, iterFn);
   }
 
-  next = iterator.next;
+  next = IS_RECORD ? iterable.next : iterator.next;
   while (!(step = call(next, iterator)).done) {
     try {
       result = callFn(step.value);
@@ -2626,10 +2629,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.23.3',
+  version: '3.23.4',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.23.3/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.23.4/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 

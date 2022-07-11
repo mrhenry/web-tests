@@ -2376,7 +2376,7 @@ if (PATCH) {
     }
     if (NPCG_INCLUDED && match && match.length > 1) {
       // Fix browsers whose `exec` methods don't consistently return `undefined`
-      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+      // for NPCG, like IE8. NOTE: This doesn't work for /(.?)?/
       call(nativeReplace, match[0], reCopy, function () {
         for (i = 1; i < arguments.length - 2; i++) {
           if (arguments[i] === undefined) match[i] = undefined;
@@ -2631,10 +2631,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.23.3',
+  version: '3.23.4',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.23.3/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.23.4/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3601,7 +3601,7 @@ var charAt = uncurryThis(''.charAt);
 var replace = uncurryThis(''.replace);
 var stringIndexOf = uncurryThis(''.indexOf);
 var stringSlice = uncurryThis(''.slice);
-// TODO: Use only propper RegExpIdentifierName
+// TODO: Use only proper RegExpIdentifierName
 var IS_NCG = /^\?<[^\s\d!#%&*+<=>@^][^\s!#%&*+<=>@^]*>/;
 var re1 = /a/g;
 var re2 = /a/g;
@@ -4485,6 +4485,7 @@ for (var key in DOMExceptionConstants) if (hasOwn(DOMExceptionConstants, key)) {
 "use strict";
 
 var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
 var getBuiltIn = __webpack_require__(5005);
 var createPropertyDescriptor = __webpack_require__(9114);
 var defineProperty = (__webpack_require__(3070).f);
@@ -4494,6 +4495,7 @@ var inheritIfRequired = __webpack_require__(9587);
 var normalizeStringArgument = __webpack_require__(6277);
 var DOMExceptionConstants = __webpack_require__(3678);
 var clearErrorStack = __webpack_require__(7741);
+var DESCRIPTORS = __webpack_require__(9781);
 var IS_PURE = __webpack_require__(1913);
 
 var DOM_EXCEPTION = 'DOMException';
@@ -4517,7 +4519,15 @@ var DOMExceptionPrototype = $DOMException.prototype = NativeDOMException.prototy
 
 var ERROR_HAS_STACK = 'stack' in Error(DOM_EXCEPTION);
 var DOM_EXCEPTION_HAS_STACK = 'stack' in new NativeDOMException(1, 2);
-var FORCED_CONSTRUCTOR = ERROR_HAS_STACK && !DOM_EXCEPTION_HAS_STACK;
+
+// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+var descriptor = NativeDOMException && DESCRIPTORS && Object.getOwnPropertyDescriptor(global, DOM_EXCEPTION);
+
+// Bun ~ 0.1.1 DOMException have incorrect descriptor and we can't redefine it
+// https://github.com/Jarred-Sumner/bun/issues/399
+var BUGGY_DESCRIPTOR = !!descriptor && !(descriptor.writable && descriptor.configurable);
+
+var FORCED_CONSTRUCTOR = ERROR_HAS_STACK && !BUGGY_DESCRIPTOR && !DOM_EXCEPTION_HAS_STACK;
 
 // `DOMException` constructor patch for `.stack` where it's required
 // https://webidl.spec.whatwg.org/#es-DOMException-specialness

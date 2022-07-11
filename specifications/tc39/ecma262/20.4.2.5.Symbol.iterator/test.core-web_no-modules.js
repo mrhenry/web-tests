@@ -2001,10 +2001,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.23.3',
+  version: '3.23.4',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.23.3/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.23.4/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
