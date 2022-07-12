@@ -1,0 +1,28 @@
+{
+  "id": "6c09b392-8125-4216-9ad3-e55da97e7d32",
+  "spec": {
+    "org": "tc39",
+    "id": "ecma262",
+    "section": "23.1.5.2.2",
+    "name": "ArrayIterator.prototype.toStringTag",
+    "url": "https://tc39.es/ecma262/#sec-%arrayiteratorprototype%-@@tostringtag"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "babel": {
+      "inline_script": "test.babel.js"
+    },
+    "babel_webpack": {
+      "inline_script": "test.babel_webpack.js"
+    },
+    "core-web": {
+      "module_script": "test.core-web_modules.js",
+      "nomodules_script": "test.core-web_no-modules.js"
+    },
+    "pure": {
+      "inline_script": "test.pure.js"
+    }
+  },
+  "polyfill.io": []
+}
