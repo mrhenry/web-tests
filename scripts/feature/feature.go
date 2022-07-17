@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
+	"regexp"
 )
 
 type Feature struct {
@@ -39,46 +39,10 @@ type FeatureInMapping struct {
 	Dir string `json:"dir"`
 }
 
-func (x FeatureInMapping) ContentHash() (string, error) {
-	if x.Dir == "" {
-		return "", errors.New("feature has no directory")
-	}
-
-	var dirB []byte
-
-	err := filepath.Walk(x.Dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if info.IsDir() {
-			return filepath.SkipDir
-		}
-
-		f, err := os.Open(path)
-		if err != nil {
-			return err
-		}
-
-		defer f.Close()
-
-		b, err := ioutil.ReadAll(f)
-		if err != nil {
-			return err
-		}
-
-		dirB = append(dirB, []byte(path)...)
-		dirB = append(dirB, b...)
-
-		return nil
-	})
-	if err != nil {
-		return "", err
-	}
-
-	sum := sha256.Sum256(dirB)
-	return fmt.Sprintf("%x", sum), nil
-}
+var corejsVersioningRegexp = regexp.MustCompile(`\s*version: '\d+\.\d+\.\d+',
+\s*mode: IS_PURE \? 'pure' : 'global',
+\s*copyright: '© \d+-\d+ Denis Pushkarev \(zloirock\.ru\)',
+\s*license: 'https://github\.com/zloirock/core-js/blob/v\d+\.\d+\.\d+/LICENSE',`)
 
 func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 	if x.Dir == "" {
@@ -187,6 +151,8 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 		dirB = append(dirB, testPath...)
 		dirB = append(dirB, b...)
 	}
+
+	dirB = corejsVersioningRegexp.ReplaceAll(dirB, []byte{})
 
 	sum := sha256.Sum256(dirB)
 	return fmt.Sprintf("%x", sum), nil

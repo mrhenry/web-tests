@@ -61,22 +61,6 @@ module.exports = function (key) {
 
 /***/ }),
 
-/***/ 1530:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var charAt = (__webpack_require__(8710).charAt);
-
-// `AdvanceStringIndex` abstract operation
-// https://tc39.es/ecma262/#sec-advancestringindex
-module.exports = function (S, index, unicode) {
-  return index + (unicode ? charAt(S, index).length : 1);
-};
-
-
-/***/ }),
-
 /***/ 9670:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1191,88 +1175,6 @@ module.exports = function (exec) {
 
 /***/ }),
 
-/***/ 7007:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-// TODO: Remove from `core-js@4` since it's moved to entry points
-__webpack_require__(4916);
-var uncurryThis = __webpack_require__(1702);
-var defineBuiltIn = __webpack_require__(8052);
-var regexpExec = __webpack_require__(2261);
-var fails = __webpack_require__(7293);
-var wellKnownSymbol = __webpack_require__(5112);
-var createNonEnumerableProperty = __webpack_require__(8880);
-
-var SPECIES = wellKnownSymbol('species');
-var RegExpPrototype = RegExp.prototype;
-
-module.exports = function (KEY, exec, FORCED, SHAM) {
-  var SYMBOL = wellKnownSymbol(KEY);
-
-  var DELEGATES_TO_SYMBOL = !fails(function () {
-    // String methods call symbol-named RegEp methods
-    var O = {};
-    O[SYMBOL] = function () { return 7; };
-    return ''[KEY](O) != 7;
-  });
-
-  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails(function () {
-    // Symbol-named RegExp methods call .exec
-    var execCalled = false;
-    var re = /a/;
-
-    if (KEY === 'split') {
-      // We can't use real regex here since it causes deoptimization
-      // and serious performance degradation in V8
-      // https://github.com/zloirock/core-js/issues/306
-      re = {};
-      // RegExp[@@split] doesn't call the regex's exec method, but first creates
-      // a new one. We need to return the patched regex when creating the new one.
-      re.constructor = {};
-      re.constructor[SPECIES] = function () { return re; };
-      re.flags = '';
-      re[SYMBOL] = /./[SYMBOL];
-    }
-
-    re.exec = function () { execCalled = true; return null; };
-
-    re[SYMBOL]('');
-    return !execCalled;
-  });
-
-  if (
-    !DELEGATES_TO_SYMBOL ||
-    !DELEGATES_TO_EXEC ||
-    FORCED
-  ) {
-    var uncurriedNativeRegExpMethod = uncurryThis(/./[SYMBOL]);
-    var methods = exec(SYMBOL, ''[KEY], function (nativeMethod, regexp, str, arg2, forceStringMethod) {
-      var uncurriedNativeMethod = uncurryThis(nativeMethod);
-      var $exec = regexp.exec;
-      if ($exec === regexpExec || $exec === RegExpPrototype.exec) {
-        if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
-          // The native String method already delegates to @@method (this
-          // polyfilled function), leasing to infinite recursion.
-          // We avoid it by directly calling the native @@method method.
-          return { done: true, value: uncurriedNativeRegExpMethod(regexp, str, arg2) };
-        }
-        return { done: true, value: uncurriedNativeMethod(str, regexp, arg2) };
-      }
-      return { done: false };
-    });
-
-    defineBuiltIn(String.prototype, KEY, methods[0]);
-    defineBuiltIn(RegExpPrototype, SYMBOL, methods[1]);
-  }
-
-  if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], 'sham', true);
-};
-
-
-/***/ }),
-
 /***/ 2104:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1491,57 +1393,6 @@ var aCallable = __webpack_require__(9662);
 module.exports = function (V, P) {
   var func = V[P];
   return func == null ? undefined : aCallable(func);
-};
-
-
-/***/ }),
-
-/***/ 647:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var uncurryThis = __webpack_require__(1702);
-var toObject = __webpack_require__(7908);
-
-var floor = Math.floor;
-var charAt = uncurryThis(''.charAt);
-var replace = uncurryThis(''.replace);
-var stringSlice = uncurryThis(''.slice);
-var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
-var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
-
-// `GetSubstitution` abstract operation
-// https://tc39.es/ecma262/#sec-getsubstitution
-module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
-  var tailPos = position + matched.length;
-  var m = captures.length;
-  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
-  if (namedCaptures !== undefined) {
-    namedCaptures = toObject(namedCaptures);
-    symbols = SUBSTITUTION_SYMBOLS;
-  }
-  return replace(replacement, symbols, function (match, ch) {
-    var capture;
-    switch (charAt(ch, 0)) {
-      case '$': return '$';
-      case '&': return matched;
-      case '`': return stringSlice(str, 0, position);
-      case "'": return stringSlice(str, tailPos);
-      case '<':
-        capture = namedCaptures[stringSlice(ch, 1, -1)];
-        break;
-      default: // \d\d?
-        var n = +ch;
-        if (n === 0) return match;
-        if (n > m) {
-          var f = floor(n / 10);
-          if (f === 0) return match;
-          if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
-          return match;
-        }
-        capture = captures[n - 1];
-    }
-    return capture === undefined ? '' : capture;
-  });
 };
 
 
@@ -2764,33 +2615,6 @@ module.exports = function (Target, Source, key) {
     get: function () { return Source[key]; },
     set: function (it) { Source[key] = it; }
   });
-};
-
-
-/***/ }),
-
-/***/ 7651:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var call = __webpack_require__(6916);
-var anObject = __webpack_require__(9670);
-var isCallable = __webpack_require__(614);
-var classof = __webpack_require__(4326);
-var regexpExec = __webpack_require__(2261);
-
-var $TypeError = TypeError;
-
-// `RegExpExec` abstract operation
-// https://tc39.es/ecma262/#sec-regexpexec
-module.exports = function (R, S) {
-  var exec = R.exec;
-  if (isCallable(exec)) {
-    var result = call(exec, R, S);
-    if (result !== null) anObject(result);
-    return result;
-  }
-  if (classof(R) === 'RegExp') return call(regexpExec, R, S);
-  throw $TypeError('RegExp#exec called on incompatible receiver');
 };
 
 
@@ -4455,150 +4279,6 @@ defineIterator(String, 'String', function (iterated) {
 
 /***/ }),
 
-/***/ 5306:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var apply = __webpack_require__(2104);
-var call = __webpack_require__(6916);
-var uncurryThis = __webpack_require__(1702);
-var fixRegExpWellKnownSymbolLogic = __webpack_require__(7007);
-var fails = __webpack_require__(7293);
-var anObject = __webpack_require__(9670);
-var isCallable = __webpack_require__(614);
-var toIntegerOrInfinity = __webpack_require__(9303);
-var toLength = __webpack_require__(7466);
-var toString = __webpack_require__(1340);
-var requireObjectCoercible = __webpack_require__(4488);
-var advanceStringIndex = __webpack_require__(1530);
-var getMethod = __webpack_require__(8173);
-var getSubstitution = __webpack_require__(647);
-var regExpExec = __webpack_require__(7651);
-var wellKnownSymbol = __webpack_require__(5112);
-
-var REPLACE = wellKnownSymbol('replace');
-var max = Math.max;
-var min = Math.min;
-var concat = uncurryThis([].concat);
-var push = uncurryThis([].push);
-var stringIndexOf = uncurryThis(''.indexOf);
-var stringSlice = uncurryThis(''.slice);
-
-var maybeToString = function (it) {
-  return it === undefined ? it : String(it);
-};
-
-// IE <= 11 replaces $0 with the whole match, as if it was $&
-// https://stackoverflow.com/questions/6024666/getting-ie-to-replace-a-regex-with-the-literal-string-0
-var REPLACE_KEEPS_$0 = (function () {
-  // eslint-disable-next-line regexp/prefer-escape-replacement-dollar-char -- required for testing
-  return 'a'.replace(/./, '$0') === '$0';
-})();
-
-// Safari <= 13.0.3(?) substitutes nth capture where n>m with an empty string
-var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = (function () {
-  if (/./[REPLACE]) {
-    return /./[REPLACE]('a', '$0') === '';
-  }
-  return false;
-})();
-
-var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
-  var re = /./;
-  re.exec = function () {
-    var result = [];
-    result.groups = { a: '7' };
-    return result;
-  };
-  // eslint-disable-next-line regexp/no-useless-dollar-replacements -- false positive
-  return ''.replace(re, '$<a>') !== '7';
-});
-
-// @@replace logic
-fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNative) {
-  var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? '$' : '$0';
-
-  return [
-    // `String.prototype.replace` method
-    // https://tc39.es/ecma262/#sec-string.prototype.replace
-    function replace(searchValue, replaceValue) {
-      var O = requireObjectCoercible(this);
-      var replacer = searchValue == undefined ? undefined : getMethod(searchValue, REPLACE);
-      return replacer
-        ? call(replacer, searchValue, O, replaceValue)
-        : call(nativeReplace, toString(O), searchValue, replaceValue);
-    },
-    // `RegExp.prototype[@@replace]` method
-    // https://tc39.es/ecma262/#sec-regexp.prototype-@@replace
-    function (string, replaceValue) {
-      var rx = anObject(this);
-      var S = toString(string);
-
-      if (
-        typeof replaceValue == 'string' &&
-        stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) === -1 &&
-        stringIndexOf(replaceValue, '$<') === -1
-      ) {
-        var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
-        if (res.done) return res.value;
-      }
-
-      var functionalReplace = isCallable(replaceValue);
-      if (!functionalReplace) replaceValue = toString(replaceValue);
-
-      var global = rx.global;
-      if (global) {
-        var fullUnicode = rx.unicode;
-        rx.lastIndex = 0;
-      }
-      var results = [];
-      while (true) {
-        var result = regExpExec(rx, S);
-        if (result === null) break;
-
-        push(results, result);
-        if (!global) break;
-
-        var matchStr = toString(result[0]);
-        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
-      }
-
-      var accumulatedResult = '';
-      var nextSourcePosition = 0;
-      for (var i = 0; i < results.length; i++) {
-        result = results[i];
-
-        var matched = toString(result[0]);
-        var position = max(min(toIntegerOrInfinity(result.index), S.length), 0);
-        var captures = [];
-        // NOTE: This is equivalent to
-        //   captures = result.slice(1).map(maybeToString)
-        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
-        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
-        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
-        for (var j = 1; j < result.length; j++) push(captures, maybeToString(result[j]));
-        var namedCaptures = result.groups;
-        if (functionalReplace) {
-          var replacerArgs = concat([matched], captures, position, S);
-          if (namedCaptures !== undefined) push(replacerArgs, namedCaptures);
-          var replacement = toString(apply(replaceValue, undefined, replacerArgs));
-        } else {
-          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
-        }
-        if (position >= nextSourcePosition) {
-          accumulatedResult += stringSlice(S, nextSourcePosition, position) + replacement;
-          nextSourcePosition = position + matched.length;
-        }
-      }
-      return accumulatedResult + stringSlice(S, nextSourcePosition);
-    }
-  ];
-}, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
-
-
-/***/ }),
-
 /***/ 3210:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -5478,9 +5158,12 @@ function Element_prototype_closest_typeof(obj) { "@babel/helpers - typeof"; retu
 var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
 var es_regexp_test = __webpack_require__(7601);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(5306);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
+var es_array_slice = __webpack_require__(7042);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
+var es_array_join = __webpack_require__(9600);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-scope.js
+
 
 
 
@@ -5502,13 +5185,97 @@ var es_string_replace = __webpack_require__(5306);
   try {
     document.querySelector(':scope *');
   } catch (_) {
+    var replaceScopeWithAttr = function replaceScopeWithAttr(query, attr) {
+      var parts = [];
+      var current = '';
+      var escaped = false;
+      var quoted = false;
+      var quotedMark = false;
+      var bracketed = 0;
+
+      for (var i = 0; i < query.length; i++) {
+        var _char = query[i];
+
+        if (escaped) {
+          current += _char;
+          escaped = false;
+          continue;
+        }
+
+        if (quoted) {
+          if (_char === quotedMark) {
+            quoted = false;
+          }
+
+          current += _char;
+          continue;
+        }
+
+        if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(_char || '')) {
+          parts.push(current.slice(0, current.length - 6));
+          parts.push('[' + attr + ']');
+          current = '';
+        }
+
+        switch (_char) {
+          case ':':
+            parts.push(current);
+            current = '';
+            current += _char;
+            continue;
+
+          case '\\':
+            current += _char;
+            escaped = true;
+            continue;
+
+          case '"':
+          case "'":
+            current += _char;
+            quoted = true;
+            quotedMark = _char;
+            continue;
+
+          case '[':
+            current += _char;
+            bracketed++;
+            continue;
+
+          case "]":
+            current += _char;
+
+            if (bracketed > 0) {
+              bracketed--;
+            }
+
+            continue;
+
+          default:
+            current += _char;
+            continue;
+        }
+      }
+
+      if (current.toLowerCase() === ':scope') {
+        parts.push(current.slice(0, current.length - 6));
+        parts.push('[' + attr + ']');
+        current = '';
+      }
+
+      if (parts.length === 0) {
+        return query;
+      }
+
+      return parts.join('') + current;
+    };
+
     var polyfill = function polyfill(qsa) {
       return function (selectors) {
         var hasScope = selectors && scopeTest.test(selectors);
 
         if (hasScope) {
           var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
-          arguments[0] = selectors.replace(scopeReplacer, '[' + attr + ']');
+          arguments[0] = replaceScopeWithAttr(selectors, attr);
           this.setAttribute(attr, '');
           var elementOrNodeList = qsa.apply(this, arguments);
           this.removeAttribute(attr);
@@ -5520,7 +5287,6 @@ var es_string_replace = __webpack_require__(5306);
     };
 
     var scopeTest = /:scope(?![\w-])/i;
-    var scopeReplacer = /:scope(?![\w-])/gi;
     var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
 
     global.Element.prototype.querySelector = function querySelector(selectors) {
@@ -5550,10 +5316,6 @@ var es_string_replace = __webpack_require__(5306);
     }
   }
 })(self);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__(7042);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
-var es_array_join = __webpack_require__(9600);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3210);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-has.js
@@ -5640,6 +5402,7 @@ var es_string_trim = __webpack_require__(3210);
     var quoted = false;
     var quotedMark = false;
     var inHas = false;
+    var bracketed = 0;
 
     for (var i = 0; i < query.length; i++) {
       var _char = query[i];
@@ -5647,6 +5410,15 @@ var es_string_trim = __webpack_require__(3210);
       if (escaped) {
         current += _char;
         escaped = false;
+        continue;
+      }
+
+      if (quoted) {
+        if (_char === quotedMark) {
+          quoted = false;
+        }
+
+        current += _char;
         continue;
       }
 
@@ -5658,11 +5430,6 @@ var es_string_trim = __webpack_require__(3210);
 
       switch (_char) {
         case ':':
-          if (quoted) {
-            current += _char;
-            continue;
-          }
-
           if (!inHas) {
             current = '';
           }
@@ -5701,15 +5468,23 @@ var es_string_trim = __webpack_require__(3210);
 
         case '"':
         case "'":
-          if (quoted && _char === quotedMark) {
-            current += _char;
-            quoted = false;
-            continue;
-          }
-
           current += _char;
           quoted = true;
           quotedMark = _char;
+          continue;
+
+        case '[':
+          current += _char;
+          bracketed++;
+          continue;
+
+        case "]":
+          current += _char;
+
+          if (bracketed > 0) {
+            bracketed--;
+          }
+
           continue;
 
         default:
@@ -5727,6 +5502,7 @@ var es_string_trim = __webpack_require__(3210);
     var escaped = false;
     var quoted = false;
     var quotedMark = false;
+    var bracketed = 0;
 
     for (var i = 0; i < query.length; i++) {
       var _char2 = query[i];
@@ -5737,7 +5513,16 @@ var es_string_trim = __webpack_require__(3210);
         continue;
       }
 
-      if (current.toLowerCase() === ':scope' && !/^[\w|\\]/.test(_char2 || '')) {
+      if (quoted) {
+        if (_char2 === quotedMark) {
+          quoted = false;
+        }
+
+        current += _char2;
+        continue;
+      }
+
+      if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(_char2 || '')) {
         parts.push(current.slice(0, current.length - 6));
         parts.push('[' + attr + ']');
         current = '';
@@ -5745,11 +5530,6 @@ var es_string_trim = __webpack_require__(3210);
 
       switch (_char2) {
         case ':':
-          if (quoted) {
-            current += _char2;
-            continue;
-          }
-
           parts.push(current);
           current = '';
           current += _char2;
@@ -5762,21 +5542,35 @@ var es_string_trim = __webpack_require__(3210);
 
         case '"':
         case "'":
-          if (quoted && _char2 === quotedMark) {
-            current += _char2;
-            quoted = false;
-            continue;
-          }
-
           current += _char2;
           quoted = true;
           quotedMark = _char2;
+          continue;
+
+        case '[':
+          current += _char2;
+          bracketed++;
+          continue;
+
+        case "]":
+          current += _char2;
+
+          if (bracketed > 0) {
+            bracketed--;
+          }
+
           continue;
 
         default:
           current += _char2;
           continue;
       }
+    }
+
+    if (current.toLowerCase() === ':scope') {
+      parts.push(current.slice(0, current.length - 6));
+      parts.push('[' + attr + ']');
+      current = '';
     }
 
     if (parts.length === 0) {

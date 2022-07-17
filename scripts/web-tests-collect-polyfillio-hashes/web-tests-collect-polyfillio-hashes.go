@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -97,6 +98,8 @@ func main() {
 	}
 }
 
+var polyfillioVersioningRegexp = regexp.MustCompile(`/\* Polyfill service v\d+\.\d+\.\d+`)
+
 func getPolyfillIOContent(p []string, browser browserua.UserAgent) ([]byte, error) {
 	polyfills := url.QueryEscape(strings.Join(p, ","))
 
@@ -122,6 +125,8 @@ func getPolyfillIOContent(p []string, browser browserua.UserAgent) ([]byte, erro
 	if err != nil {
 		return nil, err
 	}
+
+	b = polyfillioVersioningRegexp.ReplaceAll(b, []byte("/* "))
 
 	return b, nil
 }
