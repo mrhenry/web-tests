@@ -34,6 +34,11 @@ func failingCoreWeb() {
 		log.Fatal(err)
 	}
 
+	significantUAVersion, err := significantUAVersionMapper(context.Background(), db)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for _, feature := range features {
 		if strings.Contains(feature.Dir, "example/test") {
 			continue
@@ -81,14 +86,14 @@ func failingCoreWeb() {
 					continue
 				}
 
-				byBrowser, ok := results[resultKey(r)]
+				byBrowser, ok := results[significantUAVersion(r)]
 				if !ok {
 					byBrowser = map[string]result.Result{}
 				}
 
 				byBrowser[r.Test] = r
 
-				results[resultKey(r)] = byBrowser
+				results[significantUAVersion(r)] = byBrowser
 			}
 		}
 
