@@ -81,10 +81,20 @@ func significantUAVersionMapper(ctx context.Context, db *sql.DB) (func(x result.
 	return func(x result.Result) string {
 		if x.OS == "ios" {
 			osVersion := first_iOS_versions[fmt.Sprintf("%s/%s", x.Browser, x.BrowserVersion)]
+			if osVersion != nil {
+				return fmt.Sprintf(
+					"%s/%d.%d",
+					x.OS,
+					osVersion.Segments()[0],
+					osVersion.Segments()[1],
+				)
+			}
+
 			return fmt.Sprintf(
-				"%s/%d.%d",
-				x.OS, osVersion.Segments()[0],
-				osVersion.Segments()[1],
+				"%s/%s.%d",
+				x.OS,
+				x.OSVersion,
+				0,
 			)
 		}
 
