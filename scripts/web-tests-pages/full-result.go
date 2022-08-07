@@ -87,6 +87,11 @@ func fullResult() {
 					byBrowser = map[string]result.Result{}
 				}
 
+				_, ok = byBrowser[r.Test]
+				if ok {
+					panic(fmt.Sprintf("duplicate result for %s %s %s", r.Test, significantUAVersion(r), r.BrowserVersion))
+				}
+
 				byBrowser[r.Test] = r
 
 				results[significantUAVersion(r)] = byBrowser
