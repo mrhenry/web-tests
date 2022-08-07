@@ -5239,6 +5239,12 @@ var es_string_includes = __webpack_require__(2023);
 var es_object_set_prototype_of = __webpack_require__(8304);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
 var es_object_create = __webpack_require__(8011);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
+var es_symbol_to_string_tag = __webpack_require__(3680);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
+var es_json_to_string_tag = __webpack_require__(3706);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
+var es_math_to_string_tag = __webpack_require__(408);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
 var es_object_define_properties = __webpack_require__(3321);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
@@ -5249,12 +5255,6 @@ var es_object_assign = __webpack_require__(9601);
 var es_array_index_of = __webpack_require__(2772);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
-var es_symbol_to_string_tag = __webpack_require__(3680);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
-var es_json_to_string_tag = __webpack_require__(3706);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
-var es_math_to_string_tag = __webpack_require__(408);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
@@ -5472,6 +5472,12 @@ var Iterator = function () {
 
 
 
+
+
+
+
+
+
 var ArrayIterator = function () {
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
@@ -5511,6 +5517,12 @@ var ArrayIterator = function () {
       enumerable: false,
       writable: true
     }
+  });
+  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
+    value: 'Array Iterator',
+    writable: false,
+    enumerable: false,
+    configurable: true
   });
   return ArrayIterator;
 }();

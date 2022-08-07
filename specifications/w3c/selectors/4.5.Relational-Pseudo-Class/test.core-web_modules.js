@@ -3361,6 +3361,7 @@ var Iterator = function () {
 
 
 
+
 var ArrayIterator = function () {
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
@@ -3400,6 +3401,12 @@ var ArrayIterator = function () {
       enumerable: false,
       writable: true
     }
+  });
+  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
+    value: 'Array Iterator',
+    writable: false,
+    enumerable: false,
+    configurable: true
   });
   return ArrayIterator;
 }();

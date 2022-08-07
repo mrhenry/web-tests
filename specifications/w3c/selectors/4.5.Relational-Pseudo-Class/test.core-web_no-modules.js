@@ -84,7 +84,7 @@ module.exports = function (argument) {
 "use strict";
 
 var $forEach = (__webpack_require__(2092).forEach);
-var arrayMethodIsStrict = __webpack_require__(9341);
+var arrayMethodIsStrict = __webpack_require__(2133);
 
 var STRICT_METHOD = arrayMethodIsStrict('forEach');
 
@@ -297,7 +297,7 @@ module.exports = function (METHOD_NAME) {
 
 /***/ }),
 
-/***/ 9341:
+/***/ 2133:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -3451,7 +3451,7 @@ $({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
 var $ = __webpack_require__(2109);
 var uncurryThis = __webpack_require__(1702);
 var $IndexOf = (__webpack_require__(1318).indexOf);
-var arrayMethodIsStrict = __webpack_require__(9341);
+var arrayMethodIsStrict = __webpack_require__(2133);
 
 var un$IndexOf = uncurryThis([].indexOf);
 
@@ -3566,7 +3566,7 @@ var $ = __webpack_require__(2109);
 var uncurryThis = __webpack_require__(1702);
 var IndexedObject = __webpack_require__(8361);
 var toIndexedObject = __webpack_require__(5656);
-var arrayMethodIsStrict = __webpack_require__(9341);
+var arrayMethodIsStrict = __webpack_require__(2133);
 
 var un$Join = uncurryThis([].join);
 
@@ -3655,7 +3655,7 @@ var deletePropertyOrThrow = __webpack_require__(5117);
 var toString = __webpack_require__(1340);
 var fails = __webpack_require__(7293);
 var internalSort = __webpack_require__(4362);
-var arrayMethodIsStrict = __webpack_require__(9341);
+var arrayMethodIsStrict = __webpack_require__(2133);
 var FF = __webpack_require__(8886);
 var IE_OR_EDGE = __webpack_require__(256);
 var V8 = __webpack_require__(7392);
@@ -4704,7 +4704,7 @@ $({ target: 'Symbol', stat: true, forced: !NATIVE_SYMBOL_REGISTRY }, {
 
 /***/ }),
 
-/***/ 3680:
+/***/ 9341:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 var getBuiltIn = __webpack_require__(5005);
@@ -4787,6 +4787,12 @@ var es_object_define_property = __webpack_require__(9070);
 var es_object_set_prototype_of = __webpack_require__(8304);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
 var es_object_create = __webpack_require__(8011);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
+var es_symbol_to_string_tag = __webpack_require__(9341);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
+var es_json_to_string_tag = __webpack_require__(3706);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
+var es_math_to_string_tag = __webpack_require__(408);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(1703);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
@@ -4803,12 +4809,6 @@ var es_array_for_each = __webpack_require__(9554);
 var es_array_index_of = __webpack_require__(2772);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
-var es_symbol_to_string_tag = __webpack_require__(3680);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
-var es_json_to_string_tag = __webpack_require__(3706);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
-var es_math_to_string_tag = __webpack_require__(408);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
@@ -5026,6 +5026,12 @@ var Iterator = function () {
 
 
 
+
+
+
+
+
+
 var ArrayIterator = function () {
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
@@ -5065,6 +5071,12 @@ var ArrayIterator = function () {
       enumerable: false,
       writable: true
     }
+  });
+  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
+    value: 'Array Iterator',
+    writable: false,
+    enumerable: false,
+    configurable: true
   });
   return ArrayIterator;
 }();
