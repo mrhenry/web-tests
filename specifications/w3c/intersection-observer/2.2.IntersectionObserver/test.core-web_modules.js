@@ -3434,6 +3434,8 @@ var es_parse_float = __webpack_require__(4678);
           var html = document.documentElement;
           var body = document.body;
           rootRect = {
+            x: 0,
+            y: 0,
             top: 0,
             left: 0,
             right: html.clientWidth || body.clientWidth,
@@ -3459,6 +3461,8 @@ var es_parse_float = __webpack_require__(4678);
         };
         newRect.width = newRect.right - newRect.left;
         newRect.height = newRect.bottom - newRect.top;
+        newRect.x = newRect.left;
+        newRect.y = newRect.top;
         return newRect;
       };
 
@@ -3535,6 +3539,8 @@ var es_parse_float = __webpack_require__(4678);
         var width = right - left;
         var height = bottom - top;
         return width >= 0 && height >= 0 && {
+          x: left,
+          y: top,
           top: top,
           bottom: bottom,
           left: left,
@@ -3553,8 +3559,10 @@ var es_parse_float = __webpack_require__(4678);
 
         if (!rect) return getEmptyRect();
 
-        if (!(rect.width && rect.height)) {
+        if (!(rect.width && rect.height && rect.x && rect.y)) {
           rect = {
+            x: rect.left,
+            y: rect.top,
             top: rect.top,
             right: rect.right,
             bottom: rect.bottom,
@@ -3569,6 +3577,8 @@ var es_parse_float = __webpack_require__(4678);
 
       function getEmptyRect() {
         return {
+          x: 0,
+          y: 0,
           top: 0,
           bottom: 0,
           left: 0,
