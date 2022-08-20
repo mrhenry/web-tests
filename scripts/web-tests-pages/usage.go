@@ -63,15 +63,24 @@ func getUsageData(parentCtx context.Context) (*UsageData, error) {
 			}
 
 			major := fmt.Sprint(parsedVersion.Segments()[0])
+			minor := fmt.Sprint(parsedVersion.Segments()[1])
 
-			majorUsage, ok := usageGlobalByMajorVersion[major]
+			significantVersion := major
+			if k == "ios_saf" {
+				significantVersion = fmt.Sprintf("%s.%s", major, minor)
+			}
+			if strings.ToLower(k) == "safari" {
+				significantVersion = fmt.Sprintf("%s.%s", major, minor)
+			}
+
+			majorUsage, ok := usageGlobalByMajorVersion[significantVersion]
 			if ok {
 				majorUsage = majorUsage + usage
 			} else {
 				majorUsage = usage
 			}
 
-			usageGlobalByMajorVersion[major] = majorUsage
+			usageGlobalByMajorVersion[significantVersion] = majorUsage
 		}
 
 		v.UsageGlobal = usageGlobalByMajorVersion
@@ -122,22 +131,23 @@ func weightScoreByUsageDataForBrowserWithVersion(usageData *UsageData, browserWi
 		return score
 	}
 
+	major := fmt.Sprint(a.Segments()[0])
+	minor := fmt.Sprint(a.Segments()[1])
+
+	significantVersion := major
+	if parts[0] == "ios" || parts[0] == "safari" {
+		significantVersion = fmt.Sprintf("%s.%s", major, minor)
+	}
+
 	agent, ok := usageData.Agents[parts[0]]
 	if !ok {
 		return score
 	}
 
-	for version, usage := range agent.UsageGlobal {
-		b, err := reallyTolerantSemver(version)
-		if err != nil {
-			continue
-		}
-
-		if a.Segments()[0] == b.Segments()[0] {
-			other := 1 - (usage / 100)
-			this := score * (usage / 100)
-			return other + this
-		}
+	if usage, ok := agent.UsageGlobal[significantVersion]; ok {
+		other := 1 - (usage / 100)
+		this := score * (usage / 100)
+		return other + this
 	}
 
 	return score

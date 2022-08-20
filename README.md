@@ -26,6 +26,8 @@ Scores are represented as [nines](https://en.wikipedia.org/wiki/High_availabilit
 Each failing/passing test is weighted by the global usage of the browser from the test result.
 This gives an approximate "reliability" of a feature in the real world.
 
+Only desktop browsers are included because there are no reliable statistics for mobile browsers.
+
 ## Tested
 
 - native *
@@ -34,6 +36,7 @@ This gives an approximate "reliability" of a feature in the real world.
 - babel + polyfill.io
 - babel + webpack and core-js
 - babel + webpack, core-js and core-web
+- postcss-preset-env
 
 _suggestions for other tools are welcome_
 

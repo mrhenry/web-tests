@@ -215,7 +215,7 @@ func failingCoreWeb() {
 					for _, test := range testsSlice {
 						result, ok := results.results[test]
 						if !ok {
-							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 1)
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, significantUAVersion(result), 1)
 							scores.addScore(test, weightedScore)
 						} else {
 							if result.Score < 1 {
@@ -224,7 +224,7 @@ func failingCoreWeb() {
 								tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>"
 							}
 
-							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, significantUAVersion(result), result.Score)
 							scores.addScore(test, weightedScore)
 						}
 					}

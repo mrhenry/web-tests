@@ -217,12 +217,20 @@ func fullResult() {
 						if !ok {
 							tableBody = tableBody + "<td>?</td>"
 
-							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, 1)
+							if result.OS == "ios" {
+								continue
+							}
+
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, significantUAVersion(result), 1)
 							scores.addScore(test, weightedScore)
 						} else {
 							tableBody = tableBody + "<td>" + fmt.Sprintf("%0.1f", result.Score) + "</td>"
 
-							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, results.browserWithVersion, result.Score)
+							if result.OS == "ios" {
+								continue
+							}
+
+							weightedScore := weightScoreByUsageDataForBrowserWithVersion(usageData, significantUAVersion(result), result.Score)
 							scores.addScore(test, weightedScore)
 						}
 					}
