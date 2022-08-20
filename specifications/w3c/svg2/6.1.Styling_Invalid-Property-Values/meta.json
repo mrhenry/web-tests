@@ -1,0 +1,29 @@
+{
+  "id": "e3290bdc-ee3e-49de-af8e-2c158df14a73",
+  "spec": {
+    "org": "w3c",
+    "id": "svg2",
+    "section": "6.1",
+    "name": "Styling - invalid property values",
+    "url": "https://www.w3.org/TR/SVG2/styling.html"
+  },
+  "notes": [
+    {
+      "message": "I could not find a more accurate specification section."
+    }
+  ],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  },
+  "polyfill.io": []
+}

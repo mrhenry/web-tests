@@ -1,0 +1,13 @@
+:root {
+	--color: red;
+}
+
+#graphic-1 {
+	fill: red;
+	fill: var(--color);
+}
+
+#graphic-2 {
+	fill: red;
+	fill: not-a-color;
+}
