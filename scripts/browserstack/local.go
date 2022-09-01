@@ -34,11 +34,11 @@ func getLocalBinary(parentCtx context.Context, accessKey string, localIdentifier
 		parentCtx,
 		localBinPath,
 		accessKey,
-		"--force-local",
 		"-force",
 		"-onlyAutomate",
 		"--enable-logging-for-api",
 		"--local-identifier",
+		"--force-local",
 		localIdentifier,
 	)
 
