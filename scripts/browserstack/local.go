@@ -38,6 +38,7 @@ func getLocalBinary(parentCtx context.Context, accessKey string, localIdentifier
 		"-onlyAutomate",
 		"--enable-logging-for-api",
 		"--local-identifier",
+		"--force-local",
 		localIdentifier,
 	)
 
