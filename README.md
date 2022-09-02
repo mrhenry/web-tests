@@ -110,3 +110,21 @@ All tests are also written in ES3. Only the actual feature tested can be modern.
 ## What it's not
 
 This is not a replacement for caniuse. Results from this tool can flow back into caniuse but the principal goal of this project is to test features.
+
+------------
+
+## Run tests locally
+
+[`Go`](https://go.dev) is required to build the test runner
+
+Start with a shallow clone : `git clone --depth=1 https://github.com/mrhenry/web-tests.git`
+
+1. compile the scripts
+2. generate the html files used for each test
+3. run the tests
+
+```sh
+make scripts
+make html-tests-from-existing-sources
+BROWSERSTACK_USERNAME=<your user name> BROWSERSTACK_ACCESS_KEY=<your access key> web-tests-browserstack
+```
