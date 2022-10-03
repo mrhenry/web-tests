@@ -1,12 +1,9 @@
 :link, :visited, area[href] {
 	color: #f00;
-}
-:-webkit-any-link {
+}:-webkit-any-link {
 	color: #f00;
-}
-:-moz-any-link {
+}:-moz-any-link {
 	color: #f00;
-}
-:any-link {
+}:any-link {
 	color: #f00;
 }
