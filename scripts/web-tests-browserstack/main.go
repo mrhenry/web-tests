@@ -261,6 +261,15 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		}
 	}
 
+	if browser.Browser == "safari" {
+		if browser.BrowserVersion == "11.0" || browser.BrowserVersion == "11.1" {
+			w3cCompatible = false
+		}
+		if browser.BrowserVersion == "10.0" || browser.BrowserVersion == "10.1" {
+			w3cCompatible = false
+		}
+	}
+
 	if browser.Device != "" {
 		caps["deviceName"] = browser.Device
 		// caps["browserstack.appium_version"] = "1.8.0"
@@ -276,6 +285,34 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	}
 	if browser.BrowserVersion != "" {
 		caps["browserVersion"] = browser.BrowserVersion
+	}
+
+	if browser.Browser == "opera" && browser.BrowserVersion == "12.16" {
+		w3cCompatible = false
+		caps["browserstack.local"] = "true" // suspected to have no effect
+	}
+
+	if browser.Browser == "opera" && browser.BrowserVersion == "12.15" {
+		w3cCompatible = false
+		caps["browserstack.local"] = "true" // suspected to have no effect
+	}
+
+	if browser.Browser == "firefox" && (browser.BrowserVersion == "4.0" ||
+		browser.BrowserVersion == "38.0" ||
+		browser.BrowserVersion == "39.0" ||
+		browser.BrowserVersion == "40.0" ||
+		browser.BrowserVersion == "41.0" ||
+		browser.BrowserVersion == "42.0" ||
+		browser.BrowserVersion == "43.0" ||
+		browser.BrowserVersion == "44.0" ||
+		browser.BrowserVersion == "45.0") {
+		w3cCompatible = false
+		caps["browserstack.firefox.driver"] = "0.15.0" // suspected to have no effect
+		caps["browserstack.local"] = "true"            // suspected to have no effect
+	}
+
+	if browser.Browser == "ie" {
+		w3cCompatible = false
 	}
 
 	in := make(chan browserstack.Test, len(tests))
