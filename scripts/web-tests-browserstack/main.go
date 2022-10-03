@@ -298,6 +298,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	}
 
 	if browser.Browser == "firefox" && (browser.BrowserVersion == "4.0" ||
+		browser.BrowserVersion == "5.0" ||
 		browser.BrowserVersion == "38.0" ||
 		browser.BrowserVersion == "39.0" ||
 		browser.BrowserVersion == "40.0" ||
@@ -312,6 +313,10 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	}
 
 	if browser.Browser == "ie" {
+		w3cCompatible = false
+	}
+
+	if browser.Browser == "edge" {
 		w3cCompatible = false
 	}
 
