@@ -316,7 +316,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		w3cCompatible = false
 	}
 
-	if browser.Browser == "edge" {
+	if browser.Browser == "edge" && browser.BrowserVersion == "15.0" {
 		w3cCompatible = false
 	}
 
