@@ -3132,7 +3132,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
-
 (function (undefined) {
   if (!("DocumentFragment" in self && function () {
     try {
@@ -3145,14 +3144,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       global.DocumentFragment = function DocumentFragment() {
         return document.createDocumentFragment();
       };
-
       var fragment = document.createDocumentFragment();
       global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.7.DocumentFragment/test.pure.js
-
 
 (function (cb) {
   var fixture = document.getElementById('the-fixture');

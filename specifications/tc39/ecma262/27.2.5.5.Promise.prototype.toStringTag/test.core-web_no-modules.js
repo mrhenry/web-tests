@@ -3988,7 +3988,6 @@ var __webpack_exports__ = {};
 
 
 
-
 (function (cb) {
   cb(Promise.prototype[Symbol.toStringTag] === 'Promise');
 })(callback);

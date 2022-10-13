@@ -2157,15 +2157,12 @@ var __webpack_exports__ = {};
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
 (function (cb) {
   var nodeList = document.getElementsByTagName('div');
   var results = [];
-
   for (var node of nodeList) {
     results.push(node);
   }
-
   cb(results.length > 0);
 })(callback);
 })();

@@ -7,7 +7,6 @@
     cb(false);
     return;
   }
-
   var inputB = document.createElement('input');
   inputB.setAttribute('type', 'date');
   inputB.value = "2006-01-02";

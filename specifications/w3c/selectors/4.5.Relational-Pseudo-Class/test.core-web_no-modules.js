@@ -4992,17 +4992,14 @@ var Iterator = function () {
     this.length = 0;
     return this;
   };
-
   var callable = function callable(fn) {
     if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
     return fn;
   };
-
   var Iterator = function Iterator(list, context) {
     if (!(this instanceof Iterator)) {
       return new Iterator(list, context);
     }
-
     Object.defineProperties(this, {
       __list__: {
         writable: true,
@@ -5023,7 +5020,6 @@ var Iterator = function () {
     context.on('_delete', this._onDelete.bind(this));
     context.on('_clear', this._onClear.bind(this));
   };
-
   Object.defineProperties(Iterator.prototype, Object.assign({
     constructor: {
       value: Iterator,
@@ -5035,14 +5031,11 @@ var Iterator = function () {
       value: function value() {
         var i;
         if (!this.__list__) return;
-
         if (this.__redo__) {
           i = this.__redo__.shift();
           if (i !== undefined) return i;
         }
-
         if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
-
         this._unBind();
       },
       configurable: true,
@@ -5085,13 +5078,9 @@ var Iterator = function () {
         this.__list__ = null;
         delete this.__redo__;
         if (!this.__context__) return;
-
         this.__context__.off('_add', this._onAdd.bind(this));
-
         this.__context__.off('_delete', this._onDelete.bind(this));
-
         this.__context__.off('_clear', this._onClear.bind(this));
-
         this.__context__ = null;
       },
       configurable: true,
@@ -5111,7 +5100,6 @@ var Iterator = function () {
       value: function value(index) {
         if (index >= this.__nextIndex__) return;
         ++this.__nextIndex__;
-
         if (!this.__redo__) {
           Object.defineProperty(this, '__redo__', {
             value: [index],
@@ -5121,11 +5109,9 @@ var Iterator = function () {
           });
           return;
         }
-
         this.__redo__.forEach(function (redo, i) {
           if (redo >= index) this.__redo__[i] = ++redo;
         }, this);
-
         this.__redo__.push(index);
       },
       configurable: true,
@@ -5140,7 +5126,6 @@ var Iterator = function () {
         if (!this.__redo__) return;
         i = this.__redo__.indexOf(index);
         if (i !== -1) this.__redo__.splice(i, 1);
-
         this.__redo__.forEach(function (redo, i) {
           if (redo > index) this.__redo__[i] = --redo;
         }, this);
@@ -5175,7 +5160,6 @@ var Iterator = function () {
   });
   return Iterator;
 }();
-
 /* harmony default export */ var _Iterator = (Iterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
@@ -5191,6 +5175,7 @@ var Iterator = function () {
 
 
 var ArrayIterator = function () {
+
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
@@ -5202,7 +5187,6 @@ var ArrayIterator = function () {
       writable: false
     });
   };
-
   if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
   ArrayIterator.prototype = Object.create(_Iterator.prototype, {
     constructor: {
@@ -5238,11 +5222,9 @@ var ArrayIterator = function () {
   });
   return ArrayIterator;
 }();
-
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
 
 
 
@@ -5270,7 +5252,6 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; ret
 
 
 
-
 (function (undefined) {
   if (!("forEach" in NodeList.prototype)) {
     NodeList.prototype.forEach = Array.prototype.forEach;
@@ -5283,20 +5264,16 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; ret
 
 
 
-
 function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_matches_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_matches_typeof(obj); }
-
 (function (undefined) {
   if (!("document" in self && "matches" in document.documentElement)) {
     Element.prototype.matches = Element.prototype.webkitMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || function matches(selector) {
       var element = this;
       var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
       var index = 0;
-
       while (elements[index] && elements[index] !== element) {
         ++index;
       }
-
       return !!elements[index];
     };
   }
@@ -5308,18 +5285,14 @@ function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; retu
 
 
 
-
 function Element_prototype_closest_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_closest_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_closest_typeof(obj); }
-
 (function (undefined) {
   if (!("document" in self && "closest" in document.documentElement)) {
     Element.prototype.closest = function closest(selector) {
       var node = this;
-
       while (node) {
         if (node.matches(selector)) return node;else node = 'SVGElement' in window && node instanceof SVGElement ? node.parentNode : node.parentElement;
       }
-
       return null;
     };
   }
@@ -5338,7 +5311,6 @@ var es_array_join = __webpack_require__(9600);
 
 
 
-
 /**
  * @license
  * Author : https://github.com/jonathantneal
@@ -5352,6 +5324,7 @@ var es_array_join = __webpack_require__(9600);
  * When using or citing the work, you should not imply endorsement by the author or the affirmer.
  * This is a [human-readable summary of the Legal Code](//creativecommons.org/publicdomain/zero/1.0/) ([read the full text](//creativecommons.org/publicdomain/zero/1.0/)).
  */
+
 (function (global) {
   try {
     document.querySelector(':scope *');
@@ -5363,116 +5336,100 @@ var es_array_join = __webpack_require__(9600);
       var quoted = false;
       var quotedMark = false;
       var bracketed = 0;
-
       for (var i = 0; i < query.length; i++) {
         var _char = query[i];
-
         if (escaped) {
           current += _char;
           escaped = false;
           continue;
         }
-
         if (quoted) {
           if (_char === quotedMark) {
             quoted = false;
           }
-
           current += _char;
           continue;
         }
-
         if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(_char || '')) {
           parts.push(current.slice(0, current.length - 6));
           parts.push('[' + attr + ']');
           current = '';
         }
-
         switch (_char) {
           case ':':
             parts.push(current);
             current = '';
             current += _char;
             continue;
-
           case '\\':
             current += _char;
             escaped = true;
             continue;
-
           case '"':
           case "'":
             current += _char;
             quoted = true;
             quotedMark = _char;
             continue;
-
           case '[':
             current += _char;
             bracketed++;
             continue;
-
           case "]":
             current += _char;
-
             if (bracketed > 0) {
               bracketed--;
             }
-
             continue;
-
           default:
             current += _char;
             continue;
         }
       }
-
       if (current.toLowerCase() === ':scope') {
         parts.push(current.slice(0, current.length - 6));
         parts.push('[' + attr + ']');
         current = '';
       }
-
       if (parts.length === 0) {
         return query;
       }
-
       return parts.join('') + current;
     };
-
     var polyfill = function polyfill(qsa) {
       return function (selectors) {
         var hasScope = selectors && scopeTest.test(selectors);
-
         if (hasScope) {
           var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
+
           arguments[0] = replaceScopeWithAttr(selectors, attr);
+
           this.setAttribute(attr, '');
+
           var elementOrNodeList = qsa.apply(this, arguments);
+
           this.removeAttribute(attr);
+
           return elementOrNodeList;
         } else {
           return qsa.apply(this, arguments);
         }
       };
     };
-
     var scopeTest = /:scope(?![\w-])/i;
-    var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
 
+    var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
     global.Element.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithScope.apply(this, arguments);
     };
 
     var querySelectorAllWithScope = polyfill(global.Element.prototype.querySelectorAll);
-
     global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithScope.apply(this, arguments);
     };
 
     if (global.Element.prototype.matches) {
       var matchesWithScope = polyfill(global.Element.prototype.matches);
-
       global.Element.prototype.matches = function matches(selectors) {
         return matchesWithScope.apply(this, arguments);
       };
@@ -5480,7 +5437,6 @@ var es_array_join = __webpack_require__(9600);
 
     if (global.Element.prototype.closest) {
       var closestWithScope = polyfill(global.Element.prototype.closest);
-
       global.Element.prototype.closest = function closest(selectors) {
         return closestWithScope.apply(this, arguments);
       };
@@ -5497,32 +5453,28 @@ var es_string_trim = __webpack_require__(3210);
 
 
 
-
 (function (global) {
   try {
     global.document.querySelector(':has(*, :does-not-exist, > *)');
-    global.document.querySelector(':has(:has(any))');
 
-    if (!global.document.querySelector(':has(:scope *)')) {
+    global.document.querySelector(':has(:has(any), div)');
+    if (!global.document.querySelector(':has(:scope *)') && CSS.supports('selector(:has(div))')) {
       return;
     }
   } catch (_) {}
 
   var querySelectorWithHasElement = polyfill(global.Element.prototype.querySelector);
-
   global.Element.prototype.querySelector = function querySelector(selectors) {
     return querySelectorWithHasElement.apply(this, arguments);
   };
 
   var querySelectorAllWithHasElement = polyfill(global.Element.prototype.querySelectorAll);
-
   global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
     return querySelectorAllWithHasElement.apply(this, arguments);
   };
 
   if (global.Element.prototype.matches) {
     var matchesWithHasElement = polyfill(global.Element.prototype.matches);
-
     global.Element.prototype.matches = function matches(selectors) {
       return matchesWithHasElement.apply(this, arguments);
     };
@@ -5530,7 +5482,6 @@ var es_string_trim = __webpack_require__(3210);
 
   if (global.Element.prototype.closest) {
     var closestWithHasElement = polyfill(global.Element.prototype.closest);
-
     global.Element.prototype.closest = function closest(selectors) {
       return closestWithHasElement.apply(this, arguments);
     };
@@ -5538,20 +5489,17 @@ var es_string_trim = __webpack_require__(3210);
 
   if ('Document' in global && 'prototype' in global.Document) {
     var querySelectorWithHasDocument = polyfill(global.Document.prototype.querySelector);
-
     global.Document.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithHasDocument.apply(this, arguments);
     };
 
     var querySelectorAllWithHasDocument = polyfill(global.Document.prototype.querySelectorAll);
-
     global.Document.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithHasDocument.apply(this, arguments);
     };
 
     if (global.Document.prototype.matches) {
       var matchesWithHasDocument = polyfill(global.Document.prototype.matches);
-
       global.Document.prototype.matches = function matches(selectors) {
         return matchesWithHasDocument.apply(this, arguments);
       };
@@ -5559,13 +5507,11 @@ var es_string_trim = __webpack_require__(3210);
 
     if (global.Document.prototype.closest) {
       var closestWithHasDocument = polyfill(global.Document.prototype.closest);
-
       global.Document.prototype.closest = function closest(selectors) {
         return closestWithHasDocument.apply(this, arguments);
       };
     }
   }
-
   function pseudoClassHasInnerQuery(query) {
     var current = '';
     var start = 0;
@@ -5575,48 +5521,38 @@ var es_string_trim = __webpack_require__(3210);
     var quotedMark = false;
     var inHas = false;
     var bracketed = 0;
-
     for (var i = 0; i < query.length; i++) {
       var _char = query[i];
-
       if (escaped) {
         current += _char;
         escaped = false;
         continue;
       }
-
       if (quoted) {
         if (_char === quotedMark) {
           quoted = false;
         }
-
         current += _char;
         continue;
       }
-
       if (current.toLowerCase() === ':has(' && !inHas) {
         inHas = true;
         start = i;
         current = '';
       }
-
       switch (_char) {
         case ':':
           if (!inHas) {
             current = '';
           }
-
           current += _char;
           continue;
-
         case '(':
           if (inHas) {
             depth++;
           }
-
           current += _char;
           continue;
-
         case ')':
           if (inHas) {
             if (depth === 0) {
@@ -5626,48 +5562,37 @@ var es_string_trim = __webpack_require__(3210);
                 end: i - 1
               };
             }
-
             depth--;
           }
-
           current += _char;
           continue;
-
         case '\\':
           current += _char;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           current += _char;
           quoted = true;
           quotedMark = _char;
           continue;
-
         case '[':
           current += _char;
           bracketed++;
           continue;
-
         case "]":
           current += _char;
-
           if (bracketed > 0) {
             bracketed--;
           }
-
           continue;
-
         default:
           current += _char;
           continue;
       }
     }
-
     return false;
   }
-
   function replaceScopeWithAttr(query, attr) {
     var parts = [];
     var current = '';
@@ -5675,95 +5600,75 @@ var es_string_trim = __webpack_require__(3210);
     var quoted = false;
     var quotedMark = false;
     var bracketed = 0;
-
     for (var i = 0; i < query.length; i++) {
       var _char2 = query[i];
-
       if (escaped) {
         current += _char2;
         escaped = false;
         continue;
       }
-
       if (quoted) {
         if (_char2 === quotedMark) {
           quoted = false;
         }
-
         current += _char2;
         continue;
       }
-
       if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(_char2 || '')) {
         parts.push(current.slice(0, current.length - 6));
         parts.push('[' + attr + ']');
         current = '';
       }
-
       switch (_char2) {
         case ':':
           parts.push(current);
           current = '';
           current += _char2;
           continue;
-
         case '\\':
           current += _char2;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           current += _char2;
           quoted = true;
           quotedMark = _char2;
           continue;
-
         case '[':
           current += _char2;
           bracketed++;
           continue;
-
         case "]":
           current += _char2;
-
           if (bracketed > 0) {
             bracketed--;
           }
-
           continue;
-
         default:
           current += _char2;
           continue;
       }
     }
-
     if (current.toLowerCase() === ':scope') {
       parts.push(current.slice(0, current.length - 6));
       parts.push('[' + attr + ']');
       current = '';
     }
-
     if (parts.length === 0) {
       return query;
     }
-
     return parts.join('') + current;
   }
-
   function charIsNestedMarkMirror(_char3, mark) {
     if (mark === '(' && _char3 === ')') {
       return true;
     }
-
     if (mark === '[' && _char3 === ']') {
       return true;
     }
-
     return false;
   }
-
   function splitSelector(query) {
     var selectors = [];
     var current = '';
@@ -5772,37 +5677,30 @@ var es_string_trim = __webpack_require__(3210);
     var quotedMark = false;
     var nestedMark = false;
     var nestedDepth = 0;
-
     for (var i = 0; i < query.length; i++) {
       var _char4 = query[i];
-
       if (escaped) {
         current += _char4;
         escaped = false;
         continue;
       }
-
       switch (_char4) {
         case ',':
           if (quoted) {
             current += _char4;
             continue;
           }
-
           if (nestedDepth > 0) {
             current += _char4;
             continue;
           }
-
           selectors.push(current);
           current = '';
           continue;
-
         case '\\':
           current += _char4;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           if (quoted && _char4 === quotedMark) {
@@ -5810,12 +5708,10 @@ var es_string_trim = __webpack_require__(3210);
             quoted = false;
             continue;
           }
-
           current += _char4;
           quoted = true;
           quotedMark = _char4;
           continue;
-
         case '(':
         case ')':
         case '[':
@@ -5824,224 +5720,175 @@ var es_string_trim = __webpack_require__(3210);
             current += _char4;
             continue;
           }
-
           if (charIsNestedMarkMirror(_char4, nestedMark)) {
             current += _char4;
             nestedDepth--;
-
             if (nestedDepth === 0) {
               nestedMark = false;
             }
-
             continue;
           }
-
           if (_char4 === nestedMark) {
             current += _char4;
             nestedDepth++;
             continue;
           }
-
           current += _char4;
           nestedDepth++;
           nestedMark = _char4;
           continue;
-
         default:
           current += _char4;
           continue;
       }
     }
-
     selectors.push(current);
     return selectors;
   }
-
   function replaceAllWithTempAttr(query, nested, callback) {
     var inner = pseudoClassHasInnerQuery(query);
-
     if (!inner) {
       return query;
     }
-
     if (nested) {
       return false;
     }
-
     var innerQuery = inner.innerQuery;
     var attr = 'q-has' + (Math.floor(Math.random() * 9000000) + 1000000);
     var innerReplacement = '[' + attr + ']';
     var x = query;
-
     if (inner.innerQuery.toLowerCase().indexOf(':has(') > -1) {
       var innerParts = splitSelector(inner.innerQuery);
       var newInnerParts = [];
-
       for (var i = 0; i < innerParts.length; i++) {
         var innerPart = innerParts[i];
-        var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
 
+        var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
         if (!innerPartReplaced) {
           newInnerParts.push(':not(*)');
         } else {
           newInnerParts.push(innerPart);
         }
       }
-
       var _prefix = x.substring(0, inner.start - 5);
-
       var _suffix = x.substring(inner.end + 2);
 
       return _prefix + newInnerParts.join(', ') + _suffix;
     }
-
     var _prefix = x.substring(0, inner.start - 5);
-
     var _suffix = x.substring(inner.end + 2);
 
     x = _prefix + innerReplacement + _suffix;
     callback(innerQuery, attr);
-
     if (x.toLowerCase().indexOf(':has(') > -1) {
       var y = replaceAllWithTempAttr(x, false, callback);
-
       if (y) {
         return y;
       }
     }
-
     return x;
   }
-
   function walkNode(rootNode, callback) {
     if ('setAttribute' in rootNode && 'querySelector' in rootNode) {
       callback(rootNode);
     }
-
     if (rootNode.hasChildNodes()) {
       var nodes = rootNode.childNodes;
-
       for (var i = 0; i < nodes.length; ++i) {
         walkNode(nodes[i], callback);
       }
     }
   }
-
   function polyfill(qsa) {
     return function (selectors) {
       if (selectors.toLowerCase().indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectors)) {
         return qsa.apply(this, arguments);
       }
-
       var rootNode;
-
       if ('getRootNode' in this) {
         rootNode = this.getRootNode();
       } else {
         var r = this;
-
         while (r) {
           rootNode = r;
           r = r.parentNode;
         }
       }
-
       var _focus = this;
-
       if (_focus === global.document) {
         _focus = global.document.documentElement;
       }
-
       var scopeAttr = 'q-has-scope' + (Math.floor(Math.random() * 9000000) + 1000000);
-
       _focus.setAttribute(scopeAttr, '');
-
       try {
         selectors = replaceScopeWithAttr(selectors, scopeAttr);
         var attrs = [scopeAttr];
         var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
           attrs.push(attr);
           var selectorParts = splitSelector(inner);
-
           for (var x = 0; x < selectorParts.length; x++) {
             var selectorPart = selectorParts[x].trim();
             var absoluteSelectorPart = selectorPart;
-
             if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
               absoluteSelectorPart = selectorPart.slice(1).trim();
             } else {
               absoluteSelectorPart = ':scope ' + selectorPart;
             }
-
             try {
               walkNode(rootNode, function (node) {
                 if (!node.querySelector(absoluteSelectorPart)) {
                   return;
                 }
-
                 switch (selectorPart[0]) {
                   case '~':
                   case '+':
                     {
                       var siblings = node.childNodes;
-
                       for (var i = 0; i < siblings.length; i++) {
                         var sibling = siblings[i];
-
                         if (!('setAttribute' in sibling)) {
                           continue;
                         }
-
                         var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
                         sibling.setAttribute(idAttr, '');
-
                         if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
                           sibling.setAttribute(attr, '');
                         }
-
                         sibling.removeAttribute(idAttr);
                       }
                     }
                     break;
-
                   case '>':
                     {
                       var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
                       node.setAttribute(idAttr, '');
-
                       if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
                         node.setAttribute(attr, '');
                       }
-
                       node.removeAttribute(idAttr);
                     }
                     break;
-
                   default:
                     node.setAttribute(attr, '');
                     break;
                 }
               });
-            } catch (_) {}
+            } catch (_) {
+            }
           }
         });
         arguments[0] = newQuery;
+
         var elementOrNodeList = qsa.apply(this, arguments);
-
         _focus.removeAttribute(scopeAttr);
-
         if (attrs.length > 0) {
           var attrsForQuery = [];
-
           for (var j = 0; j < attrs.length; j++) {
             attrsForQuery.push('[' + attrs[j] + ']');
           }
-
           var elements = global.document.querySelectorAll(attrsForQuery.join(','));
-
           for (var k = 0; k < elements.length; k++) {
             var element = elements[k];
-
             for (var l = 0; l < attrs.length; l++) {
               element.removeAttribute(attrs[l]);
             }
@@ -6051,25 +5898,19 @@ var es_string_trim = __webpack_require__(3210);
         return elementOrNodeList;
       } catch (err) {
         _focus.removeAttribute(scopeAttr);
-
         if (attrs.length > 0) {
           var attrsForQuery = [];
-
           for (var j = 0; j < attrs.length; j++) {
             attrsForQuery.push('[' + attrs[j] + ']');
           }
-
           var elements = global.document.querySelectorAll(attrsForQuery.join(','));
-
           for (var k = 0; k < elements.length; k++) {
             var element = elements[k];
-
             for (var l = 0; l < attrs.length; l++) {
               element.removeAttribute(attrs[l]);
             }
           }
         }
-
         throw err;
       }
     };
@@ -6098,26 +5939,23 @@ var es_array_from = __webpack_require__(1038);
 
 
 
-
 (function (cb) {
   var assert = {
     test: function test(message, callback) {
       callback();
     },
-    step: function step(message) {},
+    step: function step(message) {
+    },
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
           throw new Error('Arrays are not equal');
         }
-
         for (var i = 0; i < a.length; i++) {
           assert.equal(a[i], b[i]);
         }
-
         return;
       }
-
       if (a !== b) {
         throw new Error('Expected A to equal to B');
       }
@@ -6130,14 +5968,11 @@ var es_array_from = __webpack_require__(1038);
       throw new Error('Expected something truthy for A');
     }
   };
-
   function formatElements(elements) {
     var ids = [];
-
     for (var i = 0; i < elements.length; i++) {
       ids.push(elements[i].id);
     }
-
     return ids.sort().join(',');
   }
 
@@ -6174,14 +6009,11 @@ var es_array_from = __webpack_require__(1038);
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
-
   var supportsIsQueries = false;
-
   try {
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
-
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -6208,7 +6040,6 @@ var es_array_from = __webpack_require__(1038);
     testSelectorAllFromMain(assert, ".parent:has(.target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(.sibling ~ .target)", [a, b]);
     testSelectorAllFromMain(assert, ".parent:has(.sibling ~ .target)", [b]);
-
     if (supportsIsQueries) {
       testSelectorAllFromMain(assert, ":has(:is(.target ~ .sibling .descendant))", [a, h, j]);
       testSelectorAllFromMain(assert, ".parent:has(:is(.target ~ .sibling .descendant))", [h]);
@@ -6216,7 +6047,6 @@ var es_array_from = __webpack_require__(1038);
       assert.step(":has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
-
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
@@ -6236,12 +6066,13 @@ var es_array_from = __webpack_require__(1038);
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
+
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
+
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
-
     if (supportsIsQueries) {
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
@@ -6310,6 +6141,7 @@ var es_array_from = __webpack_require__(1038);
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
+
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -6407,6 +6239,7 @@ var es_array_from = __webpack_require__(1038);
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
     var extraD02 = document.getElementById("extra-d02");
+
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);

@@ -16,11 +16,9 @@
       function number(v) {
         return v === undefined ? 0 : Number(v);
       }
-
       function different(u, v) {
         return u !== v && !(isNaN(u) && isNaN(v));
       }
-
       function DOMRect(xArg, yArg, wArg, hArg) {
         var x, y, width, height, left, right, top, bottom;
         x = number(xArg);
@@ -81,7 +79,6 @@
               if (left === undefined) {
                 left = x + Math.min(0, width);
               }
-
               return left;
             },
             enumerable: true
@@ -91,7 +88,6 @@
               if (right === undefined) {
                 right = x + Math.max(0, width);
               }
-
               return right;
             },
             enumerable: true
@@ -101,7 +97,6 @@
               if (top === undefined) {
                 top = y + Math.min(0, height);
               }
-
               return top;
             },
             enumerable: true
@@ -111,14 +106,12 @@
               if (bottom === undefined) {
                 bottom = y + Math.max(0, height);
               }
-
               return bottom;
             },
             enumerable: true
           }
         });
       }
-
       global.DOMRect = DOMRect;
     })(self);
   }
@@ -201,7 +194,6 @@ var __webpack_exports__ = {};
 "use strict";
 /* harmony import */ var _mrhenry_core_web_modules_DOMRect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(142);
 /* harmony import */ var _mrhenry_core_web_modules_DOMRect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mrhenry_core_web_modules_DOMRect__WEBPACK_IMPORTED_MODULE_0__);
-
 
 (function (cb) {
   var domRect = new DOMRect();

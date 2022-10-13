@@ -5392,11 +5392,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
-
-
 var _DOMTokenList = function () {
   var dpSupport = true;
-
   var defineGetter = function defineGetter(object, name, fn, configurable) {
     if (Object.defineProperty) Object.defineProperty(object, name, {
       configurable: false === dpSupport ? true : !!configurable,
@@ -5409,21 +5406,18 @@ var _DOMTokenList = function () {
   } catch (e) {
     dpSupport = false;
   }
-
   var _DOMTokenList = function _DOMTokenList(el, prop) {
     var that = this;
     var tokens = [];
     var tokenMap = {};
     var length = 0;
     var maxLength = 0;
-
     var addIndexGetter = function addIndexGetter(i) {
       defineGetter(that, i, function () {
         preop();
         return tokens[i];
       }, false);
     };
-
     var reindex = function reindex() {
       if (length >= maxLength) for (; maxLength < length; ++maxLength) {
         addIndexGetter(maxLength);
@@ -5435,6 +5429,7 @@ var _DOMTokenList = function () {
       var i;
       var args = arguments;
       var rSpace = /\s+/;
+
       if (args.length) for (i = 0; i < args.length; ++i) {
         if (rSpace.test(args[i])) {
           error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
@@ -5451,17 +5446,17 @@ var _DOMTokenList = function () {
       }
 
       if ("" === tokens[0]) tokens = [];
-      tokenMap = {};
 
+      tokenMap = {};
       for (i = 0; i < tokens.length; ++i) {
         tokenMap[tokens[i]] = true;
       }
-
       length = tokens.length;
       reindex();
     };
 
     preop();
+
     defineGetter(that, "length", function () {
       preop();
       return length;
@@ -5471,23 +5466,18 @@ var _DOMTokenList = function () {
       preop();
       return tokens.join(" ");
     };
-
     that.item = function (idx) {
       preop();
       return tokens[idx];
     };
-
     that.contains = function (token) {
       preop();
       return !!tokenMap[token];
     };
-
     that.add = function () {
       preop.apply(that, args = arguments);
-
       for (var args, token, i = 0, l = args.length; i < l; ++i) {
         token = args[i];
-
         if (!tokenMap[token]) {
           tokens.push(token);
           tokenMap[token] = true;
@@ -5496,17 +5486,14 @@ var _DOMTokenList = function () {
 
       if (length !== tokens.length) {
         length = tokens.length >>> 0;
-
         if (_typeof(el[prop]) === "object") {
           el[prop].baseVal = tokens.join(" ");
         } else {
           el[prop] = tokens.join(" ");
         }
-
         reindex();
       }
     };
-
     that.remove = function () {
       preop.apply(that, args = arguments);
 
@@ -5518,7 +5505,6 @@ var _DOMTokenList = function () {
       for (i = 0; i < tokens.length; ++i) {
         if (!ignore[tokens[i]]) t.push(tokens[i]);
       }
-
       tokens = t;
       length = t.length >>> 0;
 
@@ -5527,10 +5513,8 @@ var _DOMTokenList = function () {
       } else {
         el[prop] = tokens.join(" ");
       }
-
       reindex();
     };
-
     that.toggle = function (token, force) {
       preop.apply(that, [token]);
 
@@ -5552,14 +5536,11 @@ var _DOMTokenList = function () {
       that.add(token);
       return true;
     };
-
     that.forEach = Array.prototype.forEach;
     return that;
   };
-
   return _DOMTokenList;
 }();
-
 /* harmony default export */ var helpers_DOMTokenList = (_DOMTokenList);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.js
 
@@ -5568,9 +5549,7 @@ var _DOMTokenList = function () {
 
 
 
-
 function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_typeof(obj); }
-
 
 (function (undefined) {
   if (!("DOMTokenList" in self && function (e) {
@@ -5578,7 +5557,6 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
   }(document.createElement("x")))) {
     (function (global) {
       var nativeImpl = "DOMTokenList" in global && global.DOMTokenList;
-
       if (!nativeImpl || !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg') && !(document.createElementNS("http://www.w3.org/2000/svg", "svg").classList instanceof DOMTokenList)) {
         global.DOMTokenList = helpers_DOMTokenList;
       }
@@ -5588,16 +5566,13 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
         if (!('classList' in e)) return;
         e.classList.toggle('x', false);
         if (!e.classList.contains('x')) return;
-
         e.classList.constructor.prototype.toggle = function toggle(token) {
           var force = arguments[1];
-
           if (force === undefined) {
             var add = !this.contains(token);
             this[add ? 'add' : 'remove'](token);
             return add;
           }
-
           force = !!force;
           this[force ? 'add' : 'remove'](token);
           return force;
@@ -5610,11 +5585,9 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
         e.classList.add('a', 'b');
         if (e.classList.contains('b')) return;
         var _native = e.classList.constructor.prototype.add;
-
         e.classList.constructor.prototype.add = function () {
           var args = arguments;
           var l = arguments.length;
-
           for (var i = 0; i < l; i++) {
             _native.call(this, args[i]);
           }
@@ -5629,11 +5602,9 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
         e.classList.remove('a', 'b');
         if (!e.classList.contains('b')) return;
         var _native2 = e.classList.constructor.prototype.remove;
-
         e.classList.constructor.prototype.remove = function () {
           var args = arguments;
           var l = arguments.length;
-
           for (var i = 0; i < l; i++) {
             _native2.call(this, args[i]);
           }
@@ -5644,7 +5615,6 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
 function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_classList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_classList_typeof(obj); }
-
 
 
 
@@ -5665,12 +5635,11 @@ function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; re
           get: fn
         });
       };
-
       var addProp = function addProp(o, name, attr) {
         defineGetter(o.prototype, name, function () {
           var tokenList;
           var THIS = this,
-              gibberishProperty = "__defineGetter__" + "DEFINE_PROPERTY" + name;
+            gibberishProperty = "__defineGetter__" + "DEFINE_PROPERTY" + name;
           if (THIS[gibberishProperty]) return tokenList;
           THIS[gibberishProperty] = true;
           tokenList = new helpers_DOMTokenList(THIS, attr);
@@ -5681,7 +5650,6 @@ function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; re
           return tokenList;
         }, true);
       };
-
       addProp(global.Element, "classList", "className");
       addProp(global.HTMLElement, "classList", "className");
       addProp(global.HTMLLinkElement, "relList", "rel");
@@ -5738,17 +5706,14 @@ var Iterator = function () {
     this.length = 0;
     return this;
   };
-
   var callable = function callable(fn) {
     if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
     return fn;
   };
-
   var Iterator = function Iterator(list, context) {
     if (!(this instanceof Iterator)) {
       return new Iterator(list, context);
     }
-
     Object.defineProperties(this, {
       __list__: {
         writable: true,
@@ -5769,7 +5734,6 @@ var Iterator = function () {
     context.on('_delete', this._onDelete.bind(this));
     context.on('_clear', this._onClear.bind(this));
   };
-
   Object.defineProperties(Iterator.prototype, Object.assign({
     constructor: {
       value: Iterator,
@@ -5781,14 +5745,11 @@ var Iterator = function () {
       value: function value() {
         var i;
         if (!this.__list__) return;
-
         if (this.__redo__) {
           i = this.__redo__.shift();
           if (i !== undefined) return i;
         }
-
         if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
-
         this._unBind();
       },
       configurable: true,
@@ -5831,13 +5792,9 @@ var Iterator = function () {
         this.__list__ = null;
         delete this.__redo__;
         if (!this.__context__) return;
-
         this.__context__.off('_add', this._onAdd.bind(this));
-
         this.__context__.off('_delete', this._onDelete.bind(this));
-
         this.__context__.off('_clear', this._onClear.bind(this));
-
         this.__context__ = null;
       },
       configurable: true,
@@ -5857,7 +5814,6 @@ var Iterator = function () {
       value: function value(index) {
         if (index >= this.__nextIndex__) return;
         ++this.__nextIndex__;
-
         if (!this.__redo__) {
           Object.defineProperty(this, '__redo__', {
             value: [index],
@@ -5867,11 +5823,9 @@ var Iterator = function () {
           });
           return;
         }
-
         this.__redo__.forEach(function (redo, i) {
           if (redo >= index) this.__redo__[i] = ++redo;
         }, this);
-
         this.__redo__.push(index);
       },
       configurable: true,
@@ -5886,7 +5840,6 @@ var Iterator = function () {
         if (!this.__redo__) return;
         i = this.__redo__.indexOf(index);
         if (i !== -1) this.__redo__.splice(i, 1);
-
         this.__redo__.forEach(function (redo, i) {
           if (redo > index) this.__redo__[i] = --redo;
         }, this);
@@ -5921,7 +5874,6 @@ var Iterator = function () {
   });
   return Iterator;
 }();
-
 /* harmony default export */ var _Iterator = (Iterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
@@ -5937,6 +5889,7 @@ var Iterator = function () {
 
 
 var ArrayIterator = function () {
+
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
@@ -5948,7 +5901,6 @@ var ArrayIterator = function () {
       writable: false
     });
   };
-
   if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
   ArrayIterator.prototype = Object.create(_Iterator.prototype, {
     constructor: {
@@ -5984,11 +5936,9 @@ var ArrayIterator = function () {
   });
   return ArrayIterator;
 }();
-
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
 function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_prototype_iterator_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_prototype_iterator_typeof(obj); }
-
 
 
 
@@ -6011,9 +5961,7 @@ function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"
       global.DOMTokenList.prototype[global.Symbol.iterator] = function () {
         return new _ArrayIterator(this);
       };
-
       var e = document.createElement('span');
-
       if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype[global.Symbol.iterator]) {
         e.classList.constructor.prototype[global.Symbol.iterator] = function () {
           return new _ArrayIterator(this);
@@ -6032,13 +5980,11 @@ function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof";
 
 
 
-
 (function (undefined) {
   if (!("DOMTokenList" in self && "forEach" in self.DOMTokenList.prototype)) {
     (function (global) {
       global.DOMTokenList.prototype.forEach = global.Array.prototype.forEach;
       var e = document.createElement('span');
-
       if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype.forEach) {
         e.classList.constructor.prototype.forEach = global.Array.prototype.forEach;
       }
@@ -6071,22 +6017,16 @@ var es_array_is_array = __webpack_require__(9753);
 
 
 
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 (function (cb) {
   var div = document.createElement('DIV');
   div.className = 'foo baz';
   var tokenList = div.classList;
   var results = [];
-
   var _iterator = _createForOfIteratorHelper(tokenList),
-      _step;
-
+    _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var token = _step.value;
@@ -6097,12 +6037,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   } finally {
     _iterator.f();
   }
-
   if (results.length !== 2) {
     cb(false);
     return;
   }
-
   cb(results[0] === 'foo' && results[1] === 'baz');
 })(callback);
 }();

@@ -16,7 +16,6 @@
       global.DocumentFragment = function DocumentFragment() {
         return document.createDocumentFragment();
       };
-
       var fragment = document.createDocumentFragment();
       global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
     })(self);
@@ -100,7 +99,6 @@ var __webpack_exports__ = {};
 "use strict";
 /* harmony import */ var _mrhenry_core_web_modules_DocumentFragment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(846);
 /* harmony import */ var _mrhenry_core_web_modules_DocumentFragment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mrhenry_core_web_modules_DocumentFragment__WEBPACK_IMPORTED_MODULE_0__);
-
 
 (function (cb) {
   var fixture = document.getElementById('the-fixture');

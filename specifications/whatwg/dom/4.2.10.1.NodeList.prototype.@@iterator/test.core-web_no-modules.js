@@ -4708,17 +4708,14 @@ var Iterator = function () {
     this.length = 0;
     return this;
   };
-
   var callable = function callable(fn) {
     if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
     return fn;
   };
-
   var Iterator = function Iterator(list, context) {
     if (!(this instanceof Iterator)) {
       return new Iterator(list, context);
     }
-
     Object.defineProperties(this, {
       __list__: {
         writable: true,
@@ -4739,7 +4736,6 @@ var Iterator = function () {
     context.on('_delete', this._onDelete.bind(this));
     context.on('_clear', this._onClear.bind(this));
   };
-
   Object.defineProperties(Iterator.prototype, Object.assign({
     constructor: {
       value: Iterator,
@@ -4751,14 +4747,11 @@ var Iterator = function () {
       value: function value() {
         var i;
         if (!this.__list__) return;
-
         if (this.__redo__) {
           i = this.__redo__.shift();
           if (i !== undefined) return i;
         }
-
         if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
-
         this._unBind();
       },
       configurable: true,
@@ -4801,13 +4794,9 @@ var Iterator = function () {
         this.__list__ = null;
         delete this.__redo__;
         if (!this.__context__) return;
-
         this.__context__.off('_add', this._onAdd.bind(this));
-
         this.__context__.off('_delete', this._onDelete.bind(this));
-
         this.__context__.off('_clear', this._onClear.bind(this));
-
         this.__context__ = null;
       },
       configurable: true,
@@ -4827,7 +4816,6 @@ var Iterator = function () {
       value: function value(index) {
         if (index >= this.__nextIndex__) return;
         ++this.__nextIndex__;
-
         if (!this.__redo__) {
           Object.defineProperty(this, '__redo__', {
             value: [index],
@@ -4837,11 +4825,9 @@ var Iterator = function () {
           });
           return;
         }
-
         this.__redo__.forEach(function (redo, i) {
           if (redo >= index) this.__redo__[i] = ++redo;
         }, this);
-
         this.__redo__.push(index);
       },
       configurable: true,
@@ -4856,7 +4842,6 @@ var Iterator = function () {
         if (!this.__redo__) return;
         i = this.__redo__.indexOf(index);
         if (i !== -1) this.__redo__.splice(i, 1);
-
         this.__redo__.forEach(function (redo, i) {
           if (redo > index) this.__redo__[i] = --redo;
         }, this);
@@ -4891,7 +4876,6 @@ var Iterator = function () {
   });
   return Iterator;
 }();
-
 /* harmony default export */ var _Iterator = (Iterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
@@ -4907,6 +4891,7 @@ var Iterator = function () {
 
 
 var ArrayIterator = function () {
+
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
@@ -4918,7 +4903,6 @@ var ArrayIterator = function () {
       writable: false
     });
   };
-
   if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
   ArrayIterator.prototype = Object.create(_Iterator.prototype, {
     constructor: {
@@ -4954,11 +4938,9 @@ var ArrayIterator = function () {
   });
   return ArrayIterator;
 }();
-
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
 
 
 
@@ -4979,7 +4961,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.forEach.js
 function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; return NodeList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, NodeList_prototype_forEach_typeof(obj); }
-
 
 
 
@@ -5022,20 +5003,14 @@ var es_array_is_array = __webpack_require__(9753);
 
 
 
-
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 (function (cb) {
   var nodeList = document.querySelectorAll('div');
   var results = [];
-
   var _iterator = _createForOfIteratorHelper(nodeList),
-      _step;
-
+    _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var node = _step.value;
@@ -5046,7 +5021,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   } finally {
     _iterator.f();
   }
-
   cb(results.length > 0);
 })(callback);
 }();

@@ -4,7 +4,8 @@
       // console.log('\n' + message);
       callback();
     },
-    step: function step(message) {// console.log('  ' + message);
+    step: function step(message) {
+      // console.log('  ' + message);
     },
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
@@ -12,14 +13,11 @@
           // console.log(a, ' - ', b);
           throw new Error('Arrays are not equal');
         }
-
         for (var i = 0; i < a.length; i++) {
           assert.equal(a[i], b[i]);
         }
-
         return;
       }
-
       if (a !== b) {
         // console.log(a, ' - ', b);
         throw new Error('Expected A to equal to B');
@@ -28,72 +26,64 @@
     ok: function ok(a) {
       if (!!a) {
         return;
-      } // console.log(a);
+      }
 
-
+      // console.log(a);
       throw new Error('Expected something truthy for A');
     }
   };
-
   function formatElements(elements) {
     var ids = [];
-
     for (var i = 0; i < elements.length; i++) {
       ids.push(elements[i].id);
     }
-
     return ids.sort().join(',');
-  } // Test that |selector| returns the given elements in #main.
+  }
 
-
+  // Test that |selector| returns the given elements in #main.
   function testSelectorAllFromMain(assert, selector, expected) {
     assert.step(selector + ' matches expected elements from #main');
     var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
-  } // Test that |selector| returns the given elements in the given scope element
+  }
 
-
+  // Test that |selector| returns the given elements in the given scope element
   function testSelectorAllFromScope(assert, scope, selector, expected) {
     assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
     var actual = Array.from(scope.querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
-  } // Test that |selector| returns the given element in #main.
+  }
 
-
+  // Test that |selector| returns the given element in #main.
   function testSelector(assert, selector, expected) {
     assert.step(selector + ' matches expected element');
     assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
-  } // Test that |selector| returns the given closest element.
+  }
 
-
+  // Test that |selector| returns the given closest element.
   function testClosest(assert, node, selector, expected) {
     assert.step('closest(' + selector + ') returns expected element');
     assert.equal(node.closest(selector), expected);
-  } // Test that |selector| returns matching status.
+  }
 
-
+  // Test that |selector| returns matching status.
   function testMatches(assert, node, selector, expected) {
     assert.step(selector + ' matches expectedly');
     assert.equal(node.matches(selector), expected);
-  } // Test that |selector1| and |selector2| returns same elements in the given scope element
+  }
 
-
+  // Test that |selector1| and |selector2| returns same elements in the given scope element
   function compareSelectorAll(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
-
   var supportsIsQueries = false;
-
   try {
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
-  } catch (_) {
-    /* noop */
-  }
-
+  } catch (_) {/* noop */}
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -120,7 +110,6 @@
     testSelectorAllFromMain(assert, ".parent:has(.target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(.sibling ~ .target)", [a, b]);
     testSelectorAllFromMain(assert, ".parent:has(.sibling ~ .target)", [b]);
-
     if (supportsIsQueries) {
       testSelectorAllFromMain(assert, ":has(:is(.target ~ .sibling .descendant))", [a, h, j]);
       testSelectorAllFromMain(assert, ".parent:has(:is(.target ~ .sibling .descendant))", [h]);
@@ -128,7 +117,6 @@
       assert.step(":has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
-
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
@@ -147,15 +135,16 @@
     var scope1 = document.getElementById("scope1");
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
-    var d03 = document.getElementById("d03"); // descendants of a scope element cannot have the scope element as its descendant
+    var d03 = document.getElementById("d03");
 
+    // descendants of a scope element cannot have the scope element as its descendant
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
-    testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []); // there can be more simple and efficient alternative for a ':scope' in ':has'
+    testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
 
+    // there can be more simple and efficient alternative for a ':scope' in ':has'
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
-
     if (supportsIsQueries) {
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
@@ -223,8 +212,9 @@
     var d71 = document.getElementById("d71");
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
-    var d80 = document.getElementById("d80"); // :has as compound selector part.
+    var d80 = document.getElementById("d80");
 
+    // :has as compound selector part.
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -321,8 +311,9 @@
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
-    var extraD02 = document.getElementById("extra-d02"); // :has as simple selector part.
+    var extraD02 = document.getElementById("extra-d02");
 
+    // :has as simple selector part.
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);

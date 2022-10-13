@@ -3994,7 +3994,6 @@ var __webpack_exports__ = {};
 
 
 
-
 (function (cb) {
   var descriptor = Object.getOwnPropertyDescriptor(Map.prototype, Symbol.toStringTag);
   cb(descriptor.value === 'Map');

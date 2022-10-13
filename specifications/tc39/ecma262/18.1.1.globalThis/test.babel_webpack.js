@@ -1497,7 +1497,6 @@ var __webpack_exports__ = {};
 /* harmony import */ var core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5837);
 /* harmony import */ var core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_global_this_js__WEBPACK_IMPORTED_MODULE_0__);
 
-
 (function (cb) {
   cb(typeof globalThis !== "undefined" && typeof globalThis.String !== "undefined");
 })(callback);

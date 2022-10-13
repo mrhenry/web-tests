@@ -3339,15 +3339,14 @@ var es_parse_float = __webpack_require__(4678);
 
 (function (undefined) {
   if (!("IntersectionObserver" in window && "IntersectionObserverEntry" in window && "intersectionRatio" in window.IntersectionObserverEntry.prototype)) {
+
     (function (window, document) {
       'use strict';
 
       var supportedNatively = 'IntersectionObserver' in window && 'IntersectionObserverEntry' in window && 'intersectionRatio' in window.IntersectionObserverEntry.prototype;
-
       if (supportedNatively) {
         return;
       }
-
       var registry = [];
 
       function IntersectionObserverEntry(entry) {
@@ -3356,10 +3355,10 @@ var es_parse_float = __webpack_require__(4678);
         this.rootBounds = entry.rootBounds;
         this.boundingClientRect = entry.boundingClientRect;
         this.intersectionRect = entry.intersectionRect || getEmptyRect();
-
         try {
           this.isIntersecting = !!entry.intersectionRect;
-        } catch (err) {}
+        } catch (err) {
+        }
 
         var targetRect = this.boundingClientRect;
         var targetArea = targetRect.width * targetRect.height;
@@ -3375,20 +3374,20 @@ var es_parse_float = __webpack_require__(4678);
 
       function IntersectionObserver(callback, opt_options) {
         var options = opt_options || {};
-
         if (typeof callback != 'function') {
           throw new Error('callback must be a function');
         }
-
         if (options.root && options.root.nodeType != 1) {
           throw new Error('root must be an Element');
         }
 
         this._checkForIntersections = throttle(this._checkForIntersections.bind(this), this.THROTTLE_TIMEOUT);
+
         this._callback = callback;
         this._observationTargets = [];
         this._queuedEntries = [];
         this._rootMarginValues = this._parseRootMargin(options.rootMargin);
+
         this.thresholds = this._initThresholds(options.threshold);
         this.root = options.root || null;
         this.rootMargin = this._rootMarginValues.map(function (margin) {
@@ -3397,31 +3396,27 @@ var es_parse_float = __webpack_require__(4678);
       }
 
       IntersectionObserver.prototype.THROTTLE_TIMEOUT = 100;
+
       IntersectionObserver.prototype.POLL_INTERVAL = null;
+
       IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
 
       IntersectionObserver.prototype.observe = function (target) {
         var isTargetAlreadyObserved = this._observationTargets.some(function (item) {
           return item.element == target;
         });
-
         if (isTargetAlreadyObserved) {
           return;
         }
-
         if (!(target && target.nodeType == 1)) {
           throw new Error('target must be an Element');
         }
-
         this._registerInstance();
-
         this._observationTargets.push({
           element: target,
           entry: null
         });
-
         this._monitorIntersections();
-
         this._checkForIntersections();
       };
 
@@ -3429,25 +3424,20 @@ var es_parse_float = __webpack_require__(4678);
         this._observationTargets = this._observationTargets.filter(function (item) {
           return item.element != target;
         });
-
         if (!this._observationTargets.length) {
           this._unmonitorIntersections();
-
           this._unregisterInstance();
         }
       };
 
       IntersectionObserver.prototype.disconnect = function () {
         this._observationTargets = [];
-
         this._unmonitorIntersections();
-
         this._unregisterInstance();
       };
 
       IntersectionObserver.prototype.takeRecords = function () {
         var records = this._queuedEntries.slice();
-
         this._queuedEntries = [];
         return records;
       };
@@ -3459,7 +3449,6 @@ var es_parse_float = __webpack_require__(4678);
           if (typeof t != 'number' || isNaN(t) || t < 0 || t > 1) {
             throw new Error('threshold must be a number between 0 and 1 inclusively');
           }
-
           return t !== a[i - 1];
         });
       };
@@ -3468,16 +3457,15 @@ var es_parse_float = __webpack_require__(4678);
         var marginString = opt_rootMargin || '0px';
         var margins = marginString.split(/\s+/).map(function (margin) {
           var parts = /^(-?\d*\.?\d+)(px|%)$/.exec(margin);
-
           if (!parts) {
             throw new Error('rootMargin must be specified in pixels or percent');
           }
-
           return {
             value: parseFloat(parts[1]),
             unit: parts[2]
           };
         });
+
         margins[1] = margins[1] || margins[0];
         margins[2] = margins[2] || margins[0];
         margins[3] = margins[3] || margins[1];
@@ -3493,10 +3481,8 @@ var es_parse_float = __webpack_require__(4678);
           } else {
             addEvent(window, 'resize', this._checkForIntersections, true);
             addEvent(document, 'scroll', this._checkForIntersections, true);
-
             if (this.USE_MUTATION_OBSERVER && 'MutationObserver' in window) {
               this._domObserver = new MutationObserver(this._checkForIntersections);
-
               this._domObserver.observe(document, {
                 attributes: true,
                 childList: true,
@@ -3515,10 +3501,8 @@ var es_parse_float = __webpack_require__(4678);
           this._monitoringInterval = null;
           removeEvent(window, 'resize', this._checkForIntersections, true);
           removeEvent(document, 'scroll', this._checkForIntersections, true);
-
           if (this._domObserver) {
             this._domObserver.disconnect();
-
             this._domObserver = null;
           }
         }
@@ -3526,19 +3510,13 @@ var es_parse_float = __webpack_require__(4678);
 
       IntersectionObserver.prototype._checkForIntersections = function () {
         var rootIsInDom = this._rootIsInDom();
-
         var rootRect = rootIsInDom ? this._getRootRect() : getEmptyRect();
-
         this._observationTargets.forEach(function (item) {
           var target = item.element;
           var targetRect = getBoundingClientRect(target);
-
           var rootContainsTarget = this._rootContainsTarget(target);
-
           var oldEntry = item.entry;
-
           var intersectionRect = rootIsInDom && rootContainsTarget && this._computeTargetAndRootIntersection(target, rootRect);
-
           var newEntry = item.entry = new IntersectionObserverEntry({
             time: now(),
             target: target,
@@ -3546,7 +3524,6 @@ var es_parse_float = __webpack_require__(4678);
             rootBounds: rootRect,
             intersectionRect: intersectionRect
           });
-
           if (!oldEntry) {
             this._queuedEntries.push(newEntry);
           } else if (rootIsInDom && rootContainsTarget) {
@@ -3559,7 +3536,6 @@ var es_parse_float = __webpack_require__(4678);
             }
           }
         }, this);
-
         if (this._queuedEntries.length) {
           this._callback(this.takeRecords(), this);
         }
@@ -3571,12 +3547,11 @@ var es_parse_float = __webpack_require__(4678);
         var intersectionRect = targetRect;
         var parent = getParentNode(target);
         var atRoot = false;
-
         while (!atRoot) {
           var parentRect = null;
           var parentComputedStyle = parent.nodeType == 1 ? window.getComputedStyle(parent) : {};
-          if (parentComputedStyle.display == 'none') return;
 
+          if (parentComputedStyle.display == 'none') return;
           if (parent == this.root || parent == document) {
             atRoot = true;
             parentRect = rootRect;
@@ -3590,16 +3565,13 @@ var es_parse_float = __webpack_require__(4678);
             intersectionRect = computeRectIntersection(parentRect, intersectionRect);
             if (!intersectionRect) break;
           }
-
           parent = getParentNode(parent);
         }
-
         return intersectionRect;
       };
 
       IntersectionObserver.prototype._getRootRect = function () {
         var rootRect;
-
         if (this.root) {
           rootRect = getBoundingClientRect(this.root);
         } else {
@@ -3616,7 +3588,6 @@ var es_parse_float = __webpack_require__(4678);
             height: html.clientHeight || body.clientHeight
           };
         }
-
         return this._expandRectByRootMargin(rootRect);
       };
 
@@ -3624,7 +3595,6 @@ var es_parse_float = __webpack_require__(4678);
         var margins = this._rootMarginValues.map(function (margin, i) {
           return margin.unit == 'px' ? margin.value : margin.value * (i % 2 ? rect.width : rect.height) / 100;
         });
-
         var newRect = {
           top: rect.top - margins[0],
           right: rect.right + margins[1],
@@ -3641,8 +3611,8 @@ var es_parse_float = __webpack_require__(4678);
       IntersectionObserver.prototype._hasCrossedThreshold = function (oldEntry, newEntry) {
         var oldRatio = oldEntry && oldEntry.isIntersecting ? oldEntry.intersectionRatio || 0 : -1;
         var newRatio = newEntry.isIntersecting ? newEntry.intersectionRatio || 0 : -1;
-        if (oldRatio === newRatio) return;
 
+        if (oldRatio === newRatio) return;
         for (var i = 0; i < this.thresholds.length; i++) {
           var threshold = this.thresholds[i];
 
@@ -3724,11 +3694,10 @@ var es_parse_float = __webpack_require__(4678);
 
       function getBoundingClientRect(el) {
         var rect;
-
         try {
           rect = el.getBoundingClientRect();
-        } catch (err) {}
-
+        } catch (err) {
+        }
         if (!rect) return getEmptyRect();
 
         if (!(rect.width && rect.height && rect.x && rect.y)) {
@@ -3743,7 +3712,6 @@ var es_parse_float = __webpack_require__(4678);
             height: rect.bottom - rect.top
           };
         }
-
         return rect;
       }
 
@@ -3762,26 +3730,21 @@ var es_parse_float = __webpack_require__(4678);
 
       function containsDeep(parent, child) {
         var node = child;
-
         while (node) {
           if (node == parent) return true;
           node = getParentNode(node);
         }
-
         return false;
       }
 
       function getParentNode(node) {
         var parent = node.parentNode;
-
         if (parent && parent.nodeType == 11 && parent.host) {
           return parent.host;
         }
-
         if (parent && parent.assignedSlot) {
           return parent.assignedSlot.parentNode;
         }
-
         return parent;
       }
 
@@ -3792,9 +3755,9 @@ var es_parse_float = __webpack_require__(4678);
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
 
-
 (function (cb) {
-  var foo = new IntersectionObserver(function () {}, {});
+  var foo = new IntersectionObserver(function () {
+  }, {});
   cb(!!foo);
 })(callback);
 })();

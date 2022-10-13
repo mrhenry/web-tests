@@ -1095,7 +1095,6 @@ var __webpack_exports__ = {};
 /* harmony import */ var core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3710);
 /* harmony import */ var core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
 
-
 (function (cb) {
   try {
     var inputA = document.createElement('input');
@@ -1105,7 +1104,6 @@ var __webpack_exports__ = {};
     cb(false);
     return;
   }
-
   var inputB = document.createElement('input');
   inputB.setAttribute('type', 'date');
   inputB.value = "2006-01-02";

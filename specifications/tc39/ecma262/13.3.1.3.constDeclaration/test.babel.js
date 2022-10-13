@@ -1,8 +1,6 @@
 function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-
 (function (cb) {
   var foo = "foo";
-
   try {
     5, _readOnlyError("foo");
     cb(false);

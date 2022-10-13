@@ -2741,7 +2741,6 @@ var es_array_push = __webpack_require__(7658);
 
 
 
-
 /**
  * @license
  * Author : https://github.com/jonathantneal
@@ -2755,26 +2754,25 @@ var es_array_push = __webpack_require__(7658);
  * When using or citing the work, you should not imply endorsement by the author or the affirmer.
  * This is a [human-readable summary of the Legal Code](//creativecommons.org/publicdomain/zero/1.0/) ([read the full text](//creativecommons.org/publicdomain/zero/1.0/)).
  */
+
 (function (global) {
   try {
     document.querySelector(':scope *');
   } catch (_) {
     var scopeTest = /:scope(?![\w-])/i;
-    var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
 
+    var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
     global.Element.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithScope.apply(this, arguments);
     };
 
     var querySelectorAllWithScope = polyfill(global.Element.prototype.querySelectorAll);
-
     global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithScope.apply(this, arguments);
     };
 
     if (global.Element.prototype.matches) {
       var matchesWithScope = polyfill(global.Element.prototype.matches);
-
       global.Element.prototype.matches = function matches(selectors) {
         return matchesWithScope.apply(this, arguments);
       };
@@ -2782,12 +2780,10 @@ var es_array_push = __webpack_require__(7658);
 
     if (global.Element.prototype.closest) {
       var closestWithScope = polyfill(global.Element.prototype.closest);
-
       global.Element.prototype.closest = function closest(selectors) {
         return closestWithScope.apply(this, arguments);
       };
     }
-
     function replaceScopeWithAttr(query, attr) {
       var parts = [];
       var current = '';
@@ -2795,93 +2791,80 @@ var es_array_push = __webpack_require__(7658);
       var quoted = false;
       var quotedMark = false;
       var bracketed = 0;
-
       for (var i = 0; i < query.length; i++) {
         var char = query[i];
-
         if (escaped) {
           current += char;
           escaped = false;
           continue;
         }
-
         if (quoted) {
           if (char === quotedMark) {
             quoted = false;
           }
-
           current += char;
           continue;
         }
-
         if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(char || '')) {
           parts.push(current.slice(0, current.length - 6));
           parts.push('[' + attr + ']');
           current = '';
         }
-
         switch (char) {
           case ':':
             parts.push(current);
             current = '';
             current += char;
             continue;
-
           case '\\':
             current += char;
             escaped = true;
             continue;
-
           case '"':
           case "'":
             current += char;
             quoted = true;
             quotedMark = char;
             continue;
-
           case '[':
             current += char;
             bracketed++;
             continue;
-
           case "]":
             current += char;
-
             if (bracketed > 0) {
               bracketed--;
             }
-
             continue;
-
           default:
             current += char;
             continue;
         }
       }
-
       if (current.toLowerCase() === ':scope') {
         parts.push(current.slice(0, current.length - 6));
         parts.push('[' + attr + ']');
         current = '';
       }
-
       if (parts.length === 0) {
         return query;
       }
-
       return parts.join('') + current;
     }
-
     function polyfill(qsa) {
       return function (selectors) {
         var hasScope = selectors && scopeTest.test(selectors);
-
         if (hasScope) {
           var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
+
           arguments[0] = replaceScopeWithAttr(selectors, attr);
+
           this.setAttribute(attr, '');
+
           var elementOrNodeList = qsa.apply(this, arguments);
+
           this.removeAttribute(attr);
+
           return elementOrNodeList;
         } else {
           return qsa.apply(this, arguments);
@@ -2897,32 +2880,28 @@ var es_string_trim = __webpack_require__(3210);
 
 
 
-
 (function (global) {
   try {
     global.document.querySelector(':has(*, :does-not-exist, > *)');
-    global.document.querySelector(':has(:has(any))');
 
-    if (!global.document.querySelector(':has(:scope *)')) {
+    global.document.querySelector(':has(:has(any), div)');
+    if (!global.document.querySelector(':has(:scope *)') && CSS.supports('selector(:has(div))')) {
       return;
     }
   } catch (_) {}
 
   var querySelectorWithHasElement = polyfill(global.Element.prototype.querySelector);
-
   global.Element.prototype.querySelector = function querySelector(selectors) {
     return querySelectorWithHasElement.apply(this, arguments);
   };
 
   var querySelectorAllWithHasElement = polyfill(global.Element.prototype.querySelectorAll);
-
   global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
     return querySelectorAllWithHasElement.apply(this, arguments);
   };
 
   if (global.Element.prototype.matches) {
     var matchesWithHasElement = polyfill(global.Element.prototype.matches);
-
     global.Element.prototype.matches = function matches(selectors) {
       return matchesWithHasElement.apply(this, arguments);
     };
@@ -2930,7 +2909,6 @@ var es_string_trim = __webpack_require__(3210);
 
   if (global.Element.prototype.closest) {
     var closestWithHasElement = polyfill(global.Element.prototype.closest);
-
     global.Element.prototype.closest = function closest(selectors) {
       return closestWithHasElement.apply(this, arguments);
     };
@@ -2938,20 +2916,17 @@ var es_string_trim = __webpack_require__(3210);
 
   if ('Document' in global && 'prototype' in global.Document) {
     var querySelectorWithHasDocument = polyfill(global.Document.prototype.querySelector);
-
     global.Document.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithHasDocument.apply(this, arguments);
     };
 
     var querySelectorAllWithHasDocument = polyfill(global.Document.prototype.querySelectorAll);
-
     global.Document.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithHasDocument.apply(this, arguments);
     };
 
     if (global.Document.prototype.matches) {
       var matchesWithHasDocument = polyfill(global.Document.prototype.matches);
-
       global.Document.prototype.matches = function matches(selectors) {
         return matchesWithHasDocument.apply(this, arguments);
       };
@@ -2959,13 +2934,11 @@ var es_string_trim = __webpack_require__(3210);
 
     if (global.Document.prototype.closest) {
       var closestWithHasDocument = polyfill(global.Document.prototype.closest);
-
       global.Document.prototype.closest = function closest(selectors) {
         return closestWithHasDocument.apply(this, arguments);
       };
     }
   }
-
   function pseudoClassHasInnerQuery(query) {
     var current = '';
     var start = 0;
@@ -2975,48 +2948,38 @@ var es_string_trim = __webpack_require__(3210);
     var quotedMark = false;
     var inHas = false;
     var bracketed = 0;
-
     for (var i = 0; i < query.length; i++) {
       var char = query[i];
-
       if (escaped) {
         current += char;
         escaped = false;
         continue;
       }
-
       if (quoted) {
         if (char === quotedMark) {
           quoted = false;
         }
-
         current += char;
         continue;
       }
-
       if (current.toLowerCase() === ':has(' && !inHas) {
         inHas = true;
         start = i;
         current = '';
       }
-
       switch (char) {
         case ':':
           if (!inHas) {
             current = '';
           }
-
           current += char;
           continue;
-
         case '(':
           if (inHas) {
             depth++;
           }
-
           current += char;
           continue;
-
         case ')':
           if (inHas) {
             if (depth === 0) {
@@ -3026,48 +2989,37 @@ var es_string_trim = __webpack_require__(3210);
                 end: i - 1
               };
             }
-
             depth--;
           }
-
           current += char;
           continue;
-
         case '\\':
           current += char;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           current += char;
           quoted = true;
           quotedMark = char;
           continue;
-
         case '[':
           current += char;
           bracketed++;
           continue;
-
         case "]":
           current += char;
-
           if (bracketed > 0) {
             bracketed--;
           }
-
           continue;
-
         default:
           current += char;
           continue;
       }
     }
-
     return false;
   }
-
   function replaceScopeWithAttr(query, attr) {
     var parts = [];
     var current = '';
@@ -3075,95 +3027,75 @@ var es_string_trim = __webpack_require__(3210);
     var quoted = false;
     var quotedMark = false;
     var bracketed = 0;
-
     for (var i = 0; i < query.length; i++) {
       var char = query[i];
-
       if (escaped) {
         current += char;
         escaped = false;
         continue;
       }
-
       if (quoted) {
         if (char === quotedMark) {
           quoted = false;
         }
-
         current += char;
         continue;
       }
-
       if (current.toLowerCase() === ':scope' && !bracketed && /^[\[\.\:\\"\s|+>~#&,)]/.test(char || '')) {
         parts.push(current.slice(0, current.length - 6));
         parts.push('[' + attr + ']');
         current = '';
       }
-
       switch (char) {
         case ':':
           parts.push(current);
           current = '';
           current += char;
           continue;
-
         case '\\':
           current += char;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           current += char;
           quoted = true;
           quotedMark = char;
           continue;
-
         case '[':
           current += char;
           bracketed++;
           continue;
-
         case "]":
           current += char;
-
           if (bracketed > 0) {
             bracketed--;
           }
-
           continue;
-
         default:
           current += char;
           continue;
       }
     }
-
     if (current.toLowerCase() === ':scope') {
       parts.push(current.slice(0, current.length - 6));
       parts.push('[' + attr + ']');
       current = '';
     }
-
     if (parts.length === 0) {
       return query;
     }
-
     return parts.join('') + current;
   }
-
   function charIsNestedMarkMirror(char, mark) {
     if (mark === '(' && char === ')') {
       return true;
     }
-
     if (mark === '[' && char === ']') {
       return true;
     }
-
     return false;
   }
-
   function splitSelector(query) {
     var selectors = [];
     var current = '';
@@ -3172,37 +3104,30 @@ var es_string_trim = __webpack_require__(3210);
     var quotedMark = false;
     var nestedMark = false;
     var nestedDepth = 0;
-
     for (var i = 0; i < query.length; i++) {
       var char = query[i];
-
       if (escaped) {
         current += char;
         escaped = false;
         continue;
       }
-
       switch (char) {
         case ',':
           if (quoted) {
             current += char;
             continue;
           }
-
           if (nestedDepth > 0) {
             current += char;
             continue;
           }
-
           selectors.push(current);
           current = '';
           continue;
-
         case '\\':
           current += char;
           escaped = true;
           continue;
-
         case '"':
         case "'":
           if (quoted && char === quotedMark) {
@@ -3210,12 +3135,10 @@ var es_string_trim = __webpack_require__(3210);
             quoted = false;
             continue;
           }
-
           current += char;
           quoted = true;
           quotedMark = char;
           continue;
-
         case '(':
         case ')':
         case '[':
@@ -3224,224 +3147,175 @@ var es_string_trim = __webpack_require__(3210);
             current += char;
             continue;
           }
-
           if (charIsNestedMarkMirror(char, nestedMark)) {
             current += char;
             nestedDepth--;
-
             if (nestedDepth === 0) {
               nestedMark = false;
             }
-
             continue;
           }
-
           if (char === nestedMark) {
             current += char;
             nestedDepth++;
             continue;
           }
-
           current += char;
           nestedDepth++;
           nestedMark = char;
           continue;
-
         default:
           current += char;
           continue;
       }
     }
-
     selectors.push(current);
     return selectors;
   }
-
   function replaceAllWithTempAttr(query, nested, callback) {
     var inner = pseudoClassHasInnerQuery(query);
-
     if (!inner) {
       return query;
     }
-
     if (nested) {
       return false;
     }
-
     var innerQuery = inner.innerQuery;
     var attr = 'q-has' + (Math.floor(Math.random() * 9000000) + 1000000);
     var innerReplacement = '[' + attr + ']';
     var x = query;
-
     if (inner.innerQuery.toLowerCase().indexOf(':has(') > -1) {
       var innerParts = splitSelector(inner.innerQuery);
       var newInnerParts = [];
-
       for (var i = 0; i < innerParts.length; i++) {
         var innerPart = innerParts[i];
-        var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
 
+        var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
         if (!innerPartReplaced) {
           newInnerParts.push(':not(*)');
         } else {
           newInnerParts.push(innerPart);
         }
       }
-
       var _prefix = x.substring(0, inner.start - 5);
-
       var _suffix = x.substring(inner.end + 2);
 
       return _prefix + newInnerParts.join(', ') + _suffix;
     }
-
     var _prefix = x.substring(0, inner.start - 5);
-
     var _suffix = x.substring(inner.end + 2);
 
     x = _prefix + innerReplacement + _suffix;
     callback(innerQuery, attr);
-
     if (x.toLowerCase().indexOf(':has(') > -1) {
       var y = replaceAllWithTempAttr(x, false, callback);
-
       if (y) {
         return y;
       }
     }
-
     return x;
   }
-
   function walkNode(rootNode, callback) {
     if ('setAttribute' in rootNode && 'querySelector' in rootNode) {
       callback(rootNode);
     }
-
     if (rootNode.hasChildNodes()) {
       var nodes = rootNode.childNodes;
-
       for (var i = 0; i < nodes.length; ++i) {
         walkNode(nodes[i], callback);
       }
     }
   }
-
   function polyfill(qsa) {
     return function (selectors) {
       if (selectors.toLowerCase().indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectors)) {
         return qsa.apply(this, arguments);
       }
-
       var rootNode;
-
       if ('getRootNode' in this) {
         rootNode = this.getRootNode();
       } else {
         var r = this;
-
         while (r) {
           rootNode = r;
           r = r.parentNode;
         }
       }
-
       var _focus = this;
-
       if (_focus === global.document) {
         _focus = global.document.documentElement;
       }
-
       var scopeAttr = 'q-has-scope' + (Math.floor(Math.random() * 9000000) + 1000000);
-
       _focus.setAttribute(scopeAttr, '');
-
       try {
         selectors = replaceScopeWithAttr(selectors, scopeAttr);
         var attrs = [scopeAttr];
         var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
           attrs.push(attr);
           var selectorParts = splitSelector(inner);
-
           for (var x = 0; x < selectorParts.length; x++) {
             var selectorPart = selectorParts[x].trim();
             var absoluteSelectorPart = selectorPart;
-
             if (selectorPart[0] === '>' || selectorPart[0] === '+' || selectorPart[0] === '~') {
               absoluteSelectorPart = selectorPart.slice(1).trim();
             } else {
               absoluteSelectorPart = ':scope ' + selectorPart;
             }
-
             try {
               walkNode(rootNode, function (node) {
                 if (!node.querySelector(absoluteSelectorPart)) {
                   return;
                 }
-
                 switch (selectorPart[0]) {
                   case '~':
                   case '+':
                     {
                       var siblings = node.childNodes;
-
                       for (var i = 0; i < siblings.length; i++) {
                         var sibling = siblings[i];
-
                         if (!('setAttribute' in sibling)) {
                           continue;
                         }
-
                         var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
                         sibling.setAttribute(idAttr, '');
-
                         if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
                           sibling.setAttribute(attr, '');
                         }
-
                         sibling.removeAttribute(idAttr);
                       }
                     }
                     break;
-
                   case '>':
                     {
                       var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
                       node.setAttribute(idAttr, '');
-
                       if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
                         node.setAttribute(attr, '');
                       }
-
                       node.removeAttribute(idAttr);
                     }
                     break;
-
                   default:
                     node.setAttribute(attr, '');
                     break;
                 }
               });
-            } catch (_) {}
+            } catch (_) {
+            }
           }
         });
         arguments[0] = newQuery;
+
         var elementOrNodeList = qsa.apply(this, arguments);
-
         _focus.removeAttribute(scopeAttr);
-
         if (attrs.length > 0) {
           var attrsForQuery = [];
-
           for (var j = 0; j < attrs.length; j++) {
             attrsForQuery.push('[' + attrs[j] + ']');
           }
-
           var elements = global.document.querySelectorAll(attrsForQuery.join(','));
-
           for (var k = 0; k < elements.length; k++) {
             var element = elements[k];
-
             for (var l = 0; l < attrs.length; l++) {
               element.removeAttribute(attrs[l]);
             }
@@ -3451,25 +3325,19 @@ var es_string_trim = __webpack_require__(3210);
         return elementOrNodeList;
       } catch (err) {
         _focus.removeAttribute(scopeAttr);
-
         if (attrs.length > 0) {
           var attrsForQuery = [];
-
           for (var j = 0; j < attrs.length; j++) {
             attrsForQuery.push('[' + attrs[j] + ']');
           }
-
           var elements = global.document.querySelectorAll(attrsForQuery.join(','));
-
           for (var k = 0; k < elements.length; k++) {
             var element = elements[k];
-
             for (var l = 0; l < attrs.length; l++) {
               element.removeAttribute(attrs[l]);
             }
           }
         }
-
         throw err;
       }
     };
@@ -3487,26 +3355,23 @@ var es_array_sort = __webpack_require__(2707);
 
 
 
-
 (function (cb) {
   var assert = {
     test: function (message, callback) {
       callback();
     },
-    step: function (message) {},
+    step: function (message) {
+    },
     equal: function (a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
           throw new Error('Arrays are not equal');
         }
-
         for (var i = 0; i < a.length; i++) {
           assert.equal(a[i], b[i]);
         }
-
         return;
       }
-
       if (a !== b) {
         throw new Error('Expected A to equal to B');
       }
@@ -3519,14 +3384,11 @@ var es_array_sort = __webpack_require__(2707);
       throw new Error('Expected something truthy for A');
     }
   };
-
   function formatElements(elements) {
     var ids = [];
-
     for (var i = 0; i < elements.length; i++) {
       ids.push(elements[i].id);
     }
-
     return ids.sort().join(',');
   }
 
@@ -3563,14 +3425,11 @@ var es_array_sort = __webpack_require__(2707);
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
-
   var supportsIsQueries = false;
-
   try {
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
-
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -3597,7 +3456,6 @@ var es_array_sort = __webpack_require__(2707);
     testSelectorAllFromMain(assert, ".parent:has(.target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(.sibling ~ .target)", [a, b]);
     testSelectorAllFromMain(assert, ".parent:has(.sibling ~ .target)", [b]);
-
     if (supportsIsQueries) {
       testSelectorAllFromMain(assert, ":has(:is(.target ~ .sibling .descendant))", [a, h, j]);
       testSelectorAllFromMain(assert, ".parent:has(:is(.target ~ .sibling .descendant))", [h]);
@@ -3605,7 +3463,6 @@ var es_array_sort = __webpack_require__(2707);
       assert.step(":has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
-
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
@@ -3625,12 +3482,13 @@ var es_array_sort = __webpack_require__(2707);
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
+
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
+
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
-
     if (supportsIsQueries) {
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
@@ -3699,6 +3557,7 @@ var es_array_sort = __webpack_require__(2707);
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
+
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -3796,6 +3655,7 @@ var es_array_sort = __webpack_require__(2707);
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
     var extraD02 = document.getElementById("extra-d02");
+
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);

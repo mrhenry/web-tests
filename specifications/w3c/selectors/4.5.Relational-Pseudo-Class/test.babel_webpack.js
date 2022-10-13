@@ -3452,26 +3452,23 @@ var __webpack_exports__ = {};
 
 
 
-
 (function (cb) {
   var assert = {
     test: function test(message, callback) {
       callback();
     },
-    step: function step(message) {},
+    step: function step(message) {
+    },
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
           throw new Error('Arrays are not equal');
         }
-
         for (var i = 0; i < a.length; i++) {
           assert.equal(a[i], b[i]);
         }
-
         return;
       }
-
       if (a !== b) {
         throw new Error('Expected A to equal to B');
       }
@@ -3484,14 +3481,11 @@ var __webpack_exports__ = {};
       throw new Error('Expected something truthy for A');
     }
   };
-
   function formatElements(elements) {
     var ids = [];
-
     for (var i = 0; i < elements.length; i++) {
       ids.push(elements[i].id);
     }
-
     return ids.sort().join(',');
   }
 
@@ -3528,14 +3522,11 @@ var __webpack_exports__ = {};
     assert.step(selector1 + ' and ' + selector2 + ' returns same elements on ' + scope.id);
     assert.equal(formatElements(result1), formatElements(result2));
   }
-
   var supportsIsQueries = false;
-
   try {
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
-
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -3562,7 +3553,6 @@ var __webpack_exports__ = {};
     testSelectorAllFromMain(assert, ".parent:has(.target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(.sibling ~ .target)", [a, b]);
     testSelectorAllFromMain(assert, ".parent:has(.sibling ~ .target)", [b]);
-
     if (supportsIsQueries) {
       testSelectorAllFromMain(assert, ":has(:is(.target ~ .sibling .descendant))", [a, h, j]);
       testSelectorAllFromMain(assert, ".parent:has(:is(.target ~ .sibling .descendant))", [h]);
@@ -3570,7 +3560,6 @@ var __webpack_exports__ = {};
       assert.step(":has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
-
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
     testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
@@ -3590,12 +3579,13 @@ var __webpack_exports__ = {};
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
+
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
+
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
-
     if (supportsIsQueries) {
       compareSelectorAll(assert, scope1, ".a:has(:scope) .c", ":is(.a :scope .c)");
       compareSelectorAll(assert, scope2, ".a:has(:scope) .c", ":is(.a :scope .c)");
@@ -3664,6 +3654,7 @@ var __webpack_exports__ = {};
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
+
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -3761,6 +3752,7 @@ var __webpack_exports__ = {};
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
     var extraD02 = document.getElementById("extra-d02");
+
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);

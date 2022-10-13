@@ -2,7 +2,6 @@
 var __webpack_exports__ = {};
 (function (cb) {
   const foo = "foo";
-
   try {
     foo = 5;
     cb(false);

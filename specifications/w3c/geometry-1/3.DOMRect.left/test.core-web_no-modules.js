@@ -3316,7 +3316,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
-
 (function (undefined) {
   if (!("DOMRect" in self && function (e) {
     try {
@@ -3329,11 +3328,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       function number(v) {
         return v === undefined ? 0 : Number(v);
       }
-
       function different(u, v) {
         return u !== v && !(isNaN(u) && isNaN(v));
       }
-
       function DOMRect(xArg, yArg, wArg, hArg) {
         var x, y, width, height, left, right, top, bottom;
         x = number(xArg);
@@ -3394,7 +3391,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               if (left === undefined) {
                 left = x + Math.min(0, width);
               }
-
               return left;
             },
             enumerable: true
@@ -3404,7 +3400,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               if (right === undefined) {
                 right = x + Math.max(0, width);
               }
-
               return right;
             },
             enumerable: true
@@ -3414,7 +3409,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               if (top === undefined) {
                 top = y + Math.min(0, height);
               }
-
               return top;
             },
             enumerable: true
@@ -3424,20 +3418,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               if (bottom === undefined) {
                 bottom = y + Math.max(0, height);
               }
-
               return bottom;
             },
             enumerable: true
           }
         });
       }
-
       global.DOMRect = DOMRect;
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/w3c/geometry-1/3.DOMRect.left/test.pure.js
-
 
 (function (cb) {
   var domRect = new DOMRect();

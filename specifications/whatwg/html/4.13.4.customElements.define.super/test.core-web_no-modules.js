@@ -6897,9 +6897,7 @@ var es_string_iterator = __webpack_require__(8783);
 
 
 
-
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
 (function (undefined) {
   if (!("console" in self)) {
     self.console = self.console || {};
@@ -6912,9 +6910,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
-
 function console_log_typeof(obj) { "@babel/helpers - typeof"; return console_log_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, console_log_typeof(obj); }
-
 (function (undefined) {
   if (!("console" in self && "log" in self.console)) {
     console.log = function log() {};
@@ -6927,9 +6923,7 @@ function console_log_typeof(obj) { "@babel/helpers - typeof"; return console_log
 
 
 
-
 function console_error_typeof(obj) { "@babel/helpers - typeof"; return console_error_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, console_error_typeof(obj); }
-
 (function (undefined) {
   if (!("console" in self && "error" in self.console)) {
     console.error = console.log;
@@ -6942,9 +6936,7 @@ function console_error_typeof(obj) { "@babel/helpers - typeof"; return console_e
 
 
 
-
 function console_warn_typeof(obj) { "@babel/helpers - typeof"; return console_warn_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, console_warn_typeof(obj); }
-
 (function (undefined) {
   if (!("console" in self && "warn" in self.console)) {
     console.warn = console.log;
@@ -6988,11 +6980,9 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; return Event_typeof = "f
 
 
 
-
 (function (undefined) {
   if (!function (n) {
     if (!("Event" in n)) return !1;
-
     try {
       return new Event("click"), !0;
     } catch (n) {
@@ -7002,14 +6992,11 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; return Event_typeof = "f
     (function () {
       if (typeof document === 'undefined' || typeof window === 'undefined') return;
       var existingProto = window.Event && window.Event.prototype || null;
-
       function Event(type, eventInitDict) {
         if (!type) {
           throw new Error('Not enough arguments');
         }
-
         var event;
-
         if ('createEvent' in document) {
           event = document.createEvent('Event');
           var bubbles = eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
@@ -7017,20 +7004,17 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; return Event_typeof = "f
           event.initEvent(type, bubbles, cancelable);
           return event;
         }
-
         event = document.createEventObject();
         event.type = type;
         event.bubbles = eventInitDict && eventInitDict.bubbles !== undefined ? eventInitDict.bubbles : false;
         event.cancelable = eventInitDict && eventInitDict.cancelable !== undefined ? eventInitDict.cancelable : false;
         return event;
       }
-
       Event.NONE = 0;
       Event.CAPTURING_PHASE = 1;
       Event.AT_TARGET = 2;
       Event.BUBBLING_PHASE = 3;
       window.Event = Window.prototype.Event = Event;
-
       if (existingProto) {
         Object.defineProperty(window.Event, 'prototype', {
           configurable: false,
@@ -7039,137 +7023,107 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; return Event_typeof = "f
           value: existingProto
         });
       }
-
       if (!('createEvent' in document)) {
         window.addEventListener = Window.prototype.addEventListener = Document.prototype.addEventListener = Element.prototype.addEventListener = function addEventListener() {
           var element = this,
-              type = arguments[0],
-              listener = arguments[1];
-
+            type = arguments[0],
+            listener = arguments[1];
           if (!element._events) {
             element._events = {};
           }
-
           if (!element._events[type]) {
             element._events[type] = function (event) {
               var list = element._events[event.type].list,
-                  events = list.slice(),
-                  index = -1,
-                  length = events.length,
-                  eventElement;
-
+                events = list.slice(),
+                index = -1,
+                length = events.length,
+                eventElement;
               event.preventDefault = function preventDefault() {
                 if (event.cancelable !== false) {
                   event.returnValue = false;
                 }
               };
-
               event.stopPropagation = function stopPropagation() {
                 event.cancelBubble = true;
               };
-
               event.stopImmediatePropagation = function stopImmediatePropagation() {
                 event.cancelBubble = true;
                 event.cancelImmediate = true;
               };
-
               event.currentTarget = element;
               event.relatedTarget = event.fromElement || null;
               event.target = event.target || event.srcElement || element;
               event.timeStamp = new Date().getTime();
-
               if (event.clientX) {
                 event.pageX = event.clientX + document.documentElement.scrollLeft;
                 event.pageY = event.clientY + document.documentElement.scrollTop;
               }
-
               while (++index < length && !event.cancelImmediate) {
                 if (index in events) {
                   eventElement = events[index];
-
                   if (list.includes(eventElement) && typeof eventElement === 'function') {
                     eventElement.call(element, event);
                   }
                 }
               }
             };
-
             element._events[type].list = [];
-
             if (element.attachEvent) {
               element.attachEvent('on' + type, element._events[type]);
             }
           }
-
           element._events[type].list.push(listener);
         };
-
         window.removeEventListener = Window.prototype.removeEventListener = Document.prototype.removeEventListener = Element.prototype.removeEventListener = function removeEventListener() {
           var element = this,
-              type = arguments[0],
-              listener = arguments[1],
-              index;
-
+            type = arguments[0],
+            listener = arguments[1],
+            index;
           if (element._events && element._events[type] && element._events[type].list) {
             index = element._events[type].list.indexOf(listener);
-
             if (index !== -1) {
               element._events[type].list.splice(index, 1);
-
               if (!element._events[type].list.length) {
                 if (element.detachEvent) {
                   element.detachEvent('on' + type, element._events[type]);
                 }
-
                 delete element._events[type];
               }
             }
           }
         };
-
         window.dispatchEvent = Window.prototype.dispatchEvent = Document.prototype.dispatchEvent = Element.prototype.dispatchEvent = function dispatchEvent(event) {
           if (!arguments.length) {
             throw new Error('Not enough arguments');
           }
-
           if (!event || typeof event.type !== 'string') {
             throw new Error('DOM Events Exception 0');
           }
-
           var element = this,
-              type = event.type;
-
+            type = event.type;
           try {
             if (!event.bubbles) {
               event.cancelBubble = true;
-
               var cancelBubbleEvent = function cancelBubbleEvent(event) {
                 event.cancelBubble = true;
                 (element || window).detachEvent('on' + type, cancelBubbleEvent);
               };
-
               this.attachEvent('on' + type, cancelBubbleEvent);
             }
-
             this.fireEvent('on' + type, event);
           } catch (error) {
             event.target = element;
-
             do {
               event.currentTarget = element;
-
               if ('_events' in element && typeof element._events[type] === 'function') {
                 element._events[type].call(element, event);
               }
-
               if (typeof element['on' + type] === 'function') {
                 element['on' + type].call(element, event);
               }
-
               element = element.nodeType === 9 ? element.parentWindow : element.parentNode;
             } while (element && !event.cancelBubble);
           }
-
           return true;
         };
 
@@ -7199,21 +7153,18 @@ function CustomEvent_typeof(obj) { "@babel/helpers - typeof"; return CustomEvent
 
 
 
-
 (function (undefined) {
   if (!("CustomEvent" in self && ("function" == typeof self.CustomEvent || self.CustomEvent.toString().indexOf("CustomEventConstructor") > -1))) {
     self.CustomEvent = function CustomEvent(type, eventInitDict) {
       if (!type) {
         throw Error('TypeError: Failed to construct "CustomEvent": An event name must be provided.');
       }
-
       var event;
       eventInitDict = eventInitDict || {
         bubbles: false,
         cancelable: false,
         detail: null
       };
-
       try {
         event = document.createEvent('CustomEvent');
         event.initCustomEvent(type, eventInitDict.bubbles, eventInitDict.cancelable, eventInitDict.detail);
@@ -7222,10 +7173,8 @@ function CustomEvent_typeof(obj) { "@babel/helpers - typeof"; return CustomEvent
         event.initEvent(type, eventInitDict.bubbles, eventInitDict.cancelable);
         event.detail = eventInitDict.detail;
       }
-
       return event;
     };
-
     CustomEvent.prototype = Event.prototype;
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : CustomEvent_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : CustomEvent_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : CustomEvent_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
@@ -7233,7 +7182,6 @@ function CustomEvent_typeof(obj) { "@babel/helpers - typeof"; return CustomEvent
 var es_object_create = __webpack_require__(8011);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
 function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return DocumentFragment_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DocumentFragment_typeof(obj); }
-
 
 
 
@@ -7253,7 +7201,6 @@ function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return Docume
       global.DocumentFragment = function DocumentFragment() {
         return document.createDocumentFragment();
       };
-
       var fragment = document.createDocumentFragment();
       global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
     })(self);
@@ -7266,15 +7213,13 @@ function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return Docume
 
 
 
-
 function _mutation_typeof(obj) { "@babel/helpers - typeof"; return _mutation_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _mutation_typeof(obj); }
-
 var _mutation = function () {
+
   function isNode(object) {
     if (typeof Node === 'function') {
       return object instanceof Node;
     }
-
     return object && _mutation_typeof(object) === "object" && object.nodeName && object.nodeType >= 1 && object.nodeType <= 12;
   }
 
@@ -7282,17 +7227,13 @@ var _mutation = function () {
     if (nodes.length === 1) {
       return isNode(nodes[0]) ? nodes[0] : document.createTextNode(nodes[0] + '');
     }
-
     var fragment = document.createDocumentFragment();
-
     for (var i = 0; i < nodes.length; i++) {
       fragment.appendChild(isNode(nodes[i]) ? nodes[i] : document.createTextNode(nodes[i] + ''));
     }
-
     return fragment;
   };
 }();
-
 /* harmony default export */ var helpers_mutation = (_mutation);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.append.js
 
@@ -7301,19 +7242,15 @@ var _mutation = function () {
 
 
 
-
 function DocumentFragment_prototype_append_typeof(obj) { "@babel/helpers - typeof"; return DocumentFragment_prototype_append_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DocumentFragment_prototype_append_typeof(obj); }
-
 
 (function (undefined) {
   if (!("DocumentFragment" in self && "append" in DocumentFragment.prototype)) {
     (function (global) {
       var fragmentProto = document.createDocumentFragment().constructor.prototype;
-
       fragmentProto.append = function append() {
         this.appendChild(helpers_mutation(arguments));
       };
-
       global.DocumentFragment.prototype.append = function append() {
         this.appendChild(helpers_mutation(arguments));
       };
@@ -7327,19 +7264,15 @@ function DocumentFragment_prototype_append_typeof(obj) { "@babel/helpers - typeo
 
 
 
-
 function DocumentFragment_prototype_prepend_typeof(obj) { "@babel/helpers - typeof"; return DocumentFragment_prototype_prepend_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DocumentFragment_prototype_prepend_typeof(obj); }
-
 
 (function (undefined) {
   if (!("DocumentFragment" in self && "prepend" in DocumentFragment.prototype)) {
     (function (global) {
       var fragmentProto = document.createDocumentFragment().constructor.prototype;
-
       fragmentProto.prepend = function prepend() {
         this.insertBefore(helpers_mutation(arguments), this.firstChild);
       };
-
       global.DocumentFragment.prototype.prepend = function prepend() {
         this.insertBefore(helpers_mutation(arguments), this.firstChild);
       };
@@ -7357,25 +7290,20 @@ function Element_prototype_after_typeof(obj) { "@babel/helpers - typeof"; return
 
 
 
-
 (function (undefined) {
   if (!("Element" in self && "after" in Element.prototype)) {
     Document.prototype.after = Element.prototype.after = function after() {
       if (this.parentNode) {
         var args = Array.prototype.slice.call(arguments),
-            viableNextSibling = this.nextSibling,
-            idx = viableNextSibling ? args.indexOf(viableNextSibling) : -1;
-
+          viableNextSibling = this.nextSibling,
+          idx = viableNextSibling ? args.indexOf(viableNextSibling) : -1;
         while (idx !== -1) {
           viableNextSibling = viableNextSibling.nextSibling;
-
           if (!viableNextSibling) {
             break;
           }
-
           idx = args.indexOf(viableNextSibling);
         }
-
         this.parentNode.insertBefore(helpers_mutation(arguments), viableNextSibling);
       }
     };
@@ -7392,9 +7320,7 @@ function Element_prototype_after_typeof(obj) { "@babel/helpers - typeof"; return
 
 
 
-
 function Element_prototype_append_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_append_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_append_typeof(obj); }
-
 
 (function (undefined) {
   if (!("Element" in self && "append" in Element.prototype)) {
@@ -7414,25 +7340,20 @@ function Element_prototype_before_typeof(obj) { "@babel/helpers - typeof"; retur
 
 
 
-
 (function (undefined) {
   if (!("Element" in self && "before" in Element.prototype)) {
     Document.prototype.before = Element.prototype.before = function before() {
       if (this.parentNode) {
         var args = Array.prototype.slice.call(arguments),
-            viablePreviousSibling = this.previousSibling,
-            idx = viablePreviousSibling ? args.indexOf(viablePreviousSibling) : -1;
-
+          viablePreviousSibling = this.previousSibling,
+          idx = viablePreviousSibling ? args.indexOf(viablePreviousSibling) : -1;
         while (idx !== -1) {
           viablePreviousSibling = viablePreviousSibling.previousSibling;
-
           if (!viablePreviousSibling) {
             break;
           }
-
           idx = args.indexOf(viablePreviousSibling);
         }
-
         this.parentNode.insertBefore(helpers_mutation(arguments), viablePreviousSibling ? viablePreviousSibling.nextSibling : this.parentNode.firstChild);
       }
     };
@@ -7449,20 +7370,16 @@ function Element_prototype_before_typeof(obj) { "@babel/helpers - typeof"; retur
 
 
 
-
 function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_matches_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_matches_typeof(obj); }
-
 (function (undefined) {
   if (!("document" in self && "matches" in document.documentElement)) {
     Element.prototype.matches = Element.prototype.webkitMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || function matches(selector) {
       var element = this;
       var elements = (element.document || element.ownerDocument).querySelectorAll(selector);
       var index = 0;
-
       while (elements[index] && elements[index] !== element) {
         ++index;
       }
-
       return !!elements[index];
     };
   }
@@ -7474,9 +7391,7 @@ function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; retu
 
 
 
-
 function Element_prototype_prepend_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_prepend_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_prepend_typeof(obj); }
-
 
 (function (undefined) {
   if (!("Element" in self && "prepend" in Element.prototype)) {
@@ -7492,9 +7407,7 @@ function Element_prototype_prepend_typeof(obj) { "@babel/helpers - typeof"; retu
 
 
 
-
 function Element_prototype_remove_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_remove_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_remove_typeof(obj); }
-
 
 (function (undefined) {
   if (!("Element" in self && "remove" in Element.prototype)) {
@@ -7507,15 +7420,12 @@ function Element_prototype_remove_typeof(obj) { "@babel/helpers - typeof"; retur
     if ("Text" in self) {
       Text.prototype.remove = Element.prototype.remove;
     }
-
     (function () {
       var originalRemove = HTMLSelectElement.prototype.remove;
-
       HTMLSelectElement.prototype.remove = function remove(index) {
         if (arguments.length === 0) {
           return Element.prototype.remove.call(this);
         }
-
         return originalRemove.call(this, index);
       };
     })();
@@ -7528,9 +7438,7 @@ function Element_prototype_remove_typeof(obj) { "@babel/helpers - typeof"; retur
 
 
 
-
 function Element_prototype_replaceWith_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_replaceWith_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_replaceWith_typeof(obj); }
-
 
 (function (undefined) {
   if (!("Element" in self && "replaceWith" in Element.prototype)) {
@@ -7574,7 +7482,6 @@ var es_function_name = __webpack_require__(8309);
 
 
 
-
 /**
  * @license
  * Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
@@ -7584,6 +7491,7 @@ var es_function_name = __webpack_require__(8309);
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
+
 (function () {
   'use strict';
 
@@ -7595,14 +7503,11 @@ var es_function_name = __webpack_require__(8309);
     (function () {
       needsDocFrag = true;
       var origCloneNode = Node.prototype.cloneNode;
-
       Node.prototype.cloneNode = function cloneNode(deep) {
         var newDom = origCloneNode.call(this, deep);
-
         if (this instanceof DocumentFragment) {
           newDom.__proto__ = DocumentFragment.prototype;
         }
-
         return newDom;
       };
 
@@ -7629,37 +7534,29 @@ var es_function_name = __webpack_require__(8309);
         }
       });
       var origInsertBefore = Node.prototype.insertBefore;
-
       function insertBefore(newNode, refNode) {
         if (newNode instanceof DocumentFragment) {
           var child;
-
           while (child = newNode.firstChild) {
             origInsertBefore.call(this, child, refNode);
           }
         } else {
           origInsertBefore.call(this, newNode, refNode);
         }
-
         return newNode;
       }
-
       Node.prototype.insertBefore = insertBefore;
       var origAppendChild = Node.prototype.appendChild;
-
       Node.prototype.appendChild = function appendChild(child) {
         if (child instanceof DocumentFragment) {
           insertBefore.call(this, child, null);
         } else {
           origAppendChild.call(this, child);
         }
-
         return child;
       };
-
       var origRemoveChild = Node.prototype.removeChild;
       var origReplaceChild = Node.prototype.replaceChild;
-
       Node.prototype.replaceChild = function replaceChild(newChild, oldChild) {
         if (newChild instanceof DocumentFragment) {
           insertBefore.call(this, newChild, oldChild);
@@ -7667,26 +7564,20 @@ var es_function_name = __webpack_require__(8309);
         } else {
           origReplaceChild.call(this, newChild, oldChild);
         }
-
         return oldChild;
       };
-
       Document.prototype.createDocumentFragment = function createDocumentFragment() {
         var frag = this.createElement('df');
         frag.__proto__ = DocumentFragment.prototype;
         return frag;
       };
-
       var origImportNode = Document.prototype.importNode;
-
       Document.prototype.importNode = function importNode(impNode, deep) {
         deep = deep || false;
         var newNode = origImportNode.call(this, impNode, deep);
-
         if (impNode instanceof DocumentFragment) {
           newNode.__proto__ = DocumentFragment.prototype;
         }
-
         return newNode;
       };
     })();
@@ -7716,19 +7607,15 @@ var es_function_name = __webpack_require__(8309);
   var docQuerySelectorAll = Document.prototype.querySelectorAll;
   var fragQuerySelectorAll = DocumentFragment.prototype.querySelectorAll;
   var scriptSelector = 'script:not([type]),script[type="application/javascript"],script[type="text/javascript"]';
-
   function QSA(node, selector) {
     if (!node.childNodes.length) {
       return [];
     }
-
     switch (node.nodeType) {
       case Node.DOCUMENT_NODE:
         return docQuerySelectorAll.call(node, selector);
-
       case Node.DOCUMENT_FRAGMENT_NODE:
         return fragQuerySelectorAll.call(node, selector);
-
       default:
         return elementQuerySelectorAll.call(node, selector);
     }
@@ -7744,11 +7631,8 @@ var es_function_name = __webpack_require__(8309);
       return clone.content.childNodes.length === 0 || clone.content.firstChild.content.childNodes.length === 0 || brokenDocFragment;
     }
   }();
-
   var TEMPLATE_TAG = 'template';
-
   var PolyfilledHTMLTemplateElement = function PolyfilledHTMLTemplateElement() {};
-
   if (needsTemplate) {
     var contentDoc = document.implementation.createHTMLDocument('template');
     var canDecorate = true;
@@ -7756,28 +7640,26 @@ var es_function_name = __webpack_require__(8309);
     templateStyle.textContent = TEMPLATE_TAG + '{display:none;}';
     var head = document.head;
     head.insertBefore(templateStyle, head.firstElementChild);
+
     PolyfilledHTMLTemplateElement.prototype = Object.create(HTMLElement.prototype);
+
     var canProtoPatch = !document.createElement('div').hasOwnProperty('innerHTML');
 
     PolyfilledHTMLTemplateElement.decorate = function (template) {
       if (template.content || template.namespaceURI !== document.documentElement.namespaceURI) {
         return;
       }
-
       template.content = contentDoc.createDocumentFragment();
       var child;
-
       while (child = template.firstChild) {
         capturedAppendChild.call(template.content, child);
       }
-
       if (canProtoPatch) {
         template.__proto__ = PolyfilledHTMLTemplateElement.prototype;
       } else {
         template.cloneNode = function (deep) {
           return PolyfilledHTMLTemplateElement._cloneNode(this, deep);
         };
-
         if (canDecorate) {
           try {
             defineInnerHTML(template);
@@ -7787,7 +7669,6 @@ var es_function_name = __webpack_require__(8309);
           }
         }
       }
-
       PolyfilledHTMLTemplateElement.bootstrap(template.content);
     };
 
@@ -7799,11 +7680,9 @@ var es_function_name = __webpack_require__(8309);
       'th': ['tr', 'tbody', 'table'],
       'td': ['tr', 'tbody', 'table']
     };
-
     var getTagName = function getTagName(text) {
       return (/<([a-z][^/\0>\x20\t\r\n\f]+)/i.exec(text) || ['', ''])[1].toLowerCase();
     };
-
     var defineInnerHTML = function defineInnerHTML(obj) {
       Object.defineProperty(obj, 'innerHTML', {
         get: function get() {
@@ -7811,28 +7690,22 @@ var es_function_name = __webpack_require__(8309);
         },
         set: function set(text) {
           var wrap = topLevelWrappingMap[getTagName(text)];
-
           if (wrap) {
             for (var i = 0; i < wrap.length; i++) {
               text = '<' + wrap[i] + '>' + text + '</' + wrap[i] + '>';
             }
           }
-
           contentDoc.body.innerHTML = text;
           PolyfilledHTMLTemplateElement.bootstrap(contentDoc);
-
           while (this.content.firstChild) {
             capturedRemoveChild.call(this.content, this.content.firstChild);
           }
-
           var body = contentDoc.body;
-
           if (wrap) {
             for (var j = 0; j < wrap.length; j++) {
               body = body.lastChild;
             }
           }
-
           while (body.firstChild) {
             capturedAppendChild.call(this.content, body.firstChild);
           }
@@ -7840,7 +7713,6 @@ var es_function_name = __webpack_require__(8309);
         configurable: true
       });
     };
-
     var defineOuterHTML = function defineOuterHTML(obj) {
       Object.defineProperty(obj, 'outerHTML', {
         get: function get() {
@@ -7850,11 +7722,9 @@ var es_function_name = __webpack_require__(8309);
           if (this.parentNode) {
             contentDoc.body.innerHTML = innerHTML;
             var docFrag = this.ownerDocument.createDocumentFragment();
-
             while (contentDoc.body.firstChild) {
               capturedAppendChild.call(docFrag, contentDoc.body.firstChild);
             }
-
             capturedReplaceChild.call(this.parentNode, docFrag, this);
           } else {
             throw new Error("Failed to set the 'outerHTML' property on 'Element': This element has no parent node.");
@@ -7863,13 +7733,11 @@ var es_function_name = __webpack_require__(8309);
         configurable: true
       });
     };
-
     defineInnerHTML(PolyfilledHTMLTemplateElement.prototype);
     defineOuterHTML(PolyfilledHTMLTemplateElement.prototype);
 
     PolyfilledHTMLTemplateElement.bootstrap = function bootstrap(doc) {
       var templates = QSA(doc, TEMPLATE_TAG);
-
       for (var i = 0, l = templates.length, t; i < l && (t = templates[i]); i++) {
         PolyfilledHTMLTemplateElement.decorate(t);
       }
@@ -7881,20 +7749,16 @@ var es_function_name = __webpack_require__(8309);
 
     Document.prototype.createElement = function createElement() {
       var el = capturedCreateElement.apply(this, arguments);
-
       if (el.localName === 'template') {
         PolyfilledHTMLTemplateElement.decorate(el);
       }
-
       return el;
     };
-
     DOMParser.prototype.parseFromString = function () {
       var el = capturedParseFromString.apply(this, arguments);
       PolyfilledHTMLTemplateElement.bootstrap(el);
       return el;
     };
-
     Object.defineProperty(HTMLElement.prototype, 'innerHTML', {
       get: function get() {
         return getInnerHTML(this);
@@ -7906,43 +7770,34 @@ var es_function_name = __webpack_require__(8309);
       configurable: true,
       enumerable: true
     });
+
     var escapeAttrRegExp = /[&\u00A0"]/g;
     var escapeDataRegExp = /[&\u00A0<>]/g;
-
     var escapeReplace = function escapeReplace(c) {
       switch (c) {
         case '&':
           return '&amp;';
-
         case '<':
           return '&lt;';
-
         case '>':
           return '&gt;';
-
         case '"':
           return '&quot;';
-
         case "\xA0":
           return '&nbsp;';
       }
     };
-
     var escapeAttr = function escapeAttr(s) {
       return s.replace(escapeAttrRegExp, escapeReplace);
     };
-
     var escapeData = function escapeData(s) {
       return s.replace(escapeDataRegExp, escapeReplace);
     };
-
     var makeSet = function makeSet(arr) {
       var set = {};
-
       for (var i = 0; i < arr.length; i++) {
         set[arr[i]] = true;
       }
-
       return set;
     };
 
@@ -7956,36 +7811,27 @@ var es_function_name = __webpack_require__(8309);
             var tagName = node.localName;
             var s = '<' + tagName;
             var attrs = node.attributes;
-
             for (var i = 0, attr; attr = attrs[i]; i++) {
               s += ' ' + attr.name + '="' + escapeAttr(attr.value) + '"';
             }
-
             s += '>';
-
             if (voidElements[tagName]) {
               return s;
             }
-
             return s + getInnerHTML(node, callback) + '</' + tagName + '>';
           }
-
         case Node.TEXT_NODE:
           {
             var data = node.data;
-
             if (parentNode && plaintextParents[parentNode.localName]) {
               return data;
             }
-
             return escapeData(data);
           }
-
         case Node.COMMENT_NODE:
           {
             return '<!--' + node.data + '-->';
           }
-
         default:
           {
             window.console.error(node);
@@ -7998,14 +7844,11 @@ var es_function_name = __webpack_require__(8309);
       if (node.localName === 'template') {
         node = node.content;
       }
-
       var s = '';
       var c$ = callback ? callback(node) : capturedChildNodes.get.call(node);
-
       for (var i = 0, l = c$.length, child; i < l && (child = c$[i]); i++) {
         s += getOuterHTML(child, node, callback);
       }
-
       return s;
     };
   }
@@ -8013,16 +7856,13 @@ var es_function_name = __webpack_require__(8309);
   if (needsTemplate || needsCloning) {
     PolyfilledHTMLTemplateElement._cloneNode = function _cloneNode(template, deep) {
       var clone = capturedCloneNode.call(template, false);
-
       if (this.decorate) {
         this.decorate(clone);
       }
-
       if (deep) {
         capturedAppendChild.call(clone.content, capturedCloneNode.call(template.content, true));
         fixClonedDom(clone.content, template.content);
       }
-
       return clone;
     };
 
@@ -8030,48 +7870,38 @@ var es_function_name = __webpack_require__(8309);
       if (!source.querySelectorAll) {
         return;
       }
-
       var s$ = QSA(source, TEMPLATE_TAG);
-
       if (s$.length === 0) {
         return;
       }
-
       var t$ = QSA(clone, TEMPLATE_TAG);
-
       for (var i = 0, l = t$.length, t, s; i < l; i++) {
         s = s$[i];
         t = t$[i];
-
         if (PolyfilledHTMLTemplateElement && PolyfilledHTMLTemplateElement.decorate) {
           PolyfilledHTMLTemplateElement.decorate(s);
         }
-
         capturedReplaceChild.call(t.parentNode, cloneNode.call(s, true), t);
       }
     };
 
     var fixClonedScripts = function fixClonedScripts(fragment) {
       var scripts = QSA(fragment, scriptSelector);
-
       for (var ns, s, i = 0; i < scripts.length; i++) {
         s = scripts[i];
         ns = capturedCreateElement.call(document, 'script');
         ns.textContent = s.textContent;
         var attrs = s.attributes;
-
         for (var ai = 0, a; ai < attrs.length; ai++) {
           a = attrs[ai];
           ns.setAttribute(a.name, a.value);
         }
-
         capturedReplaceChild.call(s.parentNode, ns, s);
       }
     };
 
     var cloneNode = Node.prototype.cloneNode = function cloneNode(deep) {
       var dom;
-
       if (!needsDocFrag && brokenDocFragment && this instanceof DocumentFragment) {
         if (!deep) {
           return this.ownerDocument.createDocumentFragment();
@@ -8083,32 +7913,26 @@ var es_function_name = __webpack_require__(8309);
       } else {
         dom = capturedCloneNode.call(this, deep);
       }
-
       if (deep) {
         fixClonedDom(dom, this);
       }
-
       return dom;
     };
 
     var importNode = Document.prototype.importNode = function importNode(element, deep) {
       deep = deep || false;
-
       if (element.localName === TEMPLATE_TAG) {
         return PolyfilledHTMLTemplateElement._cloneNode(element, deep);
       } else {
         var dom = capturedImportNode.call(this, element, deep);
-
         if (deep) {
           fixClonedDom(dom, element);
           fixClonedScripts(dom);
         }
-
         return dom;
       }
     };
   }
-
   if (needsTemplate) {
     window.HTMLTemplateElement = PolyfilledHTMLTemplateElement;
   }
@@ -8127,9 +7951,9 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
 
 
-
 (function (undefined) {
   if (!("MutationObserver" in self)) {
+
     if (!window.MutationObserver) {
       window.MutationObserver = function (undefined) {
         "use strict";
@@ -8142,16 +7966,15 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
         function startMutationChecker(observer) {
           (function check() {
             var mutations = observer.takeRecords();
-
             if (mutations.length) {
               observer._listener(mutations, observer);
             }
-
             observer._timeout = setTimeout(check, MutationObserver._period);
           })();
         }
 
         MutationObserver._period = 30;
+
         MutationObserver.prototype = {
           observe: function observe($target, config) {
             var settings = {
@@ -8165,14 +7988,12 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             for (var i = 0; i < watched.length; i++) {
               if (watched[i].tar === $target) watched.splice(i, 1);
             }
-
             if (config.attributeFilter) {
               settings.afilter = reduce(config.attributeFilter, function (a, b) {
                 a[b] = true;
                 return a;
               }, {});
             }
-
             watched.push({
               tar: $target,
               fn: createMutationSearcher($target, settings)
@@ -8185,11 +8006,9 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           takeRecords: function takeRecords() {
             var mutations = [];
             var watched = this._watched;
-
             for (var i = 0; i < watched.length; i++) {
               watched[i].fn(mutations);
             }
-
             return mutations;
           },
           disconnect: function disconnect() {
@@ -8211,20 +8030,18 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             attributeNamespace: null,
             oldValue: null
           };
-
           for (var prop in data) {
             if (has(settings, prop) && data[prop] !== undefined) settings[prop] = data[prop];
           }
-
           return settings;
         }
 
         function createMutationSearcher($target, config) {
           var $oldstate = clone($target, config);
+
           return function (mutations) {
             var olen = mutations.length,
-                dirty;
-
+              dirty;
             if (config.charData && $target.nodeType === 3 && $target.nodeValue !== $oldstate.charData) {
               mutations.push(new MutationRecord({
                 type: "characterData",
@@ -8258,7 +8075,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
         function getAttributeWithStyleHack(el, attr) {
           return attr.name !== "style" ? attr.value : el.style.cssText;
         }
-
         var getAttributeValue = hasAttributeBug ? getAttributeSimple : getAttributeWithStyleHack;
 
         function findAttributeMutations(mutations, $target, $oldstate, filter) {
@@ -8267,11 +8083,9 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           var attr;
           var name;
           var i = attributes.length;
-
           while (i--) {
             attr = attributes[i];
             name = attr.name;
-
             if (!filter || has(filter, name)) {
               if (getAttributeValue($target, attr) !== $oldstate[name]) {
                 mutations.push(MutationRecord({
@@ -8286,7 +8100,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               checked[name] = true;
             }
           }
-
           for (name in $oldstate) {
             if (!checked[name]) {
               mutations.push(MutationRecord({
@@ -8301,14 +8114,12 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
         function searchSubtree(mutations, $target, $oldstate, config) {
           var dirty;
-
           function resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes) {
             var distance = conflicts.length - 1;
             var counter = -~((distance - numAddedNodes) / 2);
             var $cur;
             var oldstruct;
             var conflict;
-
             while (conflict = conflicts.pop()) {
               $cur = $kids[conflict.i];
               oldstruct = $oldkids[conflict.j];
@@ -8326,7 +8137,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               }
 
               if (config.attr && oldstruct.attr) findAttributeMutations(mutations, $cur, oldstruct.attr, config.afilter);
-
               if (config.charData && $cur.nodeType === 3 && $cur.nodeValue !== oldstruct.charData) {
                 mutations.push(MutationRecord({
                   type: "characterData",
@@ -8334,7 +8144,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                   oldValue: oldstruct.charData
                 }));
               }
-
               if (config.descendents) findMutations($cur, oldstruct);
             }
           }
@@ -8344,25 +8153,25 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             var $oldkids = old.kids;
             var klen = $kids.length;
             var olen = $oldkids ? $oldkids.length : 0;
+
             var map;
             var conflicts;
             var id;
             var idx;
+
             var oldstruct;
             var $cur;
             var $old;
             var numAddedNodes = 0;
-            var i = 0,
-                j = 0;
 
+            var i = 0,
+              j = 0;
             while (i < klen || j < olen) {
               $cur = $kids[i];
               oldstruct = $oldkids[j];
               $old = oldstruct && oldstruct.node;
-
               if ($cur === $old) {
                 if (config.attr && oldstruct.attr) findAttributeMutations(mutations, $cur, oldstruct.attr, config.afilter);
-
                 if (config.charData && oldstruct.charData !== undefined && $cur.nodeValue !== oldstruct.charData) {
                   mutations.push(MutationRecord({
                     type: "characterData",
@@ -8372,21 +8181,19 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                 }
 
                 if (conflicts) resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes);
+
                 if (config.descendents && ($cur.childNodes.length || oldstruct.kids && oldstruct.kids.length)) findMutations($cur, oldstruct);
                 i++;
                 j++;
               } else {
                 dirty = true;
-
                 if (!map) {
                   map = {};
                   conflicts = [];
                 }
-
                 if ($cur) {
                   if (!map[id = getElementId($cur)]) {
                     map[id] = true;
-
                     if ((idx = indexOfCustomNode($oldkids, $cur, j)) === -1) {
                       if (config.kids) {
                         mutations.push(MutationRecord({
@@ -8405,14 +8212,12 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                       });
                     }
                   }
-
                   i++;
                 }
-
-                if ($old && $old !== $kids[i]) {
+                if ($old &&
+                $old !== $kids[i]) {
                   if (!map[id = getElementId($old)]) {
                     map[id] = true;
-
                     if ((idx = indexOf($kids, $old, i)) === -1) {
                       if (config.kids) {
                         mutations.push(MutationRecord({
@@ -8431,7 +8236,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                       });
                     }
                   }
-
                   j++;
                 }
               }
@@ -8439,7 +8243,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
             if (conflicts) resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes);
           }
-
           findMutations($target, $oldstate);
           return dirty;
         }
@@ -8453,13 +8256,13 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
             if (config.charData && ($target.nodeType === 3 || $target.nodeType === 8)) {
               elestruct.charData = $target.nodeValue;
-            } else {
+            }
+            else {
               if (config.attr && recurse && $target.nodeType === 1) {
                 elestruct.attr = reduce($target.attributes, function (memo, attr) {
                   if (!config.afilter || config.afilter[attr.name]) {
                     memo[attr.name] = getAttributeValue($target, attr);
                   }
-
                   return memo;
                 }, {});
               }
@@ -8467,10 +8270,8 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               if (recurse && (config.kids || config.charData || config.attr && config.descendents)) {
                 elestruct.kids = map($target.childNodes, copy);
               }
-
               recurse = config.descendents;
             }
-
             return elestruct;
           }($target);
         }
@@ -8496,11 +8297,9 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
         function map(set, iterator) {
           var results = [];
-
           for (var index = 0; index < set.length; index++) {
             results[index] = iterator(set[index], index, set);
           }
-
           return results;
         }
 
@@ -8508,7 +8307,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           for (var index = 0; index < set.length; index++) {
             memo = iterator(memo, set[index], index, set);
           }
-
           return memo;
         }
 
@@ -8516,7 +8314,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           for (; idx < set.length; idx++) {
             if ((prop ? set[idx][prop] : set[idx]) === item) return idx;
           }
-
           return -1;
         }
 
@@ -8527,7 +8324,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
         function JSCompiler_renameProperty(a) {
           return a;
         }
-
         return MutationObserver;
       }(void 0);
     }
@@ -8543,7 +8339,6 @@ function Node_prototype_contains_typeof(obj) { "@babel/helpers - typeof"; return
 
 
 
-
 (function (undefined) {
   if (!document.contains) {
     (function () {
@@ -8551,13 +8346,11 @@ function Node_prototype_contains_typeof(obj) { "@babel/helpers - typeof"; return
         if (!(0 in arguments)) {
           throw new TypeError('1 argument is required');
         }
-
         do {
           if (this === node) {
             return true;
           }
         } while (node = node && node.parentNode);
-
         return false;
       }
 
@@ -8566,7 +8359,6 @@ function Node_prototype_contains_typeof(obj) { "@babel/helpers - typeof"; return
           delete HTMLElement.prototype.contains;
         } catch (e) {}
       }
-
       if ('Node' in self) {
         Node.prototype.contains = contains;
       } else {
@@ -8579,7 +8371,6 @@ function Node_prototype_contains_typeof(obj) { "@babel/helpers - typeof"; return
 var es_array_for_each = __webpack_require__(9554);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.forEach.js
 function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; return NodeList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, NodeList_prototype_forEach_typeof(obj); }
-
 
 
 
@@ -8631,101 +8422,87 @@ var es_array_join = __webpack_require__(9600);
 
 
 ;
-
 (function () {
   try {
     var _reflectConstructHack = Reflect.construct;
   } catch (err) {}
 })();
-
 (function () {
   'use strict';
 
   var n = window.Document.prototype.createElement,
-      p = window.Document.prototype.createElementNS,
-      aa = window.Document.prototype.importNode,
-      ba = window.Document.prototype.prepend,
-      ca = window.Document.prototype.append,
-      da = window.DocumentFragment.prototype.prepend,
-      ea = window.DocumentFragment.prototype.append,
-      q = window.Node.prototype.cloneNode,
-      r = window.Node.prototype.appendChild,
-      t = window.Node.prototype.insertBefore,
-      u = window.Node.prototype.removeChild,
-      v = window.Node.prototype.replaceChild,
-      w = Object.getOwnPropertyDescriptor(window.Node.prototype, "textContent"),
-      y = window.Element.prototype.attachShadow,
-      z = Object.getOwnPropertyDescriptor(window.Element.prototype, "innerHTML"),
-      A = window.Element.prototype.getAttribute,
-      B = window.Element.prototype.setAttribute,
-      C = window.Element.prototype.removeAttribute,
-      D = window.Element.prototype.getAttributeNS,
-      E = window.Element.prototype.setAttributeNS,
-      F = window.Element.prototype.removeAttributeNS,
-      G = window.Element.prototype.insertAdjacentElement,
-      H = window.Element.prototype.insertAdjacentHTML,
-      fa = window.Element.prototype.prepend,
-      ha = window.Element.prototype.append,
-      ia = window.Element.prototype.before,
-      ja = window.Element.prototype.after,
-      ka = window.Element.prototype.replaceWith,
-      la = window.Element.prototype.remove,
-      ma = window.HTMLElement,
-      I = Object.getOwnPropertyDescriptor(window.HTMLElement.prototype, "innerHTML"),
-      na = window.HTMLElement.prototype.insertAdjacentElement,
-      oa = window.HTMLElement.prototype.insertAdjacentHTML;
+    p = window.Document.prototype.createElementNS,
+    aa = window.Document.prototype.importNode,
+    ba = window.Document.prototype.prepend,
+    ca = window.Document.prototype.append,
+    da = window.DocumentFragment.prototype.prepend,
+    ea = window.DocumentFragment.prototype.append,
+    q = window.Node.prototype.cloneNode,
+    r = window.Node.prototype.appendChild,
+    t = window.Node.prototype.insertBefore,
+    u = window.Node.prototype.removeChild,
+    v = window.Node.prototype.replaceChild,
+    w = Object.getOwnPropertyDescriptor(window.Node.prototype, "textContent"),
+    y = window.Element.prototype.attachShadow,
+    z = Object.getOwnPropertyDescriptor(window.Element.prototype, "innerHTML"),
+    A = window.Element.prototype.getAttribute,
+    B = window.Element.prototype.setAttribute,
+    C = window.Element.prototype.removeAttribute,
+    D = window.Element.prototype.getAttributeNS,
+    E = window.Element.prototype.setAttributeNS,
+    F = window.Element.prototype.removeAttributeNS,
+    G = window.Element.prototype.insertAdjacentElement,
+    H = window.Element.prototype.insertAdjacentHTML,
+    fa = window.Element.prototype.prepend,
+    ha = window.Element.prototype.append,
+    ia = window.Element.prototype.before,
+    ja = window.Element.prototype.after,
+    ka = window.Element.prototype.replaceWith,
+    la = window.Element.prototype.remove,
+    ma = window.HTMLElement,
+    I = Object.getOwnPropertyDescriptor(window.HTMLElement.prototype, "innerHTML"),
+    na = window.HTMLElement.prototype.insertAdjacentElement,
+    oa = window.HTMLElement.prototype.insertAdjacentHTML;
   var pa = new Set();
   "annotation-xml color-profile font-face font-face-src font-face-uri font-face-format font-face-name missing-glyph".split(" ").forEach(function (a) {
     return pa.add(a);
   });
-
   function qa(a) {
     var b = pa.has(a);
     a = /^[a-z][.0-9_a-z]*-[-.0-9_a-z]*$/.test(a);
     return !b && a;
   }
-
   var ra = document.contains ? document.contains.bind(document) : document.documentElement.contains.bind(document.documentElement);
-
   function J(a) {
     var b = a.isConnected;
     if (void 0 !== b) return b;
     if (ra(a)) return !0;
-
     for (; a && !(a.__CE_isImportDocument || a instanceof Document);) {
       a = a.parentNode || (window.ShadowRoot && a instanceof ShadowRoot ? a.host : void 0);
     }
-
     return !(!a || !(a.__CE_isImportDocument || a instanceof Document));
   }
-
   function K(a) {
     var b = a.children;
     if (b) return Array.prototype.slice.call(b);
     b = [];
-
     for (a = a.firstChild; a; a = a.nextSibling) {
       a.nodeType === Node.ELEMENT_NODE && b.push(a);
     }
-
     return b;
   }
-
   function L(a, b) {
     for (; b && b !== a && !b.nextSibling;) {
       b = b.parentNode;
     }
-
     return b && b !== a ? b.nextSibling : null;
   }
-
   function M(a, b, c) {
     for (var f = a; f;) {
       if (f.nodeType === Node.ELEMENT_NODE) {
         var d = f;
         b(d);
         var e = d.localName;
-
         if ("link" === e && "import" === d.getAttribute("rel")) {
           f = d["import"];
           void 0 === c && (c = new Set());
@@ -8738,110 +8515,89 @@ var es_array_join = __webpack_require__(9600);
           f = L(a, d);
           continue;
         }
-
         if (d = d.__CE_shadowRoot) for (d = d.firstChild; d; d = d.nextSibling) {
           M(d, b, c);
         }
       }
-
       f = f.firstChild ? f.firstChild : L(a, f);
     }
   }
-
   ;
-
   function N() {
     var a = !(null === O || void 0 === O || !O.noDocumentConstructionObserver),
-        b = !(null === O || void 0 === O || !O.shadyDomFastWalk);
+      b = !(null === O || void 0 === O || !O.shadyDomFastWalk);
     this.m = [];
     this.g = [];
     this.j = !1;
     this.shadyDomFastWalk = b;
     this.I = !a;
   }
-
   function P(a, b, c, f) {
     var d = window.ShadyDOM;
-
     if (a.shadyDomFastWalk && d && d.inUse) {
       if (b.nodeType === Node.ELEMENT_NODE && c(b), b.querySelectorAll) for (a = d.nativeMethods.querySelectorAll.call(b, "*"), b = 0; b < a.length; b++) {
         c(a[b]);
       }
     } else M(b, c, f);
   }
-
   function sa(a, b) {
     a.j = !0;
     a.m.push(b);
   }
-
   function ta(a, b) {
     a.j = !0;
     a.g.push(b);
   }
-
   function Q(a, b) {
     a.j && P(a, b, function (c) {
       return R(a, c);
     });
   }
-
   function R(a, b) {
     if (a.j && !b.__CE_patched) {
       b.__CE_patched = !0;
-
       for (var c = 0; c < a.m.length; c++) {
         a.m[c](b);
       }
-
       for (c = 0; c < a.g.length; c++) {
         a.g[c](b);
       }
     }
   }
-
   function S(a, b) {
     var c = [];
     P(a, b, function (d) {
       return c.push(d);
     });
-
     for (b = 0; b < c.length; b++) {
       var f = c[b];
       1 === f.__CE_state ? a.connectedCallback(f) : T(a, f);
     }
   }
-
   function U(a, b) {
     var c = [];
     P(a, b, function (d) {
       return c.push(d);
     });
-
     for (b = 0; b < c.length; b++) {
       var f = c[b];
       1 === f.__CE_state && a.disconnectedCallback(f);
     }
   }
-
   function V(a, b, c) {
     c = void 0 === c ? {} : c;
-
     var f = c.J,
-        d = c.upgrade || function (g) {
-      return T(a, g);
-    },
-        e = [];
-
+      d = c.upgrade || function (g) {
+        return T(a, g);
+      },
+      e = [];
     P(a, b, function (g) {
       a.j && R(a, g);
-
       if ("link" === g.localName && "import" === g.getAttribute("rel")) {
         var h = g["import"];
         h instanceof Node && (h.__CE_isImportDocument = !0, h.__CE_registry = document.__CE_registry);
         h && "complete" === h.readyState ? h.__CE_documentLoadHandled = !0 : g.addEventListener("load", function () {
           var k = g["import"];
-
           if (!k.__CE_documentLoadHandled) {
             k.__CE_documentLoadHandled = !0;
             var l = new Set();
@@ -8856,21 +8612,17 @@ var es_array_join = __webpack_require__(9600);
         });
       } else e.push(g);
     }, f);
-
     for (b = 0; b < e.length; b++) {
       d(e[b]);
     }
   }
-
   function T(a, b) {
     try {
       var c = b.ownerDocument,
-          f = c.__CE_registry;
+        f = c.__CE_registry;
       var d = f && (c.defaultView || c.__CE_isImportDocument) ? W(f, b.localName) : void 0;
-
       if (d && void 0 === b.__CE_state) {
         d.constructionStack.push(b);
-
         try {
           try {
             if (new d.constructorFunction() !== b) throw Error("The custom element constructor did not produce the element being upgraded.");
@@ -8880,27 +8632,22 @@ var es_array_join = __webpack_require__(9600);
         } catch (k) {
           throw b.__CE_state = 2, k;
         }
-
         b.__CE_state = 1;
         b.__CE_definition = d;
-
         if (d.attributeChangedCallback && b.hasAttributes()) {
           var e = d.observedAttributes;
-
           for (d = 0; d < e.length; d++) {
             var g = e[d],
-                h = b.getAttribute(g);
+              h = b.getAttribute(g);
             null !== h && a.attributeChangedCallback(b, g, null, h, null);
           }
         }
-
         J(b) && a.connectedCallback(b);
       }
     } catch (k) {
       X(k);
     }
   }
-
   N.prototype.connectedCallback = function (a) {
     var b = a.__CE_definition;
     if (b.connectedCallback) try {
@@ -8909,7 +8656,6 @@ var es_array_join = __webpack_require__(9600);
       X(c);
     }
   };
-
   N.prototype.disconnectedCallback = function (a) {
     var b = a.__CE_definition;
     if (b.disconnectedCallback) try {
@@ -8918,7 +8664,6 @@ var es_array_join = __webpack_require__(9600);
       X(c);
     }
   };
-
   N.prototype.attributeChangedCallback = function (a, b, c, f, d) {
     var e = a.__CE_definition;
     if (e.attributeChangedCallback && -1 < e.observedAttributes.indexOf(b)) try {
@@ -8927,7 +8672,6 @@ var es_array_join = __webpack_require__(9600);
       X(g);
     }
   };
-
   function ua(a, b, c, f) {
     var d = b.__CE_registry;
     if (d && (null === f || "http://www.w3.org/1999/xhtml" === f) && (d = W(d, c))) try {
@@ -8947,13 +8691,12 @@ var es_array_join = __webpack_require__(9600);
     R(a, b);
     return b;
   }
-
   function X(a) {
     var b = a.message,
-        c = a.sourceURL || a.fileName || "",
-        f = a.line || a.lineNumber || 0,
-        d = a.column || a.columnNumber || 0,
-        e = void 0;
+      c = a.sourceURL || a.fileName || "",
+      f = a.line || a.lineNumber || 0,
+      d = a.column || a.columnNumber || 0,
+      e = void 0;
     void 0 === ErrorEvent.prototype.initErrorEvent ? e = new ErrorEvent("error", {
       cancelable: !0,
       message: b,
@@ -8979,9 +8722,7 @@ var es_array_join = __webpack_require__(9600);
     window.dispatchEvent(e);
     e.defaultPrevented || console.error(a);
   }
-
   ;
-
   function va() {
     var a = this;
     this.g = void 0;
@@ -8989,13 +8730,11 @@ var es_array_join = __webpack_require__(9600);
       a.l = b;
     });
   }
-
   va.prototype.resolve = function (a) {
     if (this.g) throw Error("Already resolved.");
     this.g = a;
     this.l(a);
   };
-
   function wa(a) {
     var b = document;
     this.l = void 0;
@@ -9007,39 +8746,32 @@ var es_array_join = __webpack_require__(9600);
       subtree: !0
     }));
   }
-
   function xa(a) {
     a.l && a.l.disconnect();
   }
-
   wa.prototype.G = function (a) {
     var b = this.g.readyState;
     "interactive" !== b && "complete" !== b || xa(this);
-
     for (b = 0; b < a.length; b++) {
       for (var c = a[b].addedNodes, f = 0; f < c.length; f++) {
         V(this.h, c[f]);
       }
     }
   };
-
   function Y(a) {
     this.s = new Map();
     this.u = new Map();
     this.C = new Map();
     this.A = !1;
     this.B = new Map();
-
     this.o = function (b) {
       return b();
     };
-
     this.i = !1;
     this.v = [];
     this.h = a;
     this.D = a.I ? new wa(a) : void 0;
   }
-
   Y.prototype.H = function (a, b) {
     var c = this;
     if (!(b instanceof Function)) throw new TypeError("Custom element constructor getters must be functions.");
@@ -9050,7 +8782,6 @@ var es_array_join = __webpack_require__(9600);
       return za(c);
     }));
   };
-
   Y.prototype.define = function (a, b) {
     var c = this;
     if (!(b instanceof Function)) throw new TypeError("Custom element constructors must be functions.");
@@ -9061,27 +8792,22 @@ var es_array_join = __webpack_require__(9600);
       return za(c);
     }));
   };
-
   function ya(a, b) {
     if (!qa(b)) throw new SyntaxError("The element name '" + b + "' is not valid.");
     if (W(a, b)) throw Error("A custom element with name '" + (b + "' has already been defined."));
     if (a.A) throw Error("A custom element is already being defined.");
   }
-
   function Aa(a, b, c) {
     a.A = !0;
     var f;
-
     try {
       var d = c.prototype;
       if (!(d instanceof Object)) throw new TypeError("The custom element constructor's prototype is not an object.");
-
       var e = function e(m) {
         var x = d[m];
         if (void 0 !== x && !(x instanceof Function)) throw Error("The '" + m + "' callback must be a function.");
         return x;
       };
-
       var g = e("connectedCallback");
       var h = e("disconnectedCallback");
       var k = e("adoptedCallback");
@@ -9091,7 +8817,6 @@ var es_array_join = __webpack_require__(9600);
     } finally {
       a.A = !1;
     }
-
     c = {
       localName: b,
       constructorFunction: c,
@@ -9106,49 +8831,39 @@ var es_array_join = __webpack_require__(9600);
     a.C.set(c.constructorFunction, c);
     return c;
   }
-
   Y.prototype.upgrade = function (a) {
     V(this.h, a);
   };
-
   function za(a) {
     if (!1 !== a.i) {
       a.i = !1;
-
       for (var b = [], c = a.v, f = new Map(), d = 0; d < c.length; d++) {
         f.set(c[d], []);
       }
-
       V(a.h, document, {
         upgrade: function upgrade(k) {
           if (void 0 === k.__CE_state) {
             var l = k.localName,
-                m = f.get(l);
+              m = f.get(l);
             m ? m.push(k) : a.u.has(l) && b.push(k);
           }
         }
       });
-
       for (d = 0; d < b.length; d++) {
         T(a.h, b[d]);
       }
-
       for (d = 0; d < c.length; d++) {
         for (var e = c[d], g = f.get(e), h = 0; h < g.length; h++) {
           T(a.h, g[h]);
         }
-
         (e = a.B.get(e)) && e.resolve(void 0);
       }
-
       c.length = 0;
     }
   }
-
   Y.prototype.get = function (a) {
     if (a = W(this, a)) return a.constructorFunction;
   };
-
   Y.prototype.whenDefined = function (a) {
     if (!qa(a)) return Promise.reject(new SyntaxError("'" + a + "' is not a valid custom element name."));
     var b = this.B.get(a);
@@ -9160,25 +8875,20 @@ var es_array_join = __webpack_require__(9600);
     c && a && b.resolve(void 0);
     return b.F;
   };
-
   Y.prototype.polyfillWrapFlushCallback = function (a) {
     this.D && xa(this.D);
     var b = this.o;
-
     this.o = function (c) {
       return a(function () {
         return b(c);
       });
     };
   };
-
   function W(a, b) {
     var c = a.u.get(b);
     if (c) return c;
-
     if (c = a.s.get(b)) {
       a.s["delete"](b);
-
       try {
         return Aa(a, b, c());
       } catch (f) {
@@ -9186,7 +8896,6 @@ var es_array_join = __webpack_require__(9600);
       }
     }
   }
-
   window.CustomElementRegistry = Y;
   Y.prototype.define = Y.prototype.define;
   Y.prototype.upgrade = Y.prototype.upgrade;
@@ -9194,16 +8903,13 @@ var es_array_join = __webpack_require__(9600);
   Y.prototype.whenDefined = Y.prototype.whenDefined;
   Y.prototype.polyfillDefineLazy = Y.prototype.H;
   Y.prototype.polyfillWrapFlushCallback = Y.prototype.polyfillWrapFlushCallback;
-
   function Z(a, b, c) {
     function f(d) {
       return function (e) {
         for (var g = [], h = 0; h < arguments.length; ++h) {
           g[h] = arguments[h];
         }
-
         h = [];
-
         for (var k = [], l = 0; l < g.length; l++) {
           var m = g[l];
           m instanceof Element && J(m) && k.push(m);
@@ -9211,57 +8917,44 @@ var es_array_join = __webpack_require__(9600);
             h.push(m);
           } else h.push(m);
         }
-
         d.apply(this, g);
-
         for (g = 0; g < k.length; g++) {
           U(a, k[g]);
         }
-
         if (J(this)) for (g = 0; g < h.length; g++) {
           k = h[g], k instanceof Element && S(a, k);
         }
       };
     }
-
     void 0 !== c.prepend && (b.prepend = f(c.prepend));
     void 0 !== c.append && (b.append = f(c.append));
   }
-
   ;
-
   function Ba(a) {
     Document.prototype.createElement = function (b) {
       return ua(a, this, b, null);
     };
-
     Document.prototype.importNode = function (b, c) {
       b = aa.call(this, b, !!c);
       this.__CE_registry ? V(a, b) : Q(a, b);
       return b;
     };
-
     Document.prototype.createElementNS = function (b, c) {
       return ua(a, this, c, b);
     };
-
     Z(a, Document.prototype, {
       prepend: ba,
       append: ca
     });
   }
-
   ;
-
   function Ca(a) {
     function b(f) {
       return function (d) {
         for (var e = [], g = 0; g < arguments.length; ++g) {
           e[g] = arguments[g];
         }
-
         g = [];
-
         for (var h = [], k = 0; k < e.length; k++) {
           var l = e[k];
           l instanceof Element && J(l) && h.push(l);
@@ -9269,19 +8962,15 @@ var es_array_join = __webpack_require__(9600);
             g.push(l);
           } else g.push(l);
         }
-
         f.apply(this, e);
-
         for (e = 0; e < h.length; e++) {
           U(a, h[e]);
         }
-
         if (J(this)) for (e = 0; e < g.length; e++) {
           h = g[e], h instanceof Element && S(a, h);
         }
       };
     }
-
     var c = Element.prototype;
     void 0 !== ia && (c.before = b(ia));
     void 0 !== ja && (c.after = b(ja));
@@ -9289,9 +8978,7 @@ var es_array_join = __webpack_require__(9600);
       for (var d = [], e = 0; e < arguments.length; ++e) {
         d[e] = arguments[e];
       }
-
       e = [];
-
       for (var g = [], h = 0; h < d.length; h++) {
         var k = d[h];
         k instanceof Element && J(k) && g.push(k);
@@ -9299,14 +8986,11 @@ var es_array_join = __webpack_require__(9600);
           e.push(k);
         } else e.push(k);
       }
-
       h = J(this);
       ka.apply(this, d);
-
       for (d = 0; d < g.length; d++) {
         U(a, g[d]);
       }
-
       if (h) for (U(a, this), d = 0; d < e.length; d++) {
         g = e[d], g instanceof Element && S(a, g);
       }
@@ -9317,9 +9001,7 @@ var es_array_join = __webpack_require__(9600);
       f && U(a, this);
     });
   }
-
   ;
-
   function Da(a) {
     function b(d, e) {
       Object.defineProperty(d, "innerHTML", {
@@ -9328,7 +9010,7 @@ var es_array_join = __webpack_require__(9600);
         get: e.get,
         set: function set(g) {
           var h = this,
-              k = void 0;
+            k = void 0;
           J(this) && (k = [], P(a, this, function (x) {
             x !== h && k.push(x);
           }));
@@ -9342,7 +9024,6 @@ var es_array_join = __webpack_require__(9600);
         }
       });
     }
-
     function c(d, e) {
       d.insertAdjacentElement = function (g, h) {
         var k = J(h);
@@ -9352,21 +9033,17 @@ var es_array_join = __webpack_require__(9600);
         return g;
       };
     }
-
     function f(d, e) {
       function g(h, k) {
         for (var l = []; h !== k; h = h.nextSibling) {
           l.push(h);
         }
-
         for (k = 0; k < l.length; k++) {
           V(a, l[k]);
         }
       }
-
       d.insertAdjacentHTML = function (h, k) {
         h = h.toLowerCase();
-
         if ("beforebegin" === h) {
           var l = this.previousSibling;
           e.call(this, h, k);
@@ -9374,18 +9051,14 @@ var es_array_join = __webpack_require__(9600);
         } else if ("afterbegin" === h) l = this.firstChild, e.call(this, h, k), g(this.firstChild, l);else if ("beforeend" === h) l = this.lastChild, e.call(this, h, k), g(l || this.firstChild, null);else if ("afterend" === h) l = this.nextSibling, e.call(this, h, k), g(this.nextSibling, l);else throw new SyntaxError("The value provided (" + String(h) + ") is not one of 'beforebegin', 'afterbegin', 'beforeend', or 'afterend'.");
       };
     }
-
     y && (Element.prototype.attachShadow = function (d) {
       d = y.call(this, d);
-
       if (a.j && !d.__CE_patched) {
         d.__CE_patched = !0;
-
         for (var e = 0; e < a.m.length; e++) {
           a.m[e](d);
         }
       }
-
       return this.__CE_shadowRoot = d;
     });
     z && z.get ? b(Element.prototype, z) : I && I.get ? b(HTMLElement.prototype, I) : ta(a, function (d) {
@@ -9397,20 +9070,17 @@ var es_array_join = __webpack_require__(9600);
         },
         set: function set(e) {
           var g = "template" === this.localName,
-              h = g ? this.content : this,
-              k = p.call(document, this.namespaceURI, this.localName);
-
+            h = g ? this.content : this,
+            k = p.call(document, this.namespaceURI, this.localName);
           for (k.innerHTML = e; 0 < h.childNodes.length;) {
             u.call(h, h.childNodes[0]);
           }
-
           for (e = g ? k.content : k; 0 < e.childNodes.length;) {
             r.call(h, e.childNodes[0]);
           }
         }
       });
     });
-
     Element.prototype.setAttribute = function (d, e) {
       if (1 !== this.__CE_state) return B.call(this, d, e);
       var g = A.call(this, d);
@@ -9418,7 +9088,6 @@ var es_array_join = __webpack_require__(9600);
       e = A.call(this, d);
       a.attributeChangedCallback(this, d, g, e, null);
     };
-
     Element.prototype.setAttributeNS = function (d, e, g) {
       if (1 !== this.__CE_state) return E.call(this, d, e, g);
       var h = D.call(this, d, e);
@@ -9426,14 +9095,12 @@ var es_array_join = __webpack_require__(9600);
       g = D.call(this, d, e);
       a.attributeChangedCallback(this, e, h, g, d);
     };
-
     Element.prototype.removeAttribute = function (d) {
       if (1 !== this.__CE_state) return C.call(this, d);
       var e = A.call(this, d);
       C.call(this, d);
       null !== e && a.attributeChangedCallback(this, d, e, null, null);
     };
-
     Element.prototype.removeAttributeNS = function (d, e) {
       if (1 !== this.__CE_state) return F.call(this, d, e);
       var g = D.call(this, d, e);
@@ -9441,7 +9108,6 @@ var es_array_join = __webpack_require__(9600);
       var h = D.call(this, d, e);
       g !== h && a.attributeChangedCallback(this, e, g, h, d);
     };
-
     na ? c(HTMLElement.prototype, na) : G && c(Element.prototype, G);
     oa ? f(HTMLElement.prototype, oa) : H && f(Element.prototype, H);
     Z(a, Element.prototype, {
@@ -9450,28 +9116,23 @@ var es_array_join = __webpack_require__(9600);
     });
     Ca(a);
   }
-
   ;
   var Ea = {};
-
   function Fa(a) {
     function b() {
       var c = this.constructor;
-
       var f = document.__CE_registry.C.get(c);
-
       if (!f) throw Error("Failed to construct a custom element: The constructor was not registered with `customElements`.");
       var d = f.constructionStack;
       if (0 === d.length) return d = n.call(document, f.localName), Object.setPrototypeOf(d, c.prototype), d.__CE_state = 1, d.__CE_definition = f, R(a, d), d;
       var e = d.length - 1,
-          g = d[e];
+        g = d[e];
       if (g === Ea) throw Error("Failed to construct '" + f.localName + "': This element was already constructed.");
       d[e] = Ea;
       Object.setPrototypeOf(g, c.prototype);
       R(a, g);
       return g;
     }
-
     b.prototype = ma.prototype;
     Object.defineProperty(HTMLElement.prototype, "constructor", {
       writable: !0,
@@ -9481,9 +9142,7 @@ var es_array_join = __webpack_require__(9600);
     });
     window.HTMLElement = b;
   }
-
   ;
-
   function Ga(a) {
     function b(c, f) {
       Object.defineProperty(c, "textContent", {
@@ -9493,20 +9152,16 @@ var es_array_join = __webpack_require__(9600);
         set: function set(d) {
           if (this.nodeType === Node.TEXT_NODE) f.set.call(this, d);else {
             var e = void 0;
-
             if (this.firstChild) {
               var g = this.childNodes,
-                  h = g.length;
-
+                h = g.length;
               if (0 < h && J(this)) {
                 e = Array(h);
-
                 for (var k = 0; k < h; k++) {
                   e[k] = g[k];
                 }
               }
             }
-
             f.set.call(this, d);
             if (e) for (d = 0; d < e.length; d++) {
               U(a, e[d]);
@@ -9515,7 +9170,6 @@ var es_array_join = __webpack_require__(9600);
         }
       });
     }
-
     Node.prototype.insertBefore = function (c, f) {
       if (c instanceof DocumentFragment) {
         var d = K(c);
@@ -9525,14 +9179,12 @@ var es_array_join = __webpack_require__(9600);
         }
         return c;
       }
-
       d = c instanceof Element && J(c);
       f = t.call(this, c, f);
       d && U(a, c);
       J(this) && S(a, c);
       return f;
     };
-
     Node.prototype.appendChild = function (c) {
       if (c instanceof DocumentFragment) {
         var f = K(c);
@@ -9542,27 +9194,23 @@ var es_array_join = __webpack_require__(9600);
         }
         return c;
       }
-
       f = c instanceof Element && J(c);
       d = r.call(this, c);
       f && U(a, c);
       J(this) && S(a, c);
       return d;
     };
-
     Node.prototype.cloneNode = function (c) {
       c = q.call(this, !!c);
       this.ownerDocument.__CE_registry ? V(a, c) : Q(a, c);
       return c;
     };
-
     Node.prototype.removeChild = function (c) {
       var f = c instanceof Element && J(c),
-          d = u.call(this, c);
+        d = u.call(this, c);
       f && U(a, c);
       return d;
     };
-
     Node.prototype.replaceChild = function (c, f) {
       if (c instanceof DocumentFragment) {
         var d = K(c);
@@ -9572,16 +9220,14 @@ var es_array_join = __webpack_require__(9600);
         }
         return c;
       }
-
       d = c instanceof Element && J(c);
       var e = v.call(this, c, f),
-          g = J(this);
+        g = J(this);
       g && U(a, f);
       d && U(a, c);
       g && S(a, c);
       return e;
     };
-
     w && w.get ? b(Node.prototype, w) : sa(a, function (c) {
       b(c, {
         enumerable: !0,
@@ -9590,23 +9236,19 @@ var es_array_join = __webpack_require__(9600);
           for (var f = [], d = this.firstChild; d; d = d.nextSibling) {
             d.nodeType !== Node.COMMENT_NODE && f.push(d.textContent);
           }
-
           return f.join("");
         },
         set: function set(f) {
           for (; this.firstChild;) {
             u.call(this, this.firstChild);
           }
-
           null != f && "" !== f && r.call(this, document.createTextNode(f));
         }
       });
     });
   }
-
   ;
   var O = window.customElements;
-
   function Ha() {
     var a = new N();
     Fa(a);
@@ -9625,7 +9267,6 @@ var es_array_join = __webpack_require__(9600);
       value: a
     });
   }
-
   O && !O.forcePolyfill && "function" == typeof O.define && "function" == typeof O.get || Ha();
   window.__CE_installPolyfill = Ha;
 }).call(self);
@@ -9679,50 +9320,29 @@ function test_pure_typeof(obj) { "@babel/helpers - typeof"; return test_pure_typ
 
 
 
-
-
 function _get() { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get.bind(); } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(arguments.length < 3 ? target : receiver); } return desc.value; }; } return _get.apply(this, arguments); }
-
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
 function _possibleConstructorReturn(self, call) { if (call && (test_pure_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
-
 function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct.bind(); } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
-
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
 function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
-
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 (function (cb) {
   var Foo = function (_HTMLElement) {
     _inherits(Foo, _HTMLElement);
-
     var _super = _createSuper(Foo);
-
     function Foo() {
       _classCallCheck(this, Foo);
-
       return _super.apply(this, arguments);
     }
-
     _createClass(Foo, [{
       key: "connectedCallback",
       value: function connectedCallback() {
@@ -9734,33 +9354,24 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         return this._baz;
       }
     }]);
-
     return Foo;
   }(_wrapNativeSuper(HTMLElement));
-
   var Fooz = function (_Foo) {
     _inherits(Fooz, _Foo);
-
     var _super2 = _createSuper(Fooz);
-
     function Fooz() {
       _classCallCheck(this, Fooz);
-
       return _super2.apply(this, arguments);
     }
-
     _createClass(Fooz, [{
       key: "connectedCallback",
       value: function connectedCallback() {
         _get(_getPrototypeOf(Fooz.prototype), "connectedCallback", this).call(this);
-
         this._baz = this._baz + ' world';
       }
     }]);
-
     return Fooz;
   }(Foo);
-
   customElements.define('web-test-fooz', Fooz);
   document.body.appendChild(new Fooz());
   var fooz = document.getElementsByTagName('web-test-fooz')[0];
