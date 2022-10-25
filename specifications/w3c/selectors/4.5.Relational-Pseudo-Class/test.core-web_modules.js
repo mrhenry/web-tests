@@ -758,8 +758,8 @@ var FunctionPrototype = Function.prototype;
 var call = FunctionPrototype.call;
 var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
-module.exports = function (fn) {
-  return NATIVE_BIND ? uncurryThisWithBind(fn) : function () {
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
+  return function () {
     return call.apply(fn, arguments);
   };
 };
@@ -1940,10 +1940,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.25.5',
+  version: '3.26.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.25.5/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3464,8 +3464,6 @@ var es_array_sort = __webpack_require__(2707);
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
     testSelectorAllFromMain(assert, ":has(> .parent)", [a]);
     testSelectorAllFromMain(assert, ":has(> .target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(> .parent, > .target)", [a, b, f, h]);
@@ -3591,12 +3589,7 @@ var es_array_sort = __webpack_require__(2707);
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", []);
+
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -3709,12 +3702,7 @@ var es_array_sort = __webpack_require__(2707);
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", []);
+
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });

@@ -118,8 +118,9 @@
       assert.step(".parent:has(:is(.target ~ .sibling .descendant)) matches expected elements from #main");
     }
     testSelectorAllFromMain(assert, ".sibling:has(.descendant) ~ .target", [e]);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
-    testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
+    // see : https://github.com/w3c/csswg-drafts/issues/7676
+    // testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target)", []);
+    // testSelectorAllFromMain(assert, ":has(.sibling:has(.descendant) ~ .target) ~ .parent > .descendant", []);
     testSelectorAllFromMain(assert, ":has(> .parent)", [a]);
     testSelectorAllFromMain(assert, ":has(> .target)", [b, f, h]);
     testSelectorAllFromMain(assert, ":has(> .parent, > .target)", [a, b, f, h]);
@@ -248,12 +249,14 @@
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", []);
+    // see : https://github.com/w3c/csswg-drafts/issues/7676
+    // testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ".x:has(+ .y:has(> .g .h) .i) ~ .j", []);
+    // testSelectorAllFromMain(assert, ".x:has(+ .y:has(.g .h) .i) ~ .j", []);
+    // testSelectorAllFromMain(assert, ".x:has(~ .y:has(> .g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ".x:has(~ .y:has(.g .h) .i)", []);
+
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -367,12 +370,14 @@
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", []);
-    testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", []);
-    testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", []);
+    // see : https://github.com/w3c/csswg-drafts/issues/7676
+    // testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ":has(+ :has(> .g .h) .i) ~ .j", []);
+    // testSelectorAllFromMain(assert, ":has(+ :has(.g .h) .i) ~ .j", []);
+    // testSelectorAllFromMain(assert, ":has(~ :has(> .g .h) .i)", []);
+    // testSelectorAllFromMain(assert, ":has(~ :has(.g .h) .i)", []);
+
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });
