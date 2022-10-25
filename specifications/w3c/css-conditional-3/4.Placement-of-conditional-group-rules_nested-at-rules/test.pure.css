@@ -1,6 +1,6 @@
 @media screen {
-	@media all and (min-width: 1px) {
-		@media all and (min-height: 1px) {
+	@media (min-width: 1px) {
+		@media (min-height: 1px) {
 			#hello {
 				color: #f00;
 			}
