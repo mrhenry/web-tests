@@ -7,7 +7,7 @@ require (
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-version v1.6.0
-	github.com/mattn/go-sqlite3 v1.14.15
+	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/mileusna/useragent v1.2.1
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
