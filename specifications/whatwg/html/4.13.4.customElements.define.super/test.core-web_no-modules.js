@@ -8311,7 +8311,9 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
         }
 
         function indexOf(set, item, idx, prop) {
-          for (; idx < set.length; idx++) {
+          for
+          (
+          ; idx < set.length; idx++) {
             if ((prop ? set[idx][prop] : set[idx]) === item) return idx;
           }
           return -1;
@@ -8692,11 +8694,12 @@ var es_array_join = __webpack_require__(9600);
     return b;
   }
   function X(a) {
-    var b = a.message,
-      c = a.sourceURL || a.fileName || "",
-      f = a.line || a.lineNumber || 0,
-      d = a.column || a.columnNumber || 0,
-      e = void 0;
+    var b = "",
+      c = "",
+      f = 0,
+      d = 0;
+    a instanceof Error ? (b = a.message, c = a.sourceURL || a.fileName || "", f = a.line || a.lineNumber || 0, d = a.column || a.columnNumber || 0) : b = "Uncaught " + String(a);
+    var e = void 0;
     void 0 === ErrorEvent.prototype.initErrorEvent ? e = new ErrorEvent("error", {
       cancelable: !0,
       message: b,
@@ -8896,7 +8899,6 @@ var es_array_join = __webpack_require__(9600);
       }
     }
   }
-  window.CustomElementRegistry = Y;
   Y.prototype.define = Y.prototype.define;
   Y.prototype.upgrade = Y.prototype.upgrade;
   Y.prototype.get = Y.prototype.get;
@@ -9259,6 +9261,7 @@ var es_array_join = __webpack_require__(9600);
     });
     Ga(a);
     Da(a);
+    window.CustomElementRegistry = Y;
     a = new Y(a);
     document.__CE_registry = a;
     Object.defineProperty(window, "customElements", {
