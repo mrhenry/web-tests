@@ -1,4 +1,6 @@
 (function (cb) {
+	document.body.offsetTop;
+
 	var style = window.getComputedStyle(document.getElementById('a'));
 	if (style.color !== 'rgb(0, 255, 0)') {
 		cb(false);
