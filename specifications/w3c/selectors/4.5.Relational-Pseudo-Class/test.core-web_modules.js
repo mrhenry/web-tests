@@ -3304,6 +3304,7 @@ var es_string_trim = __webpack_require__(3210);
             }
           }
         });
+
         arguments[0] = newQuery;
 
         var elementOrNodeList = qsa.apply(this, arguments);
@@ -3362,6 +3363,7 @@ var es_array_sort = __webpack_require__(2707);
     },
     step: function (message) {
     },
+
     equal: function (a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
@@ -3430,6 +3432,7 @@ var es_array_sort = __webpack_require__(2707);
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
+
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });

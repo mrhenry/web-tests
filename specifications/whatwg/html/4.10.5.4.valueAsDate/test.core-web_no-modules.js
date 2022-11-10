@@ -3820,6 +3820,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
             } catch (_) {
             }
           }
+
           var type = this.type;
           if (type === "text") {
             type = this.getAttribute("type");

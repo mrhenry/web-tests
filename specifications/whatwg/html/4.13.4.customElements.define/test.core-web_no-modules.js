@@ -8273,6 +8273,7 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           ; idx < set.length; idx++) {
             if ((prop ? set[idx][prop] : set[idx]) === item) return idx;
           }
+
           return -1;
         }
 

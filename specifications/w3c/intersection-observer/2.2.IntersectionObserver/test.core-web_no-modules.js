@@ -5970,6 +5970,7 @@ function IntersectionObserver_typeof(obj) { "@babel/helpers - typeof"; return In
           rect = el.getBoundingClientRect();
         } catch (err) {
         }
+
         if (!rect) return getEmptyRect();
 
         if (!(rect.width && rect.height && rect.x && rect.y)) {

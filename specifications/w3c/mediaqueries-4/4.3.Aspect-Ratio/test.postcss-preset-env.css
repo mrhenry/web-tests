@@ -1,0 +1,34 @@
+@media screen and (min-aspect-ratio: 1/100) {
+	#a {
+		color: #0f0;
+	}
+}
+
+@media screen and (min-aspect-ratio: 0.01/1) {
+	#b {
+		color: #0f0;
+	}
+}
+
+@media screen and (min-aspect-ratio: 0.01) {
+	#c {
+		color: #0f0;
+	}
+}
+
+#d {
+	color: #0f0;
+}
+
+@media screen and (min-aspect-ratio: 0/0) {
+	#d {
+		color: red;
+	}
+}
+
+@media screen and (max-aspect-ratio: 0/0) {
+	#e {
+		color: #0f0;
+	}
+}
+

@@ -3698,6 +3698,7 @@ var es_parse_float = __webpack_require__(4678);
           rect = el.getBoundingClientRect();
         } catch (err) {
         }
+
         if (!rect) return getEmptyRect();
 
         if (!(rect.width && rect.height && rect.x && rect.y)) {

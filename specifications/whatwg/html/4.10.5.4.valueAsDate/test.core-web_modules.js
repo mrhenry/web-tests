@@ -2044,6 +2044,7 @@ var es_regexp_test = __webpack_require__(7601);
             } catch (_) {
             }
           }
+
           var type = this.type;
           if (type === "text") {
             type = this.getAttribute("type");

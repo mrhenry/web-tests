@@ -3459,6 +3459,7 @@ var __webpack_exports__ = {};
     },
     step: function step(message) {
     },
+
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
@@ -3527,6 +3528,7 @@ var __webpack_exports__ = {};
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
+
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
