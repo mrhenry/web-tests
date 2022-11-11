@@ -32,3 +32,14 @@
 	}
 }
 
+@media screen and (min-aspect-ratio: calc(1)/calc(10*10)) {
+	#f {
+		color: #0f0;
+	}
+}
+
+@media screen and (min-aspect-ratio: calc(1/100)) {
+	#g {
+		color: #0f0;
+	}
+}

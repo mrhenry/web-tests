@@ -31,5 +31,17 @@
 		return;
 	}
 
+	style = window.getComputedStyle(document.getElementById('f'));
+	if (style.color !== 'rgb(0, 255, 0)') {
+		cb(false);
+		return;
+	}
+
+	style = window.getComputedStyle(document.getElementById('g'));
+	if (style.color !== 'rgb(0, 255, 0)') {
+		cb(false);
+		return;
+	}
+
 	cb(true);
 })(callback);
