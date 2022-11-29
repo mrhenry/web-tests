@@ -4103,16 +4103,13 @@ var __webpack_exports__ = {};
 // EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
 var modules_DocumentFragment = __webpack_require__(7846);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_mutation.js
-
 var _mutation = function () {
-
   function isNode(object) {
     if (typeof Node === 'function') {
       return object instanceof Node;
     }
     return object && typeof object === "object" && object.nodeName && object.nodeType >= 1 && object.nodeType <= 12;
   }
-
   return function mutation(nodes) {
     if (nodes.length === 1) {
       return isNode(nodes[0]) ? nodes[0] : document.createTextNode(nodes[0] + '');
@@ -4174,7 +4171,6 @@ var _mutation = function () {
         this.parentNode.insertBefore(helpers_mutation(arguments), viableNextSibling);
       }
     };
-
     if ("Text" in self) {
       Text.prototype.after = Element.prototype.after;
     }
@@ -4208,7 +4204,6 @@ var _mutation = function () {
         this.parentNode.insertBefore(helpers_mutation(arguments), viablePreviousSibling ? viablePreviousSibling.nextSibling : this.parentNode.firstChild);
       }
     };
-
     if ("Text" in self) {
       Text.prototype.before = Element.prototype.before;
     }
@@ -4232,7 +4227,6 @@ var _mutation = function () {
         this.parentNode.replaceChild(helpers_mutation(arguments), this);
       }
     };
-
     if ('Text' in self) {
       Text.prototype.replaceWith = Element.prototype.replaceWith;
     }

@@ -3339,7 +3339,6 @@ var es_parse_float = __webpack_require__(4678);
 
 (function (undefined) {
   if (!("IntersectionObserver" in window && "IntersectionObserverEntry" in window && "intersectionRatio" in window.IntersectionObserverEntry.prototype)) {
-
     (function (window, document) {
       'use strict';
 
@@ -3348,7 +3347,6 @@ var es_parse_float = __webpack_require__(4678);
         return;
       }
       var registry = [];
-
       function IntersectionObserverEntry(entry) {
         this.time = entry.time;
         this.target = entry.target;
@@ -3357,21 +3355,17 @@ var es_parse_float = __webpack_require__(4678);
         this.intersectionRect = entry.intersectionRect || getEmptyRect();
         try {
           this.isIntersecting = !!entry.intersectionRect;
-        } catch (err) {
-        }
-
+        } catch (err) {}
         var targetRect = this.boundingClientRect;
         var targetArea = targetRect.width * targetRect.height;
         var intersectionRect = this.intersectionRect;
         var intersectionArea = intersectionRect.width * intersectionRect.height;
-
         if (targetArea) {
           this.intersectionRatio = Number((intersectionArea / targetArea).toFixed(4));
         } else {
           this.intersectionRatio = this.isIntersecting ? 1 : 0;
         }
       }
-
       function IntersectionObserver(callback, opt_options) {
         var options = opt_options || {};
         if (typeof callback != 'function') {
@@ -3380,27 +3374,20 @@ var es_parse_float = __webpack_require__(4678);
         if (options.root && options.root.nodeType != 1) {
           throw new Error('root must be an Element');
         }
-
         this._checkForIntersections = throttle(this._checkForIntersections.bind(this), this.THROTTLE_TIMEOUT);
-
         this._callback = callback;
         this._observationTargets = [];
         this._queuedEntries = [];
         this._rootMarginValues = this._parseRootMargin(options.rootMargin);
-
         this.thresholds = this._initThresholds(options.threshold);
         this.root = options.root || null;
         this.rootMargin = this._rootMarginValues.map(function (margin) {
           return margin.value + margin.unit;
         }).join(' ');
       }
-
       IntersectionObserver.prototype.THROTTLE_TIMEOUT = 100;
-
       IntersectionObserver.prototype.POLL_INTERVAL = null;
-
       IntersectionObserver.prototype.USE_MUTATION_OBSERVER = true;
-
       IntersectionObserver.prototype.observe = function (target) {
         var isTargetAlreadyObserved = this._observationTargets.some(function (item) {
           return item.element == target;
@@ -3419,7 +3406,6 @@ var es_parse_float = __webpack_require__(4678);
         this._monitorIntersections();
         this._checkForIntersections();
       };
-
       IntersectionObserver.prototype.unobserve = function (target) {
         this._observationTargets = this._observationTargets.filter(function (item) {
           return item.element != target;
@@ -3429,19 +3415,16 @@ var es_parse_float = __webpack_require__(4678);
           this._unregisterInstance();
         }
       };
-
       IntersectionObserver.prototype.disconnect = function () {
         this._observationTargets = [];
         this._unmonitorIntersections();
         this._unregisterInstance();
       };
-
       IntersectionObserver.prototype.takeRecords = function () {
         var records = this._queuedEntries.slice();
         this._queuedEntries = [];
         return records;
       };
-
       IntersectionObserver.prototype._initThresholds = function (opt_threshold) {
         var threshold = opt_threshold || [0];
         if (!Array.isArray(threshold)) threshold = [threshold];
@@ -3452,7 +3435,6 @@ var es_parse_float = __webpack_require__(4678);
           return t !== a[i - 1];
         });
       };
-
       IntersectionObserver.prototype._parseRootMargin = function (opt_rootMargin) {
         var marginString = opt_rootMargin || '0px';
         var margins = marginString.split(/\s+/).map(function (margin) {
@@ -3465,17 +3447,14 @@ var es_parse_float = __webpack_require__(4678);
             unit: parts[2]
           };
         });
-
         margins[1] = margins[1] || margins[0];
         margins[2] = margins[2] || margins[0];
         margins[3] = margins[3] || margins[1];
         return margins;
       };
-
       IntersectionObserver.prototype._monitorIntersections = function () {
         if (!this._monitoringIntersections) {
           this._monitoringIntersections = true;
-
           if (this.POLL_INTERVAL) {
             this._monitoringInterval = setInterval(this._checkForIntersections, this.POLL_INTERVAL);
           } else {
@@ -3493,7 +3472,6 @@ var es_parse_float = __webpack_require__(4678);
           }
         }
       };
-
       IntersectionObserver.prototype._unmonitorIntersections = function () {
         if (this._monitoringIntersections) {
           this._monitoringIntersections = false;
@@ -3507,7 +3485,6 @@ var es_parse_float = __webpack_require__(4678);
           }
         }
       };
-
       IntersectionObserver.prototype._checkForIntersections = function () {
         var rootIsInDom = this._rootIsInDom();
         var rootRect = rootIsInDom ? this._getRootRect() : getEmptyRect();
@@ -3540,7 +3517,6 @@ var es_parse_float = __webpack_require__(4678);
           this._callback(this.takeRecords(), this);
         }
       };
-
       IntersectionObserver.prototype._computeTargetAndRootIntersection = function (target, rootRect) {
         if (window.getComputedStyle(target).display == 'none') return;
         var targetRect = getBoundingClientRect(target);
@@ -3550,7 +3526,6 @@ var es_parse_float = __webpack_require__(4678);
         while (!atRoot) {
           var parentRect = null;
           var parentComputedStyle = parent.nodeType == 1 ? window.getComputedStyle(parent) : {};
-
           if (parentComputedStyle.display == 'none') return;
           if (parent == this.root || parent == document) {
             atRoot = true;
@@ -3560,7 +3535,6 @@ var es_parse_float = __webpack_require__(4678);
               parentRect = getBoundingClientRect(parent);
             }
           }
-
           if (parentRect) {
             intersectionRect = computeRectIntersection(parentRect, intersectionRect);
             if (!intersectionRect) break;
@@ -3569,7 +3543,6 @@ var es_parse_float = __webpack_require__(4678);
         }
         return intersectionRect;
       };
-
       IntersectionObserver.prototype._getRootRect = function () {
         var rootRect;
         if (this.root) {
@@ -3590,7 +3563,6 @@ var es_parse_float = __webpack_require__(4678);
         }
         return this._expandRectByRootMargin(rootRect);
       };
-
       IntersectionObserver.prototype._expandRectByRootMargin = function (rect) {
         var margins = this._rootMarginValues.map(function (margin, i) {
           return margin.unit == 'px' ? margin.value : margin.value * (i % 2 ? rect.width : rect.height) / 100;
@@ -3607,44 +3579,35 @@ var es_parse_float = __webpack_require__(4678);
         newRect.y = newRect.top;
         return newRect;
       };
-
       IntersectionObserver.prototype._hasCrossedThreshold = function (oldEntry, newEntry) {
         var oldRatio = oldEntry && oldEntry.isIntersecting ? oldEntry.intersectionRatio || 0 : -1;
         var newRatio = newEntry.isIntersecting ? newEntry.intersectionRatio || 0 : -1;
-
         if (oldRatio === newRatio) return;
         for (var i = 0; i < this.thresholds.length; i++) {
           var threshold = this.thresholds[i];
-
           if (threshold == oldRatio || threshold == newRatio || threshold < oldRatio !== threshold < newRatio) {
             return true;
           }
         }
       };
-
       IntersectionObserver.prototype._rootIsInDom = function () {
         return !this.root || containsDeep(document, this.root);
       };
-
       IntersectionObserver.prototype._rootContainsTarget = function (target) {
         return containsDeep(this.root || document, target);
       };
-
       IntersectionObserver.prototype._registerInstance = function () {
         if (registry.indexOf(this) < 0) {
           registry.push(this);
         }
       };
-
       IntersectionObserver.prototype._unregisterInstance = function () {
         var index = registry.indexOf(this);
         if (index != -1) registry.splice(index, 1);
       };
-
       function now() {
         return window.performance && performance.now && performance.now();
       }
-
       function throttle(fn, timeout) {
         var timer = null;
         return function () {
@@ -3656,7 +3619,6 @@ var es_parse_float = __webpack_require__(4678);
           }
         };
       }
-
       function addEvent(node, event, fn, opt_useCapture) {
         if (typeof node.addEventListener == 'function') {
           node.addEventListener(event, fn, opt_useCapture || false);
@@ -3664,7 +3626,6 @@ var es_parse_float = __webpack_require__(4678);
           node.attachEvent('on' + event, fn);
         }
       }
-
       function removeEvent(node, event, fn, opt_useCapture) {
         if (typeof node.removeEventListener == 'function') {
           node.removeEventListener(event, fn, opt_useCapture || false);
@@ -3672,7 +3633,6 @@ var es_parse_float = __webpack_require__(4678);
           node.detatchEvent('on' + event, fn);
         }
       }
-
       function computeRectIntersection(rect1, rect2) {
         var top = Math.max(rect1.top, rect2.top);
         var bottom = Math.min(rect1.bottom, rect2.bottom);
@@ -3691,16 +3651,12 @@ var es_parse_float = __webpack_require__(4678);
           height: height
         };
       }
-
       function getBoundingClientRect(el) {
         var rect;
         try {
           rect = el.getBoundingClientRect();
-        } catch (err) {
-        }
-
+        } catch (err) {}
         if (!rect) return getEmptyRect();
-
         if (!(rect.width && rect.height && rect.x && rect.y)) {
           rect = {
             x: rect.left,
@@ -3715,7 +3671,6 @@ var es_parse_float = __webpack_require__(4678);
         }
         return rect;
       }
-
       function getEmptyRect() {
         return {
           x: 0,
@@ -3728,7 +3683,6 @@ var es_parse_float = __webpack_require__(4678);
           height: 0
         };
       }
-
       function containsDeep(parent, child) {
         var node = child;
         while (node) {
@@ -3737,7 +3691,6 @@ var es_parse_float = __webpack_require__(4678);
         }
         return false;
       }
-
       function getParentNode(node) {
         var parent = node.parentNode;
         if (parent && parent.nodeType == 11 && parent.host) {
@@ -3748,7 +3701,6 @@ var es_parse_float = __webpack_require__(4678);
         }
         return parent;
       }
-
       window.IntersectionObserver = IntersectionObserver;
       window.IntersectionObserverEntry = IntersectionObserverEntry;
     })(window, document);
@@ -3757,8 +3709,7 @@ var es_parse_float = __webpack_require__(4678);
 ;// CONCATENATED MODULE: ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
 
 (function (cb) {
-  var foo = new IntersectionObserver(function () {
-  }, {});
+  var foo = new IntersectionObserver(function () {}, {});
   cb(!!foo);
 })(callback);
 })();

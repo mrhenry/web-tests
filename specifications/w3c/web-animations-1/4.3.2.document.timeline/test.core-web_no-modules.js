@@ -6729,9 +6729,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
   if (!("requestAnimationFrame" in self)) {
     (function (global) {
       var rafPrefix;
-
       var nowOffset = Date.now();
-
       var pnow = function pnow() {
         if (global.performance && typeof global.performance.now === 'function') {
           return global.performance.now();
@@ -6903,7 +6901,6 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
       return !1;
     }
   }())) {
-
     !function () {
       var a = {},
         b = {};

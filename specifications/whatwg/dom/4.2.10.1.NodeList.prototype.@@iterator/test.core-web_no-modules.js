@@ -4702,7 +4702,6 @@ var es_array_splice = __webpack_require__(561);
 
 
 
-
 var Iterator = function () {
   var clear = function clear() {
     this.length = 0;
@@ -4889,9 +4888,7 @@ var Iterator = function () {
 
 
 
-
 var ArrayIterator = function () {
-
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);

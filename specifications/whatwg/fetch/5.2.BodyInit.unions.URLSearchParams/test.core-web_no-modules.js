@@ -8868,7 +8868,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }
         return value;
       }
-
       function iteratorFor(items) {
         var iterator = {
           next: function next() {
@@ -9087,7 +9086,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         };
         return this;
       }
-
       var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
       function normalizeMethod(method) {
         var upcased = method.toUpperCase();

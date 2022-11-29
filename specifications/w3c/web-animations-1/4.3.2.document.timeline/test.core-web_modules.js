@@ -4870,7 +4870,6 @@ var es_string_search = __webpack_require__(4765);
       return !1;
     }
   }())) {
-
     !function () {
       var a = {},
         b = {};

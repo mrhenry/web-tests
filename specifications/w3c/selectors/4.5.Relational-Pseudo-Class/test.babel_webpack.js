@@ -3457,9 +3457,7 @@ var __webpack_exports__ = {};
     test: function test(message, callback) {
       callback();
     },
-    step: function step(message) {
-    },
-
+    step: function step(message) {},
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
@@ -3478,7 +3476,6 @@ var __webpack_exports__ = {};
       if (!!a) {
         return;
       }
-
       throw new Error('Expected something truthy for A');
     }
   };
@@ -3489,34 +3486,28 @@ var __webpack_exports__ = {};
     }
     return ids.sort().join(',');
   }
-
   function testSelectorAllFromMain(assert, selector, expected) {
     assert.step(selector + ' matches expected elements from #main');
     var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
-
   function testSelectorAllFromScope(assert, scope, selector, expected) {
     assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
     var actual = Array.from(scope.querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
-
   function testSelector(assert, selector, expected) {
     assert.step(selector + ' matches expected element');
     assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
   }
-
   function testClosest(assert, node, selector, expected) {
     assert.step('closest(' + selector + ') returns expected element');
     assert.equal(node.closest(selector), expected);
   }
-
   function testMatches(assert, node, selector, expected) {
     assert.step(selector + ' matches expectedly');
     assert.equal(node.matches(selector), expected);
   }
-
   function compareSelectorAll(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
@@ -3528,7 +3519,6 @@ var __webpack_exports__ = {};
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
-
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -3579,11 +3569,9 @@ var __webpack_exports__ = {};
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
-
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
-
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
     if (supportsIsQueries) {
@@ -3654,7 +3642,6 @@ var __webpack_exports__ = {};
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
-
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -3688,7 +3675,6 @@ var __webpack_exports__ = {};
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -3747,7 +3733,6 @@ var __webpack_exports__ = {};
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
     var extraD02 = document.getElementById("extra-d02");
-
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);
@@ -3801,7 +3786,6 @@ var __webpack_exports__ = {};
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });

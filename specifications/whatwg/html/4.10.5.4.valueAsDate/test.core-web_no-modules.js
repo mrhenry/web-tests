@@ -3746,7 +3746,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       if (!("HTMLInputElement" in global)) {
         return;
       }
-
       var dateRegExp = /^\d{4,}-[0-1][0-9]-[0-3][0-9]$/;
       var monthRegExp = /^\d{4,}-[0-1][0-9]$/;
       var weekRegExp = /^\d{4,}-W[0-5][0-9]$/;
@@ -3755,7 +3754,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       if (valueAsDateDescriptor && !valueAsDateDescriptor.configurable) {
         return;
       }
-
       function isLeapYear(year) {
         if (year % 400 === 0) {
           return true;
@@ -3817,10 +3815,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
               if (value instanceof Date) {
                 return value;
               }
-            } catch (_) {
-            }
+            } catch (_) {}
           }
-
           var type = this.type;
           if (type === "text") {
             type = this.getAttribute("type");

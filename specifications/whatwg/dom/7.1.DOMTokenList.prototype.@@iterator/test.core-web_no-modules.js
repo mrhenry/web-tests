@@ -5400,7 +5400,6 @@ var _DOMTokenList = function () {
       get: fn
     });else object.__defineGetter__(name, fn);
   };
-
   try {
     defineGetter({}, "support");
   } catch (e) {
@@ -5423,13 +5422,11 @@ var _DOMTokenList = function () {
         addIndexGetter(maxLength);
       }
     };
-
     var preop = function preop() {
       var error;
       var i;
       var args = arguments;
       var rSpace = /\s+/;
-
       if (args.length) for (i = 0; i < args.length; ++i) {
         if (rSpace.test(args[i])) {
           error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
@@ -5438,15 +5435,12 @@ var _DOMTokenList = function () {
           throw error;
         }
       }
-
       if (_typeof(el[prop]) === "object") {
         tokens = ("" + el[prop].baseVal).replace(/^\s+|\s+$/g, "").split(rSpace);
       } else {
         tokens = ("" + el[prop]).replace(/^\s+|\s+$/g, "").split(rSpace);
       }
-
       if ("" === tokens[0]) tokens = [];
-
       tokenMap = {};
       for (i = 0; i < tokens.length; ++i) {
         tokenMap[tokens[i]] = true;
@@ -5454,14 +5448,11 @@ var _DOMTokenList = function () {
       length = tokens.length;
       reindex();
     };
-
     preop();
-
     defineGetter(that, "length", function () {
       preop();
       return length;
     });
-
     that.toLocaleString = that.toString = function () {
       preop();
       return tokens.join(" ");
@@ -5483,7 +5474,6 @@ var _DOMTokenList = function () {
           tokenMap[token] = true;
         }
       }
-
       if (length !== tokens.length) {
         length = tokens.length >>> 0;
         if (_typeof(el[prop]) === "object") {
@@ -5496,18 +5486,15 @@ var _DOMTokenList = function () {
     };
     that.remove = function () {
       preop.apply(that, args = arguments);
-
       for (var args, ignore = {}, i = 0, t = []; i < args.length; ++i) {
         ignore[args[i]] = true;
         delete tokenMap[args[i]];
       }
-
       for (i = 0; i < tokens.length; ++i) {
         if (!ignore[tokens[i]]) t.push(tokens[i]);
       }
       tokens = t;
       length = t.length >>> 0;
-
       if (_typeof(el[prop]) === "object") {
         el[prop].baseVal = tokens.join(" ");
       } else {
@@ -5517,7 +5504,6 @@ var _DOMTokenList = function () {
     };
     that.toggle = function (token, force) {
       preop.apply(that, [token]);
-
       if (undefined !== force) {
         if (force) {
           that.add(token);
@@ -5527,12 +5513,10 @@ var _DOMTokenList = function () {
           return false;
         }
       }
-
       if (tokenMap[token]) {
         that.remove(token);
         return false;
       }
-
       that.add(token);
       return true;
     };
@@ -5560,7 +5544,6 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
       if (!nativeImpl || !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg') && !(document.createElementNS("http://www.w3.org/2000/svg", "svg").classList instanceof DOMTokenList)) {
         global.DOMTokenList = helpers_DOMTokenList;
       }
-
       (function () {
         var e = document.createElement('span');
         if (!('classList' in e)) return;
@@ -5578,7 +5561,6 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
           return force;
         };
       })();
-
       (function () {
         var e = document.createElement('span');
         if (!('classList' in e)) return;
@@ -5593,7 +5575,6 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
           }
         };
       })();
-
       (function () {
         var e = document.createElement('span');
         if (!('classList' in e)) return;
@@ -5681,7 +5662,6 @@ var es_array_index_of = __webpack_require__(2772);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(561);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
-
 
 
 
@@ -5887,9 +5867,7 @@ var Iterator = function () {
 
 
 
-
 var ArrayIterator = function () {
-
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);

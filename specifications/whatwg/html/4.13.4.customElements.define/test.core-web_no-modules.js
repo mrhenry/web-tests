@@ -983,6 +983,28 @@ module.exports = function (object, key, value) {
 
 /***/ }),
 
+/***/ 8709:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var anObject = __webpack_require__(9670);
+var ordinaryToPrimitive = __webpack_require__(2140);
+
+var $TypeError = TypeError;
+
+// `Date.prototype[@@toPrimitive](hint)` method implementation
+// https://tc39.es/ecma262/#sec-date.prototype-@@toprimitive
+module.exports = function (hint) {
+  anObject(this);
+  if (hint === 'string' || hint === 'default') hint = 'string';
+  else if (hint !== 'number') throw $TypeError('Incorrect hint');
+  return ordinaryToPrimitive(this, hint);
+};
+
+
+/***/ }),
+
 /***/ 7045:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -4022,6 +4044,44 @@ module.exports = {
 
 /***/ }),
 
+/***/ 3111:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+var requireObjectCoercible = __webpack_require__(4488);
+var toString = __webpack_require__(1340);
+var whitespaces = __webpack_require__(1361);
+
+var replace = uncurryThis(''.replace);
+var whitespace = '[' + whitespaces + ']';
+var ltrim = RegExp('^' + whitespace + whitespace + '*');
+var rtrim = RegExp(whitespace + whitespace + '*$');
+
+// `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
+var createMethod = function (TYPE) {
+  return function ($this) {
+    var string = toString(requireObjectCoercible($this));
+    if (TYPE & 1) string = replace(string, ltrim, '');
+    if (TYPE & 2) string = replace(string, rtrim, '');
+    return string;
+  };
+};
+
+module.exports = {
+  // `String.prototype.{ trimLeft, trimStart }` methods
+  // https://tc39.es/ecma262/#sec-string.prototype.trimstart
+  start: createMethod(1),
+  // `String.prototype.{ trimRight, trimEnd }` methods
+  // https://tc39.es/ecma262/#sec-string.prototype.trimend
+  end: createMethod(2),
+  // `String.prototype.trim` method
+  // https://tc39.es/ecma262/#sec-string.prototype.trim
+  trim: createMethod(3)
+};
+
+
+/***/ }),
+
 /***/ 6293:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -4199,6 +4259,18 @@ module.exports = {
   set: set,
   clear: clear
 };
+
+
+/***/ }),
+
+/***/ 863:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+
+// `thisNumberValue` abstract operation
+// https://tc39.es/ecma262/#sec-thisnumbervalue
+module.exports = uncurryThis(1.0.valueOf);
 
 
 /***/ }),
@@ -4507,6 +4579,16 @@ module.exports = function (name) {
     }
   } return WellKnownSymbolsStore[name];
 };
+
+
+/***/ }),
+
+/***/ 1361:
+/***/ (function(module) {
+
+// a string of all valid unicode whitespaces
+module.exports = '\u0009\u000A\u000B\u000C\u000D\u0020\u00A0\u1680\u2000\u2001\u2002' +
+  '\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
 
 /***/ }),
@@ -5008,6 +5090,26 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 
 /***/ }),
 
+/***/ 6078:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+var hasOwn = __webpack_require__(2597);
+var defineBuiltIn = __webpack_require__(8052);
+var dateToPrimitive = __webpack_require__(8709);
+var wellKnownSymbol = __webpack_require__(5112);
+
+var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
+var DatePrototype = Date.prototype;
+
+// `Date.prototype[@@toPrimitive]` method
+// https://tc39.es/ecma262/#sec-date.prototype-@@toprimitive
+if (!hasOwn(DatePrototype, TO_PRIMITIVE)) {
+  defineBuiltIn(DatePrototype, TO_PRIMITIVE, dateToPrimitive);
+}
+
+
+/***/ }),
+
 /***/ 3710:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -5263,6 +5365,102 @@ collection('Map', function (init) {
 
 // TODO: Remove this module from `core-js@4` since it's replaced to module below
 __webpack_require__(9098);
+
+
+/***/ }),
+
+/***/ 9653:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var DESCRIPTORS = __webpack_require__(9781);
+var global = __webpack_require__(7854);
+var uncurryThis = __webpack_require__(1702);
+var isForced = __webpack_require__(4705);
+var defineBuiltIn = __webpack_require__(8052);
+var hasOwn = __webpack_require__(2597);
+var inheritIfRequired = __webpack_require__(9587);
+var isPrototypeOf = __webpack_require__(7976);
+var isSymbol = __webpack_require__(2190);
+var toPrimitive = __webpack_require__(7593);
+var fails = __webpack_require__(7293);
+var getOwnPropertyNames = (__webpack_require__(8006).f);
+var getOwnPropertyDescriptor = (__webpack_require__(1236).f);
+var defineProperty = (__webpack_require__(3070).f);
+var thisNumberValue = __webpack_require__(863);
+var trim = (__webpack_require__(3111).trim);
+
+var NUMBER = 'Number';
+var NativeNumber = global[NUMBER];
+var NumberPrototype = NativeNumber.prototype;
+var TypeError = global.TypeError;
+var arraySlice = uncurryThis(''.slice);
+var charCodeAt = uncurryThis(''.charCodeAt);
+
+// `ToNumeric` abstract operation
+// https://tc39.es/ecma262/#sec-tonumeric
+var toNumeric = function (value) {
+  var primValue = toPrimitive(value, 'number');
+  return typeof primValue == 'bigint' ? primValue : toNumber(primValue);
+};
+
+// `ToNumber` abstract operation
+// https://tc39.es/ecma262/#sec-tonumber
+var toNumber = function (argument) {
+  var it = toPrimitive(argument, 'number');
+  var first, third, radix, maxCode, digits, length, index, code;
+  if (isSymbol(it)) throw TypeError('Cannot convert a Symbol value to a number');
+  if (typeof it == 'string' && it.length > 2) {
+    it = trim(it);
+    first = charCodeAt(it, 0);
+    if (first === 43 || first === 45) {
+      third = charCodeAt(it, 2);
+      if (third === 88 || third === 120) return NaN; // Number('+0x1') should be NaN, old V8 fix
+    } else if (first === 48) {
+      switch (charCodeAt(it, 1)) {
+        case 66: case 98: radix = 2; maxCode = 49; break; // fast equal of /^0b[01]+$/i
+        case 79: case 111: radix = 8; maxCode = 55; break; // fast equal of /^0o[0-7]+$/i
+        default: return +it;
+      }
+      digits = arraySlice(it, 2);
+      length = digits.length;
+      for (index = 0; index < length; index++) {
+        code = charCodeAt(digits, index);
+        // parseInt parses a string to a first unavailable symbol
+        // but ToNumber should return NaN if a string contains unavailable symbols
+        if (code < 48 || code > maxCode) return NaN;
+      } return parseInt(digits, radix);
+    }
+  } return +it;
+};
+
+// `Number` constructor
+// https://tc39.es/ecma262/#sec-number-constructor
+if (isForced(NUMBER, !NativeNumber(' 0o1') || !NativeNumber('0b1') || NativeNumber('+0x1'))) {
+  var NumberWrapper = function Number(value) {
+    var n = arguments.length < 1 ? 0 : NativeNumber(toNumeric(value));
+    var dummy = this;
+    // check on 1..constructor(foo) case
+    return isPrototypeOf(NumberPrototype, dummy) && fails(function () { thisNumberValue(dummy); })
+      ? inheritIfRequired(Object(n), dummy, NumberWrapper) : n;
+  };
+  for (var keys = DESCRIPTORS ? getOwnPropertyNames(NativeNumber) : (
+    // ES3:
+    'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
+    // ES2015 (in case, if modules with ES2015 Number statics required before):
+    'EPSILON,MAX_SAFE_INTEGER,MIN_SAFE_INTEGER,isFinite,isInteger,isNaN,isSafeInteger,parseFloat,parseInt,' +
+    // ESNext
+    'fromString,range'
+  ).split(','), j = 0, key; keys.length > j; j++) {
+    if (hasOwn(NativeNumber, key = keys[j]) && !hasOwn(NumberWrapper, key)) {
+      defineProperty(NumberWrapper, key, getOwnPropertyDescriptor(NativeNumber, key));
+    }
+  }
+  NumberWrapper.prototype = NumberPrototype;
+  NumberPrototype.constructor = NumberWrapper;
+  defineBuiltIn(global, NUMBER, NumberWrapper, { constructor: true });
+}
 
 
 /***/ }),
@@ -6748,6 +6946,23 @@ $({ target: 'Symbol', stat: true, forced: !NATIVE_SYMBOL_REGISTRY }, {
 
 /***/ }),
 
+/***/ 6649:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+var defineWellKnownSymbol = __webpack_require__(6800);
+var defineSymbolToPrimitive = __webpack_require__(6532);
+
+// `Symbol.toPrimitive` well-known symbol
+// https://tc39.es/ecma262/#sec-symbol.toprimitive
+defineWellKnownSymbol('toPrimitive');
+
+// `Symbol.prototype[@@toPrimitive]` method
+// https://tc39.es/ecma262/#sec-symbol.prototype-@@toprimitive
+defineSymbolToPrimitive();
+
+
+/***/ }),
+
 /***/ 6815:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -7083,7 +7298,6 @@ function Event_typeof(obj) { "@babel/helpers - typeof"; return Event_typeof = "f
           }
           return true;
         };
-
         document.attachEvent('onreadystatechange', function () {
           if (document.readyState === 'complete') {
             document.dispatchEvent(new Event('DOMContentLoaded', {
@@ -7172,14 +7386,12 @@ function DocumentFragment_typeof(obj) { "@babel/helpers - typeof"; return Docume
 
 function _mutation_typeof(obj) { "@babel/helpers - typeof"; return _mutation_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _mutation_typeof(obj); }
 var _mutation = function () {
-
   function isNode(object) {
     if (typeof Node === 'function') {
       return object instanceof Node;
     }
     return object && _mutation_typeof(object) === "object" && object.nodeName && object.nodeType >= 1 && object.nodeType <= 12;
   }
-
   return function mutation(nodes) {
     if (nodes.length === 1) {
       return isNode(nodes[0]) ? nodes[0] : document.createTextNode(nodes[0] + '');
@@ -7264,7 +7476,6 @@ function Element_prototype_after_typeof(obj) { "@babel/helpers - typeof"; return
         this.parentNode.insertBefore(helpers_mutation(arguments), viableNextSibling);
       }
     };
-
     if ("Text" in self) {
       Text.prototype.after = Element.prototype.after;
     }
@@ -7314,7 +7525,6 @@ function Element_prototype_before_typeof(obj) { "@babel/helpers - typeof"; retur
         this.parentNode.insertBefore(helpers_mutation(arguments), viablePreviousSibling ? viablePreviousSibling.nextSibling : this.parentNode.firstChild);
       }
     };
-
     if ("Text" in self) {
       Text.prototype.before = Element.prototype.before;
     }
@@ -7373,7 +7583,6 @@ function Element_prototype_remove_typeof(obj) { "@babel/helpers - typeof"; retur
         this.parentNode.removeChild(this);
       }
     };
-
     if ("Text" in self) {
       Text.prototype.remove = Element.prototype.remove;
     }
@@ -7404,7 +7613,6 @@ function Element_prototype_replaceWith_typeof(obj) { "@babel/helpers - typeof"; 
         this.parentNode.replaceChild(helpers_mutation(arguments), this);
       }
     };
-
     if ('Text' in self) {
       Text.prototype.replaceWith = Element.prototype.replaceWith;
     }
@@ -7447,15 +7655,12 @@ var es_function_name = __webpack_require__(8309);
  * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
  * Code distributed by Google as part of the polymer project is also
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
- */
-
-(function () {
+ */(function () {
   'use strict';
 
   var needsTemplate = typeof HTMLTemplateElement === 'undefined';
   var brokenDocFragment = !(document.createDocumentFragment().cloneNode() instanceof DocumentFragment);
   var needsDocFrag = false;
-
   if (/Trident/.test(navigator.userAgent)) {
     (function () {
       needsDocFrag = true;
@@ -7467,7 +7672,6 @@ var es_function_name = __webpack_require__(8309);
         }
         return newDom;
       };
-
       DocumentFragment.prototype.querySelectorAll = HTMLElement.prototype.querySelectorAll;
       DocumentFragment.prototype.querySelector = HTMLElement.prototype.querySelector;
       Object.defineProperties(DocumentFragment.prototype, {
@@ -7539,7 +7743,6 @@ var es_function_name = __webpack_require__(8309);
       };
     })();
   }
-
   var capturedCloneNode = Node.prototype.cloneNode;
   var capturedCreateElement = Document.prototype.createElement;
   var capturedImportNode = Document.prototype.importNode;
@@ -7577,7 +7780,6 @@ var es_function_name = __webpack_require__(8309);
         return elementQuerySelectorAll.call(node, selector);
     }
   }
-
   var needsCloning = function () {
     if (!needsTemplate) {
       var t = document.createElement('template');
@@ -7597,11 +7799,8 @@ var es_function_name = __webpack_require__(8309);
     templateStyle.textContent = TEMPLATE_TAG + '{display:none;}';
     var head = document.head;
     head.insertBefore(templateStyle, head.firstElementChild);
-
     PolyfilledHTMLTemplateElement.prototype = Object.create(HTMLElement.prototype);
-
     var canProtoPatch = !document.createElement('div').hasOwnProperty('innerHTML');
-
     PolyfilledHTMLTemplateElement.decorate = function (template) {
       if (template.content || template.namespaceURI !== document.documentElement.namespaceURI) {
         return;
@@ -7628,7 +7827,6 @@ var es_function_name = __webpack_require__(8309);
       }
       PolyfilledHTMLTemplateElement.bootstrap(template.content);
     };
-
     var topLevelWrappingMap = {
       'option': ['select'],
       'thead': ['table'],
@@ -7692,18 +7890,15 @@ var es_function_name = __webpack_require__(8309);
     };
     defineInnerHTML(PolyfilledHTMLTemplateElement.prototype);
     defineOuterHTML(PolyfilledHTMLTemplateElement.prototype);
-
     PolyfilledHTMLTemplateElement.bootstrap = function bootstrap(doc) {
       var templates = QSA(doc, TEMPLATE_TAG);
       for (var i = 0, l = templates.length, t; i < l && (t = templates[i]); i++) {
         PolyfilledHTMLTemplateElement.decorate(t);
       }
     };
-
     document.addEventListener('DOMContentLoaded', function () {
       PolyfilledHTMLTemplateElement.bootstrap(document);
     });
-
     Document.prototype.createElement = function createElement() {
       var el = capturedCreateElement.apply(this, arguments);
       if (el.localName === 'template') {
@@ -7727,7 +7922,6 @@ var es_function_name = __webpack_require__(8309);
       configurable: true,
       enumerable: true
     });
-
     var escapeAttrRegExp = /[&\u00A0"]/g;
     var escapeDataRegExp = /[&\u00A0<>]/g;
     var escapeReplace = function escapeReplace(c) {
@@ -7757,10 +7951,8 @@ var es_function_name = __webpack_require__(8309);
       }
       return set;
     };
-
     var voidElements = makeSet(['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
     var plaintextParents = makeSet(['style', 'script', 'xmp', 'iframe', 'noembed', 'noframes', 'plaintext', 'noscript']);
-
     var getOuterHTML = function getOuterHTML(node, parentNode, callback) {
       switch (node.nodeType) {
         case Node.ELEMENT_NODE:
@@ -7796,7 +7988,6 @@ var es_function_name = __webpack_require__(8309);
           }
       }
     };
-
     var getInnerHTML = function getInnerHTML(node, callback) {
       if (node.localName === 'template') {
         node = node.content;
@@ -7809,7 +8000,6 @@ var es_function_name = __webpack_require__(8309);
       return s;
     };
   }
-
   if (needsTemplate || needsCloning) {
     PolyfilledHTMLTemplateElement._cloneNode = function _cloneNode(template, deep) {
       var clone = capturedCloneNode.call(template, false);
@@ -7822,7 +8012,6 @@ var es_function_name = __webpack_require__(8309);
       }
       return clone;
     };
-
     var fixClonedDom = function fixClonedDom(clone, source) {
       if (!source.querySelectorAll) {
         return;
@@ -7841,7 +8030,6 @@ var es_function_name = __webpack_require__(8309);
         capturedReplaceChild.call(t.parentNode, cloneNode.call(s, true), t);
       }
     };
-
     var fixClonedScripts = function fixClonedScripts(fragment) {
       var scripts = QSA(fragment, scriptSelector);
       for (var ns, s, i = 0; i < scripts.length; i++) {
@@ -7856,7 +8044,6 @@ var es_function_name = __webpack_require__(8309);
         capturedReplaceChild.call(s.parentNode, ns, s);
       }
     };
-
     var cloneNode = Node.prototype.cloneNode = function cloneNode(deep) {
       var dom;
       if (!needsDocFrag && brokenDocFragment && this instanceof DocumentFragment) {
@@ -7875,7 +8062,6 @@ var es_function_name = __webpack_require__(8309);
       }
       return dom;
     };
-
     var importNode = Document.prototype.importNode = function importNode(element, deep) {
       deep = deep || false;
       if (element.localName === TEMPLATE_TAG) {
@@ -7910,16 +8096,13 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
 
 (function (undefined) {
   if (!("MutationObserver" in self)) {
-
     if (!window.MutationObserver) {
       window.MutationObserver = function (undefined) {
         "use strict";
-
         function MutationObserver(listener) {
           this._watched = [];
           this._listener = listener;
         }
-
         function startMutationChecker(observer) {
           (function check() {
             var mutations = observer.takeRecords();
@@ -7929,9 +8112,7 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             observer._timeout = setTimeout(check, MutationObserver._period);
           })();
         }
-
         MutationObserver._period = 30;
-
         MutationObserver.prototype = {
           observe: function observe($target, config) {
             var settings = {
@@ -7941,7 +8122,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               charData: !!(config.characterData || config.characterDataOldValue)
             };
             var watched = this._watched;
-
             for (var i = 0; i < watched.length; i++) {
               if (watched[i].tar === $target) watched.splice(i, 1);
             }
@@ -7955,7 +8135,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               tar: $target,
               fn: createMutationSearcher($target, settings)
             });
-
             if (!this._timeout) {
               startMutationChecker(this);
             }
@@ -7974,7 +8153,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             this._timeout = null;
           }
         };
-
         function MutationRecord(data) {
           var settings = {
             type: null,
@@ -7992,10 +8170,8 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           }
           return settings;
         }
-
         function createMutationSearcher($target, config) {
           var $oldstate = clone($target, config);
-
           return function (mutations) {
             var olen = mutations.length,
               dirty;
@@ -8006,34 +8182,27 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                 oldValue: $oldstate.charData
               }));
             }
-
             if (config.attr && $oldstate.attr) {
               findAttributeMutations(mutations, $target, $oldstate.attr, config.afilter);
             }
-
             if (config.kids || config.descendents) {
               dirty = searchSubtree(mutations, $target, $oldstate, config);
             }
-
             if (dirty || mutations.length !== olen) {
               $oldstate = clone($target, config);
             }
           };
         }
-
         var hasAttributeBug = document.createElement("i");
         hasAttributeBug.style.top = 0;
         hasAttributeBug = hasAttributeBug.attributes.style.value != "null";
-
         function getAttributeSimple(el, attr) {
           return attr.value;
         }
-
         function getAttributeWithStyleHack(el, attr) {
           return attr.name !== "style" ? attr.value : el.style.cssText;
         }
         var getAttributeValue = hasAttributeBug ? getAttributeSimple : getAttributeWithStyleHack;
-
         function findAttributeMutations(mutations, $target, $oldstate, filter) {
           var checked = {};
           var attributes = $target.attributes;
@@ -8053,7 +8222,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                   attributeNamespace: attr.namespaceURI
                 }));
               }
-
               checked[name] = true;
             }
           }
@@ -8068,7 +8236,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             }
           }
         }
-
         function searchSubtree(mutations, $target, $oldstate, config) {
           var dirty;
           function resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes) {
@@ -8080,7 +8247,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             while (conflict = conflicts.pop()) {
               $cur = $kids[conflict.i];
               oldstruct = $oldkids[conflict.j];
-
               if (config.kids && counter && Math.abs(conflict.i - conflict.j) >= distance) {
                 mutations.push(MutationRecord({
                   type: "childList",
@@ -8092,7 +8258,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                 }));
                 counter--;
               }
-
               if (config.attr && oldstruct.attr) findAttributeMutations(mutations, $cur, oldstruct.attr, config.afilter);
               if (config.charData && $cur.nodeType === 3 && $cur.nodeValue !== oldstruct.charData) {
                 mutations.push(MutationRecord({
@@ -8104,23 +8269,19 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
               if (config.descendents) findMutations($cur, oldstruct);
             }
           }
-
           function findMutations(node, old) {
             var $kids = node.childNodes;
             var $oldkids = old.kids;
             var klen = $kids.length;
             var olen = $oldkids ? $oldkids.length : 0;
-
             var map;
             var conflicts;
             var id;
             var idx;
-
             var oldstruct;
             var $cur;
             var $old;
             var numAddedNodes = 0;
-
             var i = 0,
               j = 0;
             while (i < klen || j < olen) {
@@ -8136,9 +8297,7 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                     oldValue: oldstruct.charData
                   }));
                 }
-
                 if (conflicts) resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes);
-
                 if (config.descendents && ($cur.childNodes.length || oldstruct.kids && oldstruct.kids.length)) findMutations($cur, oldstruct);
                 i++;
                 j++;
@@ -8171,8 +8330,7 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                   }
                   i++;
                 }
-                if ($old &&
-                $old !== $kids[i]) {
+                if ($old && $old !== $kids[i]) {
                   if (!map[id = getElementId($old)]) {
                     map[id] = true;
                     if ((idx = indexOf($kids, $old, i)) === -1) {
@@ -8197,24 +8355,20 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                 }
               }
             }
-
             if (conflicts) resolveConflicts(conflicts, node, $kids, $oldkids, numAddedNodes);
           }
           findMutations($target, $oldstate);
           return dirty;
         }
-
         function clone($target, config) {
           var recurse = true;
           return function copy($target) {
             var elestruct = {
               node: $target
             };
-
             if (config.charData && ($target.nodeType === 3 || $target.nodeType === 8)) {
               elestruct.charData = $target.nodeValue;
-            }
-            else {
+            } else {
               if (config.attr && recurse && $target.nodeType === 1) {
                 elestruct.attr = reduce($target.attributes, function (memo, attr) {
                   if (!config.afilter || config.afilter[attr.name]) {
@@ -8223,7 +8377,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
                   return memo;
                 }, {});
               }
-
               if (recurse && (config.kids || config.charData || config.attr && config.descendents)) {
                 elestruct.kids = map($target.childNodes, copy);
               }
@@ -8232,14 +8385,11 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             return elestruct;
           }($target);
         }
-
         function indexOfCustomNode(set, $node, idx) {
           return indexOf(set, $node, idx, JSCompiler_renameProperty("node"));
         }
-
         var counter = 1;
         var expando = "mo_id";
-
         function getElementId($ele) {
           try {
             return $ele.id || ($ele[expando] = $ele[expando] || counter++);
@@ -8251,7 +8401,6 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
             }
           }
         }
-
         function map(set, iterator) {
           var results = [];
           for (var index = 0; index < set.length; index++) {
@@ -8259,28 +8408,21 @@ function MutationObserver_typeof(obj) { "@babel/helpers - typeof"; return Mutati
           }
           return results;
         }
-
         function reduce(set, iterator, memo) {
           for (var index = 0; index < set.length; index++) {
             memo = iterator(memo, set[index], index, set);
           }
           return memo;
         }
-
         function indexOf(set, item, idx, prop) {
-          for
-          (
-          ; idx < set.length; idx++) {
+          for (; idx < set.length; idx++) {
             if ((prop ? set[idx][prop] : set[idx]) === item) return idx;
           }
-
           return -1;
         }
-
         function has(obj, prop) {
           return obj[prop] !== undefined;
         }
-
         function JSCompiler_renameProperty(a) {
           return a;
         }
@@ -8313,7 +8455,6 @@ function Node_prototype_contains_typeof(obj) { "@babel/helpers - typeof"; return
         } while (node = node && node.parentNode);
         return false;
       }
-
       if ('HTMLElement' in self && 'contains' in HTMLElement.prototype) {
         try {
           delete HTMLElement.prototype.contains;
@@ -9233,6 +9374,12 @@ var es_array_join = __webpack_require__(9600);
 }).call(self);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
 var es_object_get_prototype_of = __webpack_require__(489);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-primitive.js
+var es_symbol_to_primitive = __webpack_require__(6649);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-primitive.js
+var es_date_to_primitive = __webpack_require__(6078);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
+var es_number_constructor = __webpack_require__(9653);
 ;// CONCATENATED MODULE: ./specifications/whatwg/html/4.13.4.customElements.define/test.pure.js
 function test_pure_typeof(obj) { "@babel/helpers - typeof"; return test_pure_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, test_pure_typeof(obj); }
 
@@ -9277,9 +9424,14 @@ function test_pure_typeof(obj) { "@babel/helpers - typeof"; return test_pure_typ
 
 
 
+
+
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return test_pure_typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (test_pure_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (test_pure_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 function _possibleConstructorReturn(self, call) { if (call && (test_pure_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }

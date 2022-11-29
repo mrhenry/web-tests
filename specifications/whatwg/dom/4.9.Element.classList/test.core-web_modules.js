@@ -3768,7 +3768,6 @@ var es_array_iterator = __webpack_require__(6992);
 
 
 
-
 var Iterator = function () {
   var clear = function clear() {
     this.length = 0;
@@ -3947,9 +3946,7 @@ var Iterator = function () {
 
 
 
-
 var ArrayIterator = function () {
-
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
@@ -4026,7 +4023,6 @@ var _DOMTokenList = function () {
       get: fn
     });else object.__defineGetter__(name, fn);
   };
-
   try {
     defineGetter({}, "support");
   } catch (e) {
@@ -4049,41 +4045,33 @@ var _DOMTokenList = function () {
         addIndexGetter(maxLength);
       }
     };
-
     var preop = function preop() {
       var error;
       var i;
       var args = arguments;
       var rSpace = /\s+/;
-
       if (args.length) for (i = 0; i < args.length; ++i) if (rSpace.test(args[i])) {
         error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
         error.code = 5;
         error.name = "InvalidCharacterError";
         throw error;
       }
-
       if (typeof el[prop] === "object") {
         tokens = ("" + el[prop].baseVal).replace(/^\s+|\s+$/g, "").split(rSpace);
       } else {
         tokens = ("" + el[prop]).replace(/^\s+|\s+$/g, "").split(rSpace);
       }
-
       if ("" === tokens[0]) tokens = [];
-
       tokenMap = {};
       for (i = 0; i < tokens.length; ++i) tokenMap[tokens[i]] = true;
       length = tokens.length;
       reindex();
     };
-
     preop();
-
     defineGetter(that, "length", function () {
       preop();
       return length;
     });
-
     that.toLocaleString = that.toString = function () {
       preop();
       return tokens.join(" ");
@@ -4105,7 +4093,6 @@ var _DOMTokenList = function () {
           tokenMap[token] = true;
         }
       }
-
       if (length !== tokens.length) {
         length = tokens.length >>> 0;
         if (typeof el[prop] === "object") {
@@ -4118,16 +4105,13 @@ var _DOMTokenList = function () {
     };
     that.remove = function () {
       preop.apply(that, args = arguments);
-
       for (var args, ignore = {}, i = 0, t = []; i < args.length; ++i) {
         ignore[args[i]] = true;
         delete tokenMap[args[i]];
       }
-
       for (i = 0; i < tokens.length; ++i) if (!ignore[tokens[i]]) t.push(tokens[i]);
       tokens = t;
       length = t.length >>> 0;
-
       if (typeof el[prop] === "object") {
         el[prop].baseVal = tokens.join(" ");
       } else {
@@ -4137,7 +4121,6 @@ var _DOMTokenList = function () {
     };
     that.toggle = function (token, force) {
       preop.apply(that, [token]);
-
       if (undefined !== force) {
         if (force) {
           that.add(token);
@@ -4147,12 +4130,10 @@ var _DOMTokenList = function () {
           return false;
         }
       }
-
       if (tokenMap[token]) {
         that.remove(token);
         return false;
       }
-
       that.add(token);
       return true;
     };

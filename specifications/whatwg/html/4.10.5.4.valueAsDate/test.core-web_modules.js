@@ -1954,7 +1954,6 @@ var es_regexp_test = __webpack_require__(7601);
       if (!("HTMLInputElement" in global)) {
         return;
       }
-
       var dateRegExp = /^\d{4,}-[0-1][0-9]-[0-3][0-9]$/;
       var monthRegExp = /^\d{4,}-[0-1][0-9]$/;
       var weekRegExp = /^\d{4,}-W[0-5][0-9]$/;
@@ -1963,7 +1962,6 @@ var es_regexp_test = __webpack_require__(7601);
       if (valueAsDateDescriptor && !valueAsDateDescriptor.configurable) {
         return;
       }
-
       function isLeapYear(year) {
         if (year % 400 === 0) {
           return true;
@@ -2025,10 +2023,8 @@ var es_regexp_test = __webpack_require__(7601);
               if (value instanceof Date) {
                 return value;
               }
-            } catch (_) {
-            }
+            } catch (_) {}
           }
-
           var type = this.type;
           if (type === "text") {
             type = this.getAttribute("type");

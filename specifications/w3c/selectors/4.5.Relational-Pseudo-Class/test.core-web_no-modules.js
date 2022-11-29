@@ -4986,7 +4986,6 @@ var es_array_splice = __webpack_require__(561);
 
 
 
-
 var Iterator = function () {
   var clear = function clear() {
     this.length = 0;
@@ -5173,9 +5172,7 @@ var Iterator = function () {
 
 
 
-
 var ArrayIterator = function () {
-
   var ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
@@ -5324,7 +5321,6 @@ var es_array_join = __webpack_require__(9600);
  * When using or citing the work, you should not imply endorsement by the author or the affirmer.
  * This is a [human-readable summary of the Legal Code](//creativecommons.org/publicdomain/zero/1.0/) ([read the full text](//creativecommons.org/publicdomain/zero/1.0/)).
  */
-
 (function (global) {
   try {
     document.querySelector(':scope *');
@@ -5401,15 +5397,10 @@ var es_array_join = __webpack_require__(9600);
         var hasScope = selectors && scopeTest.test(selectors);
         if (hasScope) {
           var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
-
           arguments[0] = replaceScopeWithAttr(selectors, attr);
-
           this.setAttribute(attr, '');
-
           var elementOrNodeList = qsa.apply(this, arguments);
-
           this.removeAttribute(attr);
-
           return elementOrNodeList;
         } else {
           return qsa.apply(this, arguments);
@@ -5417,24 +5408,20 @@ var es_array_join = __webpack_require__(9600);
       };
     };
     var scopeTest = /:scope(?![\w-])/i;
-
     var querySelectorWithScope = polyfill(global.Element.prototype.querySelector);
     global.Element.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithScope.apply(this, arguments);
     };
-
     var querySelectorAllWithScope = polyfill(global.Element.prototype.querySelectorAll);
     global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithScope.apply(this, arguments);
     };
-
     if (global.Element.prototype.matches) {
       var matchesWithScope = polyfill(global.Element.prototype.matches);
       global.Element.prototype.matches = function matches(selectors) {
         return matchesWithScope.apply(this, arguments);
       };
     }
-
     if (global.Element.prototype.closest) {
       var closestWithScope = polyfill(global.Element.prototype.closest);
       global.Element.prototype.closest = function closest(selectors) {
@@ -5456,55 +5443,46 @@ var es_string_trim = __webpack_require__(3210);
 (function (global) {
   try {
     global.document.querySelector(':has(*, :does-not-exist, > *)');
-
     global.document.querySelector(':has(:has(any), div)');
     if (!global.document.querySelector(':has(:scope *)') && CSS.supports('selector(:has(div))')) {
       return;
     }
   } catch (_) {}
-
   var querySelectorWithHasElement = polyfill(global.Element.prototype.querySelector);
   global.Element.prototype.querySelector = function querySelector(selectors) {
     return querySelectorWithHasElement.apply(this, arguments);
   };
-
   var querySelectorAllWithHasElement = polyfill(global.Element.prototype.querySelectorAll);
   global.Element.prototype.querySelectorAll = function querySelectorAll(selectors) {
     return querySelectorAllWithHasElement.apply(this, arguments);
   };
-
   if (global.Element.prototype.matches) {
     var matchesWithHasElement = polyfill(global.Element.prototype.matches);
     global.Element.prototype.matches = function matches(selectors) {
       return matchesWithHasElement.apply(this, arguments);
     };
   }
-
   if (global.Element.prototype.closest) {
     var closestWithHasElement = polyfill(global.Element.prototype.closest);
     global.Element.prototype.closest = function closest(selectors) {
       return closestWithHasElement.apply(this, arguments);
     };
   }
-
   if ('Document' in global && 'prototype' in global.Document) {
     var querySelectorWithHasDocument = polyfill(global.Document.prototype.querySelector);
     global.Document.prototype.querySelector = function querySelector(selectors) {
       return querySelectorWithHasDocument.apply(this, arguments);
     };
-
     var querySelectorAllWithHasDocument = polyfill(global.Document.prototype.querySelectorAll);
     global.Document.prototype.querySelectorAll = function querySelectorAll(selectors) {
       return querySelectorAllWithHasDocument.apply(this, arguments);
     };
-
     if (global.Document.prototype.matches) {
       var matchesWithHasDocument = polyfill(global.Document.prototype.matches);
       global.Document.prototype.matches = function matches(selectors) {
         return matchesWithHasDocument.apply(this, arguments);
       };
     }
-
     if (global.Document.prototype.closest) {
       var closestWithHasDocument = polyfill(global.Document.prototype.closest);
       global.Document.prototype.closest = function closest(selectors) {
@@ -5762,7 +5740,6 @@ var es_string_trim = __webpack_require__(3210);
       var newInnerParts = [];
       for (var i = 0; i < innerParts.length; i++) {
         var innerPart = innerParts[i];
-
         var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
         if (!innerPartReplaced) {
           newInnerParts.push(':not(*)');
@@ -5772,12 +5749,10 @@ var es_string_trim = __webpack_require__(3210);
       }
       var _prefix = x.substring(0, inner.start - 5);
       var _suffix = x.substring(inner.end + 2);
-
       return _prefix + newInnerParts.join(', ') + _suffix;
     }
     var _prefix = x.substring(0, inner.start - 5);
     var _suffix = x.substring(inner.end + 2);
-
     x = _prefix + innerReplacement + _suffix;
     callback(innerQuery, attr);
     if (x.toLowerCase().indexOf(':has(') > -1) {
@@ -5873,13 +5848,10 @@ var es_string_trim = __webpack_require__(3210);
                     break;
                 }
               });
-            } catch (_) {
-            }
+            } catch (_) {}
           }
         });
-
         arguments[0] = newQuery;
-
         var elementOrNodeList = qsa.apply(this, arguments);
         _focus.removeAttribute(scopeAttr);
         if (attrs.length > 0) {
@@ -5895,7 +5867,6 @@ var es_string_trim = __webpack_require__(3210);
             }
           }
         }
-
         return elementOrNodeList;
       } catch (err) {
         _focus.removeAttribute(scopeAttr);
@@ -5945,9 +5916,7 @@ var es_array_from = __webpack_require__(1038);
     test: function test(message, callback) {
       callback();
     },
-    step: function step(message) {
-    },
-
+    step: function step(message) {},
     equal: function equal(a, b) {
       if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
@@ -5966,7 +5935,6 @@ var es_array_from = __webpack_require__(1038);
       if (!!a) {
         return;
       }
-
       throw new Error('Expected something truthy for A');
     }
   };
@@ -5977,34 +5945,28 @@ var es_array_from = __webpack_require__(1038);
     }
     return ids.sort().join(',');
   }
-
   function testSelectorAllFromMain(assert, selector, expected) {
     assert.step(selector + ' matches expected elements from #main');
     var actual = Array.from(document.getElementById("main").querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
-
   function testSelectorAllFromScope(assert, scope, selector, expected) {
     assert.step(selector + ' matches expected elements from scope ' + scope.id || scope.tagName);
     var actual = Array.from(scope.querySelectorAll(selector));
     assert.equal(formatElements(actual), formatElements(expected));
   }
-
   function testSelector(assert, selector, expected) {
     assert.step(selector + ' matches expected element');
     assert.equal(document.getElementById("main").querySelector(selector).id, expected.id);
   }
-
   function testClosest(assert, node, selector, expected) {
     assert.step('closest(' + selector + ') returns expected element');
     assert.equal(node.closest(selector), expected);
   }
-
   function testMatches(assert, node, selector, expected) {
     assert.step(selector + ' matches expectedly');
     assert.equal(node.matches(selector), expected);
   }
-
   function compareSelectorAll(assert, scope, selector1, selector2) {
     var result1 = Array.from(scope.querySelectorAll(selector1));
     var result2 = Array.from(scope.querySelectorAll(selector2));
@@ -6016,7 +5978,6 @@ var es_array_from = __webpack_require__(1038);
     document.body.querySelector(":is(div)");
     supportsIsQueries = true;
   } catch (_) {}
-
   assert.test("is valid selector", function () {
     assert.ok(document.body.querySelector(":has(*)"));
   });
@@ -6067,11 +6028,9 @@ var es_array_from = __webpack_require__(1038);
     var scope2 = document.getElementById("scope2");
     var d02 = document.getElementById("d02");
     var d03 = document.getElementById("d03");
-
     testSelectorAllFromScope(assert, scope1, ":has(:scope)", []);
     testSelectorAllFromScope(assert, scope1, ":has(:scope .c)", []);
     testSelectorAllFromScope(assert, scope1, ":has(.a :scope)", []);
-
     testSelectorAllFromScope(assert, scope1, ".a:has(:scope) .c", [d02, d03]);
     testSelectorAllFromScope(assert, scope2, ".a:has(:scope) .c", []);
     if (supportsIsQueries) {
@@ -6142,7 +6101,6 @@ var es_array_from = __webpack_require__(1038);
     var d75 = document.getElementById("d75");
     var d77 = document.getElementById("d77");
     var d80 = document.getElementById("d80");
-
     testSelectorAllFromMain(assert, ".x:has(.a)", [d02, d06, d07, d09, d12]);
     testSelectorAllFromMain(assert, ".x:has(.a > .b)", [d09]);
     testSelectorAllFromMain(assert, ".x:has(.a .b)", [d09, d12]);
@@ -6176,7 +6134,6 @@ var es_array_from = __webpack_require__(1038);
     testSelectorAllFromMain(assert, ".y:has(.g .h)", [d63, d68, d71]);
     testSelectorAllFromMain(assert, ".y:has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ".y:has(.g .h) .i", [d67, d75]);
-
     testSelectorAllFromMain(assert, ".d .x:has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ .x:has(~ .e)", [d57, d58]);
   });
@@ -6235,7 +6192,6 @@ var es_array_from = __webpack_require__(1038);
     var d80 = document.getElementById("d80");
     var extraD01 = document.getElementById("extra-d01");
     var extraD02 = document.getElementById("extra-d02");
-
     testSelectorAllFromMain(assert, ":has(.a)", [d01, d02, d06, d07, d09, d12, d17]);
     testSelectorAllFromMain(assert, ":has(.a > .b)", [d01, d09, d17]);
     testSelectorAllFromMain(assert, ":has(.a .b)", [d01, d09, d12, d17]);
@@ -6289,7 +6245,6 @@ var es_array_from = __webpack_require__(1038);
     testSelectorAllFromMain(assert, ":has(.g .h)", [extraD02, d63, d68, d71]);
     testSelectorAllFromMain(assert, ":has(> .g .h) .i", [d67, d75]);
     testSelectorAllFromMain(assert, ":has(.g .h) .i", [d67, d75]);
-
     testSelectorAllFromMain(assert, ".d :has(.e)", [d51, d52]);
     testSelectorAllFromMain(assert, ".d ~ :has(~ .e)", [d57, d58]);
   });

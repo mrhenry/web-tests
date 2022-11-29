@@ -6915,7 +6915,6 @@ var es_string_trim = __webpack_require__(3210);
         }
         return value;
       }
-
       function iteratorFor(items) {
         var iterator = {
           next: function () {
@@ -7134,7 +7133,6 @@ var es_string_trim = __webpack_require__(3210);
         };
         return this;
       }
-
       var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
       function normalizeMethod(method) {
         var upcased = method.toUpperCase();
