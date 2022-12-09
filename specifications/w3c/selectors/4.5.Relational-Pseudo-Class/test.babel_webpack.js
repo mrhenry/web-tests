@@ -3477,6 +3477,18 @@ var __webpack_exports__ = {};
         return;
       }
       throw new Error('Expected something truthy for A');
+    },
+    skip: function skip() {},
+    "throws": function throws(a) {
+      var didThrow = false;
+      try {
+        a();
+      } catch (_) {
+        didThrow = true;
+      }
+      if (!didThrow) {
+        throw new Error('Expected test to throw');
+      }
     }
   };
   function formatElements(elements) {
@@ -3523,7 +3535,9 @@ var __webpack_exports__ = {};
     assert.ok(document.body.querySelector(":has(*)"));
   });
   assert.test("accepts broken selector lists", function () {
-    assert.ok(document.body.querySelector(":has(*, :does-not-exist)"));
+    assert.skip(function () {
+      document.body.querySelector(":has(*, :does-not-exist)");
+    });
   });
   assert.test(":has basic", function () {
     var fixture = document.getElementById("the-fixture");

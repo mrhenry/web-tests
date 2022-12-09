@@ -31,8 +31,22 @@
 				return;
 			}
 
-			// console.log(a);
 			throw new Error('Expected something truthy for A');
+		},
+		skip: function () {
+
+		},
+		throws: function (a) {
+			var didThrow = false;
+			try {
+				a();
+			} catch (_) {
+				didThrow = true;
+			}
+
+			if (!didThrow) {
+				throw new Error('Expected test to throw');
+			}
 		}
 	}
 
@@ -96,7 +110,9 @@
 	});
 
 	assert.test("accepts broken selector lists", function () {
-		assert.ok(document.body.querySelector(":has(*, :does-not-exist)"));
+		assert.skip(function () {
+			document.body.querySelector(":has(*, :does-not-exist)")
+		});
 	});
 
 	assert.test(":has basic", function () {

@@ -61,6 +61,37 @@ module.exports = function (key) {
 
 /***/ }),
 
+/***/ 1530:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var charAt = (__webpack_require__(8710).charAt);
+
+// `AdvanceStringIndex` abstract operation
+// https://tc39.es/ecma262/#sec-advancestringindex
+module.exports = function (S, index, unicode) {
+  return index + (unicode ? charAt(S, index).length : 1);
+};
+
+
+/***/ }),
+
+/***/ 5787:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var isPrototypeOf = __webpack_require__(7976);
+
+var $TypeError = TypeError;
+
+module.exports = function (it, Prototype) {
+  if (isPrototypeOf(Prototype, it)) return it;
+  throw $TypeError('Incorrect invocation');
+};
+
+
+/***/ }),
+
 /***/ 9670:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -713,6 +744,21 @@ module.exports = function (object, key, value) {
 
 /***/ }),
 
+/***/ 7045:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var makeBuiltIn = __webpack_require__(6339);
+var defineProperty = __webpack_require__(3070);
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
+
+
+/***/ }),
+
 /***/ 8052:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -843,6 +889,40 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ 3678:
+/***/ (function(module) {
+
+module.exports = {
+  IndexSizeError: { s: 'INDEX_SIZE_ERR', c: 1, m: 1 },
+  DOMStringSizeError: { s: 'DOMSTRING_SIZE_ERR', c: 2, m: 0 },
+  HierarchyRequestError: { s: 'HIERARCHY_REQUEST_ERR', c: 3, m: 1 },
+  WrongDocumentError: { s: 'WRONG_DOCUMENT_ERR', c: 4, m: 1 },
+  InvalidCharacterError: { s: 'INVALID_CHARACTER_ERR', c: 5, m: 1 },
+  NoDataAllowedError: { s: 'NO_DATA_ALLOWED_ERR', c: 6, m: 0 },
+  NoModificationAllowedError: { s: 'NO_MODIFICATION_ALLOWED_ERR', c: 7, m: 1 },
+  NotFoundError: { s: 'NOT_FOUND_ERR', c: 8, m: 1 },
+  NotSupportedError: { s: 'NOT_SUPPORTED_ERR', c: 9, m: 1 },
+  InUseAttributeError: { s: 'INUSE_ATTRIBUTE_ERR', c: 10, m: 1 },
+  InvalidStateError: { s: 'INVALID_STATE_ERR', c: 11, m: 1 },
+  SyntaxError: { s: 'SYNTAX_ERR', c: 12, m: 1 },
+  InvalidModificationError: { s: 'INVALID_MODIFICATION_ERR', c: 13, m: 1 },
+  NamespaceError: { s: 'NAMESPACE_ERR', c: 14, m: 1 },
+  InvalidAccessError: { s: 'INVALID_ACCESS_ERR', c: 15, m: 1 },
+  ValidationError: { s: 'VALIDATION_ERR', c: 16, m: 0 },
+  TypeMismatchError: { s: 'TYPE_MISMATCH_ERR', c: 17, m: 1 },
+  SecurityError: { s: 'SECURITY_ERR', c: 18, m: 1 },
+  NetworkError: { s: 'NETWORK_ERR', c: 19, m: 1 },
+  AbortError: { s: 'ABORT_ERR', c: 20, m: 1 },
+  URLMismatchError: { s: 'URL_MISMATCH_ERR', c: 21, m: 1 },
+  QuotaExceededError: { s: 'QUOTA_EXCEEDED_ERR', c: 22, m: 1 },
+  TimeoutError: { s: 'TIMEOUT_ERR', c: 23, m: 1 },
+  InvalidNodeTypeError: { s: 'INVALID_NODE_TYPE_ERR', c: 24, m: 1 },
+  DataCloneError: { s: 'DATA_CLONE_ERR', c: 25, m: 1 }
+};
+
+
+/***/ }),
+
 /***/ 8886:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -861,6 +941,17 @@ module.exports = !!firefox && +firefox[1];
 var UA = __webpack_require__(8113);
 
 module.exports = /MSIE|Trident/.test(UA);
+
+
+/***/ }),
+
+/***/ 5268:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var classof = __webpack_require__(4326);
+var global = __webpack_require__(7854);
+
+module.exports = classof(global.process) == 'process';
 
 
 /***/ }),
@@ -1084,6 +1175,88 @@ module.exports = function (exec) {
   } catch (error) {
     return true;
   }
+};
+
+
+/***/ }),
+
+/***/ 7007:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+// TODO: Remove from `core-js@4` since it's moved to entry points
+__webpack_require__(4916);
+var uncurryThis = __webpack_require__(1470);
+var defineBuiltIn = __webpack_require__(8052);
+var regexpExec = __webpack_require__(2261);
+var fails = __webpack_require__(7293);
+var wellKnownSymbol = __webpack_require__(5112);
+var createNonEnumerableProperty = __webpack_require__(8880);
+
+var SPECIES = wellKnownSymbol('species');
+var RegExpPrototype = RegExp.prototype;
+
+module.exports = function (KEY, exec, FORCED, SHAM) {
+  var SYMBOL = wellKnownSymbol(KEY);
+
+  var DELEGATES_TO_SYMBOL = !fails(function () {
+    // String methods call symbol-named RegEp methods
+    var O = {};
+    O[SYMBOL] = function () { return 7; };
+    return ''[KEY](O) != 7;
+  });
+
+  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails(function () {
+    // Symbol-named RegExp methods call .exec
+    var execCalled = false;
+    var re = /a/;
+
+    if (KEY === 'split') {
+      // We can't use real regex here since it causes deoptimization
+      // and serious performance degradation in V8
+      // https://github.com/zloirock/core-js/issues/306
+      re = {};
+      // RegExp[@@split] doesn't call the regex's exec method, but first creates
+      // a new one. We need to return the patched regex when creating the new one.
+      re.constructor = {};
+      re.constructor[SPECIES] = function () { return re; };
+      re.flags = '';
+      re[SYMBOL] = /./[SYMBOL];
+    }
+
+    re.exec = function () { execCalled = true; return null; };
+
+    re[SYMBOL]('');
+    return !execCalled;
+  });
+
+  if (
+    !DELEGATES_TO_SYMBOL ||
+    !DELEGATES_TO_EXEC ||
+    FORCED
+  ) {
+    var uncurriedNativeRegExpMethod = uncurryThis(/./[SYMBOL]);
+    var methods = exec(SYMBOL, ''[KEY], function (nativeMethod, regexp, str, arg2, forceStringMethod) {
+      var uncurriedNativeMethod = uncurryThis(nativeMethod);
+      var $exec = regexp.exec;
+      if ($exec === regexpExec || $exec === RegExpPrototype.exec) {
+        if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+          // The native String method already delegates to @@method (this
+          // polyfilled function), leasing to infinite recursion.
+          // We avoid it by directly calling the native @@method method.
+          return { done: true, value: uncurriedNativeRegExpMethod(regexp, str, arg2) };
+        }
+        return { done: true, value: uncurriedNativeMethod(str, regexp, arg2) };
+      }
+      return { done: false };
+    });
+
+    defineBuiltIn(String.prototype, KEY, methods[0]);
+    defineBuiltIn(RegExpPrototype, SYMBOL, methods[1]);
+  }
+
+  if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], 'sham', true);
 };
 
 
@@ -1322,6 +1495,57 @@ var isNullOrUndefined = __webpack_require__(8554);
 module.exports = function (V, P) {
   var func = V[P];
   return isNullOrUndefined(func) ? undefined : aCallable(func);
+};
+
+
+/***/ }),
+
+/***/ 647:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+var toObject = __webpack_require__(7908);
+
+var floor = Math.floor;
+var charAt = uncurryThis(''.charAt);
+var replace = uncurryThis(''.replace);
+var stringSlice = uncurryThis(''.slice);
+var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
+
+// `GetSubstitution` abstract operation
+// https://tc39.es/ecma262/#sec-getsubstitution
+module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
+  var tailPos = position + matched.length;
+  var m = captures.length;
+  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+  if (namedCaptures !== undefined) {
+    namedCaptures = toObject(namedCaptures);
+    symbols = SUBSTITUTION_SYMBOLS;
+  }
+  return replace(replacement, symbols, function (match, ch) {
+    var capture;
+    switch (charAt(ch, 0)) {
+      case '$': return '$';
+      case '&': return matched;
+      case '`': return stringSlice(str, 0, position);
+      case "'": return stringSlice(str, tailPos);
+      case '<':
+        capture = namedCaptures[stringSlice(ch, 1, -1)];
+        break;
+      default: // \d\d?
+        var n = +ch;
+        if (n === 0) return match;
+        if (n > m) {
+          var f = floor(n / 10);
+          if (f === 0) return match;
+          if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
+          return match;
+        }
+        capture = captures[n - 1];
+    }
+    return capture === undefined ? '' : capture;
+  });
 };
 
 
@@ -2660,6 +2884,33 @@ module.exports = function (Target, Source, key) {
 
 /***/ }),
 
+/***/ 7651:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var call = __webpack_require__(6916);
+var anObject = __webpack_require__(9670);
+var isCallable = __webpack_require__(614);
+var classof = __webpack_require__(4326);
+var regexpExec = __webpack_require__(2261);
+
+var $TypeError = TypeError;
+
+// `RegExpExec` abstract operation
+// https://tc39.es/ecma262/#sec-regexpexec
+module.exports = function (R, S) {
+  var exec = R.exec;
+  if (isCallable(exec)) {
+    var result = call(exec, R, S);
+    if (result !== null) anObject(result);
+    return result;
+  }
+  if (classof(R) === 'RegExp') return call(regexpExec, R, S);
+  throw $TypeError('RegExp#exec called on incompatible receiver');
+};
+
+
+/***/ }),
+
 /***/ 2261:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -3282,6 +3533,21 @@ var $String = String;
 module.exports = function (argument) {
   if (classof(argument) === 'Symbol') throw TypeError('Cannot convert a Symbol value to a string');
   return $String(argument);
+};
+
+
+/***/ }),
+
+/***/ 4038:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var IS_NODE = __webpack_require__(5268);
+
+module.exports = function (name) {
+  try {
+    // eslint-disable-next-line no-new-func -- safe
+    if (IS_NODE) return Function('return require("' + name + '")')();
+  } catch (error) { /* empty */ }
 };
 
 
@@ -4434,6 +4700,151 @@ defineIterator(String, 'String', function (iterated) {
 
 /***/ }),
 
+/***/ 5306:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var apply = __webpack_require__(2104);
+var call = __webpack_require__(6916);
+var uncurryThis = __webpack_require__(1702);
+var fixRegExpWellKnownSymbolLogic = __webpack_require__(7007);
+var fails = __webpack_require__(7293);
+var anObject = __webpack_require__(9670);
+var isCallable = __webpack_require__(614);
+var isNullOrUndefined = __webpack_require__(8554);
+var toIntegerOrInfinity = __webpack_require__(9303);
+var toLength = __webpack_require__(7466);
+var toString = __webpack_require__(1340);
+var requireObjectCoercible = __webpack_require__(4488);
+var advanceStringIndex = __webpack_require__(1530);
+var getMethod = __webpack_require__(8173);
+var getSubstitution = __webpack_require__(647);
+var regExpExec = __webpack_require__(7651);
+var wellKnownSymbol = __webpack_require__(5112);
+
+var REPLACE = wellKnownSymbol('replace');
+var max = Math.max;
+var min = Math.min;
+var concat = uncurryThis([].concat);
+var push = uncurryThis([].push);
+var stringIndexOf = uncurryThis(''.indexOf);
+var stringSlice = uncurryThis(''.slice);
+
+var maybeToString = function (it) {
+  return it === undefined ? it : String(it);
+};
+
+// IE <= 11 replaces $0 with the whole match, as if it was $&
+// https://stackoverflow.com/questions/6024666/getting-ie-to-replace-a-regex-with-the-literal-string-0
+var REPLACE_KEEPS_$0 = (function () {
+  // eslint-disable-next-line regexp/prefer-escape-replacement-dollar-char -- required for testing
+  return 'a'.replace(/./, '$0') === '$0';
+})();
+
+// Safari <= 13.0.3(?) substitutes nth capture where n>m with an empty string
+var REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE = (function () {
+  if (/./[REPLACE]) {
+    return /./[REPLACE]('a', '$0') === '';
+  }
+  return false;
+})();
+
+var REPLACE_SUPPORTS_NAMED_GROUPS = !fails(function () {
+  var re = /./;
+  re.exec = function () {
+    var result = [];
+    result.groups = { a: '7' };
+    return result;
+  };
+  // eslint-disable-next-line regexp/no-useless-dollar-replacements -- false positive
+  return ''.replace(re, '$<a>') !== '7';
+});
+
+// @@replace logic
+fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNative) {
+  var UNSAFE_SUBSTITUTE = REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE ? '$' : '$0';
+
+  return [
+    // `String.prototype.replace` method
+    // https://tc39.es/ecma262/#sec-string.prototype.replace
+    function replace(searchValue, replaceValue) {
+      var O = requireObjectCoercible(this);
+      var replacer = isNullOrUndefined(searchValue) ? undefined : getMethod(searchValue, REPLACE);
+      return replacer
+        ? call(replacer, searchValue, O, replaceValue)
+        : call(nativeReplace, toString(O), searchValue, replaceValue);
+    },
+    // `RegExp.prototype[@@replace]` method
+    // https://tc39.es/ecma262/#sec-regexp.prototype-@@replace
+    function (string, replaceValue) {
+      var rx = anObject(this);
+      var S = toString(string);
+
+      if (
+        typeof replaceValue == 'string' &&
+        stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) === -1 &&
+        stringIndexOf(replaceValue, '$<') === -1
+      ) {
+        var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
+        if (res.done) return res.value;
+      }
+
+      var functionalReplace = isCallable(replaceValue);
+      if (!functionalReplace) replaceValue = toString(replaceValue);
+
+      var global = rx.global;
+      if (global) {
+        var fullUnicode = rx.unicode;
+        rx.lastIndex = 0;
+      }
+      var results = [];
+      while (true) {
+        var result = regExpExec(rx, S);
+        if (result === null) break;
+
+        push(results, result);
+        if (!global) break;
+
+        var matchStr = toString(result[0]);
+        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+      }
+
+      var accumulatedResult = '';
+      var nextSourcePosition = 0;
+      for (var i = 0; i < results.length; i++) {
+        result = results[i];
+
+        var matched = toString(result[0]);
+        var position = max(min(toIntegerOrInfinity(result.index), S.length), 0);
+        var captures = [];
+        // NOTE: This is equivalent to
+        //   captures = result.slice(1).map(maybeToString)
+        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+        for (var j = 1; j < result.length; j++) push(captures, maybeToString(result[j]));
+        var namedCaptures = result.groups;
+        if (functionalReplace) {
+          var replacerArgs = concat([matched], captures, position, S);
+          if (namedCaptures !== undefined) push(replacerArgs, namedCaptures);
+          var replacement = toString(apply(replaceValue, undefined, replacerArgs));
+        } else {
+          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+        }
+        if (position >= nextSourcePosition) {
+          accumulatedResult += stringSlice(S, nextSourcePosition, position) + replacement;
+          nextSourcePosition = position + matched.length;
+        }
+      }
+      return accumulatedResult + stringSlice(S, nextSourcePosition);
+    }
+  ];
+}, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
+
+
+/***/ }),
+
 /***/ 3210:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -4873,6 +5284,244 @@ defineWellKnownSymbol('toStringTag');
 // `Symbol.prototype[@@toStringTag]` property
 // https://tc39.es/ecma262/#sec-symbol.prototype-@@tostringtag
 setToStringTag(getBuiltIn('Symbol'), 'Symbol');
+
+
+/***/ }),
+
+/***/ 7714:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var tryNodeRequire = __webpack_require__(4038);
+var getBuiltIn = __webpack_require__(5005);
+var fails = __webpack_require__(7293);
+var create = __webpack_require__(30);
+var createPropertyDescriptor = __webpack_require__(9114);
+var defineProperty = (__webpack_require__(3070).f);
+var defineBuiltIn = __webpack_require__(8052);
+var defineBuiltInAccessor = __webpack_require__(7045);
+var hasOwn = __webpack_require__(2597);
+var anInstance = __webpack_require__(5787);
+var anObject = __webpack_require__(9670);
+var errorToString = __webpack_require__(7762);
+var normalizeStringArgument = __webpack_require__(6277);
+var DOMExceptionConstants = __webpack_require__(3678);
+var clearErrorStack = __webpack_require__(1060);
+var InternalStateModule = __webpack_require__(9909);
+var DESCRIPTORS = __webpack_require__(9781);
+var IS_PURE = __webpack_require__(1913);
+
+var DOM_EXCEPTION = 'DOMException';
+var DATA_CLONE_ERR = 'DATA_CLONE_ERR';
+var Error = getBuiltIn('Error');
+// NodeJS < 17.0 does not expose `DOMException` to global
+var NativeDOMException = getBuiltIn(DOM_EXCEPTION) || (function () {
+  try {
+    // NodeJS < 15.0 does not expose `MessageChannel` to global
+    var MessageChannel = getBuiltIn('MessageChannel') || tryNodeRequire('worker_threads').MessageChannel;
+    // eslint-disable-next-line es/no-weak-map, unicorn/require-post-message-target-origin -- safe
+    new MessageChannel().port1.postMessage(new WeakMap());
+  } catch (error) {
+    if (error.name == DATA_CLONE_ERR && error.code == 25) return error.constructor;
+  }
+})();
+var NativeDOMExceptionPrototype = NativeDOMException && NativeDOMException.prototype;
+var ErrorPrototype = Error.prototype;
+var setInternalState = InternalStateModule.set;
+var getInternalState = InternalStateModule.getterFor(DOM_EXCEPTION);
+var HAS_STACK = 'stack' in Error(DOM_EXCEPTION);
+
+var codeFor = function (name) {
+  return hasOwn(DOMExceptionConstants, name) && DOMExceptionConstants[name].m ? DOMExceptionConstants[name].c : 0;
+};
+
+var $DOMException = function DOMException() {
+  anInstance(this, DOMExceptionPrototype);
+  var argumentsLength = arguments.length;
+  var message = normalizeStringArgument(argumentsLength < 1 ? undefined : arguments[0]);
+  var name = normalizeStringArgument(argumentsLength < 2 ? undefined : arguments[1], 'Error');
+  var code = codeFor(name);
+  setInternalState(this, {
+    type: DOM_EXCEPTION,
+    name: name,
+    message: message,
+    code: code
+  });
+  if (!DESCRIPTORS) {
+    this.name = name;
+    this.message = message;
+    this.code = code;
+  }
+  if (HAS_STACK) {
+    var error = Error(message);
+    error.name = DOM_EXCEPTION;
+    defineProperty(this, 'stack', createPropertyDescriptor(1, clearErrorStack(error.stack, 1)));
+  }
+};
+
+var DOMExceptionPrototype = $DOMException.prototype = create(ErrorPrototype);
+
+var createGetterDescriptor = function (get) {
+  return { enumerable: true, configurable: true, get: get };
+};
+
+var getterFor = function (key) {
+  return createGetterDescriptor(function () {
+    return getInternalState(this)[key];
+  });
+};
+
+if (DESCRIPTORS) {
+  defineBuiltInAccessor(DOMExceptionPrototype, 'code', getterFor('code'));
+  defineBuiltInAccessor(DOMExceptionPrototype, 'message', getterFor('message'));
+  defineBuiltInAccessor(DOMExceptionPrototype, 'name', getterFor('name'));
+}
+
+defineProperty(DOMExceptionPrototype, 'constructor', createPropertyDescriptor(1, $DOMException));
+
+// FF36- DOMException is a function, but can't be constructed
+var INCORRECT_CONSTRUCTOR = fails(function () {
+  return !(new NativeDOMException() instanceof Error);
+});
+
+// Safari 10.1 / Chrome 32- / IE8- DOMException.prototype.toString bugs
+var INCORRECT_TO_STRING = INCORRECT_CONSTRUCTOR || fails(function () {
+  return ErrorPrototype.toString !== errorToString || String(new NativeDOMException(1, 2)) !== '2: 1';
+});
+
+// Deno 1.6.3- DOMException.prototype.code just missed
+var INCORRECT_CODE = INCORRECT_CONSTRUCTOR || fails(function () {
+  return new NativeDOMException(1, 'DataCloneError').code !== 25;
+});
+
+// Deno 1.6.3- DOMException constants just missed
+var MISSED_CONSTANTS = INCORRECT_CONSTRUCTOR
+  || NativeDOMException[DATA_CLONE_ERR] !== 25
+  || NativeDOMExceptionPrototype[DATA_CLONE_ERR] !== 25;
+
+var FORCED_CONSTRUCTOR = IS_PURE ? INCORRECT_TO_STRING || INCORRECT_CODE || MISSED_CONSTANTS : INCORRECT_CONSTRUCTOR;
+
+// `DOMException` constructor
+// https://webidl.spec.whatwg.org/#idl-DOMException
+$({ global: true, constructor: true, forced: FORCED_CONSTRUCTOR }, {
+  DOMException: FORCED_CONSTRUCTOR ? $DOMException : NativeDOMException
+});
+
+var PolyfilledDOMException = getBuiltIn(DOM_EXCEPTION);
+var PolyfilledDOMExceptionPrototype = PolyfilledDOMException.prototype;
+
+if (INCORRECT_TO_STRING && (IS_PURE || NativeDOMException === PolyfilledDOMException)) {
+  defineBuiltIn(PolyfilledDOMExceptionPrototype, 'toString', errorToString);
+}
+
+if (INCORRECT_CODE && DESCRIPTORS && NativeDOMException === PolyfilledDOMException) {
+  defineBuiltInAccessor(PolyfilledDOMExceptionPrototype, 'code', createGetterDescriptor(function () {
+    return codeFor(anObject(this).name);
+  }));
+}
+
+for (var key in DOMExceptionConstants) if (hasOwn(DOMExceptionConstants, key)) {
+  var constant = DOMExceptionConstants[key];
+  var constantName = constant.s;
+  var descriptor = createPropertyDescriptor(6, constant.c);
+  if (!hasOwn(PolyfilledDOMException, constantName)) {
+    defineProperty(PolyfilledDOMException, constantName, descriptor);
+  }
+  if (!hasOwn(PolyfilledDOMExceptionPrototype, constantName)) {
+    defineProperty(PolyfilledDOMExceptionPrototype, constantName, descriptor);
+  }
+}
+
+
+/***/ }),
+
+/***/ 2801:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var getBuiltIn = __webpack_require__(5005);
+var createPropertyDescriptor = __webpack_require__(9114);
+var defineProperty = (__webpack_require__(3070).f);
+var hasOwn = __webpack_require__(2597);
+var anInstance = __webpack_require__(5787);
+var inheritIfRequired = __webpack_require__(9587);
+var normalizeStringArgument = __webpack_require__(6277);
+var DOMExceptionConstants = __webpack_require__(3678);
+var clearErrorStack = __webpack_require__(1060);
+var DESCRIPTORS = __webpack_require__(9781);
+var IS_PURE = __webpack_require__(1913);
+
+var DOM_EXCEPTION = 'DOMException';
+var Error = getBuiltIn('Error');
+var NativeDOMException = getBuiltIn(DOM_EXCEPTION);
+
+var $DOMException = function DOMException() {
+  anInstance(this, DOMExceptionPrototype);
+  var argumentsLength = arguments.length;
+  var message = normalizeStringArgument(argumentsLength < 1 ? undefined : arguments[0]);
+  var name = normalizeStringArgument(argumentsLength < 2 ? undefined : arguments[1], 'Error');
+  var that = new NativeDOMException(message, name);
+  var error = Error(message);
+  error.name = DOM_EXCEPTION;
+  defineProperty(that, 'stack', createPropertyDescriptor(1, clearErrorStack(error.stack, 1)));
+  inheritIfRequired(that, this, $DOMException);
+  return that;
+};
+
+var DOMExceptionPrototype = $DOMException.prototype = NativeDOMException.prototype;
+
+var ERROR_HAS_STACK = 'stack' in Error(DOM_EXCEPTION);
+var DOM_EXCEPTION_HAS_STACK = 'stack' in new NativeDOMException(1, 2);
+
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var descriptor = NativeDOMException && DESCRIPTORS && Object.getOwnPropertyDescriptor(global, DOM_EXCEPTION);
+
+// Bun ~ 0.1.1 DOMException have incorrect descriptor and we can't redefine it
+// https://github.com/Jarred-Sumner/bun/issues/399
+var BUGGY_DESCRIPTOR = !!descriptor && !(descriptor.writable && descriptor.configurable);
+
+var FORCED_CONSTRUCTOR = ERROR_HAS_STACK && !BUGGY_DESCRIPTOR && !DOM_EXCEPTION_HAS_STACK;
+
+// `DOMException` constructor patch for `.stack` where it's required
+// https://webidl.spec.whatwg.org/#es-DOMException-specialness
+$({ global: true, constructor: true, forced: IS_PURE || FORCED_CONSTRUCTOR }, { // TODO: fix export logic
+  DOMException: FORCED_CONSTRUCTOR ? $DOMException : NativeDOMException
+});
+
+var PolyfilledDOMException = getBuiltIn(DOM_EXCEPTION);
+var PolyfilledDOMExceptionPrototype = PolyfilledDOMException.prototype;
+
+if (PolyfilledDOMExceptionPrototype.constructor !== PolyfilledDOMException) {
+  if (!IS_PURE) {
+    defineProperty(PolyfilledDOMExceptionPrototype, 'constructor', createPropertyDescriptor(1, PolyfilledDOMException));
+  }
+
+  for (var key in DOMExceptionConstants) if (hasOwn(DOMExceptionConstants, key)) {
+    var constant = DOMExceptionConstants[key];
+    var constantName = constant.s;
+    if (!hasOwn(PolyfilledDOMException, constantName)) {
+      defineProperty(PolyfilledDOMException, constantName, createPropertyDescriptor(6, constant.c));
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ 1174:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+var getBuiltIn = __webpack_require__(5005);
+var setToStringTag = __webpack_require__(8003);
+
+var DOM_EXCEPTION = 'DOMException';
+
+setToStringTag(getBuiltIn(DOM_EXCEPTION), DOM_EXCEPTION);
 
 
 /***/ })
@@ -5432,7 +6081,21 @@ var es_array_join = __webpack_require__(9600);
 })(self);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3210);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(5306);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.constructor.js
+var web_dom_exception_constructor = __webpack_require__(7714);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.stack.js
+var web_dom_exception_stack = __webpack_require__(2801);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.to-string-tag.js
+var web_dom_exception_to_string_tag = __webpack_require__(1174);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-has.js
+
+
+
+
+
+
 
 
 
@@ -5443,7 +6106,6 @@ var es_string_trim = __webpack_require__(3210);
 (function (global) {
   try {
     global.document.querySelector(':has(*, :does-not-exist, > *)');
-    global.document.querySelector(':has(:has(any), div)');
     if (!global.document.querySelector(':has(:scope *)') && CSS.supports('selector(:has(div))')) {
       return;
     }
@@ -5742,7 +6404,7 @@ var es_string_trim = __webpack_require__(3210);
         var innerPart = innerParts[i];
         var innerPartReplaced = replaceAllWithTempAttr(innerPart, true, function () {});
         if (!innerPartReplaced) {
-          newInnerParts.push(':not(*)');
+          throw new Error("Nested :has() is not supported");
         } else {
           newInnerParts.push(innerPart);
         }
@@ -5809,46 +6471,44 @@ var es_string_trim = __webpack_require__(3210);
             } else {
               absoluteSelectorPart = ':scope ' + selectorPart;
             }
-            try {
-              walkNode(rootNode, function (node) {
-                if (!node.querySelector(absoluteSelectorPart)) {
-                  return;
-                }
-                switch (selectorPart[0]) {
-                  case '~':
-                  case '+':
-                    {
-                      var siblings = node.childNodes;
-                      for (var i = 0; i < siblings.length; i++) {
-                        var sibling = siblings[i];
-                        if (!('setAttribute' in sibling)) {
-                          continue;
-                        }
-                        var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
-                        sibling.setAttribute(idAttr, '');
-                        if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
-                          sibling.setAttribute(attr, '');
-                        }
-                        sibling.removeAttribute(idAttr);
+            walkNode(rootNode, function (node) {
+              if (!node.querySelector(absoluteSelectorPart)) {
+                return;
+              }
+              switch (selectorPart[0]) {
+                case '~':
+                case '+':
+                  {
+                    var siblings = node.childNodes;
+                    for (var i = 0; i < siblings.length; i++) {
+                      var sibling = siblings[i];
+                      if (!('setAttribute' in sibling)) {
+                        continue;
                       }
-                    }
-                    break;
-                  case '>':
-                    {
                       var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
-                      node.setAttribute(idAttr, '');
-                      if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
-                        node.setAttribute(attr, '');
+                      sibling.setAttribute(idAttr, '');
+                      if (node.querySelector(':scope [' + idAttr + ']' + ' ' + selectorPart)) {
+                        sibling.setAttribute(attr, '');
                       }
-                      node.removeAttribute(idAttr);
+                      sibling.removeAttribute(idAttr);
                     }
-                    break;
-                  default:
-                    node.setAttribute(attr, '');
-                    break;
-                }
-              });
-            } catch (_) {}
+                  }
+                  break;
+                case '>':
+                  {
+                    var idAttr = 'q-has-id' + (Math.floor(Math.random() * 9000000) + 1000000);
+                    node.setAttribute(idAttr, '');
+                    if (node.querySelector(':scope[' + idAttr + ']' + ' ' + selectorPart)) {
+                      node.setAttribute(attr, '');
+                    }
+                    node.removeAttribute(idAttr);
+                  }
+                  break;
+                default:
+                  node.setAttribute(attr, '');
+                  break;
+              }
+            });
           }
         });
         arguments[0] = newQuery;
@@ -5883,7 +6543,23 @@ var es_string_trim = __webpack_require__(3210);
             }
           }
         }
-        throw err;
+        var errorMessage = '';
+        try {
+          qsa.apply(this, [':core-web-does-not-exist']);
+        } catch (dummyError) {
+          errorMessage = dummyError.message;
+          if (errorMessage) {
+            errorMessage = errorMessage.replace(':core-web-does-not-exist', selectors);
+          }
+        }
+        if (!errorMessage) {
+          errorMessage = "Failed to execute 'querySelector' on 'Document': '" + selectors + "' is not a valid selector.";
+        }
+        try {
+          throw new DOMException(errorMessage);
+        } catch (_) {
+          throw new Error(errorMessage);
+        }
       }
     };
   }
@@ -5936,6 +6612,18 @@ var es_array_from = __webpack_require__(1038);
         return;
       }
       throw new Error('Expected something truthy for A');
+    },
+    skip: function skip() {},
+    "throws": function throws(a) {
+      var didThrow = false;
+      try {
+        a();
+      } catch (_) {
+        didThrow = true;
+      }
+      if (!didThrow) {
+        throw new Error('Expected test to throw');
+      }
     }
   };
   function formatElements(elements) {
@@ -5982,7 +6670,9 @@ var es_array_from = __webpack_require__(1038);
     assert.ok(document.body.querySelector(":has(*)"));
   });
   assert.test("accepts broken selector lists", function () {
-    assert.ok(document.body.querySelector(":has(*, :does-not-exist)"));
+    assert.skip(function () {
+      document.body.querySelector(":has(*, :does-not-exist)");
+    });
   });
   assert.test(":has basic", function () {
     var fixture = document.getElementById("the-fixture");
