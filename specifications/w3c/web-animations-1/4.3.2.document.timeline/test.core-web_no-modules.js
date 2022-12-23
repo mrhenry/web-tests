@@ -6908,9 +6908,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
         function c(a) {
           if ("number" == typeof a) return a;
           var b = {};
-          for (var c in a) {
-            b[c] = a[c];
-          }
+          for (var c in a) b[c] = a[c];
           return b;
         }
         function d() {
@@ -7149,14 +7147,10 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
         }
         function f(a) {
           var b = [];
-          for (var c in a) {
-            if (!(c in ["easing", "offset", "composite"])) {
-              var d = a[c];
-              Array.isArray(d) || (d = [d]);
-              for (var e, f = d.length, g = 0; g < f; g++) {
-                e = {}, e.offset = "offset" in a ? a.offset : 1 == f ? 1 : g / (f - 1), "easing" in a && (e.easing = a.easing), "composite" in a && (e.composite = a.composite), e[c] = d[g], b.push(e);
-              }
-            }
+          for (var c in a) if (!(c in ["easing", "offset", "composite"])) {
+            var d = a[c];
+            Array.isArray(d) || (d = [d]);
+            for (var e, f = d.length, g = 0; g < f; g++) e = {}, e.offset = "offset" in a ? a.offset : 1 == f ? 1 : g / (f - 1), "easing" in a && (e.easing = a.easing), "composite" in a && (e.composite = a.composite), e[c] = d[g], b.push(e);
           }
           return b.sort(function (a, b) {
             return a.offset - b.offset;
@@ -7169,9 +7163,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             for (var b = 0, c = d[0].offset, e = 1; e < a; e++) {
               var f = d[e].offset;
               if (null != f) {
-                for (var g = 1; g < e - b; g++) {
-                  d[b + g].offset = c + (f - c) * g / (e - b);
-                }
+                for (var g = 1; g < e - b; g++) d[b + g].offset = c + (f - c) * g / (e - b);
                 b = e, c = f;
               }
             }
@@ -7279,17 +7271,13 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
         }
         !function (a, b, c) {
           function d(a) {
-            for (var b = {}, c = 0; c < a.length; c++) {
-              for (var d in a[c]) {
-                if ("offset" != d && "easing" != d && "composite" != d) {
-                  var e = {
-                    offset: a[c].offset,
-                    easing: a[c].easing,
-                    value: a[c][d]
-                  };
-                  b[d] = b[d] || [], b[d].push(e);
-                }
-              }
+            for (var b = {}, c = 0; c < a.length; c++) for (var d in a[c]) if ("offset" != d && "easing" != d && "composite" != d) {
+              var e = {
+                offset: a[c].offset,
+                easing: a[c].easing,
+                value: a[c][d]
+              };
+              b[d] = b[d] || [], b[d].push(e);
             }
             for (var f in b) {
               var g = b[f];
@@ -7303,24 +7291,22 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
           }
           function e(c) {
             var d = [];
-            for (var e in c) {
-              for (var f = c[e], g = 0; g < f.length - 1; g++) {
-                var h = g,
-                  i = g + 1,
-                  j = f[h].offset,
-                  k = f[i].offset,
-                  l = j,
-                  m = k;
-                0 == g && (l = -1 / 0, 0 == k && (i = h)), g == f.length - 2 && (m = 1 / 0, 1 == j && (h = i)), d.push({
-                  applyFrom: l,
-                  applyTo: m,
-                  startOffset: f[h].offset,
-                  endOffset: f[i].offset,
-                  easingFunction: a.parseEasingFunction(f[h].easing),
-                  property: e,
-                  interpolation: b.propertyInterpolation(e, f[h].value, f[i].value)
-                });
-              }
+            for (var e in c) for (var f = c[e], g = 0; g < f.length - 1; g++) {
+              var h = g,
+                i = g + 1,
+                j = f[h].offset,
+                k = f[i].offset,
+                l = j,
+                m = k;
+              0 == g && (l = -1 / 0, 0 == k && (i = h)), g == f.length - 2 && (m = 1 / 0, 1 == j && (h = i)), d.push({
+                applyFrom: l,
+                applyTo: m,
+                startOffset: f[h].offset,
+                endOffset: f[i].offset,
+                easingFunction: a.parseEasingFunction(f[h].easing),
+                property: e,
+                interpolation: b.propertyInterpolation(e, f[h].value, f[i].value)
+              });
             }
             return d.sort(function (a, b) {
               return a.startOffset - b.startOffset;
@@ -7338,9 +7324,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
                   f = d.endOffset - d.startOffset,
                   g = 0 == f ? 0 : d.easingFunction(e / f);
                 b.apply(a, d.property, d.interpolation(g));
-              });else for (var d in g) {
-                "offset" != d && "easing" != d && "composite" != d && b.clear(a, d);
-              }
+              });else for (var d in g) "offset" != d && "easing" != d && "composite" != d && b.clear(a, d);
             };
           };
         }(a, b), function (a, b, c) {
@@ -7514,16 +7498,10 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               return this._surrogateStyle.cssText;
             },
             set cssText(a) {
-              for (var b = {}, c = 0; c < this._surrogateStyle.length; c++) {
-                b[this._surrogateStyle[c]] = !0;
-              }
+              for (var b = {}, c = 0; c < this._surrogateStyle.length; c++) b[this._surrogateStyle[c]] = !0;
               this._surrogateStyle.cssText = a, this._updateIndices();
-              for (var c = 0; c < this._surrogateStyle.length; c++) {
-                b[this._surrogateStyle[c]] = !0;
-              }
-              for (var d in b) {
-                this._isAnimatedProperty[d] || this._style.setProperty(d, this._surrogateStyle.getPropertyValue(d));
-              }
+              for (var c = 0; c < this._surrogateStyle.length; c++) b[this._surrogateStyle[c]] = !0;
+              for (var d in b) this._isAnimatedProperty[d] || this._style.setProperty(d, this._surrogateStyle.getPropertyValue(d));
             },
             get length() {
               return this._surrogateStyle.length;
@@ -7532,24 +7510,20 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               return this._style.parentRule;
             },
             _updateIndices: function _updateIndices() {
-              for (; this._length < this._surrogateStyle.length;) {
-                Object.defineProperty(this, this._length, {
-                  configurable: !0,
-                  enumerable: !1,
-                  get: function (a) {
-                    return function () {
-                      return this._surrogateStyle[a];
-                    };
-                  }(this._length)
-                }), this._length++;
-              }
-              for (; this._length > this._surrogateStyle.length;) {
-                this._length--, Object.defineProperty(this, this._length, {
-                  configurable: !0,
-                  enumerable: !1,
-                  value: void 0
-                });
-              }
+              for (; this._length < this._surrogateStyle.length;) Object.defineProperty(this, this._length, {
+                configurable: !0,
+                enumerable: !1,
+                get: function (a) {
+                  return function () {
+                    return this._surrogateStyle[a];
+                  };
+                }(this._length)
+              }), this._length++;
+              for (; this._length > this._surrogateStyle.length;) this._length--, Object.defineProperty(this, this._length, {
+                configurable: !0,
+                enumerable: !1,
+                value: void 0
+              });
             },
             _set: function _set(b, c) {
               this._style[b] = c, this._isAnimatedProperty[b] = !0, this._updateSvgTransformAttr && "transform" == a.unprefixedPropertyName(b) && (null == this._savedTransformAttr && (this._savedTransformAttr = this._element.getAttribute("transform")), this._element.setAttribute("transform", a.transformToSvgMatrix(c)));
@@ -7558,26 +7532,22 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               this._style[b] = this._surrogateStyle[b], this._updateSvgTransformAttr && "transform" == a.unprefixedPropertyName(b) && (this._savedTransformAttr ? this._element.setAttribute("transform", this._savedTransformAttr) : this._element.removeAttribute("transform"), this._savedTransformAttr = null), delete this._isAnimatedProperty[b];
             }
           };
-          for (var k in i) {
-            e.prototype[k] = function (a, b) {
-              return function () {
-                var c = this._surrogateStyle[a].apply(this._surrogateStyle, arguments);
-                return b && (this._isAnimatedProperty[arguments[0]] || this._style[a].apply(this._style, arguments), this._updateIndices()), c;
-              };
-            }(k, k in j);
-          }
-          for (var l in document.documentElement.style) {
-            l in h || l in i || function (a) {
-              d(e.prototype, a, {
-                get: function get() {
-                  return this._surrogateStyle[a];
-                },
-                set: function set(b) {
-                  this._surrogateStyle[a] = b, this._updateIndices(), this._isAnimatedProperty[a] || (this._style[a] = b);
-                }
-              });
-            }(l);
-          }
+          for (var k in i) e.prototype[k] = function (a, b) {
+            return function () {
+              var c = this._surrogateStyle[a].apply(this._surrogateStyle, arguments);
+              return b && (this._isAnimatedProperty[arguments[0]] || this._style[a].apply(this._style, arguments), this._updateIndices()), c;
+            };
+          }(k, k in j);
+          for (var l in document.documentElement.style) l in h || l in i || function (a) {
+            d(e.prototype, a, {
+              get: function get() {
+                return this._surrogateStyle[a];
+              },
+              set: function set(b) {
+                this._surrogateStyle[a] = b, this._updateIndices(), this._isAnimatedProperty[a] || (this._style[a] = b);
+              }
+            });
+          }(l);
           a.apply = function (b, c, d) {
             f(b), b.style._set(a.propertyName(c), d);
           }, a.clear = function (b, c) {
@@ -7593,9 +7563,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             if ("number" == typeof a && "number" == typeof b) return a * (1 - d) + b * d;
             if ("boolean" == typeof a && "boolean" == typeof b) return d < .5 ? a : b;
             if (a.length == b.length) {
-              for (var e = [], f = 0; f < a.length; f++) {
-                e.push(c(a[f], b[f], d));
-              }
+              for (var e = [], f = 0; f < a.length; f++) e.push(c(a[f], b[f], d));
               return e;
             }
             throw "Mismatched interpolation arguments " + a + ":" + b;
@@ -7613,34 +7581,20 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             var f = a.dot(b, d);
             f = c(f, -1, 1);
             var g = [];
-            if (1 === f) g = b;else for (var h = Math.acos(f), i = 1 * Math.sin(e * h) / Math.sqrt(1 - f * f), j = 0; j < 4; j++) {
-              g.push(b[j] * (Math.cos(e * h) - f * i) + d[j] * i);
-            }
+            if (1 === f) g = b;else for (var h = Math.acos(f), i = 1 * Math.sin(e * h) / Math.sqrt(1 - f * f), j = 0; j < 4; j++) g.push(b[j] * (Math.cos(e * h) - f * i) + d[j] * i);
             return g;
           }
           var e = function () {
             function a(a, b) {
-              for (var c = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], d = 0; d < 4; d++) {
-                for (var e = 0; e < 4; e++) {
-                  for (var f = 0; f < 4; f++) {
-                    c[d][e] += b[d][f] * a[f][e];
-                  }
-                }
-              }
+              for (var c = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], d = 0; d < 4; d++) for (var e = 0; e < 4; e++) for (var f = 0; f < 4; f++) c[d][e] += b[d][f] * a[f][e];
               return c;
             }
             function b(a) {
               return 0 == a[0][2] && 0 == a[0][3] && 0 == a[1][2] && 0 == a[1][3] && 0 == a[2][0] && 0 == a[2][1] && 1 == a[2][2] && 0 == a[2][3] && 0 == a[3][2] && 1 == a[3][3];
             }
             function c(c, d, e, f, g) {
-              for (var h = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]], i = 0; i < 4; i++) {
-                h[i][3] = g[i];
-              }
-              for (var i = 0; i < 3; i++) {
-                for (var j = 0; j < 3; j++) {
-                  h[3][i] += c[j] * h[j][i];
-                }
-              }
+              for (var h = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]], i = 0; i < 4; i++) h[i][3] = g[i];
+              for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) h[3][i] += c[j] * h[j][i];
               var k = f[0],
                 l = f[1],
                 m = f[2],
@@ -7649,11 +7603,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               o[0][0] = 1 - 2 * (l * l + m * m), o[0][1] = 2 * (k * l - m * n), o[0][2] = 2 * (k * m + l * n), o[1][0] = 2 * (k * l + m * n), o[1][1] = 1 - 2 * (k * k + m * m), o[1][2] = 2 * (l * m - k * n), o[2][0] = 2 * (k * m - l * n), o[2][1] = 2 * (l * m + k * n), o[2][2] = 1 - 2 * (k * k + l * l), h = a(h, o);
               var p = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
               e[2] && (p[2][1] = e[2], h = a(h, p)), e[1] && (p[2][1] = 0, p[2][0] = e[0], h = a(h, p)), e[0] && (p[2][0] = 0, p[1][0] = e[0], h = a(h, p));
-              for (var i = 0; i < 3; i++) {
-                for (var j = 0; j < 3; j++) {
-                  h[i][j] *= d[i];
-                }
-              }
+              for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) h[i][j] *= d[i];
               return b(h) ? [h[0][0], h[0][1], h[1][0], h[1][1], h[3][0], h[3][1]] : h[0].concat(h[1], h[2], h[3]);
             }
             return c;
@@ -7837,9 +7787,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
           b.timeline = q;
         }(a, b), function (a, b) {
           function c(a, b) {
-            for (var c = 0, d = 0; d < a.length; d++) {
-              c += a[d] * b[d];
-            }
+            for (var c = 0, d = 0; d < a.length; d++) c += a[d] * b[d];
             return c;
           }
           function d(a, b) {
@@ -7933,9 +7881,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             }
             function b(b) {
               for (var c = 1 / a(b), d = b[0][0], e = b[0][1], f = b[0][2], g = b[1][0], h = b[1][1], i = b[1][2], j = b[2][0], k = b[2][1], l = b[2][2], m = [[(h * l - i * k) * c, (f * k - e * l) * c, (e * i - f * h) * c, 0], [(i * j - g * l) * c, (d * l - f * j) * c, (f * g - d * i) * c, 0], [(g * k - h * j) * c, (j * e - d * k) * c, (d * h - e * g) * c, 0]], n = [], o = 0; o < 3; o++) {
-                for (var p = 0, q = 0; q < 3; q++) {
-                  p += b[3][q] * m[q][o];
-                }
+                for (var p = 0, q = 0; q < 3; q++) p += b[3][q] * m[q][o];
                 n.push(p);
               }
               return n.push(1), m.push(n), m;
@@ -7945,9 +7891,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             }
             function e(a, b) {
               for (var c = [], d = 0; d < 4; d++) {
-                for (var e = 0, f = 0; f < 4; f++) {
-                  e += a[f] * b[f][d];
-                }
+                for (var e = 0, f = 0; f < 4; f++) e += a[f] * b[f][d];
                 c.push(e);
               }
               return c;
@@ -7968,12 +7912,8 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             function j(j) {
               var k = [j.slice(0, 4), j.slice(4, 8), j.slice(8, 12), j.slice(12, 16)];
               if (1 !== k[3][3]) return null;
-              for (var l = [], m = 0; m < 4; m++) {
-                l.push(k[m].slice());
-              }
-              for (var m = 0; m < 3; m++) {
-                l[m][3] = 0;
-              }
+              for (var l = [], m = 0; m < 4; m++) l.push(k[m].slice());
+              for (var m = 0; m < 3; m++) l[m][3] = 0;
               if (0 === a(l)) return null;
               var n,
                 o = [];
@@ -7986,9 +7926,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               var s = [];
               q.push(k[1].slice(0, 3)), s.push(c(q[0], q[1])), q[1] = h(q[1], q[0], 1, -s[0]), r.push(g(q[1])), q[1] = f(q[1]), s[0] /= r[1], q.push(k[2].slice(0, 3)), s.push(c(q[0], q[2])), q[2] = h(q[2], q[0], 1, -s[1]), s.push(c(q[1], q[2])), q[2] = h(q[2], q[1], 1, -s[2]), r.push(g(q[2])), q[2] = f(q[2]), s[1] /= r[2], s[2] /= r[2];
               var t = i(q[1], q[2]);
-              if (c(q[0], t) < 0) for (var m = 0; m < 3; m++) {
-                r[m] *= -1, q[m][0] *= -1, q[m][1] *= -1, q[m][2] *= -1;
-              }
+              if (c(q[0], t) < 0) for (var m = 0; m < 3; m++) r[m] *= -1, q[m][0] *= -1, q[m][1] *= -1, q[m][2] *= -1;
               var u,
                 v,
                 w = q[0][0] + q[1][1] + q[2][2] + 1;
@@ -8017,16 +7955,12 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             }
           }
           function e(a, b) {
-            for (var c = 0, d = 0; d < b.length && (!/\s|,/.test(b[d]) || 0 != c); d++) {
-              if ("(" == b[d]) c++;else if (")" == b[d] && (c--, 0 == c && d++, c <= 0)) break;
-            }
+            for (var c = 0, d = 0; d < b.length && (!/\s|,/.test(b[d]) || 0 != c); d++) if ("(" == b[d]) c++;else if (")" == b[d] && (c--, 0 == c && d++, c <= 0)) break;
             var e = a(b.substr(0, d));
             return void 0 == e ? void 0 : [e, b.substr(d)];
           }
           function f(a, b) {
-            for (var c = a, d = b; c && d;) {
-              c > d ? c %= d : d %= c;
-            }
+            for (var c = a, d = b; c && d;) c > d ? c %= d : d %= c;
             return c = a * b / (c + d);
           }
           function g(a) {
@@ -8062,20 +7996,16 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             }];
           }
           function k(a, b, c) {
-            for (var d = [], e = [], f = [], g = 0, h = 0; h < c.length; h++) {
-              if ("function" == typeof c[h]) {
-                var i = c[h](a[g], b[g++]);
-                d.push(i[0]), e.push(i[1]), f.push(i[2]);
-              } else !function (a) {
-                d.push(!1), e.push(!1), f.push(function () {
-                  return c[a];
-                });
-              }(h);
-            }
+            for (var d = [], e = [], f = [], g = 0, h = 0; h < c.length; h++) if ("function" == typeof c[h]) {
+              var i = c[h](a[g], b[g++]);
+              d.push(i[0]), e.push(i[1]), f.push(i[2]);
+            } else !function (a) {
+              d.push(!1), e.push(!1), f.push(function () {
+                return c[a];
+              });
+            }(h);
             return [d, e, function (a) {
-              for (var b = "", c = 0; c < a.length; c++) {
-                b += f[c](a[c]);
-              }
+              for (var b = "", c = 0; c < a.length; c++) b += f[c](a[c]);
               return b;
             }];
           }
@@ -8099,16 +8029,12 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
             if (d && "" == d[1]) return d[0];
           }
           function d(b, c) {
-            for (; b.lengths.length < Math.max(b.lengths.length, c.lengths.length);) {
-              b.lengths.push({
-                px: 0
-              });
-            }
-            for (; c.lengths.length < Math.max(b.lengths.length, c.lengths.length);) {
-              c.lengths.push({
-                px: 0
-              });
-            }
+            for (; b.lengths.length < Math.max(b.lengths.length, c.lengths.length);) b.lengths.push({
+              px: 0
+            });
+            for (; c.lengths.length < Math.max(b.lengths.length, c.lengths.length);) c.lengths.push({
+              px: 0
+            });
             if (b.inset == c.inset && !!b.color == !!c.color) {
               for (var d, e = [], f = [[], 0], g = [[], 0], h = 0; h < b.lengths.length; h++) {
                 var i = a.mergeDimensions(b.lengths[h], c.lengths[h], 2 == h);
@@ -8119,9 +8045,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
                 f[1] = j[0], g[1] = j[1], d = j[2];
               }
               return [f, g, function (a) {
-                for (var c = b.inset ? "inset " : " ", f = 0; f < e.length; f++) {
-                  c += e[f](a[0][f]) + " ";
-                }
+                for (var c = b.inset ? "inset " : " ", f = 0; f < e.length; f++) c += e[f](a[0][f]) + " ";
                 return d && (c += d(a[1])), c;
               }];
             }
@@ -8223,9 +8147,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               function c(a) {
                 return Math.max(0, Math.min(255, a));
               }
-              if (b[3]) for (var d = 0; d < 3; d++) {
-                b[d] = Math.round(c(b[d] / b[3]));
-              }
+              if (b[3]) for (var d = 0; d < 3; d++) b[d] = Math.round(c(b[d] / b[3]));
               return b[3] = a.numberToString(a.clamp(0, 1, b[3])), "rgba(" + b.join(",") + ")";
             }];
           }
@@ -8281,9 +8203,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
               b = b.replace(a, function (a) {
                 return d[a] = null, "U" + a;
               });
-              for (var e = "U(" + a.source + ")", f = b.replace(/[-+]?(\d*\.)?\d+([Ee][-+]?\d+)?/g, "N").replace(new RegExp("N" + e, "g"), "D").replace(/\s[+-]\s/g, "O").replace(/\s/g, ""), g = [/N\*(D)/g, /(N|D)[*\/]N/g, /(N|D)O\1/g, /\((N|D)\)/g], h = 0; h < g.length;) {
-                g[h].test(f) ? (f = f.replace(g[h], "$1"), h = 0) : h++;
-              }
+              for (var e = "U(" + a.source + ")", f = b.replace(/[-+]?(\d*\.)?\d+([Ee][-+]?\d+)?/g, "N").replace(new RegExp("N" + e, "g"), "D").replace(/\s[+-]\s/g, "O").replace(/\s/g, ""), g = [/N\*(D)/g, /(N|D)[*\/]N/g, /(N|D)O\1/g, /\((N|D)\)/g], h = 0; h < g.length;) g[h].test(f) ? (f = f.replace(g[h], "$1"), h = 0) : h++;
               if ("D" == f) {
                 for (var i in d) {
                   var j = c(b.replace(new RegExp("U" + i, "g"), "").replace(new RegExp(e, "g"), "*0"));
@@ -8300,12 +8220,8 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
           function f(b, c, d) {
             var e,
               f = [];
-            for (e in b) {
-              f.push(e);
-            }
-            for (e in c) {
-              f.indexOf(e) < 0 && f.push(e);
-            }
+            for (e in b) f.push(e);
+            for (e in c) f.indexOf(e) < 0 && f.push(e);
             return b = f.map(function (a) {
               return b[a] || 0;
             }), c = f.map(function (a) {
@@ -8440,9 +8356,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
                   d: k.map(function (a) {
                     if ("number" == typeof a) return l;
                     var b = {};
-                    for (var c in a) {
-                      b[c] = l;
-                    }
+                    for (var c in a) b[c] = l;
                     return b;
                   })
                 });
@@ -8550,9 +8464,7 @@ function WebAnimations_typeof(obj) { "@babel/helpers - typeof"; return WebAnimat
         }(b), function (a) {
           function b(a) {
             var b = {};
-            for (var c in a) {
-              b[c] = -a[c];
-            }
+            for (var c in a) b[c] = -a[c];
             return b;
           }
           function c(b) {

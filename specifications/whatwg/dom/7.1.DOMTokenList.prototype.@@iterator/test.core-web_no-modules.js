@@ -5427,13 +5427,11 @@ var _DOMTokenList = function () {
       var i;
       var args = arguments;
       var rSpace = /\s+/;
-      if (args.length) for (i = 0; i < args.length; ++i) {
-        if (rSpace.test(args[i])) {
-          error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
-          error.code = 5;
-          error.name = "InvalidCharacterError";
-          throw error;
-        }
+      if (args.length) for (i = 0; i < args.length; ++i) if (rSpace.test(args[i])) {
+        error = new SyntaxError('String "' + args[i] + '" ' + "contains" + ' an invalid character');
+        error.code = 5;
+        error.name = "InvalidCharacterError";
+        throw error;
       }
       if (_typeof(el[prop]) === "object") {
         tokens = ("" + el[prop].baseVal).replace(/^\s+|\s+$/g, "").split(rSpace);
@@ -5442,9 +5440,7 @@ var _DOMTokenList = function () {
       }
       if ("" === tokens[0]) tokens = [];
       tokenMap = {};
-      for (i = 0; i < tokens.length; ++i) {
-        tokenMap[tokens[i]] = true;
-      }
+      for (i = 0; i < tokens.length; ++i) tokenMap[tokens[i]] = true;
       length = tokens.length;
       reindex();
     };
@@ -5490,9 +5486,7 @@ var _DOMTokenList = function () {
         ignore[args[i]] = true;
         delete tokenMap[args[i]];
       }
-      for (i = 0; i < tokens.length; ++i) {
-        if (!ignore[tokens[i]]) t.push(tokens[i]);
-      }
+      for (i = 0; i < tokens.length; ++i) if (!ignore[tokens[i]]) t.push(tokens[i]);
       tokens = t;
       length = t.length >>> 0;
       if (_typeof(el[prop]) === "object") {
@@ -5997,7 +5991,7 @@ var es_array_is_array = __webpack_require__(9753);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 (function (cb) {
   var div = document.createElement('DIV');
   div.className = 'foo baz';

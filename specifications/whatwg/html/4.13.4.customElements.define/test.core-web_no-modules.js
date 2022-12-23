@@ -8578,24 +8578,18 @@ var es_array_join = __webpack_require__(9600);
     var b = a.isConnected;
     if (void 0 !== b) return b;
     if (ra(a)) return !0;
-    for (; a && !(a.__CE_isImportDocument || a instanceof Document);) {
-      a = a.parentNode || (window.ShadowRoot && a instanceof ShadowRoot ? a.host : void 0);
-    }
+    for (; a && !(a.__CE_isImportDocument || a instanceof Document);) a = a.parentNode || (window.ShadowRoot && a instanceof ShadowRoot ? a.host : void 0);
     return !(!a || !(a.__CE_isImportDocument || a instanceof Document));
   }
   function K(a) {
     var b = a.children;
     if (b) return Array.prototype.slice.call(b);
     b = [];
-    for (a = a.firstChild; a; a = a.nextSibling) {
-      a.nodeType === Node.ELEMENT_NODE && b.push(a);
-    }
+    for (a = a.firstChild; a; a = a.nextSibling) a.nodeType === Node.ELEMENT_NODE && b.push(a);
     return b;
   }
   function L(a, b) {
-    for (; b && b !== a && !b.nextSibling;) {
-      b = b.parentNode;
-    }
+    for (; b && b !== a && !b.nextSibling;) b = b.parentNode;
     return b && b !== a ? b.nextSibling : null;
   }
   function M(a, b, c) {
@@ -8607,18 +8601,14 @@ var es_array_join = __webpack_require__(9600);
         if ("link" === e && "import" === d.getAttribute("rel")) {
           f = d["import"];
           void 0 === c && (c = new Set());
-          if (f instanceof Node && !c.has(f)) for (c.add(f), f = f.firstChild; f; f = f.nextSibling) {
-            M(f, b, c);
-          }
+          if (f instanceof Node && !c.has(f)) for (c.add(f), f = f.firstChild; f; f = f.nextSibling) M(f, b, c);
           f = L(a, d);
           continue;
         } else if ("template" === e) {
           f = L(a, d);
           continue;
         }
-        if (d = d.__CE_shadowRoot) for (d = d.firstChild; d; d = d.nextSibling) {
-          M(d, b, c);
-        }
+        if (d = d.__CE_shadowRoot) for (d = d.firstChild; d; d = d.nextSibling) M(d, b, c);
       }
       f = f.firstChild ? f.firstChild : L(a, f);
     }
@@ -8636,9 +8626,7 @@ var es_array_join = __webpack_require__(9600);
   function P(a, b, c, f) {
     var d = window.ShadyDOM;
     if (a.shadyDomFastWalk && d && d.inUse) {
-      if (b.nodeType === Node.ELEMENT_NODE && c(b), b.querySelectorAll) for (a = d.nativeMethods.querySelectorAll.call(b, "*"), b = 0; b < a.length; b++) {
-        c(a[b]);
-      }
+      if (b.nodeType === Node.ELEMENT_NODE && c(b), b.querySelectorAll) for (a = d.nativeMethods.querySelectorAll.call(b, "*"), b = 0; b < a.length; b++) c(a[b]);
     } else M(b, c, f);
   }
   function sa(a, b) {
@@ -8657,12 +8645,8 @@ var es_array_join = __webpack_require__(9600);
   function R(a, b) {
     if (a.j && !b.__CE_patched) {
       b.__CE_patched = !0;
-      for (var c = 0; c < a.m.length; c++) {
-        a.m[c](b);
-      }
-      for (c = 0; c < a.g.length; c++) {
-        a.g[c](b);
-      }
+      for (var c = 0; c < a.m.length; c++) a.m[c](b);
+      for (c = 0; c < a.g.length; c++) a.g[c](b);
     }
   }
   function S(a, b) {
@@ -8713,9 +8697,7 @@ var es_array_join = __webpack_require__(9600);
         });
       } else e.push(g);
     }, f);
-    for (b = 0; b < e.length; b++) {
-      d(e[b]);
-    }
+    for (b = 0; b < e.length; b++) d(e[b]);
   }
   function T(a, b) {
     try {
@@ -8854,11 +8836,7 @@ var es_array_join = __webpack_require__(9600);
   wa.prototype.G = function (a) {
     var b = this.g.readyState;
     "interactive" !== b && "complete" !== b || xa(this);
-    for (b = 0; b < a.length; b++) {
-      for (var c = a[b].addedNodes, f = 0; f < c.length; f++) {
-        V(this.h, c[f]);
-      }
-    }
+    for (b = 0; b < a.length; b++) for (var c = a[b].addedNodes, f = 0; f < c.length; f++) V(this.h, c[f]);
   };
   function Y(a) {
     this.s = new Map();
@@ -8939,9 +8917,7 @@ var es_array_join = __webpack_require__(9600);
   function za(a) {
     if (!1 !== a.i) {
       a.i = !1;
-      for (var b = [], c = a.v, f = new Map(), d = 0; d < c.length; d++) {
-        f.set(c[d], []);
-      }
+      for (var b = [], c = a.v, f = new Map(), d = 0; d < c.length; d++) f.set(c[d], []);
       V(a.h, document, {
         upgrade: function upgrade(k) {
           if (void 0 === k.__CE_state) {
@@ -8951,13 +8927,9 @@ var es_array_join = __webpack_require__(9600);
           }
         }
       });
-      for (d = 0; d < b.length; d++) {
-        T(a.h, b[d]);
-      }
+      for (d = 0; d < b.length; d++) T(a.h, b[d]);
       for (d = 0; d < c.length; d++) {
-        for (var e = c[d], g = f.get(e), h = 0; h < g.length; h++) {
-          T(a.h, g[h]);
-        }
+        for (var e = c[d], g = f.get(e), h = 0; h < g.length; h++) T(a.h, g[h]);
         (e = a.B.get(e)) && e.resolve(void 0);
       }
       c.length = 0;
@@ -9007,24 +8979,16 @@ var es_array_join = __webpack_require__(9600);
   function Z(a, b, c) {
     function f(d) {
       return function (e) {
-        for (var g = [], h = 0; h < arguments.length; ++h) {
-          g[h] = arguments[h];
-        }
+        for (var g = [], h = 0; h < arguments.length; ++h) g[h] = arguments[h];
         h = [];
         for (var k = [], l = 0; l < g.length; l++) {
           var m = g[l];
           m instanceof Element && J(m) && k.push(m);
-          if (m instanceof DocumentFragment) for (m = m.firstChild; m; m = m.nextSibling) {
-            h.push(m);
-          } else h.push(m);
+          if (m instanceof DocumentFragment) for (m = m.firstChild; m; m = m.nextSibling) h.push(m);else h.push(m);
         }
         d.apply(this, g);
-        for (g = 0; g < k.length; g++) {
-          U(a, k[g]);
-        }
-        if (J(this)) for (g = 0; g < h.length; g++) {
-          k = h[g], k instanceof Element && S(a, k);
-        }
+        for (g = 0; g < k.length; g++) U(a, k[g]);
+        if (J(this)) for (g = 0; g < h.length; g++) k = h[g], k instanceof Element && S(a, k);
       };
     }
     void 0 !== c.prepend && (b.prepend = f(c.prepend));
@@ -9052,49 +9016,33 @@ var es_array_join = __webpack_require__(9600);
   function Ca(a) {
     function b(f) {
       return function (d) {
-        for (var e = [], g = 0; g < arguments.length; ++g) {
-          e[g] = arguments[g];
-        }
+        for (var e = [], g = 0; g < arguments.length; ++g) e[g] = arguments[g];
         g = [];
         for (var h = [], k = 0; k < e.length; k++) {
           var l = e[k];
           l instanceof Element && J(l) && h.push(l);
-          if (l instanceof DocumentFragment) for (l = l.firstChild; l; l = l.nextSibling) {
-            g.push(l);
-          } else g.push(l);
+          if (l instanceof DocumentFragment) for (l = l.firstChild; l; l = l.nextSibling) g.push(l);else g.push(l);
         }
         f.apply(this, e);
-        for (e = 0; e < h.length; e++) {
-          U(a, h[e]);
-        }
-        if (J(this)) for (e = 0; e < g.length; e++) {
-          h = g[e], h instanceof Element && S(a, h);
-        }
+        for (e = 0; e < h.length; e++) U(a, h[e]);
+        if (J(this)) for (e = 0; e < g.length; e++) h = g[e], h instanceof Element && S(a, h);
       };
     }
     var c = Element.prototype;
     void 0 !== ia && (c.before = b(ia));
     void 0 !== ja && (c.after = b(ja));
     void 0 !== ka && (c.replaceWith = function (f) {
-      for (var d = [], e = 0; e < arguments.length; ++e) {
-        d[e] = arguments[e];
-      }
+      for (var d = [], e = 0; e < arguments.length; ++e) d[e] = arguments[e];
       e = [];
       for (var g = [], h = 0; h < d.length; h++) {
         var k = d[h];
         k instanceof Element && J(k) && g.push(k);
-        if (k instanceof DocumentFragment) for (k = k.firstChild; k; k = k.nextSibling) {
-          e.push(k);
-        } else e.push(k);
+        if (k instanceof DocumentFragment) for (k = k.firstChild; k; k = k.nextSibling) e.push(k);else e.push(k);
       }
       h = J(this);
       ka.apply(this, d);
-      for (d = 0; d < g.length; d++) {
-        U(a, g[d]);
-      }
-      if (h) for (U(a, this), d = 0; d < e.length; d++) {
-        g = e[d], g instanceof Element && S(a, g);
-      }
+      for (d = 0; d < g.length; d++) U(a, g[d]);
+      if (h) for (U(a, this), d = 0; d < e.length; d++) g = e[d], g instanceof Element && S(a, g);
     });
     void 0 !== la && (c.remove = function () {
       var f = J(this);
@@ -9136,12 +9084,8 @@ var es_array_join = __webpack_require__(9600);
     }
     function f(d, e) {
       function g(h, k) {
-        for (var l = []; h !== k; h = h.nextSibling) {
-          l.push(h);
-        }
-        for (k = 0; k < l.length; k++) {
-          V(a, l[k]);
-        }
+        for (var l = []; h !== k; h = h.nextSibling) l.push(h);
+        for (k = 0; k < l.length; k++) V(a, l[k]);
       }
       d.insertAdjacentHTML = function (h, k) {
         h = h.toLowerCase();
@@ -9156,9 +9100,7 @@ var es_array_join = __webpack_require__(9600);
       d = y.call(this, d);
       if (a.j && !d.__CE_patched) {
         d.__CE_patched = !0;
-        for (var e = 0; e < a.m.length; e++) {
-          a.m[e](d);
-        }
+        for (var e = 0; e < a.m.length; e++) a.m[e](d);
       }
       return this.__CE_shadowRoot = d;
     });
@@ -9173,12 +9115,8 @@ var es_array_join = __webpack_require__(9600);
           var g = "template" === this.localName,
             h = g ? this.content : this,
             k = p.call(document, this.namespaceURI, this.localName);
-          for (k.innerHTML = e; 0 < h.childNodes.length;) {
-            u.call(h, h.childNodes[0]);
-          }
-          for (e = g ? k.content : k; 0 < e.childNodes.length;) {
-            r.call(h, e.childNodes[0]);
-          }
+          for (k.innerHTML = e; 0 < h.childNodes.length;) u.call(h, h.childNodes[0]);
+          for (e = g ? k.content : k; 0 < e.childNodes.length;) r.call(h, e.childNodes[0]);
         }
       });
     });
@@ -9258,15 +9196,11 @@ var es_array_join = __webpack_require__(9600);
                 h = g.length;
               if (0 < h && J(this)) {
                 e = Array(h);
-                for (var k = 0; k < h; k++) {
-                  e[k] = g[k];
-                }
+                for (var k = 0; k < h; k++) e[k] = g[k];
               }
             }
             f.set.call(this, d);
-            if (e) for (d = 0; d < e.length; d++) {
-              U(a, e[d]);
-            }
+            if (e) for (d = 0; d < e.length; d++) U(a, e[d]);
           }
         }
       });
@@ -9275,9 +9209,7 @@ var es_array_join = __webpack_require__(9600);
       if (c instanceof DocumentFragment) {
         var d = K(c);
         c = t.call(this, c, f);
-        if (J(this)) for (f = 0; f < d.length; f++) {
-          S(a, d[f]);
-        }
+        if (J(this)) for (f = 0; f < d.length; f++) S(a, d[f]);
         return c;
       }
       d = c instanceof Element && J(c);
@@ -9290,9 +9222,7 @@ var es_array_join = __webpack_require__(9600);
       if (c instanceof DocumentFragment) {
         var f = K(c);
         c = r.call(this, c);
-        if (J(this)) for (var d = 0; d < f.length; d++) {
-          S(a, f[d]);
-        }
+        if (J(this)) for (var d = 0; d < f.length; d++) S(a, f[d]);
         return c;
       }
       f = c instanceof Element && J(c);
@@ -9316,9 +9246,7 @@ var es_array_join = __webpack_require__(9600);
       if (c instanceof DocumentFragment) {
         var d = K(c);
         c = v.call(this, c, f);
-        if (J(this)) for (U(a, f), f = 0; f < d.length; f++) {
-          S(a, d[f]);
-        }
+        if (J(this)) for (U(a, f), f = 0; f < d.length; f++) S(a, d[f]);
         return c;
       }
       d = c instanceof Element && J(c);
@@ -9334,15 +9262,11 @@ var es_array_join = __webpack_require__(9600);
         enumerable: !0,
         configurable: !0,
         get: function get() {
-          for (var f = [], d = this.firstChild; d; d = d.nextSibling) {
-            d.nodeType !== Node.COMMENT_NODE && f.push(d.textContent);
-          }
+          for (var f = [], d = this.firstChild; d; d = d.nextSibling) d.nodeType !== Node.COMMENT_NODE && f.push(d.textContent);
           return f.join("");
         },
         set: function set(f) {
-          for (; this.firstChild;) {
-            u.call(this, this.firstChild);
-          }
+          for (; this.firstChild;) u.call(this, this.firstChild);
           null != f && "" !== f && r.call(this, document.createTextNode(f));
         }
       });
