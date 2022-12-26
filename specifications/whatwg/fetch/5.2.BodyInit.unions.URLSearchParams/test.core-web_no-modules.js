@@ -1436,6 +1436,7 @@ module.exports = !fails(function () {
 var documentAll = typeof document == 'object' && document.all;
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
 
 module.exports = {
@@ -1498,6 +1499,15 @@ var IS_NODE = __webpack_require__(5268);
 module.exports = !IS_DENO && !IS_NODE
   && typeof window == 'object'
   && typeof document == 'object';
+
+
+/***/ }),
+
+/***/ 9363:
+/***/ (function(module) {
+
+/* global Bun -- Deno case */
+module.exports = typeof Bun == 'function' && Bun && typeof Bun.version == 'string';
 
 
 /***/ }),
@@ -4132,36 +4142,37 @@ module.exports = function (it) {
 /***/ 7152:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+"use strict";
+
 var global = __webpack_require__(7854);
 var apply = __webpack_require__(2104);
 var isCallable = __webpack_require__(614);
-var userAgent = __webpack_require__(8113);
+var ENGINE_IS_BUN = __webpack_require__(9363);
+var USER_AGENT = __webpack_require__(8113);
 var arraySlice = __webpack_require__(206);
 var validateArgumentsLength = __webpack_require__(8053);
 
-var MSIE = /MSIE .\./.test(userAgent); // <- dirty ie9- check
 var Function = global.Function;
+// dirty IE9- and Bun 0.3.0- checks
+var WRAP = /MSIE .\./.test(USER_AGENT) || ENGINE_IS_BUN && (function () {
+  var version = global.Bun.version.split('.');
+  return version.length < 3 || version[0] == 0 && (version[1] < 3 || version[1] == 3 && version[2] == 0);
+})();
 
-var wrap = function (scheduler) {
-  return MSIE ? function (handler, timeout /* , ...arguments */) {
-    var boundArgs = validateArgumentsLength(arguments.length, 1) > 2;
-    var fn = isCallable(handler) ? handler : Function(handler);
-    var args = boundArgs ? arraySlice(arguments, 2) : undefined;
-    return scheduler(boundArgs ? function () {
-      apply(fn, this, args);
-    } : fn, timeout);
-  } : scheduler;
-};
-
-// ie9- setTimeout & setInterval additional parameters fix
+// IE9- / Bun 0.3.0- setTimeout / setInterval / setImmediate additional parameters fix
 // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-module.exports = {
-  // `setTimeout` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-  setTimeout: wrap(global.setTimeout),
-  // `setInterval` method
-  // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-  setInterval: wrap(global.setInterval)
+// https://github.com/oven-sh/bun/issues/1633
+module.exports = function (scheduler, hasTimeArg) {
+  var firstParamIndex = hasTimeArg ? 2 : 1;
+  return WRAP ? function (handler, timeout /* , ...arguments */) {
+    var boundArgs = validateArgumentsLength(arguments.length, 1) > firstParamIndex;
+    var fn = isCallable(handler) ? handler : Function(handler);
+    var params = boundArgs ? arraySlice(arguments, firstParamIndex) : [];
+    var callback = boundArgs ? function () {
+      apply(fn, this, params);
+    } : fn;
+    return hasTimeArg ? scheduler(callback, timeout) : scheduler(callback);
+  } : scheduler;
 };
 
 
@@ -4251,10 +4262,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.26.1',
+  version: '3.27.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.26.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.27.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -8135,9 +8146,11 @@ createTypedArrayConstructor('Uint8', function (init) {
 
 var $ = __webpack_require__(2109);
 var global = __webpack_require__(7854);
-var setInterval = (__webpack_require__(7152).setInterval);
+var schedulersFix = __webpack_require__(7152);
 
-// ie9- setInterval additional parameters fix
+var setInterval = schedulersFix(global.setInterval, true);
+
+// Bun / IE9- setInterval additional parameters fix
 // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
 $({ global: true, bind: true, forced: global.setInterval !== setInterval }, {
   setInterval: setInterval
@@ -8151,9 +8164,11 @@ $({ global: true, bind: true, forced: global.setInterval !== setInterval }, {
 
 var $ = __webpack_require__(2109);
 var global = __webpack_require__(7854);
-var setTimeout = (__webpack_require__(7152).setTimeout);
+var schedulersFix = __webpack_require__(7152);
 
-// ie9- setTimeout additional parameters fix
+var setTimeout = schedulersFix(global.setTimeout, true);
+
+// Bun / IE9- setTimeout additional parameters fix
 // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
 $({ global: true, bind: true, forced: global.setTimeout !== setTimeout }, {
   setTimeout: setTimeout
