@@ -20,7 +20,7 @@
         "@babel/core": "^7.17.12",
         "@babel/preset-env": "^7.19.4",
         "@mrhenry/babel-plugin-core-web": "^1.0.0",
-        "babel-loader": "^9.0.0",
+        "babel-loader": "^9.1.2",
         "core-js": "^3.27.0",
         "postcss": "^8.4.20",
         "postcss-cli": "^10.1.0",
