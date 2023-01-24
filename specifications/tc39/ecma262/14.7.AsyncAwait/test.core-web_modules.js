@@ -410,9 +410,8 @@ module.exports = typeof Deno == 'object' && Deno && typeof Deno.version == 'obje
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var userAgent = __webpack_require__(8113);
-var global = __webpack_require__(7854);
 
-module.exports = /ipad|iphone|ipod/i.test(userAgent) && global.Pebble !== undefined;
+module.exports = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';
 
 
 /***/ }),
@@ -431,9 +430,8 @@ module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var classof = __webpack_require__(4326);
-var global = __webpack_require__(7854);
 
-module.exports = classof(global.process) == 'process';
+module.exports = typeof process != 'undefined' && classof(process) == 'process';
 
 
 /***/ }),
@@ -449,11 +447,9 @@ module.exports = /web0s(?!.*chrome)/i.test(userAgent);
 /***/ }),
 
 /***/ 8113:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
-var getBuiltIn = __webpack_require__(5005);
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -829,15 +825,13 @@ module.exports = {};
 /***/ }),
 
 /***/ 842:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var global = __webpack_require__(7854);
+/***/ ((module) => {
 
 module.exports = function (a, b) {
-  var console = global.console;
-  if (console && console.error) {
+  try {
+    // eslint-disable-next-line no-console -- safe
     arguments.length == 1 ? console.error(a) : console.error(a, b);
-  }
+  } catch (error) { /* empty */ }
 };
 
 
@@ -1301,6 +1295,7 @@ module.exports = function (obj) {
 /***/ 6339:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
 var isCallable = __webpack_require__(614);
 var hasOwn = __webpack_require__(2597);
@@ -1311,8 +1306,12 @@ var InternalStateModule = __webpack_require__(9909);
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
+var $String = String;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -1321,8 +1320,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -1341,7 +1340,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -1378,6 +1377,7 @@ var global = __webpack_require__(7854);
 var bind = __webpack_require__(9974);
 var getOwnPropertyDescriptor = (__webpack_require__(1236).f);
 var macrotask = (__webpack_require__(261).set);
+var Queue = __webpack_require__(8572);
 var IS_IOS = __webpack_require__(6833);
 var IS_IOS_PEBBLE = __webpack_require__(1528);
 var IS_WEBOS_WEBKIT = __webpack_require__(1036);
@@ -1389,26 +1389,22 @@ var process = global.process;
 var Promise = global.Promise;
 // Node.js 11 shows ExperimentalWarning on getting `queueMicrotask`
 var queueMicrotaskDescriptor = getOwnPropertyDescriptor(global, 'queueMicrotask');
-var queueMicrotask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
-
-var flush, head, last, notify, toggle, node, promise, then;
+var microtask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
+var notify, toggle, node, promise, then;
 
 // modern engines have queueMicrotask method
-if (!queueMicrotask) {
-  flush = function () {
+if (!microtask) {
+  var queue = new Queue();
+
+  var flush = function () {
     var parent, fn;
     if (IS_NODE && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (error) {
-        if (head) notify();
-        else last = undefined;
-        throw error;
-      }
-    } last = undefined;
+    while (fn = queue.get()) try {
+      fn();
+    } catch (error) {
+      if (queue.head) notify();
+      throw error;
+    }
     if (parent) parent.enter();
   };
 
@@ -1443,22 +1439,20 @@ if (!queueMicrotask) {
   // - onreadystatechange
   // - setTimeout
   } else {
-    // strange IE + webpack dev server bug - use .bind(global)
+    // `webpack` dev server bug on IE global methods - use bind(fn, global)
     macrotask = bind(macrotask, global);
     notify = function () {
       macrotask(flush);
     };
   }
+
+  microtask = function (fn) {
+    if (!queue.head) notify();
+    queue.add(fn);
+  };
 }
 
-module.exports = queueMicrotask || function (fn) {
-  var task = { fn: fn, next: undefined };
-  if (last) last.next = task;
-  if (!head) {
-    head = task;
-    notify();
-  } last = task;
-};
+module.exports = microtask;
 
 
 /***/ }),
@@ -1856,15 +1850,16 @@ var Queue = function () {
 Queue.prototype = {
   add: function (item) {
     var entry = { item: item, next: null };
-    if (this.head) this.tail.next = entry;
+    var tail = this.tail;
+    if (tail) tail.next = entry;
     else this.head = entry;
     this.tail = entry;
   },
   get: function () {
     var entry = this.head;
     if (entry) {
-      this.head = entry.next;
-      if (this.tail === entry) this.tail = null;
+      var next = this.head = entry.next;
+      if (next === null) this.tail = null;
       return entry.item;
     }
   }
@@ -1976,10 +1971,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.27.1',
+  version: '3.27.2',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.27.1/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2055,10 +2050,10 @@ var queue = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
 var $location, defer, channel, port;
 
-try {
+fails(function () {
   // Deno throws a ReferenceError on `location` access without `--location` flag
   $location = global.location;
-} catch (error) { /* empty */ }
+});
 
 var run = function (id) {
   if (hasOwn(queue, id)) {
@@ -2074,11 +2069,11 @@ var runner = function (id) {
   };
 };
 
-var listener = function (event) {
+var eventListener = function (event) {
   run(event.data);
 };
 
-var post = function (id) {
+var globalPostMessageDefer = function (id) {
   // old engines have not location.origin
   global.postMessage(String(id), $location.protocol + '//' + $location.host);
 };
@@ -2113,7 +2108,7 @@ if (!set || !clear) {
   } else if (MessageChannel && !IS_IOS) {
     channel = new MessageChannel();
     port = channel.port2;
-    channel.port1.onmessage = listener;
+    channel.port1.onmessage = eventListener;
     defer = bind(port.postMessage, port);
   // Browsers with postMessage, skip WebWorkers
   // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
@@ -2122,10 +2117,10 @@ if (!set || !clear) {
     isCallable(global.postMessage) &&
     !global.importScripts &&
     $location && $location.protocol !== 'file:' &&
-    !fails(post)
+    !fails(globalPostMessageDefer)
   ) {
-    defer = post;
-    global.addEventListener('message', listener, false);
+    defer = globalPostMessageDefer;
+    global.addEventListener('message', eventListener, false);
   // IE8-
   } else if (ONREADYSTATECHANGE in createElement('script')) {
     defer = function (id) {
@@ -2394,21 +2389,15 @@ var uid = __webpack_require__(9711);
 var NATIVE_SYMBOL = __webpack_require__(6293);
 var USE_SYMBOL_AS_UID = __webpack_require__(3307);
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 

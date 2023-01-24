@@ -4,13 +4,13 @@
 	}
 }
 
-@media screen and (min-aspect-ratio: 0.01/1) {
+@media screen and (min-aspect-ratio: 1/100) {
 	#b {
 		color: #0f0;
 	}
 }
 
-@media screen and (min-aspect-ratio: 0.01) {
+@media screen and (min-aspect-ratio: 1/100) {
 	#c {
 		color: #0f0;
 	}
@@ -20,25 +20,25 @@
 	color: #0f0;
 }
 
-@media screen and (min-aspect-ratio: 0/0) {
+@media screen and (min-aspect-ratio: 2147483647/1) {
 	#d {
 		color: red;
 	}
 }
 
-@media screen and (max-aspect-ratio: 0/0) {
+@media screen and (max-aspect-ratio: 2147483647/1) {
 	#e {
 		color: #0f0;
 	}
 }
 
-@media screen and (min-aspect-ratio: calc(1)/calc(10*10)) {
+@media screen and (min-aspect-ratio: calc((1) * 100000)/calc((10*10) * 100000)) {
 	#f {
 		color: #0f0;
 	}
 }
 
-@media screen and (min-aspect-ratio: calc(1/100)) {
+@media screen and (min-aspect-ratio: calc((1/100) * 100000)/100000) {
 	#g {
 		color: #0f0;
 	}

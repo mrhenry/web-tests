@@ -698,19 +698,16 @@ module.exports = /MSIE|Trident/.test(UA);
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var classof = __webpack_require__(4326);
-var global = __webpack_require__(7854);
 
-module.exports = classof(global.process) == 'process';
+module.exports = typeof process != 'undefined' && classof(process) == 'process';
 
 
 /***/ }),
 
 /***/ 8113:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
-var getBuiltIn = __webpack_require__(5005);
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -794,6 +791,26 @@ module.exports = function (stack, dropEntries) {
   if (IS_V8_OR_CHAKRA_STACK && typeof stack == 'string' && !$Error.prepareStackTrace) {
     while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, '');
   } return stack;
+};
+
+
+/***/ }),
+
+/***/ 5392:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var createNonEnumerableProperty = __webpack_require__(8880);
+var clearErrorStack = __webpack_require__(1060);
+var ERROR_STACK_INSTALLABLE = __webpack_require__(2914);
+
+// non-standard V8
+var captureStackTrace = Error.captureStackTrace;
+
+module.exports = function (error, C, stack, dropEntries) {
+  if (ERROR_STACK_INSTALLABLE) {
+    if (captureStackTrace) captureStackTrace(error, C);
+    else createNonEnumerableProperty(error, 'stack', clearErrorStack(stack, dropEntries));
+  }
 };
 
 
@@ -1846,6 +1863,7 @@ module.exports = function (obj) {
 /***/ 6339:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
 var isCallable = __webpack_require__(614);
 var hasOwn = __webpack_require__(2597);
@@ -1856,8 +1874,12 @@ var InternalStateModule = __webpack_require__(9909);
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
+var $String = String;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -1866,8 +1888,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -1886,7 +1908,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -2731,10 +2753,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.27.1',
+  version: '3.27.2',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.27.1/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3183,21 +3205,15 @@ var uid = __webpack_require__(9711);
 var NATIVE_SYMBOL = __webpack_require__(6293);
 var USE_SYMBOL_AS_UID = __webpack_require__(3307);
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 
@@ -3229,8 +3245,7 @@ var proxyAccessor = __webpack_require__(2626);
 var inheritIfRequired = __webpack_require__(9587);
 var normalizeStringArgument = __webpack_require__(6277);
 var installErrorCause = __webpack_require__(8340);
-var clearErrorStack = __webpack_require__(1060);
-var ERROR_STACK_INSTALLABLE = __webpack_require__(2914);
+var installErrorStack = __webpack_require__(5392);
 var DESCRIPTORS = __webpack_require__(9781);
 var IS_PURE = __webpack_require__(1913);
 
@@ -3256,7 +3271,7 @@ module.exports = function (FULL_NAME, wrapper, FORCED, IS_AGGREGATE_ERROR) {
     var message = normalizeStringArgument(IS_AGGREGATE_ERROR ? b : a, undefined);
     var result = IS_AGGREGATE_ERROR ? new OriginalError(a) : new OriginalError();
     if (message !== undefined) createNonEnumerableProperty(result, 'message', message);
-    if (ERROR_STACK_INSTALLABLE) createNonEnumerableProperty(result, 'stack', clearErrorStack(result.stack, 2));
+    installErrorStack(result, WrappedError, result.stack, 2);
     if (this && isPrototypeOf(OriginalErrorPrototype, this)) inheritIfRequired(result, this, WrappedError);
     if (arguments.length > OPTIONS_POSITION) installErrorCause(result, arguments[OPTIONS_POSITION]);
     return result;
@@ -3376,18 +3391,20 @@ var INCORRECT_TO_LENGTH = fails(function () {
 
 // V8 and Safari <= 15.4, FF < 23 throws InternalError
 // https://bugs.chromium.org/p/v8/issues/detail?id=12681
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
     // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).push();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_TO_LENGTH || !properErrorOnNonWritableLength();
 
 // `Array.prototype.push` method
 // https://tc39.es/ecma262/#sec-array.prototype.push
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   push: function push(item) {
     var O = toObject(this);
@@ -3417,14 +3434,14 @@ var arrayMethodIsStrict = __webpack_require__(9341);
 var CHROME_VERSION = __webpack_require__(7392);
 var IS_NODE = __webpack_require__(5268);
 
-var STRICT_METHOD = arrayMethodIsStrict('reduce');
 // Chrome 80-82 has a critical bug
 // https://bugs.chromium.org/p/chromium/issues/detail?id=1049982
 var CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
+var FORCED = CHROME_BUG || !arrayMethodIsStrict('reduce');
 
 // `Array.prototype.reduce` method
 // https://tc39.es/ecma262/#sec-array.prototype.reduce
-$({ target: 'Array', proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   reduce: function reduce(callbackfn /* , initialValue */) {
     var length = arguments.length;
     return $reduce(this, callbackfn, length, length > 1 ? arguments[1] : undefined);
@@ -3576,6 +3593,7 @@ var exportWebAssemblyErrorCauseWrapper = function (ERROR_NAME, wrapper) {
   }
 };
 
+// https://tc39.es/ecma262/#sec-nativeerror
 // https://github.com/tc39/proposal-error-cause
 exportGlobalErrorCauseWrapper('Error', function (init) {
   return function Error(message) { return apply(init, this, arguments); };
@@ -4602,8 +4620,11 @@ var getterFor = function (key) {
 };
 
 if (DESCRIPTORS) {
+  // `DOMException.prototype.code` getter
   defineBuiltInAccessor(DOMExceptionPrototype, 'code', getterFor('code'));
+  // `DOMException.prototype.message` getter
   defineBuiltInAccessor(DOMExceptionPrototype, 'message', getterFor('message'));
+  // `DOMException.prototype.name` getter
   defineBuiltInAccessor(DOMExceptionPrototype, 'name', getterFor('name'));
 }
 
@@ -4650,6 +4671,7 @@ if (INCORRECT_CODE && DESCRIPTORS && NativeDOMException === PolyfilledDOMExcepti
   }));
 }
 
+// `DOMException` constants
 for (var key in DOMExceptionConstants) if (hasOwn(DOMExceptionConstants, key)) {
   var constant = DOMExceptionConstants[key];
   var constantName = constant.s;
@@ -4749,6 +4771,7 @@ var setToStringTag = __webpack_require__(8003);
 
 var DOM_EXCEPTION = 'DOMException';
 
+// `DOMException.prototype[@@toStringTag]` property
 setToStringTag(getBuiltIn(DOM_EXCEPTION), DOM_EXCEPTION);
 
 
