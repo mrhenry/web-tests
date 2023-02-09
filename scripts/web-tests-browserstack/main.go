@@ -254,15 +254,8 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		"name":  fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
 	})
 
-	browserVersion, err := reallyTolerantSemver(browser.BrowserVersion)
-	if err != nil {
-		return err
-	}
-
-	osVersion, err := reallyTolerantSemver(browser.OSVersion)
-	if err != nil {
-		return err
-	}
+	browserVersion, _ := reallyTolerantSemver(browser.BrowserVersion)
+	osVersion, _ := reallyTolerantSemver(browser.OSVersion)
 
 	w3cCompatible := true
 
@@ -294,27 +287,27 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	}
 
 	if browser.OS == "ios" {
-		if osVersion.Segments()[0] < 12 {
+		if osVersion != nil && osVersion.Segments()[0] < 12 {
 			w3cCompatible = false
 		}
 	} else if browser.Browser == "safari" {
-		if browserVersion.Segments()[0] < 12 {
+		if browserVersion != nil && browserVersion.Segments()[0] < 12 {
 			w3cCompatible = false
 		}
 	} else if browser.Browser == "firefox" {
-		if browserVersion.Segments()[0] < 46 {
+		if browserVersion != nil && browserVersion.Segments()[0] < 46 {
 			w3cCompatible = false
 			caps["browserstack.firefox.driver"] = "0.15.0" // suspected to have no effect
 			caps["browserstack.local"] = "true"            // suspected to have no effect
 		}
 	} else if browser.Browser == "chrome" {
-		if browserVersion.Segments()[0] < 36 {
+		if browserVersion != nil && browserVersion.Segments()[0] < 36 {
 			w3cCompatible = false
 		}
 	} else if browser.Browser == "ie" {
 		w3cCompatible = false
 	} else if browser.Browser == "edge" {
-		if browserVersion.Segments()[0] < 79 {
+		if browserVersion != nil && browserVersion.Segments()[0] < 79 {
 			w3cCompatible = false
 		}
 	}
@@ -364,7 +357,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		}
 	}()
 
-	err = client.RunTest(ctx, caps, w3cCompatible, in, out)
+	err := client.RunTest(ctx, caps, w3cCompatible, in, out)
 	if err != nil {
 		return err
 	}
