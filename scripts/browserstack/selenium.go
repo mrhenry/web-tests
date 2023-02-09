@@ -396,8 +396,10 @@ func runSeleniumTest(wd selenium.WebDriver, port int, test Test) Test {
 		return test
 	}
 
+	test.end = time.Now()
+	test.success = ok
+
 	if !ok {
-		test.end = time.Now()
 		test.err = errors.New("selenium test failed")
 		return test
 	}
