@@ -254,21 +254,17 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		"name":  fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
 	})
 
-	w3cCompatible := true
-	if browser.OS == "ios" {
-		if browser.OSVersion == "11" || browser.OSVersion == "10" {
-			w3cCompatible = false
-		}
+	browserVersion, err := reallyTolerantSemver(browser.BrowserVersion)
+	if err != nil {
+		return err
 	}
 
-	if browser.Browser == "safari" {
-		if browser.BrowserVersion == "11.0" || browser.BrowserVersion == "11.1" {
-			w3cCompatible = false
-		}
-		if browser.BrowserVersion == "10.0" || browser.BrowserVersion == "10.1" {
-			w3cCompatible = false
-		}
+	osVersion, err := reallyTolerantSemver(browser.OSVersion)
+	if err != nil {
+		return err
 	}
+
+	w3cCompatible := true
 
 	if browser.Device != "" {
 		caps["deviceName"] = browser.Device
@@ -297,32 +293,30 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		caps["browserstack.local"] = "true" // suspected to have no effect
 	}
 
-	if browser.Browser == "firefox" && (browser.BrowserVersion == "4.0" ||
-		browser.BrowserVersion == "5.0" ||
-		browser.BrowserVersion == "6.0" ||
-		browser.BrowserVersion == "7.0" ||
-		browser.BrowserVersion == "8.0" ||
-		browser.BrowserVersion == "9.0" ||
-		browser.BrowserVersion == "10.0" ||
-		browser.BrowserVersion == "38.0" ||
-		browser.BrowserVersion == "39.0" ||
-		browser.BrowserVersion == "40.0" ||
-		browser.BrowserVersion == "41.0" ||
-		browser.BrowserVersion == "42.0" ||
-		browser.BrowserVersion == "43.0" ||
-		browser.BrowserVersion == "44.0" ||
-		browser.BrowserVersion == "45.0") {
+	if browser.OS == "ios" {
+		if osVersion.Segments()[0] < 12 {
+			w3cCompatible = false
+		}
+	} else if browser.Browser == "safari" {
+		if browserVersion.Segments()[0] < 12 {
+			w3cCompatible = false
+		}
+	} else if browser.Browser == "firefox" {
+		if browserVersion.Segments()[0] < 46 {
+			w3cCompatible = false
+			caps["browserstack.firefox.driver"] = "0.15.0" // suspected to have no effect
+			caps["browserstack.local"] = "true"            // suspected to have no effect
+		}
+	} else if browser.Browser == "chrome" {
+		if browserVersion.Segments()[0] < 36 {
+			w3cCompatible = false
+		}
+	} else if browser.Browser == "ie" {
 		w3cCompatible = false
-		caps["browserstack.firefox.driver"] = "0.15.0" // suspected to have no effect
-		caps["browserstack.local"] = "true"            // suspected to have no effect
-	}
-
-	if browser.Browser == "ie" {
-		w3cCompatible = false
-	}
-
-	if browser.Browser == "edge" && browser.BrowserVersion == "15.0" {
-		w3cCompatible = false
+	} else if browser.Browser == "edge" {
+		if browserVersion.Segments()[0] < 79 {
+			w3cCompatible = false
+		}
 	}
 
 	in := make(chan browserstack.Test, len(tests))
@@ -370,7 +364,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		}
 	}()
 
-	err := client.RunTest(ctx, caps, w3cCompatible, in, out)
+	err = client.RunTest(ctx, caps, w3cCompatible, in, out)
 	if err != nil {
 		return err
 	}
