@@ -299,6 +299,11 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 
 	if browser.Browser == "firefox" && (browser.BrowserVersion == "4.0" ||
 		browser.BrowserVersion == "5.0" ||
+		browser.BrowserVersion == "6.0" ||
+		browser.BrowserVersion == "7.0" ||
+		browser.BrowserVersion == "8.0" ||
+		browser.BrowserVersion == "9.0" ||
+		browser.BrowserVersion == "10.0" ||
 		browser.BrowserVersion == "38.0" ||
 		browser.BrowserVersion == "39.0" ||
 		browser.BrowserVersion == "40.0" ||
