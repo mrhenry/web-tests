@@ -3,8 +3,6 @@ github.com/blang/semver
 # github.com/blang/semver/v4 v4.0.0
 ## explicit
 github.com/blang/semver/v4
-# github.com/google/go-cmp v0.5.5
-## explicit
 # github.com/google/uuid v1.3.0
 ## explicit
 github.com/google/uuid
@@ -17,7 +15,7 @@ github.com/mattn/go-sqlite3
 # github.com/mileusna/useragent v1.2.1
 ## explicit
 github.com/mileusna/useragent
-# github.com/tebeka/selenium v0.9.9 => github.com/romainmenke/selenium v0.9.14
+# github.com/tebeka/selenium v0.9.9 => github.com/romainmenke/selenium v0.9.15
 ## explicit
 github.com/tebeka/selenium
 github.com/tebeka/selenium/chrome

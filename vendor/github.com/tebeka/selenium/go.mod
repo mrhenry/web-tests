@@ -1,14 +1,13 @@
 module github.com/tebeka/selenium
 
-go 1.12
+go 1.20
 
 require (
-	cloud.google.com/go v0.41.0
-	github.com/BurntSushi/xgbutil v0.0.0-20160919175755-f7c97cef3b4e
+	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
+	github.com/BurntSushi/xgbutil v0.0.0-20190907113008-ad855c713046
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/google/go-cmp v0.3.0
-	github.com/google/go-github/v27 v27.0.4
-	google.golang.org/api v0.7.0
+	github.com/golang/glog v1.0.0
+	github.com/google/go-cmp v0.5.9
+	golang.org/x/net v0.7.0 // indirect
 )
