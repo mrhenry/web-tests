@@ -354,6 +354,21 @@ module.exports = function (object, key, value) {
 
 /***/ }),
 
+/***/ 7045:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var makeBuiltIn = __webpack_require__(6339);
+var defineProperty = __webpack_require__(3070);
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
+
+
+/***/ }),
+
 /***/ 8052:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -725,6 +740,42 @@ var aFunction = function (argument) {
 
 module.exports = function (namespace, method) {
   return arguments.length < 2 ? aFunction(global[namespace]) : global[namespace] && global[namespace][method];
+};
+
+
+/***/ }),
+
+/***/ 8044:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__(1702);
+var isArray = __webpack_require__(3157);
+var isCallable = __webpack_require__(614);
+var classof = __webpack_require__(4326);
+var toString = __webpack_require__(1340);
+
+var push = uncurryThis([].push);
+
+module.exports = function (replacer) {
+  if (isCallable(replacer)) return replacer;
+  if (!isArray(replacer)) return;
+  var rawLength = replacer.length;
+  var keys = [];
+  for (var i = 0; i < rawLength; i++) {
+    var element = replacer[i];
+    if (typeof element == 'string') push(keys, element);
+    else if (typeof element == 'number' || classof(element) == 'Number' || classof(element) == 'String') push(keys, toString(element));
+  }
+  var keysLength = keys.length;
+  var root = true;
+  return function (key, value) {
+    if (root) {
+      root = false;
+      return value;
+    }
+    if (isArray(this)) return value;
+    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
+  };
 };
 
 
@@ -1683,10 +1734,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.27.2',
+  version: '3.28.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.28.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2049,13 +2100,13 @@ var apply = __webpack_require__(2104);
 var call = __webpack_require__(6916);
 var uncurryThis = __webpack_require__(1702);
 var fails = __webpack_require__(7293);
-var isArray = __webpack_require__(3157);
 var isCallable = __webpack_require__(614);
-var isObject = __webpack_require__(111);
 var isSymbol = __webpack_require__(2190);
 var arraySlice = __webpack_require__(206);
+var getReplacerFunction = __webpack_require__(8044);
 var NATIVE_SYMBOL = __webpack_require__(6293);
 
+var $String = String;
 var $stringify = getBuiltIn('JSON', 'stringify');
 var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
@@ -2085,13 +2136,13 @@ var ILL_FORMED_UNICODE = fails(function () {
 
 var stringifyWithSymbolsFix = function (it, replacer) {
   var args = arraySlice(arguments);
-  var $replacer = replacer;
-  if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
-  if (!isArray(replacer)) replacer = function (key, value) {
-    if (isCallable($replacer)) value = call($replacer, this, key, value);
+  var $replacer = getReplacerFunction(replacer);
+  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
+  args[1] = function (key, value) {
+    // some old implementations (like WebKit) could pass numbers as keys
+    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
     if (!isSymbol(value)) return value;
   };
-  args[1] = replacer;
   return apply($stringify, null, args);
 };
 
@@ -2190,6 +2241,7 @@ var definePropertyModule = __webpack_require__(3070);
 var definePropertiesModule = __webpack_require__(6048);
 var propertyIsEnumerableModule = __webpack_require__(5296);
 var defineBuiltIn = __webpack_require__(8052);
+var defineBuiltInAccessor = __webpack_require__(7045);
 var shared = __webpack_require__(2309);
 var sharedKey = __webpack_require__(6200);
 var hiddenKeys = __webpack_require__(3501);
@@ -2361,7 +2413,7 @@ if (!NATIVE_SYMBOL) {
 
   if (DESCRIPTORS) {
     // https://github.com/tc39/proposal-Symbol-description
-    nativeDefineProperty(SymbolPrototype, 'description', {
+    defineBuiltInAccessor(SymbolPrototype, 'description', {
       configurable: true,
       get: function description() {
         return getInternalState(this).description;
@@ -2435,7 +2487,7 @@ var hasOwn = __webpack_require__(2597);
 var isCallable = __webpack_require__(614);
 var isPrototypeOf = __webpack_require__(7976);
 var toString = __webpack_require__(1340);
-var defineProperty = (__webpack_require__(3070).f);
+var defineBuiltInAccessor = __webpack_require__(7045);
 var copyConstructorProperties = __webpack_require__(9920);
 
 var NativeSymbol = global.Symbol;
@@ -2468,7 +2520,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var replace = uncurryThis(''.replace);
   var stringSlice = uncurryThis(''.slice);
 
-  defineProperty(SymbolPrototype, 'description', {
+  defineBuiltInAccessor(SymbolPrototype, 'description', {
     configurable: true,
     get: function description() {
       var symbol = thisSymbolValue(this);

@@ -180,6 +180,21 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ 7045:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var makeBuiltIn = __webpack_require__(6339);
+var defineProperty = __webpack_require__(3070);
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
+
+
+/***/ }),
+
 /***/ 8052:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1163,10 +1178,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.27.2',
+  version: '3.28.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.27.2/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.28.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -1469,7 +1484,7 @@ var hasOwn = __webpack_require__(2597);
 var isCallable = __webpack_require__(614);
 var isPrototypeOf = __webpack_require__(7976);
 var toString = __webpack_require__(1340);
-var defineProperty = (__webpack_require__(3070).f);
+var defineBuiltInAccessor = __webpack_require__(7045);
 var copyConstructorProperties = __webpack_require__(9920);
 
 var NativeSymbol = global.Symbol;
@@ -1502,7 +1517,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var replace = uncurryThis(''.replace);
   var stringSlice = uncurryThis(''.slice);
 
-  defineProperty(SymbolPrototype, 'description', {
+  defineBuiltInAccessor(SymbolPrototype, 'description', {
     configurable: true,
     get: function description() {
       var symbol = thisSymbolValue(this);
