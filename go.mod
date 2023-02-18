@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/mileusna/useragent v1.2.1
 	github.com/tebeka/selenium v0.9.9
-	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
+	golang.org/x/sync v0.1.0
 )
 
 replace github.com/tebeka/selenium v0.9.9 => github.com/romainmenke/selenium v0.9.14
