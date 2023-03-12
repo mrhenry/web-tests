@@ -4019,10 +4019,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.28.0',
+  version: '3.29.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.28.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.29.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4894,6 +4894,7 @@ module.exports = function (key) {
 
 var fails = __webpack_require__(7293);
 var wellKnownSymbol = __webpack_require__(5112);
+var DESCRIPTORS = __webpack_require__(9781);
 var IS_PURE = __webpack_require__(1913);
 
 var ITERATOR = wellKnownSymbol('iterator');
@@ -4909,6 +4910,7 @@ module.exports = !fails(function () {
     result += key + value;
   });
   return (IS_PURE && !url.toJSON)
+    || (!searchParams.size && (IS_PURE || !DESCRIPTORS))
     || !searchParams.sort
     || url.href !== 'http://a/c%20d?a=1&c=3'
     || searchParams.get('c') !== '3'
@@ -6290,7 +6292,7 @@ var $set = Int8ArrayPrototype && Int8ArrayPrototype.set;
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 
-var WORKS_WITH_OBJECTS_AND_GEERIC_ON_TYPED_ARRAYS = !fails(function () {
+var WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS = !fails(function () {
   // eslint-disable-next-line es/no-typed-arrays -- required for testing
   var array = new Uint8ClampedArray(2);
   call($set, array, { length: 1, 0: 3 }, 1);
@@ -6298,7 +6300,7 @@ var WORKS_WITH_OBJECTS_AND_GEERIC_ON_TYPED_ARRAYS = !fails(function () {
 });
 
 // https://bugs.chromium.org/p/v8/issues/detail?id=11294 and other
-var TO_OBJECT_BUG = WORKS_WITH_OBJECTS_AND_GEERIC_ON_TYPED_ARRAYS && ArrayBufferViewCore.NATIVE_ARRAY_BUFFER_VIEWS && fails(function () {
+var TO_OBJECT_BUG = WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS && ArrayBufferViewCore.NATIVE_ARRAY_BUFFER_VIEWS && fails(function () {
   var array = new Int8Array(2);
   array.set(1);
   array.set('2', 1);
@@ -6311,13 +6313,13 @@ exportTypedArrayMethod('set', function set(arrayLike /* , offset */) {
   aTypedArray(this);
   var offset = toOffset(arguments.length > 1 ? arguments[1] : undefined, 1);
   var src = toIndexedObject(arrayLike);
-  if (WORKS_WITH_OBJECTS_AND_GEERIC_ON_TYPED_ARRAYS) return call($set, this, src, offset);
+  if (WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS) return call($set, this, src, offset);
   var length = this.length;
   var len = lengthOfArrayLike(src);
   var index = 0;
   if (len + offset > length) throw RangeError('Wrong length');
   while (index < len) this[offset + index] = src[index++];
-}, !WORKS_WITH_OBJECTS_AND_GEERIC_ON_TYPED_ARRAYS || TO_OBJECT_BUG);
+}, !WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS || TO_OBJECT_BUG);
 
 
 /***/ }),
@@ -6583,6 +6585,7 @@ var uncurryThis = __webpack_require__(1702);
 var DESCRIPTORS = __webpack_require__(9781);
 var USE_NATIVE_URL = __webpack_require__(5143);
 var defineBuiltIn = __webpack_require__(8052);
+var defineBuiltInAccessor = __webpack_require__(7045);
 var defineBuiltIns = __webpack_require__(9190);
 var setToStringTag = __webpack_require__(8003);
 var createIteratorConstructor = __webpack_require__(3061);
@@ -6778,7 +6781,8 @@ URLSearchParamsState.prototype = {
 var URLSearchParamsConstructor = function URLSearchParams(/* init */) {
   anInstance(this, URLSearchParamsPrototype);
   var init = arguments.length > 0 ? arguments[0] : undefined;
-  setInternalState(this, new URLSearchParamsState(init));
+  var state = setInternalState(this, new URLSearchParamsState(init));
+  if (!DESCRIPTORS) this.length = state.entries.length;
 };
 
 var URLSearchParamsPrototype = URLSearchParamsConstructor.prototype;
@@ -6790,6 +6794,7 @@ defineBuiltIns(URLSearchParamsPrototype, {
     validateArgumentsLength(arguments.length, 2);
     var state = getInternalParamsState(this);
     push(state.entries, { key: $toString(name), value: $toString(value) });
+    if (!DESCRIPTORS) this.length++;
     state.updateURL();
   },
   // `URLSearchParams.prototype.delete` method
@@ -6804,6 +6809,7 @@ defineBuiltIns(URLSearchParamsPrototype, {
       if (entries[index].key === key) splice(entries, index, 1);
       else index++;
     }
+    if (!DESCRIPTORS) this.length = entries.length;
     state.updateURL();
   },
   // `URLSearchParams.prototype.get` method
@@ -6865,6 +6871,7 @@ defineBuiltIns(URLSearchParamsPrototype, {
       }
     }
     if (!found) push(entries, { key: key, value: val });
+    if (!DESCRIPTORS) this.length = entries.length;
     state.updateURL();
   },
   // `URLSearchParams.prototype.sort` method
@@ -6909,6 +6916,16 @@ defineBuiltIn(URLSearchParamsPrototype, ITERATOR, URLSearchParamsPrototype.entri
 defineBuiltIn(URLSearchParamsPrototype, 'toString', function toString() {
   return getInternalParamsState(this).serialize();
 }, { enumerable: true });
+
+// `URLSearchParams.prototype.size` getter
+// https://github.com/whatwg/url/pull/734
+if (DESCRIPTORS) defineBuiltInAccessor(URLSearchParamsPrototype, 'size', {
+  get: function size() {
+    return getInternalParamsState(this).entries.length;
+  },
+  configurable: true,
+  enumerable: true
+});
 
 setToStringTag(URLSearchParamsConstructor, URL_SEARCH_PARAMS);
 
