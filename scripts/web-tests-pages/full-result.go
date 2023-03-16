@@ -89,7 +89,7 @@ func fullResult() {
 
 				_, ok = byBrowser[r.Test]
 				if ok {
-					panic(fmt.Sprintf("duplicate result for %s %s %s", r.Test, significantUAVersion(r), r.BrowserVersion))
+					panic(fmt.Sprintf("duplicate result for %s %s %s/%s", r.Test, significantUAVersion(r), r.Browser, r.BrowserVersion))
 				}
 
 				byBrowser[r.Test] = r
