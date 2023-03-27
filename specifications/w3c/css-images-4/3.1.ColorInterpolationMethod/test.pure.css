@@ -1,9 +1,0 @@
-#hello {
-	background: rgb(255, 0, 0);
-}
-
-#hello {
-	background: linear-gradient(in oklch longer hue to right, red 0%, blue 100%);
-	height: 100px;
-	width: 100px;
-}
