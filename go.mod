@@ -7,7 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-version v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.16
-	github.com/mileusna/useragent v1.2.1
+	github.com/mileusna/useragent v1.3.2
 	github.com/tebeka/selenium v0.9.9
 	golang.org/x/sync v0.1.0
 )
