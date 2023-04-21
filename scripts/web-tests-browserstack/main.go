@@ -301,7 +301,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 			caps["browserstack.local"] = "true"            // suspected to have no effect
 		}
 	} else if browser.Browser == "chrome" {
-		if browserVersion != nil && browserVersion.Segments()[0] < 58 {
+		if browserVersion != nil && browserVersion.Segments()[0] < 65 {
 			w3cCompatible = false
 		}
 	} else if browser.Browser == "ie" {
