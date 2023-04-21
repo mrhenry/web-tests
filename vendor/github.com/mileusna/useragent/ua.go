@@ -8,25 +8,19 @@ import (
 
 // UserAgent struct containing all data extracted from parsed user-agent string
 type UserAgent struct {
-	Name      string
-	Version   string
-	OS        string
-	OSVersion string
-	Device    string
-	Mobile    bool
-	Tablet    bool
-	Desktop   bool
-	Bot       bool
-	URL       string
-	String    string
-}
-
-var ignore = map[string]struct{}{
-	"KHTML, like Gecko": {},
-	"U":                 {},
-	"compatible":        {},
-	"Mozilla":           {},
-	"WOW64":             {},
+	VersionNo   VersionNo
+	OSVersionNo VersionNo
+	URL         string
+	String      string
+	Name        string
+	Version     string
+	OS          string
+	OSVersion   string
+	Device      string
+	Mobile      bool
+	Tablet      bool
+	Desktop     bool
+	Bot         bool
 }
 
 // Constants for browsers and operating systems for easier comparison
@@ -56,6 +50,10 @@ const (
 	FacebookExternalHit = "facebookexternalhit"
 	Applebot            = "Applebot"
 	Bingbot             = "Bingbot"
+
+	FacebookApp  = "Facebook App"
+	InstagramApp = "Instagram App"
+	TiktokApp    = "TikTok App"
 )
 
 // Parse user agent string returning UserAgent struct
@@ -79,14 +77,10 @@ func Parse(userAgent string) UserAgent {
 	switch {
 	case tokens.exists("Android"):
 		ua.OS = Android
-		ua.OSVersion = tokens.get(Android)
-		for _, token := range tokens.list {
-			s := token.Key
-			if strings.HasSuffix(s, "Build") {
-				ua.Device = strings.TrimSpace(s[:len(s)-5])
-				ua.Tablet = strings.Contains(strings.ToLower(ua.Device), "tablet")
-			}
-		}
+		var osIndex int
+		osIndex, ua.OSVersion = tokens.getIndexValue(Android)
+		ua.Tablet = strings.Contains(strings.ToLower(ua.String), "tablet")
+		ua.Device = tokens.findAndroidDevice(osIndex)
 
 	case tokens.exists("iPhone"):
 		ua.OS = IOS
@@ -126,12 +120,7 @@ func Parse(userAgent string) UserAgent {
 		ua.Desktop = true
 	}
 
-	// for s, val := range sys {
-	// 	fmt.Println(s, "--", val)
-	// }
-
 	switch {
-
 	case tokens.exists("Googlebot"):
 		ua.Name = Googlebot
 		ua.Version = tokens.get(Googlebot)
@@ -233,8 +222,13 @@ func Parse(userAgent string) UserAgent {
 		ua.Mobile = tokens.existsAny("Mobile", "Mobile Safari")
 		ua.Bot = true
 
-	case tokens.exists("AdsBot-Google-Mobile") || tokens.exists("Mediapartners-Google") || tokens.exists("AdsBot-Google"):
+	case tokens.existsAny("AdsBot-Google-Mobile", "Mediapartners-Google", "AdsBot-Google"):
 		ua.Name = GoogleAdsBot
+		ua.Bot = true
+		ua.Mobile = ua.IsAndroid() || ua.IsIOS()
+
+	case tokens.exists("Yahoo Ad monitoring"):
+		ua.Name = "Yahoo Ad monitoring"
 		ua.Bot = true
 		ua.Mobile = ua.IsAndroid() || ua.IsIOS()
 
@@ -245,6 +239,21 @@ func Parse(userAgent string) UserAgent {
 			ua.Version = strings.TrimPrefix(miui, "MiuiBrowser/")
 			ua.Mobile = true
 		}
+
+	case tokens.exists("FBAN"):
+		ua.Name = FacebookApp
+		ua.Version = tokens.get("FBAN")
+	case tokens.exists("FB_IAB"):
+		ua.Name = FacebookApp
+		ua.Version = tokens.get("FBAV")
+
+	case tokens.startsWith("Instagram"):
+		ua.Name = InstagramApp
+		ua.Version = tokens.findInstagramVersion()
+
+	case tokens.exists("BytedanceWebview"):
+		ua.Name = TiktokApp
+		ua.Version = tokens.get("app_version")
 
 	case tokens.get("HuaweiBrowser") != "":
 		ua.Name = "Huawei Browser"
@@ -298,12 +307,16 @@ func Parse(userAgent string) UserAgent {
 		}
 	}
 
+	if ua.IsAndroid() {
+		ua.Mobile = true
+	}
+
 	// if tablet, switch mobile to off
 	if ua.Tablet {
 		ua.Mobile = false
 	}
 
-	// if not already bot, check some popular bots and weather URL is set
+	// if not already bot, check some popular bots and wether URL is set
 	if !ua.Bot {
 		ua.Bot = ua.URL != ""
 	}
@@ -314,6 +327,9 @@ func Parse(userAgent string) UserAgent {
 			ua.Bot = true
 		}
 	}
+
+	parseVersion(ua.Version, &ua.VersionNo)
+	parseVersion(ua.OSVersion, &ua.OSVersionNo)
 
 	return ua
 }
@@ -328,7 +344,7 @@ func parse(userAgent string) properties {
 	addToken := func() {
 		if buff.Len() != 0 {
 			s := strings.TrimSpace(buff.String())
-			if _, ign := ignore[s]; !ign {
+			if !ignore(s) {
 				if isURL {
 					s = strings.TrimPrefix(s, "+")
 				}
@@ -349,6 +365,7 @@ func parse(userAgent string) properties {
 	}
 
 	parOpen := false
+	braOpen := false
 
 	bua := []byte(userAgent)
 	for i, c := range bua {
@@ -359,12 +376,19 @@ func parse(userAgent string) properties {
 			addToken()
 			parOpen = false
 
-		case parOpen && c == 59: // ;
+		case (parOpen || braOpen) && c == 59: // ;
 			addToken()
 
 		case c == 40: // (
 			addToken()
 			parOpen = true
+
+		case c == 91: // [
+			addToken()
+			braOpen = true
+		case c == 93: // ]
+			addToken()
+			braOpen = false
 
 		case slash && c == 32:
 			addToken()
@@ -416,6 +440,16 @@ func checkVer(s string) (name, v string) {
 	// return s[:i], s[i+1:]
 }
 
+// ignore retursn true if token should be ignored
+func ignore(s string) bool {
+	switch s {
+	case "KHTML, like Gecko", "U", "compatible", "Mozilla", "WOW64", "en", "en-us", "en-gb", "ru-ru":
+		return true
+	default:
+		return false
+	}
+}
+
 type property struct {
 	Key   string
 	Value string
@@ -435,6 +469,15 @@ func (p properties) get(key string) string {
 		}
 	}
 	return ""
+}
+
+func (p properties) getIndexValue(key string) (int, string) {
+	for i, prop := range p.list {
+		if prop.Key == key {
+			return i, prop.Value
+		}
+	}
+	return -1, ""
 }
 
 func (p properties) exists(key string) bool {
@@ -471,6 +514,29 @@ func (p properties) findMacOSVersion() string {
 	return ""
 }
 
+func (p properties) startsWith(value string) bool {
+	for _, prop := range p.list {
+		if strings.HasPrefix(prop.Key, value) {
+			return true
+		}
+	}
+	return false
+}
+
+func (p properties) findInstagramVersion() string {
+	for _, token := range p.list {
+		if strings.HasPrefix(token.Key, "Instagram") {
+			if ver := findVersion(token.Value); ver != "" {
+				return ver
+			} else if ver = findVersion(token.Key); ver != "" {
+				return ver
+			}
+		}
+
+	}
+	return ""
+}
+
 // findBestMatch from the rest of the bunch
 // in first cycle only return key with version value
 // if withVerValue is false, do another cycle and return any token
@@ -484,6 +550,10 @@ func (p properties) findBestMatch(withVerOnly bool) string {
 			switch prop.Key {
 			case Chrome, Firefox, Safari, "Version", "Mobile", "Mobile Safari", "Mozilla", "AppleWebKit", "Windows NT", "Windows Phone OS", Android, "Macintosh", Linux, "GSA", "CrOS":
 			default:
+				// don' pick if starts with number
+				if len(prop.Key) != 0 && prop.Key[0] >= 48 && prop.Key[0] <= 57 {
+					break
+				}
 				if i == 0 {
 					if prop.Value != "" { // in first check, only return keys with value
 						return prop.Key
@@ -502,6 +572,27 @@ var rxMacOSVer = regexp.MustCompile(`[_\d\.]+`)
 func findVersion(s string) string {
 	if ver := rxMacOSVer.FindString(s); ver != "" {
 		return strings.Replace(ver, "_", ".", -1)
+	}
+	return ""
+}
+
+// findAndroidDevice in tokens
+func (p *properties) findAndroidDevice(startIndex int) string {
+	for i := startIndex; i < startIndex+1; i++ {
+		if len(p.list) > i+1 {
+			dev := p.list[i+1].Key
+			if len(dev) == 2 || (len(dev) == 5 && dev[2] == '-') {
+				// probably langage tag (en-us etc..), ignore and continue loop
+				continue
+			}
+			switch dev {
+			case Chrome, Firefox, Safari, "Opera Mini", "Presto", "Version", "Mobile", "Mobile Safari", "Mozilla", "AppleWebKit", "Windows NT", "Windows Phone OS", Android, "Macintosh", Linux, "CrOS":
+				// ignore this tokens, not device names
+			default:
+				p.list = append(p.list[:i+1], p.list[i+2:]...)
+				return strings.TrimSpace(strings.TrimSuffix(dev, "Build"))
+			}
+		}
 	}
 	return ""
 }
