@@ -344,7 +344,7 @@ module.exports =
   check(typeof self == 'object' && self) ||
   check(typeof __webpack_require__.g == 'object' && __webpack_require__.g) ||
   // eslint-disable-next-line no-new-func -- fallback
-  (function () { return this; })() || Function('return this')();
+  (function () { return this; })() || this || Function('return this')();
 
 
 /***/ }),
@@ -764,10 +764,10 @@ var store = __webpack_require__(465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.30.1',
+  version: '3.30.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.30.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.30.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -780,13 +780,18 @@ var store = __webpack_require__(465);
 /* eslint-disable es/no-symbol -- required for testing */
 var V8_VERSION = __webpack_require__(392);
 var fails = __webpack_require__(293);
+var global = __webpack_require__(854);
+
+var $String = global.String;
 
 // eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
   var symbol = Symbol();
   // Chrome 38 Symbol has incorrect toString conversion
   // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
+  // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
+  // of course, fail.
+  return !$String(symbol) || !(Object(symbol) instanceof Symbol) ||
     // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
     !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
@@ -1006,7 +1011,7 @@ if (String(new Date(NaN)) != INVALID_DATE) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
