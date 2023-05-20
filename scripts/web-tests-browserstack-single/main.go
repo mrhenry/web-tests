@@ -3,15 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
-	"os/signal"
-	"sort"
+	"path"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/hashicorp/go-version"
@@ -25,11 +21,8 @@ import (
 )
 
 func main() {
-	processCtx, processCancel := context.WithTimeout(context.Background(), time.Minute*120)
-	defer processCancel()
-
-	runnerCtx, runnerCancel := context.WithCancel(processCtx)
-	defer runnerCancel()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*120)
+	defer cancel()
 
 	db, err := store.NewSqliteDatabase("./web-tests.db", false)
 	if err != nil {
@@ -38,93 +31,14 @@ func main() {
 
 	defer store.CloseDB(db)
 
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-	doneChan := make(chan bool, 1)
-
-	go func() {
-		<-sigs
-		log.Println("shutting down")
-		runnerCancel()
-
-		time.Sleep(time.Second * 30)
-
-		processCancel()
-
-		time.Sleep(time.Second * 10)
-
-		select {
-		case doneChan <- true:
-		default:
-		}
-	}()
-
-	var browserFilterArg string
-
-	flag.StringVar(&browserFilterArg, "browser", "", "Only run on browser")
-
-	flag.Parse()
-
-	if err != nil {
-		log.Println(err) // non-fatal for us
-		return
-	}
-
-	for i := 0; i < 10; i++ {
-		if i > 0 {
-			time.Sleep(time.Second * 15)
-		}
-
-		select {
-		case <-processCtx.Done():
-			return
-		default:
-		}
-
-		run(processCtx, runnerCtx, db, i, browserFilterArg)
-	}
-
-	go func() {
-		time.Sleep(time.Second * 10)
-
-		select {
-		case doneChan <- true:
-		default:
-		}
-	}()
-
-	<-doneChan
+	run(ctx, db)
 }
 
-func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chunkIndex int, browserFilter string) {
-	doneChan := make(chan bool, 1)
-	ctx, cancel := context.WithTimeout(runnerCtx, time.Minute*30)
+func run(parentCtx context.Context, db *sql.DB) {
+	ctx, cancel := context.WithTimeout(parentCtx, time.Minute*30)
 	defer cancel()
 
-	go func() {
-		select {
-		case <-runnerCtx.Done():
-			time.Sleep(time.Second * 10)
-
-			select {
-			case doneChan <- true:
-				// noop
-				return
-			default:
-				// noop
-				return
-			}
-		}
-	}()
-
-	select {
-	case <-processCtx.Done():
-		return
-	default:
-	}
-
-	sessionName := fmt.Sprintf("Web Tests (%d) – %s", chunkIndex+1, time.Now().Format(time.RFC3339))
+	sessionName := fmt.Sprintf("Web Tests (%d) – %s", 1, time.Now().Format(time.RFC3339))
 	userName := os.Getenv("BROWSERSTACK_USERNAME")
 	accessKey := os.Getenv("BROWSERSTACK_ACCESS_KEY")
 
@@ -139,7 +53,7 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 		AccessKey: accessKey,
 	})
 
-	done, err := client.OpenTunnel(processCtx)
+	done, err := client.OpenTunnel(ctx)
 	defer done()
 	if err != nil {
 		log.Println(err)
@@ -148,96 +62,32 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 
 	log.Println("tunnel ready")
 
-	allBrowsers, err := client.ReducedBrowsers(ctx)
+	err = runTest(
+		ctx,
+		db,
+		client,
+		browserstack.Browser{
+			Browser:        "chrome",
+			BrowserVersion: "80",
+		},
+		[]browserstack.Test{
+			{
+				Path: path.Join(
+					"./tests",
+					fmt.Sprintf(
+						"%s:%s.html",
+						"f209d29e-a7d7-47ec-b7b4-81b615e55976",
+						"pure",
+					),
+				),
+			},
+		},
+		sessionName,
+		mapping,
+	)
 	if err != nil {
 		log.Println(err)
-		return
 	}
-
-	browsers, err := store.SelectBrowsersByPriority(ctx, db, allBrowsers)
-	if err != nil {
-		panic(err)
-	}
-
-	if browserFilter != "" {
-		filteredBrowsers := []browserstack.Browser{}
-		for _, b := range browsers {
-			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
-				filteredBrowsers = append(filteredBrowsers, b)
-			}
-		}
-
-		if len(filteredBrowsers) > 0 {
-			browsers = filteredBrowsers
-		}
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(browsers), func(i, j int) {
-		browsers[i], browsers[j] = browsers[j], browsers[i]
-	})
-
-	browsersLimit := 50
-	if len(browsers) > browsersLimit {
-		browsers = browsers[:browsersLimit]
-	}
-
-	// With parallelism it is faster to start with all slower runs.
-	// This prevents a single slow run at the end blocking the session.
-	sort.Sort(browserstack.BrowsersByTestSpeed(browsers))
-
-	sema := semaphore.NewWeighted(4)
-
-	for _, browser := range browsers {
-		if err := sema.Acquire(ctx, 1); err != nil {
-			log.Println(err)
-			return
-		}
-
-		go func(b browserstack.Browser) {
-			defer sema.Release(1)
-
-			select {
-			case <-runnerCtx.Done():
-				return
-			default:
-			}
-
-			time.Sleep(time.Second * 5)
-
-			tests, err := store.SelectTestsByBrowserAndPriority(ctx, db, *b.RealBrowser)
-			if err != nil {
-				panic(err)
-			}
-
-			err = runTest(ctx, db, client, b, tests, sessionName, mapping)
-			if err != nil {
-				log.Println(err) // non-fatal for us
-			}
-		}(browser)
-	}
-
-	go func() {
-		// Wait for all
-		if err := sema.Acquire(ctx, 4); err != nil {
-			log.Println(err)
-			return
-		}
-
-		err = done()
-		if err != nil {
-			log.Println(err) // non-fatal for us
-		}
-
-		select {
-		case doneChan <- true:
-			// noop
-		default:
-			// noop
-		}
-	}()
-
-	<-doneChan
 }
 
 func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client, browser browserstack.Browser, tests []browserstack.Test, sessionName string, mapping feature.Mapping) error {
@@ -245,13 +95,13 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 	defer cancel()
 
 	caps := client.SetCaps(selenium.Capabilities{
-		"browserstack.local": "true",
-		"browserstack.video": "false",
-		// "browserstack.debug":       "true",
-		// "browserstack.console":     "verbose",
-		// "browserstack.networkLogs": "true",
-		"build": sessionName,
-		"name":  fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
+		"browserstack.local":       "true",
+		"browserstack.video":       "false",
+		"browserstack.debug":       "true",
+		"browserstack.console":     "verbose",
+		"browserstack.networkLogs": "true",
+		"build":                    sessionName,
+		"name":                     fmt.Sprintf("%s – %s", "Web Tests", browser.ResultKey()),
 	})
 
 	browserVersion, _ := reallyTolerantSemver(browser.BrowserVersion)
