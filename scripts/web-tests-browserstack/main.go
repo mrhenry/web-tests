@@ -290,6 +290,10 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 		if browserVersion != nil && browserVersion.Segments()[0] > 11 {
 			w3cCompatible = true
 		}
+	} else if browser.Browser == "edge" {
+		if browserVersion != nil && browserVersion.Segments()[0] > 15 {
+			w3cCompatible = true
+		}
 	}
 
 	in := make(chan browserstack.Test, len(tests))
