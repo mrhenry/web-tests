@@ -5608,6 +5608,55 @@ var DOM_EXCEPTION = 'DOMException';
 setToStringTag(getBuiltIn(DOM_EXCEPTION), DOM_EXCEPTION);
 
 
+/***/ }),
+
+/***/ 1550:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var defineBuiltInAccessor = __webpack_require__(7045);
+var DESCRIPTORS = __webpack_require__(9781);
+
+var $TypeError = TypeError;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+var INCORRECT_VALUE = global.self !== global;
+
+// `self` getter
+// https://html.spec.whatwg.org/multipage/window-object.html#dom-self
+try {
+  if (DESCRIPTORS) {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    var descriptor = Object.getOwnPropertyDescriptor(global, 'self');
+    // some engines have `self`, but with incorrect descriptor
+    // https://github.com/denoland/deno/issues/15765
+    if (INCORRECT_VALUE || !descriptor || !descriptor.get || !descriptor.enumerable) {
+      defineBuiltInAccessor(global, 'self', {
+        get: function self() {
+          return global;
+        },
+        set: function self(value) {
+          if (this !== global) throw $TypeError('Illegal invocation');
+          defineProperty(global, 'self', {
+            value: value,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          });
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+  } else $({ global: true, simple: true, forced: INCORRECT_VALUE }, {
+    self: global
+  });
+} catch (error) { /* empty */ }
+
+
 /***/ })
 
 /******/ 	});
@@ -5661,6 +5710,8 @@ var es_symbol = __webpack_require__(2526);
 var es_symbol_description = __webpack_require__(1817);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__(1539);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(1550);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
 var es_symbol_iterator = __webpack_require__(2165);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
@@ -5963,6 +6014,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
 
 
+
 (function (undefined) {
   if (!("Symbol" in self && "iterator" in self.Symbol && function () {
     var e = document.createDocumentFragment();
@@ -5982,19 +6034,21 @@ function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; ret
 
 
 
+
 (function (undefined) {
   if (!("forEach" in NodeList.prototype)) {
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.matches.js
-
-
-
-
-
-
 function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_matches_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_matches_typeof(obj); }
+
+
+
+
+
+
+
 (function (undefined) {
   if (!("document" in self && "matches" in document.documentElement)) {
     Element.prototype.matches = Element.prototype.webkitMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || function matches(selector) {
@@ -6009,13 +6063,14 @@ function Element_prototype_matches_typeof(obj) { "@babel/helpers - typeof"; retu
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_matches_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_matches_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_matches_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.closest.js
-
-
-
-
-
-
 function Element_prototype_closest_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_closest_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_closest_typeof(obj); }
+
+
+
+
+
+
+
 (function (undefined) {
   if (!("document" in self && "closest" in document.documentElement)) {
     Element.prototype.closest = function closest(selector) {
@@ -6036,6 +6091,7 @@ var es_array_slice = __webpack_require__(7042);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__(9600);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-scope.js
+
 
 
 
@@ -6127,17 +6183,19 @@ var es_array_join = __webpack_require__(9600);
     };
     var polyfill = function polyfill(qsa) {
       return function (selectors) {
-        var hasScope = selectors && scopeTest.test(selectors);
-        if (hasScope) {
-          var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
-          arguments[0] = replaceScopeWithAttr(selectors, attr);
-          this.setAttribute(attr, '');
-          var elementOrNodeList = qsa.apply(this, arguments);
-          this.removeAttribute(attr);
-          return elementOrNodeList;
-        } else {
+        if (!selectors) {
           return qsa.apply(this, arguments);
         }
+        var selectorsString = String(selectors);
+        if (!selectorsString || !scopeTest.test(selectorsString)) {
+          return qsa.apply(this, arguments);
+        }
+        var attr = 'q' + (Math.floor(Math.random() * 9000000) + 2000000);
+        arguments[0] = replaceScopeWithAttr(selectorsString, attr);
+        this.setAttribute(attr, '');
+        var elementOrNodeList = qsa.apply(this, arguments);
+        this.removeAttribute(attr);
+        return elementOrNodeList;
       };
     };
     var scopeTest = /:scope(?![\w-])/i;
@@ -6174,6 +6232,7 @@ var web_dom_exception_stack = __webpack_require__(2801);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.to-string-tag.js
 var web_dom_exception_to_string_tag = __webpack_require__(1174);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~element-qsa-has.js
+
 
 
 
@@ -6522,7 +6581,11 @@ var web_dom_exception_to_string_tag = __webpack_require__(1174);
   }
   function polyfill(qsa) {
     return function (selectors) {
-      if (selectors.toLowerCase().indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectors)) {
+      if (!selectors) {
+        return qsa.apply(this, arguments);
+      }
+      var selectorsString = String(selectors);
+      if (!selectorsString || selectorsString.toLowerCase().indexOf(':has(') === -1 || !pseudoClassHasInnerQuery(selectorsString)) {
         return qsa.apply(this, arguments);
       }
       var rootNode;
@@ -6542,9 +6605,9 @@ var web_dom_exception_to_string_tag = __webpack_require__(1174);
       var scopeAttr = 'q-has-scope' + (Math.floor(Math.random() * 9000000) + 1000000);
       _focus.setAttribute(scopeAttr, '');
       try {
-        selectors = replaceScopeWithAttr(selectors, scopeAttr);
+        selectorsString = replaceScopeWithAttr(selectorsString, scopeAttr);
         var attrs = [scopeAttr];
-        var newQuery = replaceAllWithTempAttr(selectors, false, function (inner, attr) {
+        var newQuery = replaceAllWithTempAttr(selectorsString, false, function (inner, attr) {
           attrs.push(attr);
           var selectorParts = splitSelector(inner);
           for (var x = 0; x < selectorParts.length; x++) {
@@ -6633,11 +6696,11 @@ var web_dom_exception_to_string_tag = __webpack_require__(1174);
         } catch (dummyError) {
           errorMessage = dummyError.message;
           if (errorMessage) {
-            errorMessage = errorMessage.replace(':core-web-does-not-exist', selectors);
+            errorMessage = errorMessage.replace(':core-web-does-not-exist', selectorsString);
           }
         }
         if (!errorMessage) {
-          errorMessage = "Failed to execute 'querySelector' on 'Document': '" + selectors + "' is not a valid selector.";
+          errorMessage = "Failed to execute 'querySelector' on 'Document': '" + selectorsString + "' is not a valid selector.";
         }
         try {
           throw new DOMException(errorMessage);

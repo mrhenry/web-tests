@@ -5379,6 +5379,55 @@ defineWellKnownSymbol('toStringTag');
 setToStringTag(getBuiltIn('Symbol'), 'Symbol');
 
 
+/***/ }),
+
+/***/ 1550:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var defineBuiltInAccessor = __webpack_require__(7045);
+var DESCRIPTORS = __webpack_require__(9781);
+
+var $TypeError = TypeError;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+var INCORRECT_VALUE = global.self !== global;
+
+// `self` getter
+// https://html.spec.whatwg.org/multipage/window-object.html#dom-self
+try {
+  if (DESCRIPTORS) {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    var descriptor = Object.getOwnPropertyDescriptor(global, 'self');
+    // some engines have `self`, but with incorrect descriptor
+    // https://github.com/denoland/deno/issues/15765
+    if (INCORRECT_VALUE || !descriptor || !descriptor.get || !descriptor.enumerable) {
+      defineBuiltInAccessor(global, 'self', {
+        get: function self() {
+          return global;
+        },
+        set: function self(value) {
+          if (this !== global) throw $TypeError('Illegal invocation');
+          defineProperty(global, 'self', {
+            value: value,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          });
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+  } else $({ global: true, simple: true, forced: INCORRECT_VALUE }, {
+    self: global
+  });
+} catch (error) { /* empty */ }
+
+
 /***/ })
 
 /******/ 	});
@@ -5426,6 +5475,8 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(1550);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2526);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
@@ -5617,13 +5668,14 @@ var _DOMTokenList = function () {
 }();
 /* harmony default export */ var helpers_DOMTokenList = (_DOMTokenList);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.js
-
-
-
-
-
-
 function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, DOMTokenList_typeof(obj); }
+
+
+
+
+
+
+
 
 (function (undefined) {
   if (!("DOMTokenList" in self && function (e) {
@@ -5686,6 +5738,7 @@ function DOMTokenList_typeof(obj) { "@babel/helpers - typeof"; return DOMTokenLi
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
 function Element_prototype_classList_typeof(obj) { "@babel/helpers - typeof"; return Element_prototype_classList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, Element_prototype_classList_typeof(obj); }
+
 
 
 
@@ -6016,6 +6069,7 @@ function DOMTokenList_prototype_iterator_typeof(obj) { "@babel/helpers - typeof"
 
 
 
+
 (function (undefined) {
   if (!("Symbol" in self && "iterator" in self.Symbol && function () {
     try {
@@ -6048,6 +6102,7 @@ function DOMTokenList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof";
 
 
 
+
 (function (undefined) {
   if (!("DOMTokenList" in self && "forEach" in self.DOMTokenList.prototype)) {
     (function (global) {
@@ -6066,6 +6121,8 @@ var es_array_from = __webpack_require__(1038);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.is-array.js
 var es_array_is_array = __webpack_require__(9753);
 ;// CONCATENATED MODULE: ./specifications/whatwg/dom/7.1.DOMTokenList.prototype.@@iterator/test.pure.js
+
+
 
 
 

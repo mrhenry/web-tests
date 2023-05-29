@@ -1,29 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 7846:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-(function (undefined) {
-  if (!("DocumentFragment" in self && function () {
-    try {
-      return new DocumentFragment(), !0;
-    } catch (n) {
-      return !1;
-    }
-  }())) {
-    (function (global) {
-      global.DocumentFragment = function DocumentFragment() {
-        return document.createDocumentFragment();
-      };
-      var fragment = document.createDocumentFragment();
-      global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
-    })(self);
-  }
-}).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-
-/***/ }),
-
 /***/ 9662:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -4101,6 +4078,55 @@ $({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
 });
 
 
+/***/ }),
+
+/***/ 1550:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var defineBuiltInAccessor = __webpack_require__(7045);
+var DESCRIPTORS = __webpack_require__(9781);
+
+var $TypeError = TypeError;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+var INCORRECT_VALUE = global.self !== global;
+
+// `self` getter
+// https://html.spec.whatwg.org/multipage/window-object.html#dom-self
+try {
+  if (DESCRIPTORS) {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    var descriptor = Object.getOwnPropertyDescriptor(global, 'self');
+    // some engines have `self`, but with incorrect descriptor
+    // https://github.com/denoland/deno/issues/15765
+    if (INCORRECT_VALUE || !descriptor || !descriptor.get || !descriptor.enumerable) {
+      defineBuiltInAccessor(global, 'self', {
+        get: function self() {
+          return global;
+        },
+        set: function self(value) {
+          if (this !== global) throw $TypeError('Illegal invocation');
+          defineProperty(global, 'self', {
+            value: value,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          });
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+  } else $({ global: true, simple: true, forced: INCORRECT_VALUE }, {
+    self: global
+  });
+} catch (error) { /* empty */ }
+
+
 /***/ })
 
 /******/ 	});
@@ -4148,8 +4174,27 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
-var modules_DocumentFragment = __webpack_require__(7846);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(1550);
+;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
+
+(function (undefined) {
+  if (!("DocumentFragment" in self && function () {
+    try {
+      return new DocumentFragment(), !0;
+    } catch (n) {
+      return !1;
+    }
+  }())) {
+    (function (global) {
+      global.DocumentFragment = function DocumentFragment() {
+        return document.createDocumentFragment();
+      };
+      var fragment = document.createDocumentFragment();
+      global.DocumentFragment.prototype = Object.create(fragment.constructor.prototype);
+    })(self);
+  }
+}).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_mutation.js
 var _mutation = function () {
   function isNode(object) {
@@ -4172,6 +4217,7 @@ var _mutation = function () {
 /* harmony default export */ const helpers_mutation = (_mutation);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.append.js
 
+
 (function (undefined) {
   if (!("DocumentFragment" in self && "append" in DocumentFragment.prototype)) {
     (function (global) {
@@ -4187,6 +4233,7 @@ var _mutation = function () {
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.prepend.js
 
+
 (function (undefined) {
   if (!("DocumentFragment" in self && "prepend" in DocumentFragment.prototype)) {
     (function (global) {
@@ -4201,6 +4248,7 @@ var _mutation = function () {
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.after.js
+
 
 (function (undefined) {
   if (!("Element" in self && "after" in Element.prototype)) {
@@ -4226,6 +4274,7 @@ var _mutation = function () {
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.append.js
 
+
 (function (undefined) {
   if (!("Element" in self && "append" in Element.prototype)) {
     Document.prototype.append = Element.prototype.append = function append() {
@@ -4234,6 +4283,7 @@ var _mutation = function () {
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.before.js
+
 
 (function (undefined) {
   if (!("Element" in self && "before" in Element.prototype)) {
@@ -4259,6 +4309,7 @@ var _mutation = function () {
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.prepend.js
 
+
 (function (undefined) {
   if (!("Element" in self && "prepend" in Element.prototype)) {
     Document.prototype.prepend = Element.prototype.prepend = function prepend() {
@@ -4267,6 +4318,7 @@ var _mutation = function () {
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.replaceWith.js
+
 
 (function (undefined) {
   if (!("Element" in self && "replaceWith" in Element.prototype)) {
@@ -4295,6 +4347,7 @@ var es_error_cause = __webpack_require__(1703);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__(8674);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
+
 
 
 

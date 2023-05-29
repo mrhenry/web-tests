@@ -6549,29 +6549,51 @@ exportTypedArrayMethod('with', { 'with': function (index, value) {
 
 /***/ }),
 
-/***/ 3767:
+/***/ 1550:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-// TODO: Remove from `core-js@4`
-__webpack_require__(1439);
+"use strict";
 
+var $ = __webpack_require__(2109);
+var global = __webpack_require__(7854);
+var defineBuiltInAccessor = __webpack_require__(7045);
+var DESCRIPTORS = __webpack_require__(9781);
 
-/***/ }),
+var $TypeError = TypeError;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+var INCORRECT_VALUE = global.self !== global;
 
-/***/ 8585:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(7585);
-
-
-/***/ }),
-
-/***/ 8696:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(5315);
+// `self` getter
+// https://html.spec.whatwg.org/multipage/window-object.html#dom-self
+try {
+  if (DESCRIPTORS) {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    var descriptor = Object.getOwnPropertyDescriptor(global, 'self');
+    // some engines have `self`, but with incorrect descriptor
+    // https://github.com/denoland/deno/issues/15765
+    if (INCORRECT_VALUE || !descriptor || !descriptor.get || !descriptor.enumerable) {
+      defineBuiltInAccessor(global, 'self', {
+        get: function self() {
+          return global;
+        },
+        set: function self(value) {
+          if (this !== global) throw $TypeError('Illegal invocation');
+          defineProperty(global, 'self', {
+            value: value,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          });
+        },
+        configurable: true,
+        enumerable: true
+      });
+    }
+  } else $({ global: true, simple: true, forced: INCORRECT_VALUE }, {
+    self: global
+  });
+} catch (error) { /* empty */ }
 
 
 /***/ }),
@@ -6998,6 +7020,35 @@ module.exports = {
 __webpack_require__(5556);
 
 
+/***/ }),
+
+/***/ 2062:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var DESCRIPTORS = __webpack_require__(9781);
+var uncurryThis = __webpack_require__(1702);
+var defineBuiltInAccessor = __webpack_require__(7045);
+
+var URLSearchParamsPrototype = URLSearchParams.prototype;
+var forEach = uncurryThis(URLSearchParamsPrototype.forEach);
+
+// `URLSearchParams.prototype.size` getter
+// https://github.com/whatwg/url/pull/734
+if (DESCRIPTORS && !('size' in URLSearchParamsPrototype)) {
+  defineBuiltInAccessor(URLSearchParamsPrototype, 'size', {
+    get: function size() {
+      var count = 0;
+      forEach(this, function () { count++; });
+      return count;
+    },
+    configurable: true,
+    enumerable: true
+  });
+}
+
+
 /***/ })
 
 /******/ 	});
@@ -7052,6 +7103,8 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
 var es_promise = __webpack_require__(8674);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(1550);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.global-this.js
 var es_global_this = __webpack_require__(5837);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
@@ -7062,6 +7115,8 @@ var es_symbol_description = __webpack_require__(1817);
 var es_array_buffer_slice = __webpack_require__(9575);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
 var es_array_buffer_constructor = __webpack_require__(8264);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
+var es_regexp_to_string = __webpack_require__(9714);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4916);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
@@ -7086,21 +7141,23 @@ var es_typed_array_set = __webpack_require__(3462);
 var es_typed_array_sort = __webpack_require__(3824);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.to-locale-string.js
 var es_typed_array_to_locale_string = __webpack_require__(2974);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-reversed.js
-var esnext_typed_array_to_reversed = __webpack_require__(3767);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.to-sorted.js
-var esnext_typed_array_to_sorted = __webpack_require__(8585);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.typed-array.with.js
-var esnext_typed_array_with = __webpack_require__(8696);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.to-reversed.js
+var es_typed_array_to_reversed = __webpack_require__(1439);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.to-sorted.js
+var es_typed_array_to_sorted = __webpack_require__(7585);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.typed-array.with.js
+var es_typed_array_with = __webpack_require__(5315);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.url-search-params.js
 var web_url_search_params = __webpack_require__(1637);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
-var es_regexp_to_string = __webpack_require__(9714);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.url-search-params.size.js
+var web_url_search_params_size = __webpack_require__(2062);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__(5306);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3210);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
+
+
 
 
 
@@ -7633,6 +7690,7 @@ var es_string_trim = __webpack_require__(3210);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./specifications/whatwg/fetch/5.2.BodyInit.unions.URLSearchParams/test.pure.js
+
 
 
 
