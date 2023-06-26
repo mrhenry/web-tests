@@ -3473,6 +3473,7 @@ var web_self = __webpack_require__(1550);
           this.intersectionRatio = this.isIntersecting ? 1 : 0;
         }
       }
+      IntersectionObserverEntry.prototype.intersectionRatio = 0;
       function IntersectionObserver(callback, opt_options) {
         var options = opt_options || {};
         if (typeof callback != 'function') {
