@@ -28,3 +28,17 @@ updates:
       all-dependencies:
         patterns:
           - "*"
+- package-ecosystem: "github-actions"
+    directory: "/"
+    open-pull-requests-limit: 10
+    labels:
+      - "github-actions"
+      - "dependencies"
+    schedule:
+      interval: weekly
+      time: "01:00"
+      timezone: "Europe/Brussels"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
