@@ -50,7 +50,7 @@ var ArrayPrototype = Array.prototype;
 
 // Array.prototype[@@unscopables]
 // https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
-if (ArrayPrototype[UNSCOPABLES] == undefined) {
+if (ArrayPrototype[UNSCOPABLES] === undefined) {
   defineProperty(ArrayPrototype, UNSCOPABLES, {
     configurable: true,
     value: create(null)
@@ -169,10 +169,10 @@ var createMethod = function (IS_INCLUDES) {
     var value;
     // Array#includes uses SameValueZero equality algorithm
     // eslint-disable-next-line no-self-compare -- NaN check
-    if (IS_INCLUDES && el != el) while (length > index) {
+    if (IS_INCLUDES && el !== el) while (length > index) {
       value = O[index++];
       // eslint-disable-next-line no-self-compare -- NaN check
-      if (value != value) return true;
+      if (value !== value) return true;
     // Array#indexOf ignores holes, Array#includes - not
     } else for (;length > index; index++) {
       if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
@@ -208,7 +208,8 @@ module.exports = function (O, start, end) {
   var k = toAbsoluteIndex(start, length);
   var fin = toAbsoluteIndex(end === undefined ? length : end, length);
   var result = $Array(max(fin - k, 0));
-  for (var n = 0; k < fin; k++, n++) createProperty(result, n, O[k]);
+  var n = 0;
+  for (; k < fin; k++, n++) createProperty(result, n, O[k]);
   result.length = n;
   return result;
 };
@@ -316,7 +317,7 @@ var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var $Object = Object;
 
 // ES3 wrong here
-var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) == 'Arguments';
+var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) === 'Arguments';
 
 // fallback for IE11 Script Access Denied error
 var tryGet = function (it, key) {
@@ -334,7 +335,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     // builtinTag case
     : CORRECT_ARGUMENTS ? classofRaw(O)
     // ES3 arguments fallback
-    : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
+    : (result = classofRaw(O)) === 'Object' && isCallable(O.callee) ? 'Arguments' : result;
 };
 
 
@@ -538,7 +539,7 @@ var fails = __webpack_require__(7293);
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
+  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 });
 
 
@@ -989,7 +990,7 @@ module.exports = function (V, P) {
 
 
 var check = function (it) {
-  return it && it.Math == Math && it;
+  return it && it.Math === Math && it;
 };
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -1058,7 +1059,7 @@ module.exports = !DESCRIPTORS && !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
-  }).a != 7;
+  }).a !== 7;
 });
 
 
@@ -1081,7 +1082,7 @@ module.exports = fails(function () {
   // eslint-disable-next-line no-prototype-builtins -- safe
   return !$Object('z').propertyIsEnumerable(0);
 }) ? function (it) {
-  return classof(it) == 'String' ? split(it, '') : $Object(it);
+  return classof(it) === 'String' ? split(it, '') : $Object(it);
 } : $Object;
 
 
@@ -1295,8 +1296,8 @@ var replacement = /#|\.prototype\./;
 
 var isForced = function (feature, detection) {
   var value = data[normalize(feature)];
-  return value == POLYFILL ? true
-    : value == NATIVE ? false
+  return value === POLYFILL ? true
+    : value === NATIVE ? false
     : isCallable(detection) ? fails(detection)
     : !!detection;
 };
@@ -1479,7 +1480,7 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
     || IterablePrototype['@@iterator']
     || DEFAULT && IterablePrototype[DEFAULT];
   var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
-  var anyNativeIterator = NAME == 'Array' ? IterablePrototype.entries || nativeIterator : nativeIterator;
+  var anyNativeIterator = NAME === 'Array' ? IterablePrototype.entries || nativeIterator : nativeIterator;
   var CurrentIteratorPrototype, methods, KEY;
 
   // fix native
@@ -1500,7 +1501,7 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
   }
 
   // fix Array.prototype.{ values, @@iterator }.name in V8 / FF
-  if (PROPER_FUNCTION_NAME && DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
+  if (PROPER_FUNCTION_NAME && DEFAULT === VALUES && nativeIterator && nativeIterator.name !== VALUES) {
     if (!IS_PURE && CONFIGURABLE_FUNCTION_NAME) {
       createNonEnumerableProperty(IterablePrototype, 'name', VALUES);
     } else {
@@ -1732,11 +1733,11 @@ module.exports = !$assign || fails(function () {
   var A = {};
   var B = {};
   // eslint-disable-next-line es/no-symbol -- safe
-  var symbol = Symbol();
+  var symbol = Symbol('assign detection');
   var alphabet = 'abcdefghijklmnopqrst';
   A[symbol] = 7;
   alphabet.split('').forEach(function (chr) { B[chr] = chr; });
-  return $assign({}, A)[symbol] != 7 || objectKeys($assign({}, B)).join('') != alphabet;
+  return $assign({}, A)[symbol] !== 7 || objectKeys($assign({}, B)).join('') !== alphabet;
 }) ? function assign(target, source) { // eslint-disable-line no-unused-vars -- required for `.length`
   var T = toObject(target);
   var argumentsLength = arguments.length;
@@ -2268,10 +2269,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.0',
+  version: '3.32.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.32.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2370,7 +2371,7 @@ var ucs2decode = function (string) {
     if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
       // It's a high surrogate, and there is a next character.
       var extra = charCodeAt(string, counter++);
-      if ((extra & 0xFC00) == 0xDC00) { // Low surrogate.
+      if ((extra & 0xFC00) === 0xDC00) { // Low surrogate.
         push(output, ((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
       } else {
         // It's an unmatched surrogate; only append this code unit, in case the
@@ -2469,7 +2470,7 @@ var encode = function (input) {
       if (currentValue < n && ++delta > maxInt) {
         throw $RangeError(OVERFLOW_ERROR);
       }
-      if (currentValue == n) {
+      if (currentValue === n) {
         // Represent delta as a generalized variable-length integer.
         var q = delta;
         var k = base;
@@ -2484,7 +2485,7 @@ var encode = function (input) {
         }
 
         push(output, fromCharCode(digitToBasic(q)));
-        bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+        bias = adapt(delta, handledCPCountPlusOne, handledCPCount === basicLength);
         delta = 0;
         handledCPCount++;
       }
@@ -2523,7 +2524,7 @@ var $String = global.String;
 
 // eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
-  var symbol = Symbol();
+  var symbol = Symbol('symbol detection');
   // Chrome 38 Symbol has incorrect toString conversion
   // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
   // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
@@ -2815,7 +2816,7 @@ module.exports = DESCRIPTORS && fails(function () {
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
-  }).prototype != 42;
+  }).prototype !== 42;
 });
 
 
@@ -2921,9 +2922,10 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
     state.target = undefined;
     return createIterResultObject(undefined, true);
   }
-  if (kind == 'keys') return createIterResultObject(index, false);
-  if (kind == 'values') return createIterResultObject(target[index], false);
-  return createIterResultObject([index, target[index]], false);
+  switch (kind) {
+    case 'keys': return createIterResultObject(index, false);
+    case 'values': return createIterResultObject(target[index], false);
+  } return createIterResultObject([index, target[index]], false);
 }, 'values');
 
 // argumentsList[@@iterator] is %ArrayProto_values%
@@ -3700,7 +3702,7 @@ var EOF;
 var parseIPv4 = function (input) {
   var parts = split(input, '.');
   var partsLength, numbers, index, part, radix, number, ipv4;
-  if (parts.length && parts[parts.length - 1] == '') {
+  if (parts.length && parts[parts.length - 1] === '') {
     parts.length--;
   }
   partsLength = parts.length;
@@ -3708,23 +3710,23 @@ var parseIPv4 = function (input) {
   numbers = [];
   for (index = 0; index < partsLength; index++) {
     part = parts[index];
-    if (part == '') return input;
+    if (part === '') return input;
     radix = 10;
-    if (part.length > 1 && charAt(part, 0) == '0') {
+    if (part.length > 1 && charAt(part, 0) === '0') {
       radix = exec(HEX_START, part) ? 16 : 8;
-      part = stringSlice(part, radix == 8 ? 1 : 2);
+      part = stringSlice(part, radix === 8 ? 1 : 2);
     }
     if (part === '') {
       number = 0;
     } else {
-      if (!exec(radix == 10 ? DEC : radix == 8 ? OCT : HEX, part)) return input;
+      if (!exec(radix === 10 ? DEC : radix === 8 ? OCT : HEX, part)) return input;
       number = parseInt(part, radix);
     }
     push(numbers, number);
   }
   for (index = 0; index < partsLength; index++) {
     number = numbers[index];
-    if (index == partsLength - 1) {
+    if (index === partsLength - 1) {
       if (number >= pow(256, 5 - partsLength)) return null;
     } else if (number > 255) return null;
   }
@@ -3748,15 +3750,15 @@ var parseIPv6 = function (input) {
     return charAt(input, pointer);
   };
 
-  if (chr() == ':') {
-    if (charAt(input, 1) != ':') return;
+  if (chr() === ':') {
+    if (charAt(input, 1) !== ':') return;
     pointer += 2;
     pieceIndex++;
     compress = pieceIndex;
   }
   while (chr()) {
-    if (pieceIndex == 8) return;
-    if (chr() == ':') {
+    if (pieceIndex === 8) return;
+    if (chr() === ':') {
       if (compress !== null) return;
       pointer++;
       pieceIndex++;
@@ -3769,33 +3771,33 @@ var parseIPv6 = function (input) {
       pointer++;
       length++;
     }
-    if (chr() == '.') {
-      if (length == 0) return;
+    if (chr() === '.') {
+      if (length === 0) return;
       pointer -= length;
       if (pieceIndex > 6) return;
       numbersSeen = 0;
       while (chr()) {
         ipv4Piece = null;
         if (numbersSeen > 0) {
-          if (chr() == '.' && numbersSeen < 4) pointer++;
+          if (chr() === '.' && numbersSeen < 4) pointer++;
           else return;
         }
         if (!exec(DIGIT, chr())) return;
         while (exec(DIGIT, chr())) {
           number = parseInt(chr(), 10);
           if (ipv4Piece === null) ipv4Piece = number;
-          else if (ipv4Piece == 0) return;
+          else if (ipv4Piece === 0) return;
           else ipv4Piece = ipv4Piece * 10 + number;
           if (ipv4Piece > 255) return;
           pointer++;
         }
         address[pieceIndex] = address[pieceIndex] * 256 + ipv4Piece;
         numbersSeen++;
-        if (numbersSeen == 2 || numbersSeen == 4) pieceIndex++;
+        if (numbersSeen === 2 || numbersSeen === 4) pieceIndex++;
       }
-      if (numbersSeen != 4) return;
+      if (numbersSeen !== 4) return;
       break;
-    } else if (chr() == ':') {
+    } else if (chr() === ':') {
       pointer++;
       if (!chr()) return;
     } else if (chr()) return;
@@ -3804,12 +3806,12 @@ var parseIPv6 = function (input) {
   if (compress !== null) {
     swaps = pieceIndex - compress;
     pieceIndex = 7;
-    while (pieceIndex != 0 && swaps > 0) {
+    while (pieceIndex !== 0 && swaps > 0) {
       swap = address[pieceIndex];
       address[pieceIndex--] = address[compress + swaps - 1];
       address[compress + --swaps] = swap;
     }
-  } else if (pieceIndex != 8) return;
+  } else if (pieceIndex !== 8) return;
   return address;
 };
 
@@ -3897,15 +3899,15 @@ var specialSchemes = {
 // https://url.spec.whatwg.org/#windows-drive-letter
 var isWindowsDriveLetter = function (string, normalized) {
   var second;
-  return string.length == 2 && exec(ALPHA, charAt(string, 0))
-    && ((second = charAt(string, 1)) == ':' || (!normalized && second == '|'));
+  return string.length === 2 && exec(ALPHA, charAt(string, 0))
+    && ((second = charAt(string, 1)) === ':' || (!normalized && second === '|'));
 };
 
 // https://url.spec.whatwg.org/#start-with-a-windows-drive-letter
 var startsWithWindowsDriveLetter = function (string) {
   var third;
   return string.length > 1 && isWindowsDriveLetter(stringSlice(string, 0, 2)) && (
-    string.length == 2 ||
+    string.length === 2 ||
     ((third = charAt(string, 2)) === '/' || third === '\\' || third === '?' || third === '#')
   );
 };
@@ -4009,27 +4011,27 @@ URLState.prototype = {
           break;
 
         case SCHEME:
-          if (chr && (exec(ALPHANUMERIC, chr) || chr == '+' || chr == '-' || chr == '.')) {
+          if (chr && (exec(ALPHANUMERIC, chr) || chr === '+' || chr === '-' || chr === '.')) {
             buffer += toLowerCase(chr);
-          } else if (chr == ':') {
+          } else if (chr === ':') {
             if (stateOverride && (
-              (url.isSpecial() != hasOwn(specialSchemes, buffer)) ||
-              (buffer == 'file' && (url.includesCredentials() || url.port !== null)) ||
-              (url.scheme == 'file' && !url.host)
+              (url.isSpecial() !== hasOwn(specialSchemes, buffer)) ||
+              (buffer === 'file' && (url.includesCredentials() || url.port !== null)) ||
+              (url.scheme === 'file' && !url.host)
             )) return;
             url.scheme = buffer;
             if (stateOverride) {
-              if (url.isSpecial() && specialSchemes[url.scheme] == url.port) url.port = null;
+              if (url.isSpecial() && specialSchemes[url.scheme] === url.port) url.port = null;
               return;
             }
             buffer = '';
-            if (url.scheme == 'file') {
+            if (url.scheme === 'file') {
               state = FILE;
-            } else if (url.isSpecial() && base && base.scheme == url.scheme) {
+            } else if (url.isSpecial() && base && base.scheme === url.scheme) {
               state = SPECIAL_RELATIVE_OR_AUTHORITY;
             } else if (url.isSpecial()) {
               state = SPECIAL_AUTHORITY_SLASHES;
-            } else if (codePoints[pointer + 1] == '/') {
+            } else if (codePoints[pointer + 1] === '/') {
               state = PATH_OR_AUTHORITY;
               pointer++;
             } else {
@@ -4046,8 +4048,8 @@ URLState.prototype = {
           break;
 
         case NO_SCHEME:
-          if (!base || (base.cannotBeABaseURL && chr != '#')) return INVALID_SCHEME;
-          if (base.cannotBeABaseURL && chr == '#') {
+          if (!base || (base.cannotBeABaseURL && chr !== '#')) return INVALID_SCHEME;
+          if (base.cannotBeABaseURL && chr === '#') {
             url.scheme = base.scheme;
             url.path = arraySlice(base.path);
             url.query = base.query;
@@ -4056,11 +4058,11 @@ URLState.prototype = {
             state = FRAGMENT;
             break;
           }
-          state = base.scheme == 'file' ? FILE : RELATIVE;
+          state = base.scheme === 'file' ? FILE : RELATIVE;
           continue;
 
         case SPECIAL_RELATIVE_OR_AUTHORITY:
-          if (chr == '/' && codePoints[pointer + 1] == '/') {
+          if (chr === '/' && codePoints[pointer + 1] === '/') {
             state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
             pointer++;
           } else {
@@ -4069,7 +4071,7 @@ URLState.prototype = {
           } break;
 
         case PATH_OR_AUTHORITY:
-          if (chr == '/') {
+          if (chr === '/') {
             state = AUTHORITY;
             break;
           } else {
@@ -4079,16 +4081,16 @@ URLState.prototype = {
 
         case RELATIVE:
           url.scheme = base.scheme;
-          if (chr == EOF) {
+          if (chr === EOF) {
             url.username = base.username;
             url.password = base.password;
             url.host = base.host;
             url.port = base.port;
             url.path = arraySlice(base.path);
             url.query = base.query;
-          } else if (chr == '/' || (chr == '\\' && url.isSpecial())) {
+          } else if (chr === '/' || (chr === '\\' && url.isSpecial())) {
             state = RELATIVE_SLASH;
-          } else if (chr == '?') {
+          } else if (chr === '?') {
             url.username = base.username;
             url.password = base.password;
             url.host = base.host;
@@ -4096,7 +4098,7 @@ URLState.prototype = {
             url.path = arraySlice(base.path);
             url.query = '';
             state = QUERY;
-          } else if (chr == '#') {
+          } else if (chr === '#') {
             url.username = base.username;
             url.password = base.password;
             url.host = base.host;
@@ -4117,9 +4119,9 @@ URLState.prototype = {
           } break;
 
         case RELATIVE_SLASH:
-          if (url.isSpecial() && (chr == '/' || chr == '\\')) {
+          if (url.isSpecial() && (chr === '/' || chr === '\\')) {
             state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
-          } else if (chr == '/') {
+          } else if (chr === '/') {
             state = AUTHORITY;
           } else {
             url.username = base.username;
@@ -4132,24 +4134,24 @@ URLState.prototype = {
 
         case SPECIAL_AUTHORITY_SLASHES:
           state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
-          if (chr != '/' || charAt(buffer, pointer + 1) != '/') continue;
+          if (chr !== '/' || charAt(buffer, pointer + 1) !== '/') continue;
           pointer++;
           break;
 
         case SPECIAL_AUTHORITY_IGNORE_SLASHES:
-          if (chr != '/' && chr != '\\') {
+          if (chr !== '/' && chr !== '\\') {
             state = AUTHORITY;
             continue;
           } break;
 
         case AUTHORITY:
-          if (chr == '@') {
+          if (chr === '@') {
             if (seenAt) buffer = '%40' + buffer;
             seenAt = true;
             bufferCodePoints = arrayFrom(buffer);
             for (var i = 0; i < bufferCodePoints.length; i++) {
               var codePoint = bufferCodePoints[i];
-              if (codePoint == ':' && !seenPasswordToken) {
+              if (codePoint === ':' && !seenPasswordToken) {
                 seenPasswordToken = true;
                 continue;
               }
@@ -4159,10 +4161,10 @@ URLState.prototype = {
             }
             buffer = '';
           } else if (
-            chr == EOF || chr == '/' || chr == '?' || chr == '#' ||
-            (chr == '\\' && url.isSpecial())
+            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
+            (chr === '\\' && url.isSpecial())
           ) {
-            if (seenAt && buffer == '') return INVALID_AUTHORITY;
+            if (seenAt && buffer === '') return INVALID_AUTHORITY;
             pointer -= arrayFrom(buffer).length + 1;
             buffer = '';
             state = HOST;
@@ -4171,22 +4173,22 @@ URLState.prototype = {
 
         case HOST:
         case HOSTNAME:
-          if (stateOverride && url.scheme == 'file') {
+          if (stateOverride && url.scheme === 'file') {
             state = FILE_HOST;
             continue;
-          } else if (chr == ':' && !seenBracket) {
-            if (buffer == '') return INVALID_HOST;
+          } else if (chr === ':' && !seenBracket) {
+            if (buffer === '') return INVALID_HOST;
             failure = url.parseHost(buffer);
             if (failure) return failure;
             buffer = '';
             state = PORT;
-            if (stateOverride == HOSTNAME) return;
+            if (stateOverride === HOSTNAME) return;
           } else if (
-            chr == EOF || chr == '/' || chr == '?' || chr == '#' ||
-            (chr == '\\' && url.isSpecial())
+            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
+            (chr === '\\' && url.isSpecial())
           ) {
-            if (url.isSpecial() && buffer == '') return INVALID_HOST;
-            if (stateOverride && buffer == '' && (url.includesCredentials() || url.port !== null)) return;
+            if (url.isSpecial() && buffer === '') return INVALID_HOST;
+            if (stateOverride && buffer === '' && (url.includesCredentials() || url.port !== null)) return;
             failure = url.parseHost(buffer);
             if (failure) return failure;
             buffer = '';
@@ -4194,8 +4196,8 @@ URLState.prototype = {
             if (stateOverride) return;
             continue;
           } else {
-            if (chr == '[') seenBracket = true;
-            else if (chr == ']') seenBracket = false;
+            if (chr === '[') seenBracket = true;
+            else if (chr === ']') seenBracket = false;
             buffer += chr;
           } break;
 
@@ -4203,11 +4205,11 @@ URLState.prototype = {
           if (exec(DIGIT, chr)) {
             buffer += chr;
           } else if (
-            chr == EOF || chr == '/' || chr == '?' || chr == '#' ||
-            (chr == '\\' && url.isSpecial()) ||
+            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
+            (chr === '\\' && url.isSpecial()) ||
             stateOverride
           ) {
-            if (buffer != '') {
+            if (buffer !== '') {
               var port = parseInt(buffer, 10);
               if (port > 0xFFFF) return INVALID_PORT;
               url.port = (url.isSpecial() && port === specialSchemes[url.scheme]) ? null : port;
@@ -4221,31 +4223,35 @@ URLState.prototype = {
 
         case FILE:
           url.scheme = 'file';
-          if (chr == '/' || chr == '\\') state = FILE_SLASH;
-          else if (base && base.scheme == 'file') {
-            if (chr == EOF) {
-              url.host = base.host;
-              url.path = arraySlice(base.path);
-              url.query = base.query;
-            } else if (chr == '?') {
-              url.host = base.host;
-              url.path = arraySlice(base.path);
-              url.query = '';
-              state = QUERY;
-            } else if (chr == '#') {
-              url.host = base.host;
-              url.path = arraySlice(base.path);
-              url.query = base.query;
-              url.fragment = '';
-              state = FRAGMENT;
-            } else {
-              if (!startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
+          if (chr === '/' || chr === '\\') state = FILE_SLASH;
+          else if (base && base.scheme === 'file') {
+            switch (chr) {
+              case EOF:
                 url.host = base.host;
                 url.path = arraySlice(base.path);
-                url.shortenPath();
-              }
-              state = PATH;
-              continue;
+                url.query = base.query;
+                break;
+              case '?':
+                url.host = base.host;
+                url.path = arraySlice(base.path);
+                url.query = '';
+                state = QUERY;
+                break;
+              case '#':
+                url.host = base.host;
+                url.path = arraySlice(base.path);
+                url.query = base.query;
+                url.fragment = '';
+                state = FRAGMENT;
+                break;
+              default:
+                if (!startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
+                  url.host = base.host;
+                  url.path = arraySlice(base.path);
+                  url.shortenPath();
+                }
+                state = PATH;
+                continue;
             }
           } else {
             state = PATH;
@@ -4253,11 +4259,11 @@ URLState.prototype = {
           } break;
 
         case FILE_SLASH:
-          if (chr == '/' || chr == '\\') {
+          if (chr === '/' || chr === '\\') {
             state = FILE_HOST;
             break;
           }
-          if (base && base.scheme == 'file' && !startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
+          if (base && base.scheme === 'file' && !startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
             if (isWindowsDriveLetter(base.path[0], true)) push(url.path, base.path[0]);
             else url.host = base.host;
           }
@@ -4265,17 +4271,17 @@ URLState.prototype = {
           continue;
 
         case FILE_HOST:
-          if (chr == EOF || chr == '/' || chr == '\\' || chr == '?' || chr == '#') {
+          if (chr === EOF || chr === '/' || chr === '\\' || chr === '?' || chr === '#') {
             if (!stateOverride && isWindowsDriveLetter(buffer)) {
               state = PATH;
-            } else if (buffer == '') {
+            } else if (buffer === '') {
               url.host = '';
               if (stateOverride) return;
               state = PATH_START;
             } else {
               failure = url.parseHost(buffer);
               if (failure) return failure;
-              if (url.host == 'localhost') url.host = '';
+              if (url.host === 'localhost') url.host = '';
               if (stateOverride) return;
               buffer = '';
               state = PATH_START;
@@ -4286,50 +4292,50 @@ URLState.prototype = {
         case PATH_START:
           if (url.isSpecial()) {
             state = PATH;
-            if (chr != '/' && chr != '\\') continue;
-          } else if (!stateOverride && chr == '?') {
+            if (chr !== '/' && chr !== '\\') continue;
+          } else if (!stateOverride && chr === '?') {
             url.query = '';
             state = QUERY;
-          } else if (!stateOverride && chr == '#') {
+          } else if (!stateOverride && chr === '#') {
             url.fragment = '';
             state = FRAGMENT;
-          } else if (chr != EOF) {
+          } else if (chr !== EOF) {
             state = PATH;
-            if (chr != '/') continue;
+            if (chr !== '/') continue;
           } break;
 
         case PATH:
           if (
-            chr == EOF || chr == '/' ||
-            (chr == '\\' && url.isSpecial()) ||
-            (!stateOverride && (chr == '?' || chr == '#'))
+            chr === EOF || chr === '/' ||
+            (chr === '\\' && url.isSpecial()) ||
+            (!stateOverride && (chr === '?' || chr === '#'))
           ) {
             if (isDoubleDot(buffer)) {
               url.shortenPath();
-              if (chr != '/' && !(chr == '\\' && url.isSpecial())) {
+              if (chr !== '/' && !(chr === '\\' && url.isSpecial())) {
                 push(url.path, '');
               }
             } else if (isSingleDot(buffer)) {
-              if (chr != '/' && !(chr == '\\' && url.isSpecial())) {
+              if (chr !== '/' && !(chr === '\\' && url.isSpecial())) {
                 push(url.path, '');
               }
             } else {
-              if (url.scheme == 'file' && !url.path.length && isWindowsDriveLetter(buffer)) {
+              if (url.scheme === 'file' && !url.path.length && isWindowsDriveLetter(buffer)) {
                 if (url.host) url.host = '';
                 buffer = charAt(buffer, 0) + ':'; // normalize windows drive letter
               }
               push(url.path, buffer);
             }
             buffer = '';
-            if (url.scheme == 'file' && (chr == EOF || chr == '?' || chr == '#')) {
+            if (url.scheme === 'file' && (chr === EOF || chr === '?' || chr === '#')) {
               while (url.path.length > 1 && url.path[0] === '') {
                 shift(url.path);
               }
             }
-            if (chr == '?') {
+            if (chr === '?') {
               url.query = '';
               state = QUERY;
-            } else if (chr == '#') {
+            } else if (chr === '#') {
               url.fragment = '';
               state = FRAGMENT;
             }
@@ -4338,28 +4344,28 @@ URLState.prototype = {
           } break;
 
         case CANNOT_BE_A_BASE_URL_PATH:
-          if (chr == '?') {
+          if (chr === '?') {
             url.query = '';
             state = QUERY;
-          } else if (chr == '#') {
+          } else if (chr === '#') {
             url.fragment = '';
             state = FRAGMENT;
-          } else if (chr != EOF) {
+          } else if (chr !== EOF) {
             url.path[0] += percentEncode(chr, C0ControlPercentEncodeSet);
           } break;
 
         case QUERY:
-          if (!stateOverride && chr == '#') {
+          if (!stateOverride && chr === '#') {
             url.fragment = '';
             state = FRAGMENT;
-          } else if (chr != EOF) {
-            if (chr == "'" && url.isSpecial()) url.query += '%27';
-            else if (chr == '#') url.query += '%23';
+          } else if (chr !== EOF) {
+            if (chr === "'" && url.isSpecial()) url.query += '%27';
+            else if (chr === '#') url.query += '%23';
             else url.query += percentEncode(chr, C0ControlPercentEncodeSet);
           } break;
 
         case FRAGMENT:
-          if (chr != EOF) url.fragment += percentEncode(chr, fragmentPercentEncodeSet);
+          if (chr !== EOF) url.fragment += percentEncode(chr, fragmentPercentEncodeSet);
           break;
       }
 
@@ -4369,8 +4375,8 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#host-parsing
   parseHost: function (input) {
     var result, codePoints, index;
-    if (charAt(input, 0) == '[') {
-      if (charAt(input, input.length - 1) != ']') return INVALID_HOST;
+    if (charAt(input, 0) === '[') {
+      if (charAt(input, input.length - 1) !== ']') return INVALID_HOST;
       result = parseIPv6(stringSlice(input, 1, -1));
       if (!result) return INVALID_HOST;
       this.host = result;
@@ -4393,11 +4399,11 @@ URLState.prototype = {
   },
   // https://url.spec.whatwg.org/#cannot-have-a-username-password-port
   cannotHaveUsernamePasswordPort: function () {
-    return !this.host || this.cannotBeABaseURL || this.scheme == 'file';
+    return !this.host || this.cannotBeABaseURL || this.scheme === 'file';
   },
   // https://url.spec.whatwg.org/#include-credentials
   includesCredentials: function () {
-    return this.username != '' || this.password != '';
+    return this.username !== '' || this.password !== '';
   },
   // https://url.spec.whatwg.org/#is-special
   isSpecial: function () {
@@ -4407,7 +4413,7 @@ URLState.prototype = {
   shortenPath: function () {
     var path = this.path;
     var pathSize = path.length;
-    if (pathSize && (this.scheme != 'file' || pathSize != 1 || !isWindowsDriveLetter(path[0], true))) {
+    if (pathSize && (this.scheme !== 'file' || pathSize !== 1 || !isWindowsDriveLetter(path[0], true))) {
       path.length--;
     }
   },
@@ -4430,7 +4436,7 @@ URLState.prototype = {
       }
       output += serializeHost(host);
       if (port !== null) output += ':' + port;
-    } else if (scheme == 'file') output += '//';
+    } else if (scheme === 'file') output += '//';
     output += url.cannotBeABaseURL ? path[0] : path.length ? '/' + join(path, '/') : '';
     if (query !== null) output += '?' + query;
     if (fragment !== null) output += '#' + fragment;
@@ -4446,12 +4452,12 @@ URLState.prototype = {
   getOrigin: function () {
     var scheme = this.scheme;
     var port = this.port;
-    if (scheme == 'blob') try {
+    if (scheme === 'blob') try {
       return new URLConstructor(scheme.path[0]).origin;
     } catch (error) {
       return 'null';
     }
-    if (scheme == 'file' || !this.isSpecial()) return 'null';
+    if (scheme === 'file' || !this.isSpecial()) return 'null';
     return scheme + '://' + serializeHost(this.host) + (port !== null ? ':' + port : '');
   },
   // https://url.spec.whatwg.org/#dom-url-protocol
@@ -4514,7 +4520,7 @@ URLState.prototype = {
   setPort: function (port) {
     if (this.cannotHaveUsernamePasswordPort()) return;
     port = $toString(port);
-    if (port == '') this.port = null;
+    if (port === '') this.port = null;
     else this.parse(port, PORT);
   },
   // https://url.spec.whatwg.org/#dom-url-pathname
@@ -4534,10 +4540,10 @@ URLState.prototype = {
   },
   setSearch: function (search) {
     search = $toString(search);
-    if (search == '') {
+    if (search === '') {
       this.query = null;
     } else {
-      if ('?' == charAt(search, 0)) search = stringSlice(search, 1);
+      if (charAt(search, 0) === '?') search = stringSlice(search, 1);
       this.query = '';
       this.parse(search, QUERY);
     }
@@ -4554,11 +4560,11 @@ URLState.prototype = {
   },
   setHash: function (hash) {
     hash = $toString(hash);
-    if (hash == '') {
+    if (hash === '') {
       this.fragment = null;
       return;
     }
-    if ('#' == charAt(hash, 0)) hash = stringSlice(hash, 1);
+    if (charAt(hash, 0) === '#') hash = stringSlice(hash, 1);
     this.fragment = '';
     this.parse(hash, FRAGMENT);
   },

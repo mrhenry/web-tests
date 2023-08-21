@@ -316,7 +316,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer();
     new NativeArrayBuffer(1.5);
     new NativeArrayBuffer(NaN);
-    return NativeArrayBuffer.length != 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
+    return NativeArrayBuffer.length !== 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
   })) {
     /* eslint-enable no-new -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
@@ -409,10 +409,10 @@ var createMethod = function (IS_INCLUDES) {
     var value;
     // Array#includes uses SameValueZero equality algorithm
     // eslint-disable-next-line no-self-compare -- NaN check
-    if (IS_INCLUDES && el != el) while (length > index) {
+    if (IS_INCLUDES && el !== el) while (length > index) {
       value = O[index++];
       // eslint-disable-next-line no-self-compare -- NaN check
-      if (value != value) return true;
+      if (value !== value) return true;
     // Array#indexOf ignores holes, Array#includes - not
     } else for (;length > index; index++) {
       if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
@@ -448,7 +448,8 @@ module.exports = function (O, start, end) {
   var k = toAbsoluteIndex(start, length);
   var fin = toAbsoluteIndex(end === undefined ? length : end, length);
   var result = $Array(max(fin - k, 0));
-  for (var n = 0; k < fin; k++, n++) createProperty(result, n, O[k]);
+  var n = 0;
+  for (; k < fin; k++, n++) createProperty(result, n, O[k]);
   result.length = n;
   return result;
 };
@@ -485,7 +486,7 @@ var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var $Object = Object;
 
 // ES3 wrong here
-var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) == 'Arguments';
+var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) === 'Arguments';
 
 // fallback for IE11 Script Access Denied error
 var tryGet = function (it, key) {
@@ -503,7 +504,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     // builtinTag case
     : CORRECT_ARGUMENTS ? classofRaw(O)
     // ES3 arguments fallback
-    : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
+    : (result = classofRaw(O)) === 'Object' && isCallable(O.callee) ? 'Arguments' : result;
 };
 
 
@@ -694,7 +695,7 @@ var fails = __webpack_require__(7293);
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
+  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 });
 
 
@@ -1024,7 +1025,7 @@ module.exports = function (V, P) {
 
 
 var check = function (it) {
-  return it && it.Math == Math && it;
+  return it && it.Math === Math && it;
 };
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -1082,17 +1083,20 @@ module.exports = !DESCRIPTORS && !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
-  }).a != 7;
+  }).a !== 7;
 });
 
 
 /***/ }),
 
 /***/ 1179:
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
 // IEEE754 conversions based on https://github.com/feross/ieee754
+var sign = __webpack_require__(4310);
+var trunc = __webpack_require__(4758);
+
 var $Array = Array;
 var abs = Math.abs;
 var pow = Math.pow;
@@ -1100,20 +1104,28 @@ var floor = Math.floor;
 var log = Math.log;
 var LN2 = Math.LN2;
 
+var roundToEven = function (number) {
+  var truncated = trunc(number);
+  var delta = abs(number - truncated);
+  if (delta > 0.5 || delta === 0.5 && truncated % 2 !== 0) {
+    return truncated + sign(number);
+  } return truncated;
+};
+
 var pack = function (number, mantissaLength, bytes) {
   var buffer = $Array(bytes);
   var exponentLength = bytes * 8 - mantissaLength - 1;
   var eMax = (1 << exponentLength) - 1;
   var eBias = eMax >> 1;
   var rt = mantissaLength === 23 ? pow(2, -24) - pow(2, -77) : 0;
-  var sign = number < 0 || number === 0 && 1 / number < 0 ? 1 : 0;
+  var s = number < 0 || number === 0 && 1 / number < 0 ? 1 : 0;
   var index = 0;
   var exponent, mantissa, c;
   number = abs(number);
   // eslint-disable-next-line no-self-compare -- NaN check
-  if (number != number || number === Infinity) {
+  if (number !== number || number === Infinity) {
     // eslint-disable-next-line no-self-compare -- NaN check
-    mantissa = number != number ? 1 : 0;
+    mantissa = number !== number ? 1 : 0;
     exponent = eMax;
   } else {
     exponent = floor(log(number) / LN2);
@@ -1135,10 +1147,10 @@ var pack = function (number, mantissaLength, bytes) {
       mantissa = 0;
       exponent = eMax;
     } else if (exponent + eBias >= 1) {
-      mantissa = (number * c - 1) * pow(2, mantissaLength);
+      mantissa = roundToEven((number * c - 1) * pow(2, mantissaLength));
       exponent = exponent + eBias;
     } else {
-      mantissa = number * pow(2, eBias - 1) * pow(2, mantissaLength);
+      mantissa = roundToEven(number * pow(2, eBias - 1) * pow(2, mantissaLength));
       exponent = 0;
     }
   }
@@ -1154,7 +1166,7 @@ var pack = function (number, mantissaLength, bytes) {
     exponent /= 256;
     exponentLength -= 8;
   }
-  buffer[--index] |= sign * 128;
+  buffer[--index] |= s * 128;
   return buffer;
 };
 
@@ -1165,10 +1177,10 @@ var unpack = function (buffer, mantissaLength) {
   var eBias = eMax >> 1;
   var nBits = exponentLength - 7;
   var index = bytes - 1;
-  var sign = buffer[index--];
-  var exponent = sign & 127;
+  var s = buffer[index--];
+  var exponent = s & 127;
   var mantissa;
-  sign >>= 7;
+  s >>= 7;
   while (nBits > 0) {
     exponent = exponent * 256 + buffer[index--];
     nBits -= 8;
@@ -1183,11 +1195,11 @@ var unpack = function (buffer, mantissaLength) {
   if (exponent === 0) {
     exponent = 1 - eBias;
   } else if (exponent === eMax) {
-    return mantissa ? NaN : sign ? -Infinity : Infinity;
+    return mantissa ? NaN : s ? -Infinity : Infinity;
   } else {
     mantissa = mantissa + pow(2, mantissaLength);
     exponent = exponent - eBias;
-  } return (sign ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
+  } return (s ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
 };
 
 module.exports = {
@@ -1215,7 +1227,7 @@ module.exports = fails(function () {
   // eslint-disable-next-line no-prototype-builtins -- safe
   return !$Object('z').propertyIsEnumerable(0);
 }) ? function (it) {
-  return classof(it) == 'String' ? split(it, '') : $Object(it);
+  return classof(it) === 'String' ? split(it, '') : $Object(it);
 } : $Object;
 
 
@@ -1411,8 +1423,8 @@ var replacement = /#|\.prototype\./;
 
 var isForced = function (feature, detection) {
   var value = data[normalize(feature)];
-  return value == POLYFILL ? true
-    : value == NATIVE ? false
+  return value === POLYFILL ? true
+    : value === NATIVE ? false
     : isCallable(detection) ? fails(detection)
     : !!detection;
 };
@@ -1564,6 +1576,22 @@ var makeBuiltIn = module.exports = function (value, name, options) {
 Function.prototype.toString = makeBuiltIn(function toString() {
   return isCallable(this) && getInternalState(this).source || inspectSource(this);
 }, 'toString');
+
+
+/***/ }),
+
+/***/ 4310:
+/***/ ((module) => {
+
+
+// `Math.sign` method implementation
+// https://tc39.es/ecma262/#sec-math.sign
+// eslint-disable-next-line es/no-math-sign -- safe
+module.exports = Math.sign || function sign(x) {
+  var n = +x;
+  // eslint-disable-next-line no-self-compare -- NaN check
+  return n === 0 || n !== n ? n : n < 0 ? -1 : 1;
+};
 
 
 /***/ }),
@@ -1968,10 +1996,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.0',
+  version: '3.32.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.32.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2013,7 +2041,7 @@ var $String = global.String;
 
 // eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
-  var symbol = Symbol();
+  var symbol = Symbol('symbol detection');
   // Chrome 38 Symbol has incorrect toString conversion
   // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
   // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
@@ -2278,7 +2306,7 @@ module.exports = DESCRIPTORS && fails(function () {
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
-  }).prototype != 42;
+  }).prototype !== 42;
 });
 
 
@@ -2435,7 +2463,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   SymbolWrapper.prototype = SymbolPrototype;
   SymbolPrototype.constructor = SymbolWrapper;
 
-  var NATIVE_SYMBOL = String(NativeSymbol('test')) == 'Symbol(test)';
+  var NATIVE_SYMBOL = String(NativeSymbol('description detection')) === 'Symbol(description detection)';
   var thisSymbolValue = uncurryThis(SymbolPrototype.valueOf);
   var symbolDescriptiveString = uncurryThis(SymbolPrototype.toString);
   var regexp = /^Symbol\((.*)\)[^)]+$/;
