@@ -5278,7 +5278,7 @@ var ArrayIterator = function () {
 }();
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
 
@@ -5299,7 +5299,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.forEach.js
-function NodeList_prototype_forEach_typeof(obj) { "@babel/helpers - typeof"; return NodeList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, NodeList_prototype_forEach_typeof(obj); }
+function NodeList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; return NodeList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, NodeList_prototype_forEach_typeof(o); }
 
 
 
