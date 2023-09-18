@@ -1238,7 +1238,9 @@ try {
 } catch (error) { /* empty */ }
 
 module.exports = function (exec, SKIP_CLOSING) {
-  if (!SKIP_CLOSING && !SAFE_CLOSING) return false;
+  try {
+    if (!SKIP_CLOSING && !SAFE_CLOSING) return false;
+  } catch (error) { return false; } // workaround of old WebKit + `eval` bug
   var ITERATION_SUPPORT = false;
   try {
     var object = {};
@@ -1979,7 +1981,10 @@ module.exports = function (KEY, exec, FORCED, SHAM) {
       re[SYMBOL] = /./[SYMBOL];
     }
 
-    re.exec = function () { execCalled = true; return null; };
+    re.exec = function () {
+      execCalled = true;
+      return null;
+    };
 
     re[SYMBOL]('');
     return !execCalled;
@@ -2484,7 +2489,7 @@ var pack = function (number, mantissaLength, bytes) {
       exponent = eMax;
     } else if (exponent + eBias >= 1) {
       mantissa = roundToEven((number * c - 1) * pow(2, mantissaLength));
-      exponent = exponent + eBias;
+      exponent += eBias;
     } else {
       mantissa = roundToEven(number * pow(2, eBias - 1) * pow(2, mantissaLength));
       exponent = 0;
@@ -2533,8 +2538,8 @@ var unpack = function (buffer, mantissaLength) {
   } else if (exponent === eMax) {
     return mantissa ? NaN : s ? -Infinity : Infinity;
   } else {
-    mantissa = mantissa + pow(2, mantissaLength);
-    exponent = exponent - eBias;
+    mantissa += pow(2, mantissaLength);
+    exponent -= eBias;
   } return (s ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
 };
 
@@ -3114,12 +3119,15 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
 
   var getIterationMethod = function (KIND) {
     if (KIND === DEFAULT && defaultIterator) return defaultIterator;
-    if (!BUGGY_SAFARI_ITERATORS && KIND in IterablePrototype) return IterablePrototype[KIND];
+    if (!BUGGY_SAFARI_ITERATORS && KIND && KIND in IterablePrototype) return IterablePrototype[KIND];
+
     switch (KIND) {
       case KEYS: return function keys() { return new IteratorConstructor(this, KIND); };
       case VALUES: return function values() { return new IteratorConstructor(this, KIND); };
       case ENTRIES: return function entries() { return new IteratorConstructor(this, KIND); };
-    } return function () { return new IteratorConstructor(this); };
+    }
+
+    return function () { return new IteratorConstructor(this); };
   };
 
   var TO_STRING_TAG = NAME + ' Iterator';
@@ -4541,10 +4549,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.1',
+  version: '3.32.2',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.32.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
