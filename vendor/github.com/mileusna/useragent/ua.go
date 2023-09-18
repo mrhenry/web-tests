@@ -31,7 +31,9 @@ const (
 	MacOS        = "macOS"
 	IOS          = "iOS"
 	Linux        = "Linux"
+	FreeBSD      = "FreeBSD"
 	ChromeOS     = "ChromeOS"
+	BlackBerry   = "BlackBerry"
 
 	Opera            = "Opera"
 	OperaMini        = "Opera Mini"
@@ -72,6 +74,8 @@ func Parse(userAgent string) UserAgent {
 			break
 		}
 	}
+
+	//fmt.Printf("%+v\n", tokens)
 
 	// OS lookup
 	switch {
@@ -114,10 +118,20 @@ func Parse(userAgent string) UserAgent {
 		ua.OSVersion = tokens.get(Linux)
 		ua.Desktop = true
 
+	case tokens.exists("FreeBSD"):
+		ua.OS = FreeBSD
+		ua.OSVersion = tokens.get(FreeBSD)
+		ua.Desktop = true
+
 	case tokens.exists("CrOS"):
 		ua.OS = ChromeOS
 		ua.OSVersion = tokens.get("CrOS")
 		ua.Desktop = true
+
+	case tokens.exists("BlackBerry"):
+		ua.OS = BlackBerry
+		ua.OSVersion = tokens.get("BlackBerry")
+		ua.Mobile = true
 	}
 
 	switch {
@@ -126,6 +140,12 @@ func Parse(userAgent string) UserAgent {
 		ua.Version = tokens.get(Googlebot)
 		ua.Bot = true
 		ua.Mobile = tokens.existsAny("Mobile", "Mobile Safari")
+
+	case tokens.existsAny("GoogleProber", "GoogleProducer"):
+		if name := tokens.findBestMatch(false); name != "" {
+			ua.Name = name
+		}
+		ua.Bot = true
 
 	case tokens.exists("Applebot"):
 		ua.Name = Applebot
@@ -243,6 +263,7 @@ func Parse(userAgent string) UserAgent {
 	case tokens.exists("FBAN"):
 		ua.Name = FacebookApp
 		ua.Version = tokens.get("FBAN")
+
 	case tokens.exists("FB_IAB"):
 		ua.Name = FacebookApp
 		ua.Version = tokens.get("FBAV")
@@ -259,6 +280,15 @@ func Parse(userAgent string) UserAgent {
 		ua.Name = "Huawei Browser"
 		ua.Version = tokens.get("HuaweiBrowser")
 		ua.Mobile = tokens.existsAny("Mobile", "Mobile Safari")
+
+	case tokens.exists("BlackBerry"):
+		ua.Name = "BlackBerry"
+		ua.Version = tokens.get("Version")
+
+	case tokens.exists("NetFront"):
+		ua.Name = "NetFront"
+		ua.Version = tokens.get("NetFront")
+		ua.Mobile = true
 
 	// if chrome and Safari defined, find any other token sent descr
 	case tokens.exists(Chrome) && tokens.exists(Safari):
@@ -303,7 +333,10 @@ func Parse(userAgent string) UserAgent {
 				ua.Name = ua.String
 			}
 			ua.Bot = strings.Contains(strings.ToLower(ua.Name), "bot")
-			ua.Mobile = tokens.existsAny("Mobile", "Mobile Safari")
+			// If mobile flag has already been set, don't override it.
+			if !ua.Mobile {
+				ua.Mobile = tokens.existsAny("Mobile", "Mobile Safari")
+			}
 		}
 	}
 
@@ -379,6 +412,9 @@ func parse(userAgent string) properties {
 		case (parOpen || braOpen) && c == 59: // ;
 			addToken()
 
+		case c == 59: // ;
+			addToken()
+
 		case c == 40: // (
 			addToken()
 			parOpen = true
@@ -389,6 +425,16 @@ func parse(userAgent string) properties {
 		case c == 93: // ]
 			addToken()
 			braOpen = false
+
+		case c == 58: // :
+			if bytes.HasSuffix(buff.Bytes(), []byte("http")) || bytes.HasSuffix(buff.Bytes(), []byte("https")) {
+				// If we are part of a URL just write the character.
+				buff.WriteByte(c)
+			} else if i != len(bua)-1 && bua[i+1] != ' ' {
+				// If the following character is not a space, change to a space.
+				buff.WriteByte(' ')
+			}
+			// Otherwise don't write as its probably a badly formatted key value separator.
 
 		case slash && c == 32:
 			addToken()
@@ -401,7 +447,11 @@ func parse(userAgent string) properties {
 				buff.WriteByte(c)
 				isURL = true
 			} else {
-				slash = true
+				if ignore(buff.String()) {
+					buff.Reset()
+				} else {
+					slash = true
+				}
 			}
 
 		default:
@@ -424,7 +474,7 @@ func checkVer(s string) (name, v string) {
 	switch s[:i] {
 	case "Linux", "Windows NT", "Windows Phone OS", "MSIE", "Android":
 		return s[:i], s[i+1:]
-	case "CrOS x86_64", "CrOS aarch64":
+	case "CrOS x86_64", "CrOS aarch64", "CrOS armv7l":
 		j := strings.LastIndex(s[:i], " ")
 		return s[:j], s[j+1 : i]
 	default:
@@ -443,7 +493,7 @@ func checkVer(s string) (name, v string) {
 // ignore retursn true if token should be ignored
 func ignore(s string) bool {
 	switch s {
-	case "KHTML, like Gecko", "U", "compatible", "Mozilla", "WOW64", "en", "en-us", "en-gb", "ru-ru":
+	case "KHTML, like Gecko", "U", "compatible", "Mozilla", "WOW64", "en", "en-us", "en-gb", "ru-ru", "Browser":
 		return true
 	default:
 		return false
