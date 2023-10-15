@@ -25,7 +25,7 @@
         "postcss": "^8.4.30",
         "postcss-cli": "^10.1.0",
         "postcss-preset-env": "^9.1.4",
-        "webpack": "^5.88.2",
+        "webpack": "^5.89.0",
         "webpack-cli": "^5.0.0"
     },
     "volta": {
