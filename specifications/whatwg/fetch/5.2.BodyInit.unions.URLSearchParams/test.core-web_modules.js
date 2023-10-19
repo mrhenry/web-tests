@@ -14,7 +14,7 @@ var $TypeError = TypeError;
 // `Assert: IsCallable(argument) is true`
 module.exports = function (argument) {
   if (isCallable(argument)) return argument;
-  throw $TypeError(tryToString(argument) + ' is not a function');
+  throw new $TypeError(tryToString(argument) + ' is not a function');
 };
 
 
@@ -32,7 +32,7 @@ var $TypeError = TypeError;
 // `Assert: IsConstructor(argument) is true`
 module.exports = function (argument) {
   if (isConstructor(argument)) return argument;
-  throw $TypeError(tryToString(argument) + ' is not a constructor');
+  throw new $TypeError(tryToString(argument) + ' is not a constructor');
 };
 
 
@@ -49,7 +49,7 @@ var $TypeError = TypeError;
 
 module.exports = function (argument) {
   if (typeof argument == 'object' || isCallable(argument)) return argument;
-  throw $TypeError("Can't set " + $String(argument) + ' as a prototype');
+  throw new $TypeError("Can't set " + $String(argument) + ' as a prototype');
 };
 
 
@@ -108,7 +108,7 @@ var $TypeError = TypeError;
 
 module.exports = function (it, Prototype) {
   if (isPrototypeOf(Prototype, it)) return it;
-  throw $TypeError('Incorrect invocation');
+  throw new $TypeError('Incorrect invocation');
 };
 
 
@@ -126,7 +126,7 @@ var $TypeError = TypeError;
 // `Assert: Type(argument) is Object`
 module.exports = function (argument) {
   if (isObject(argument)) return argument;
-  throw $TypeError($String(argument) + ' is not an object');
+  throw new $TypeError($String(argument) + ' is not an object');
 };
 
 
@@ -224,12 +224,12 @@ var isTypedArray = function (it) {
 
 var aTypedArray = function (it) {
   if (isTypedArray(it)) return it;
-  throw TypeError('Target is not a typed array');
+  throw new TypeError('Target is not a typed array');
 };
 
 var aTypedArrayConstructor = function (C) {
   if (isCallable(C) && (!setPrototypeOf || isPrototypeOf(TypedArray, C))) return C;
-  throw TypeError(tryToString(C) + ' is not a typed array constructor');
+  throw new TypeError(tryToString(C) + ' is not a typed array constructor');
 };
 
 var exportTypedArrayMethod = function (KEY, property, forced, options) {
@@ -293,7 +293,7 @@ for (NAME in BigIntArrayConstructorsList) {
 if (!NATIVE_ARRAY_BUFFER_VIEWS || !isCallable(TypedArray) || TypedArray === Function.prototype) {
   // eslint-disable-next-line no-shadow -- safe
   TypedArray = function TypedArray() {
-    throw TypeError('Incorrect invocation');
+    throw new TypeError('Incorrect invocation');
   };
   if (NATIVE_ARRAY_BUFFER_VIEWS) for (NAME in TypedArrayConstructorsList) {
     if (global[NAME]) setPrototypeOf(global[NAME], TypedArray);
@@ -359,6 +359,7 @@ var anInstance = __webpack_require__(5787);
 var toIntegerOrInfinity = __webpack_require__(9303);
 var toLength = __webpack_require__(7466);
 var toIndex = __webpack_require__(7067);
+var fround = __webpack_require__(6130);
 var IEEE754 = __webpack_require__(1179);
 var getPrototypeOf = __webpack_require__(9518);
 var setPrototypeOf = __webpack_require__(7674);
@@ -409,7 +410,7 @@ var unpackInt32 = function (buffer) {
 };
 
 var packFloat32 = function (number) {
-  return packIEEE754(number, 23, 4);
+  return packIEEE754(fround(number), 23, 4);
 };
 
 var packFloat64 = function (number) {
@@ -429,7 +430,7 @@ var get = function (view, count, index, isLittleEndian) {
   var store = getInternalDataViewState(view);
   var intIndex = toIndex(index);
   var boolIsLittleEndian = !!isLittleEndian;
-  if (intIndex + count > store.byteLength) throw RangeError(WRONG_INDEX);
+  if (intIndex + count > store.byteLength) throw new RangeError(WRONG_INDEX);
   var bytes = store.bytes;
   var start = intIndex + store.byteOffset;
   var pack = arraySlice(bytes, start, start + count);
@@ -441,7 +442,7 @@ var set = function (view, count, index, conversion, value, isLittleEndian) {
   var intIndex = toIndex(index);
   var pack = conversion(+value);
   var boolIsLittleEndian = !!isLittleEndian;
-  if (intIndex + count > store.byteLength) throw RangeError(WRONG_INDEX);
+  if (intIndex + count > store.byteLength) throw new RangeError(WRONG_INDEX);
   var bytes = store.bytes;
   var start = intIndex + store.byteOffset;
   for (var i = 0; i < count; i++) bytes[start + i] = pack[boolIsLittleEndian ? i : count - i - 1];
@@ -470,9 +471,9 @@ if (!NATIVE_ARRAY_BUFFER) {
     var bufferState = getInternalArrayBufferState(buffer);
     var bufferLength = bufferState.byteLength;
     var offset = toIntegerOrInfinity(byteOffset);
-    if (offset < 0 || offset > bufferLength) throw RangeError('Wrong offset');
+    if (offset < 0 || offset > bufferLength) throw new RangeError('Wrong offset');
     byteLength = byteLength === undefined ? bufferLength - offset : toLength(byteLength);
-    if (offset + byteLength > bufferLength) throw RangeError(WRONG_LENGTH);
+    if (offset + byteLength > bufferLength) throw new RangeError(WRONG_LENGTH);
     setInternalState(this, {
       type: DATA_VIEW,
       buffer: buffer,
@@ -840,7 +841,7 @@ var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function () {
 
 module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
   if (isArray(O) && !getOwnPropertyDescriptor(O, 'length').writable) {
-    throw $TypeError('Cannot set read only .length');
+    throw new $TypeError('Cannot set read only .length');
   } return O.length = length;
 } : function (O, length) {
   return O.length = length;
@@ -1016,7 +1017,7 @@ module.exports = function (O, C, index, value) {
   var len = lengthOfArrayLike(O);
   var relativeIndex = toIntegerOrInfinity(index);
   var actualIndex = relativeIndex < 0 ? len + relativeIndex : relativeIndex;
-  if (actualIndex >= len || actualIndex < 0) throw $RangeError('Incorrect index');
+  if (actualIndex >= len || actualIndex < 0) throw new $RangeError('Incorrect index');
   var A = new C(len);
   var k = 0;
   for (; k < len; k++) A[k] = k === actualIndex ? value : O[k];
@@ -1560,7 +1561,7 @@ var uncurryThis = __webpack_require__(1702);
 var $Error = Error;
 var replace = uncurryThis(''.replace);
 
-var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
 // eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
@@ -1603,7 +1604,7 @@ var fails = __webpack_require__(7293);
 var createPropertyDescriptor = __webpack_require__(9114);
 
 module.exports = !fails(function () {
-  var error = Error('a');
+  var error = new Error('a');
   if (!('stack' in error)) return true;
   // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
@@ -1976,7 +1977,7 @@ var $TypeError = TypeError;
 module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
   if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
-  throw $TypeError(tryToString(argument) + ' is not iterable');
+  throw new $TypeError(tryToString(argument) + ' is not iterable');
 };
 
 
@@ -2147,13 +2148,10 @@ module.exports = !DESCRIPTORS && !fails(function () {
 /***/ }),
 
 /***/ 1179:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
 
 // IEEE754 conversions based on https://github.com/feross/ieee754
-var sign = __webpack_require__(4310);
-var trunc = __webpack_require__(4758);
-
 var $Array = Array;
 var abs = Math.abs;
 var pow = Math.pow;
@@ -2161,21 +2159,13 @@ var floor = Math.floor;
 var log = Math.log;
 var LN2 = Math.LN2;
 
-var roundToEven = function (number) {
-  var truncated = trunc(number);
-  var delta = abs(number - truncated);
-  if (delta > 0.5 || delta === 0.5 && truncated % 2 !== 0) {
-    return truncated + sign(number);
-  } return truncated;
-};
-
 var pack = function (number, mantissaLength, bytes) {
   var buffer = $Array(bytes);
   var exponentLength = bytes * 8 - mantissaLength - 1;
   var eMax = (1 << exponentLength) - 1;
   var eBias = eMax >> 1;
   var rt = mantissaLength === 23 ? pow(2, -24) - pow(2, -77) : 0;
-  var s = number < 0 || number === 0 && 1 / number < 0 ? 1 : 0;
+  var sign = number < 0 || number === 0 && 1 / number < 0 ? 1 : 0;
   var index = 0;
   var exponent, mantissa, c;
   number = abs(number);
@@ -2204,10 +2194,10 @@ var pack = function (number, mantissaLength, bytes) {
       mantissa = 0;
       exponent = eMax;
     } else if (exponent + eBias >= 1) {
-      mantissa = roundToEven((number * c - 1) * pow(2, mantissaLength));
+      mantissa = (number * c - 1) * pow(2, mantissaLength);
       exponent += eBias;
     } else {
-      mantissa = roundToEven(number * pow(2, eBias - 1) * pow(2, mantissaLength));
+      mantissa = number * pow(2, eBias - 1) * pow(2, mantissaLength);
       exponent = 0;
     }
   }
@@ -2223,7 +2213,7 @@ var pack = function (number, mantissaLength, bytes) {
     exponent /= 256;
     exponentLength -= 8;
   }
-  buffer[--index] |= s * 128;
+  buffer[--index] |= sign * 128;
   return buffer;
 };
 
@@ -2234,10 +2224,10 @@ var unpack = function (buffer, mantissaLength) {
   var eBias = eMax >> 1;
   var nBits = exponentLength - 7;
   var index = bytes - 1;
-  var s = buffer[index--];
-  var exponent = s & 127;
+  var sign = buffer[index--];
+  var exponent = sign & 127;
   var mantissa;
-  s >>= 7;
+  sign >>= 7;
   while (nBits > 0) {
     exponent = exponent * 256 + buffer[index--];
     nBits -= 8;
@@ -2252,11 +2242,11 @@ var unpack = function (buffer, mantissaLength) {
   if (exponent === 0) {
     exponent = 1 - eBias;
   } else if (exponent === eMax) {
-    return mantissa ? NaN : s ? -Infinity : Infinity;
+    return mantissa ? NaN : sign ? -Infinity : Infinity;
   } else {
     mantissa += pow(2, mantissaLength);
     exponent -= eBias;
-  } return (s ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
+  } return (sign ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
 };
 
 module.exports = {
@@ -2382,7 +2372,7 @@ var getterFor = function (TYPE) {
   return function (it) {
     var state;
     if (!isObject(it) || (state = get(it)).type !== TYPE) {
-      throw TypeError('Incompatible receiver, ' + TYPE + ' required');
+      throw new TypeError('Incompatible receiver, ' + TYPE + ' required');
     } return state;
   };
 };
@@ -2395,7 +2385,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   store.set = store.set;
   /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     store.set(it, metadata);
     return metadata;
@@ -2410,7 +2400,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
@@ -2517,7 +2507,7 @@ var empty = [];
 var construct = getBuiltIn('Reflect', 'construct');
 var constructorRegExp = /^\s*(?:class|function)\b/;
 var exec = uncurryThis(constructorRegExp.exec);
-var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
+var INCORRECT_TO_STRING = !constructorRegExp.test(noop);
 
 var isConstructorModern = function isConstructor(argument) {
   if (!isCallable(argument)) return false;
@@ -2721,7 +2711,7 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
-    if (!iterFn) throw $TypeError(tryToString(iterable) + ' is not iterable');
+    if (!iterFn) throw new $TypeError(tryToString(iterable) + ' is not iterable');
     // optimisation for array iterators
     if (isArrayIteratorMethod(iterFn)) {
       for (index = 0, length = lengthOfArrayLike(iterable); length > index; index++) {
@@ -3051,6 +3041,56 @@ Function.prototype.toString = makeBuiltIn(function toString() {
 
 /***/ }),
 
+/***/ 3731:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var sign = __webpack_require__(4310);
+
+var abs = Math.abs;
+
+var EPSILON = 2.220446049250313e-16; // Number.EPSILON
+var INVERSE_EPSILON = 1 / EPSILON;
+
+var roundTiesToEven = function (n) {
+  return n + INVERSE_EPSILON - INVERSE_EPSILON;
+};
+
+module.exports = function (x, FLOAT_EPSILON, FLOAT_MAX_VALUE, FLOAT_MIN_VALUE) {
+  var n = +x;
+  var absolute = abs(n);
+  var s = sign(n);
+  if (absolute < FLOAT_MIN_VALUE) return s * roundTiesToEven(absolute / FLOAT_MIN_VALUE / FLOAT_EPSILON) * FLOAT_MIN_VALUE * FLOAT_EPSILON;
+  var a = (1 + FLOAT_EPSILON / EPSILON) * absolute;
+  var result = a - (a - absolute);
+  // eslint-disable-next-line no-self-compare -- NaN check
+  if (result > FLOAT_MAX_VALUE || result !== result) return s * Infinity;
+  return s * result;
+};
+
+
+/***/ }),
+
+/***/ 6130:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var floatRound = __webpack_require__(3731);
+
+var FLOAT32_EPSILON = 1.1920928955078125e-7; // 2 ** -23;
+var FLOAT32_MAX_VALUE = 3.4028234663852886e+38; // 2 ** 128 - 2 ** 104
+var FLOAT32_MIN_VALUE = 1.1754943508222875e-38; // 2 ** -126;
+
+// `Math.fround` method implementation
+// https://tc39.es/ecma262/#sec-math.fround
+// eslint-disable-next-line es/no-math-fround -- safe
+module.exports = Math.fround || function fround(x) {
+  return floatRound(x, FLOAT32_EPSILON, FLOAT32_MAX_VALUE, FLOAT32_MIN_VALUE);
+};
+
+
+/***/ }),
+
 /***/ 4310:
 /***/ ((module) => {
 
@@ -3184,7 +3224,7 @@ var $TypeError = TypeError;
 var PromiseCapability = function (C) {
   var resolve, reject;
   this.promise = new C(function ($$resolve, $$reject) {
-    if (resolve !== undefined || reject !== undefined) throw $TypeError('Bad Promise constructor');
+    if (resolve !== undefined || reject !== undefined) throw new $TypeError('Bad Promise constructor');
     resolve = $$resolve;
     reject = $$reject;
   });
@@ -3376,7 +3416,7 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   if (IE8_DOM_DEFINE) try {
     return $defineProperty(O, P, Attributes);
   } catch (error) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw $TypeError('Accessors not supported');
+  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError('Accessors not supported');
   if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
@@ -3600,7 +3640,7 @@ module.exports = function (input, pref) {
   if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
   if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
-  throw $TypeError("Can't convert object to primitive value");
+  throw new $TypeError("Can't convert object to primitive value");
 };
 
 
@@ -3815,7 +3855,7 @@ module.exports = function (R, S) {
     return result;
   }
   if (classof(R) === 'RegExp') return call(regexpExec, R, S);
-  throw $TypeError('RegExp#exec called on incompatible receiver');
+  throw new $TypeError('RegExp#exec called on incompatible receiver');
 };
 
 
@@ -4040,7 +4080,7 @@ var $RegExp = global.RegExp;
 
 module.exports = fails(function () {
   var re = $RegExp('.', 's');
-  return !(re.dotAll && re.exec('\n') && re.flags === 's');
+  return !(re.dotAll && re.test('\n') && re.flags === 's');
 });
 
 
@@ -4076,7 +4116,7 @@ var $TypeError = TypeError;
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
-  if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
+  if (isNullOrUndefined(it)) throw new $TypeError("Can't call method on " + it);
   return it;
 };
 
@@ -4169,10 +4209,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.2',
+  version: '3.33.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.2/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.33.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4488,7 +4528,7 @@ var $TypeError = TypeError;
 // https://tc39.es/ecma262/#sec-tobigint
 module.exports = function (argument) {
   var prim = toPrimitive(argument, 'number');
-  if (typeof prim == 'number') throw $TypeError("Can't convert number to bigint");
+  if (typeof prim == 'number') throw new $TypeError("Can't convert number to bigint");
   // eslint-disable-next-line es/no-bigint -- safe
   return BigInt(prim);
 };
@@ -4511,7 +4551,7 @@ module.exports = function (it) {
   if (it === undefined) return 0;
   var number = toIntegerOrInfinity(it);
   var length = toLength(number);
-  if (number !== length) throw $RangeError('Wrong length or index');
+  if (number !== length) throw new $RangeError('Wrong length or index');
   return length;
 };
 
@@ -4594,7 +4634,7 @@ var $RangeError = RangeError;
 
 module.exports = function (it, BYTES) {
   var offset = toPositiveInteger(it);
-  if (offset % BYTES) throw $RangeError('Wrong offset');
+  if (offset % BYTES) throw new $RangeError('Wrong offset');
   return offset;
 };
 
@@ -4611,7 +4651,7 @@ var $RangeError = RangeError;
 
 module.exports = function (it) {
   var result = toIntegerOrInfinity(it);
-  if (result < 0) throw $RangeError("The argument can't be less than 0");
+  if (result < 0) throw new $RangeError("The argument can't be less than 0");
   return result;
 };
 
@@ -4642,7 +4682,7 @@ module.exports = function (input, pref) {
     if (pref === undefined) pref = 'default';
     result = call(exoticToPrim, input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
-    throw $TypeError("Can't convert object to primitive value");
+    throw new $TypeError("Can't convert object to primitive value");
   }
   if (pref === undefined) pref = 'number';
   return ordinaryToPrimitive(input, pref);
@@ -4693,7 +4733,7 @@ var classof = __webpack_require__(648);
 var $String = String;
 
 module.exports = function (argument) {
-  if (classof(argument) === 'Symbol') throw TypeError('Cannot convert a Symbol value to a string');
+  if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
   return $String(argument);
 };
 
@@ -4903,12 +4943,12 @@ if (DESCRIPTORS) {
           byteOffset = toOffset(offset, BYTES);
           var $len = data.byteLength;
           if ($length === undefined) {
-            if ($len % BYTES) throw RangeError(WRONG_LENGTH);
+            if ($len % BYTES) throw new RangeError(WRONG_LENGTH);
             byteLength = $len - byteOffset;
-            if (byteLength < 0) throw RangeError(WRONG_LENGTH);
+            if (byteLength < 0) throw new RangeError(WRONG_LENGTH);
           } else {
             byteLength = toLength($length) * BYTES;
-            if (byteLength + byteOffset > $len) throw RangeError(WRONG_LENGTH);
+            if (byteLength + byteOffset > $len) throw new RangeError(WRONG_LENGTH);
           }
           length = byteLength / BYTES;
         } else if (isTypedArray(data)) {
@@ -5169,7 +5209,7 @@ module.exports = DESCRIPTORS && fails(function () {
 var $TypeError = TypeError;
 
 module.exports = function (passed, required) {
-  if (passed < required) throw $TypeError('Not enough arguments');
+  if (passed < required) throw new $TypeError('Not enough arguments');
   return passed;
 };
 
@@ -5502,7 +5542,8 @@ var wrapErrorConstructorWithCause = __webpack_require__(9191);
 var WEB_ASSEMBLY = 'WebAssembly';
 var WebAssembly = global[WEB_ASSEMBLY];
 
-var FORCED = Error('e', { cause: 7 }).cause !== 7;
+// eslint-disable-next-line es/no-error-cause -- feature detection
+var FORCED = new Error('e', { cause: 7 }).cause !== 7;
 
 var exportGlobalErrorCauseWrapper = function (ERROR_NAME, wrapper) {
   var O = {};
@@ -5732,7 +5773,7 @@ var callReaction = function (reaction, state) {
         }
       }
       if (result === reaction.promise) {
-        reject(TypeError('Promise-chain cycle'));
+        reject(new TypeError('Promise-chain cycle'));
       } else if (then = isThenable(result)) {
         call(then, result, resolve, reject);
       } else resolve(result);
@@ -5822,7 +5863,7 @@ var internalResolve = function (state, value, unwrap) {
   state.done = true;
   if (unwrap) state = unwrap;
   try {
-    if (state.facade === value) throw TypeError("Promise can't be resolved itself");
+    if (state.facade === value) throw new TypeError("Promise can't be resolved itself");
     var then = isThenable(value);
     if (then) {
       microtask(function () {
@@ -6505,7 +6546,7 @@ exportTypedArrayMethod('set', function set(arrayLike /* , offset */) {
   var length = this.length;
   var len = lengthOfArrayLike(src);
   var index = 0;
-  if (len + offset > length) throw RangeError('Wrong length');
+  if (len + offset > length) throw new RangeError('Wrong length');
   while (index < len) this[offset + index] = src[index++];
 }, !WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS || TO_OBJECT_BUG);
 
@@ -6756,7 +6797,7 @@ try {
           return global;
         },
         set: function self(value) {
-          if (this !== global) throw $TypeError('Illegal invocation');
+          if (this !== global) throw new $TypeError('Illegal invocation');
           defineProperty(global, 'self', {
             value: value,
             writable: true,
@@ -6937,7 +6978,7 @@ URLSearchParamsState.prototype = {
           (first = call(entryNext, entryIterator)).done ||
           (second = call(entryNext, entryIterator)).done ||
           !call(entryNext, entryIterator).done
-        ) throw TypeError('Expected sequence with length 2');
+        ) throw new TypeError('Expected sequence with length 2');
         push(this.entries, { key: $toString(first.value), value: $toString(second.value) });
       }
     } else for (var key in object) if (hasOwn(object, key)) {

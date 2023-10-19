@@ -14,7 +14,7 @@ var $TypeError = TypeError;
 // `Assert: IsCallable(argument) is true`
 module.exports = function (argument) {
   if (isCallable(argument)) return argument;
-  throw $TypeError(tryToString(argument) + ' is not a function');
+  throw new $TypeError(tryToString(argument) + ' is not a function');
 };
 
 
@@ -32,7 +32,7 @@ var $TypeError = TypeError;
 // `Assert: IsConstructor(argument) is true`
 module.exports = function (argument) {
   if (isConstructor(argument)) return argument;
-  throw $TypeError(tryToString(argument) + ' is not a constructor');
+  throw new $TypeError(tryToString(argument) + ' is not a constructor');
 };
 
 
@@ -49,7 +49,7 @@ var $TypeError = TypeError;
 
 module.exports = function (argument) {
   if (typeof argument == 'object' || isCallable(argument)) return argument;
-  throw $TypeError("Can't set " + $String(argument) + ' as a prototype');
+  throw new $TypeError("Can't set " + $String(argument) + ' as a prototype');
 };
 
 
@@ -93,7 +93,7 @@ var $TypeError = TypeError;
 
 module.exports = function (it, Prototype) {
   if (isPrototypeOf(Prototype, it)) return it;
-  throw $TypeError('Incorrect invocation');
+  throw new $TypeError('Incorrect invocation');
 };
 
 
@@ -111,7 +111,7 @@ var $TypeError = TypeError;
 // `Assert: Type(argument) is Object`
 module.exports = function (argument) {
   if (isObject(argument)) return argument;
-  throw $TypeError($String(argument) + ' is not an object');
+  throw new $TypeError($String(argument) + ' is not an object');
 };
 
 
@@ -182,7 +182,7 @@ var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function () {
 
 module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
   if (isArray(O) && !getOwnPropertyDescriptor(O, 'length').writable) {
-    throw $TypeError('Cannot set read only .length');
+    throw new $TypeError('Cannot set read only .length');
   } return O.length = length;
 } : function (O, length) {
   return O.length = length;
@@ -668,7 +668,7 @@ var uncurryThis = __webpack_require__(1702);
 var $Error = Error;
 var replace = uncurryThis(''.replace);
 
-var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
 // eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
@@ -711,7 +711,7 @@ var fails = __webpack_require__(7293);
 var createPropertyDescriptor = __webpack_require__(9114);
 
 module.exports = !fails(function () {
-  var error = Error('a');
+  var error = new Error('a');
   if (!('stack' in error)) return true;
   // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
@@ -1000,7 +1000,7 @@ var $TypeError = TypeError;
 module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
   if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
-  throw $TypeError(tryToString(argument) + ' is not iterable');
+  throw new $TypeError(tryToString(argument) + ' is not iterable');
 };
 
 
@@ -1232,7 +1232,7 @@ var getterFor = function (TYPE) {
   return function (it) {
     var state;
     if (!isObject(it) || (state = get(it)).type !== TYPE) {
-      throw TypeError('Incompatible receiver, ' + TYPE + ' required');
+      throw new TypeError('Incompatible receiver, ' + TYPE + ' required');
     } return state;
   };
 };
@@ -1245,7 +1245,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   store.set = store.set;
   /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     store.set(it, metadata);
     return metadata;
@@ -1260,7 +1260,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
@@ -1353,7 +1353,7 @@ var empty = [];
 var construct = getBuiltIn('Reflect', 'construct');
 var constructorRegExp = /^\s*(?:class|function)\b/;
 var exec = uncurryThis(constructorRegExp.exec);
-var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
+var INCORRECT_TO_STRING = !constructorRegExp.test(noop);
 
 var isConstructorModern = function isConstructor(argument) {
   if (!isCallable(argument)) return false;
@@ -1539,7 +1539,7 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
-    if (!iterFn) throw $TypeError(tryToString(iterable) + ' is not iterable');
+    if (!iterFn) throw new $TypeError(tryToString(iterable) + ' is not iterable');
     // optimisation for array iterators
     if (isArrayIteratorMethod(iterFn)) {
       for (index = 0, length = lengthOfArrayLike(iterable); length > index; index++) {
@@ -1986,7 +1986,7 @@ var $TypeError = TypeError;
 var PromiseCapability = function (C) {
   var resolve, reject;
   this.promise = new C(function ($$resolve, $$reject) {
-    if (resolve !== undefined || reject !== undefined) throw $TypeError('Bad Promise constructor');
+    if (resolve !== undefined || reject !== undefined) throw new $TypeError('Bad Promise constructor');
     resolve = $$resolve;
     reject = $$reject;
   });
@@ -2178,7 +2178,7 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   if (IE8_DOM_DEFINE) try {
     return $defineProperty(O, P, Attributes);
   } catch (error) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw $TypeError('Accessors not supported');
+  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError('Accessors not supported');
   if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
@@ -2402,7 +2402,7 @@ module.exports = function (input, pref) {
   if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
   if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
-  throw $TypeError("Can't convert object to primitive value");
+  throw new $TypeError("Can't convert object to primitive value");
 };
 
 
@@ -2794,7 +2794,7 @@ var $RegExp = global.RegExp;
 
 module.exports = fails(function () {
   var re = $RegExp('.', 's');
-  return !(re.dotAll && re.exec('\n') && re.flags === 's');
+  return !(re.dotAll && re.test('\n') && re.flags === 's');
 });
 
 
@@ -2830,7 +2830,7 @@ var $TypeError = TypeError;
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
-  if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
+  if (isNullOrUndefined(it)) throw new $TypeError("Can't call method on " + it);
   return it;
 };
 
@@ -2923,10 +2923,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.2',
+  version: '3.33.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.2/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.33.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3215,7 +3215,7 @@ module.exports = function (input, pref) {
     if (pref === undefined) pref = 'default';
     result = call(exoticToPrim, input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
-    throw $TypeError("Can't convert object to primitive value");
+    throw new $TypeError("Can't convert object to primitive value");
   }
   if (pref === undefined) pref = 'number';
   return ordinaryToPrimitive(input, pref);
@@ -3266,7 +3266,7 @@ var classof = __webpack_require__(648);
 var $String = String;
 
 module.exports = function (argument) {
-  if (classof(argument) === 'Symbol') throw TypeError('Cannot convert a Symbol value to a string');
+  if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
   return $String(argument);
 };
 
@@ -3348,7 +3348,7 @@ module.exports = DESCRIPTORS && fails(function () {
 var $TypeError = TypeError;
 
 module.exports = function (passed, required) {
-  if (passed < required) throw $TypeError('Not enough arguments');
+  if (passed < required) throw new $TypeError('Not enough arguments');
   return passed;
 };
 
@@ -3599,7 +3599,8 @@ var wrapErrorConstructorWithCause = __webpack_require__(9191);
 var WEB_ASSEMBLY = 'WebAssembly';
 var WebAssembly = global[WEB_ASSEMBLY];
 
-var FORCED = Error('e', { cause: 7 }).cause !== 7;
+// eslint-disable-next-line es/no-error-cause -- feature detection
+var FORCED = new Error('e', { cause: 7 }).cause !== 7;
 
 var exportGlobalErrorCauseWrapper = function (ERROR_NAME, wrapper) {
   var O = {};
@@ -3813,7 +3814,7 @@ var callReaction = function (reaction, state) {
         }
       }
       if (result === reaction.promise) {
-        reject(TypeError('Promise-chain cycle'));
+        reject(new TypeError('Promise-chain cycle'));
       } else if (then = isThenable(result)) {
         call(then, result, resolve, reject);
       } else resolve(result);
@@ -3903,7 +3904,7 @@ var internalResolve = function (state, value, unwrap) {
   state.done = true;
   if (unwrap) state = unwrap;
   try {
-    if (state.facade === value) throw TypeError("Promise can't be resolved itself");
+    if (state.facade === value) throw new TypeError("Promise can't be resolved itself");
     var then = isThenable(value);
     if (then) {
       microtask(function () {
@@ -4222,7 +4223,7 @@ try {
           return global;
         },
         set: function self(value) {
-          if (this !== global) throw $TypeError('Illegal invocation');
+          if (this !== global) throw new $TypeError('Illegal invocation');
           defineProperty(global, 'self', {
             value: value,
             writable: true,
