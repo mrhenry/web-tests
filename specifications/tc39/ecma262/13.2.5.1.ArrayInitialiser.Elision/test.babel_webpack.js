@@ -14,7 +14,7 @@ var $TypeError = TypeError;
 // `Assert: IsCallable(argument) is true`
 module.exports = function (argument) {
   if (isCallable(argument)) return argument;
-  throw $TypeError(tryToString(argument) + ' is not a function');
+  throw new $TypeError(tryToString(argument) + ' is not a function');
 };
 
 
@@ -32,7 +32,7 @@ var $TypeError = TypeError;
 // `Assert: Type(argument) is Object`
 module.exports = function (argument) {
   if (isObject(argument)) return argument;
-  throw $TypeError($String(argument) + ' is not an object');
+  throw new $TypeError($String(argument) + ' is not an object');
 };
 
 
@@ -220,7 +220,7 @@ var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function () {
 
 module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
   if (isArray(O) && !getOwnPropertyDescriptor(O, 'length').writable) {
-    throw $TypeError('Cannot set read only .length');
+    throw new $TypeError('Cannot set read only .length');
   } return O.length = length;
 } : function (O, length) {
   return O.length = length;
@@ -991,7 +991,7 @@ var getterFor = function (TYPE) {
   return function (it) {
     var state;
     if (!isObject(it) || (state = get(it)).type !== TYPE) {
-      throw TypeError('Incompatible receiver, ' + TYPE + ' required');
+      throw new TypeError('Incompatible receiver, ' + TYPE + ' required');
     } return state;
   };
 };
@@ -1004,7 +1004,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   store.set = store.set;
   /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     store.set(it, metadata);
     return metadata;
@@ -1019,7 +1019,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
@@ -1094,7 +1094,7 @@ var empty = [];
 var construct = getBuiltIn('Reflect', 'construct');
 var constructorRegExp = /^\s*(?:class|function)\b/;
 var exec = uncurryThis(constructorRegExp.exec);
-var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
+var INCORRECT_TO_STRING = !constructorRegExp.test(noop);
 
 var isConstructorModern = function isConstructor(argument) {
   if (!isCallable(argument)) return false;
@@ -1367,7 +1367,7 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   if (IE8_DOM_DEFINE) try {
     return $defineProperty(O, P, Attributes);
   } catch (error) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw $TypeError('Accessors not supported');
+  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError('Accessors not supported');
   if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
@@ -1527,7 +1527,7 @@ module.exports = function (input, pref) {
   if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
   if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
-  throw $TypeError("Can't convert object to primitive value");
+  throw new $TypeError("Can't convert object to primitive value");
 };
 
 
@@ -1566,7 +1566,7 @@ var $TypeError = TypeError;
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
-  if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
+  if (isNullOrUndefined(it)) throw new $TypeError("Can't call method on " + it);
   return it;
 };
 
@@ -1614,10 +1614,10 @@ var store = __webpack_require__(5465);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.32.2',
+  version: '3.33.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.32.2/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.33.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -1760,7 +1760,7 @@ module.exports = function (input, pref) {
     if (pref === undefined) pref = 'default';
     result = call(exoticToPrim, input, pref);
     if (!isObject(result) || isSymbol(result)) return result;
-    throw $TypeError("Can't convert object to primitive value");
+    throw new $TypeError("Can't convert object to primitive value");
   }
   if (pref === undefined) pref = 'number';
   return ordinaryToPrimitive(input, pref);
