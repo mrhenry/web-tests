@@ -4,7 +4,7 @@
     "org": "w3c",
     "id": "css-color-4",
     "section": "7",
-    "name": "Mixed Components",
+    "name": "Mixed Components (hsl)",
     "url": "https://www.w3.org/TR/css-color-4/#the-hsl-notation"
   },
   "notes": [],

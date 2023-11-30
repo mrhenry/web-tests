@@ -4,7 +4,7 @@
     "org": "w3c",
     "id": "css-color-4",
     "section": "8",
-    "name": "Mixed Components",
+    "name": "Mixed Components (hwb)",
     "url": "https://www.w3.org/TR/css-color-4/#the-hwb-notation"
   },
   "notes": [],

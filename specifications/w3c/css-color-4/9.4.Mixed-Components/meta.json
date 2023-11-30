@@ -4,7 +4,7 @@
     "org": "w3c",
     "id": "css-color-4",
     "section": "9.4",
-    "name": "Mixed Components",
+    "name": "Mixed Components (oklab|oklch)",
     "url": "https://www.w3.org/TR/css-color-4/#specifying-oklab-oklch"
   },
   "notes": [],
