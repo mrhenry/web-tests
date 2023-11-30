@@ -1,0 +1,25 @@
+{
+  "id": "8186ed4a-060e-477a-a25c-f3c01a90d608",
+  "spec": {
+    "org": "w3c",
+    "id": "css-color-4",
+    "section": "5.1",
+    "name": "Mixed Components",
+    "url": "https://www.w3.org/TR/css-color-4/#rgb-functions"
+  },
+  "notes": [],
+  "search_terms": [],
+  "tests": {
+    "postcss-preset-env": {
+      "inline_css": "test.postcss-preset-env.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    },
+    "pure": {
+      "inline_css": "test.pure.css",
+      "inline_html": "test.pure.html",
+      "inline_script": "test.pure.js"
+    }
+  },
+  "polyfill.io": []
+}

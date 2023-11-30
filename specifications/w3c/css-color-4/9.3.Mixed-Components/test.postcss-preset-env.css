@@ -1,0 +1,19 @@
+.foo {
+	color: rgb(0, 127, 0);
+}
+
+@media (color-gamut: p3) {
+.foo {
+	color: color(display-p3 0.21315 0.49133 0.12895);
+}
+}
+
+.bar {
+	color: rgb(0, 127, 0);
+}
+
+@media (color-gamut: p3) {
+.bar {
+	color: color(display-p3 0.21312 0.49134 0.12892);
+}
+}
