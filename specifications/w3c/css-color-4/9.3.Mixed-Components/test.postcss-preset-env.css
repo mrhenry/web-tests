@@ -1,19 +1,15 @@
 .foo {
-	color: rgb(0, 127, 0);
-}
-
-@media (color-gamut: p3) {
-.foo {
-	color: color(display-p3 0.21315 0.49133 0.12895);
-}
+	color: rgb(69, 121, 58);
+	color: lch(46% 40 134.38);
 }
 
 .bar {
-	color: rgb(0, 127, 0);
+	color: rgb(48, 125, 0);
+	color: color(display-p3 0.26918 0.48311 0.1215);
 }
 
 @media (color-gamut: p3) {
 .bar {
-	color: color(display-p3 0.21312 0.49134 0.12892);
+	color: lab(46% -40 40%);
 }
 }

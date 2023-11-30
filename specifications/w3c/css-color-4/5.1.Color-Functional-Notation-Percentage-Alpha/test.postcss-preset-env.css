@@ -1,3 +1,4 @@
 .foo {
 	color: rgba(0, 128, 0, 1);
+	color: rgba(0, 128, 0, 100%);
 }

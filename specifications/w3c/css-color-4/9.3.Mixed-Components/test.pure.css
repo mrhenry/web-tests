@@ -1,7 +1,7 @@
 .foo {
-	color: lch(46% 67.98 134.38);
+	color: lch(46% 40 134.38);
 }
 
 .bar {
-	color: lab(46% -47.55 48.59);
+	color: lab(46% -40 40%);
 }

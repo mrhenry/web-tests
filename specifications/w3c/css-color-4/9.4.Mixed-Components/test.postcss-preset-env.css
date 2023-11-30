@@ -1,19 +1,9 @@
 .foo {
-	color: rgb(47, 104, 0);
-}
-
-@media (color-gamut: p3) {
-.foo {
-	color: color(display-p3 0.22705 0.41002 0);
-}
+	color: rgb(163, 204, 138);
+	color: oklch(80% 0.1 134.38);
 }
 
 .bar {
-	color: rgb(47, 104, 0);
-}
-
-@media (color-gamut: p3) {
-.bar {
-	color: color(display-p3 0.22703 0.41002 0);
-}
+	color: rgb(142, 210, 132);
+	color: oklab(80% -0.1 20%);
 }

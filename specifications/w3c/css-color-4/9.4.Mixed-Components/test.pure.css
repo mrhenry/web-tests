@@ -1,7 +1,7 @@
 .foo {
-	color: oklch(46% 0.6798 134.38);
+	color: oklch(80% 0.1 134.38);
 }
 
 .bar {
-	color: oklab(46% -0.4755 0.4859);
+	color: oklab(80% -0.1 20%);
 }
