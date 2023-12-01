@@ -27,12 +27,15 @@ web-tests-migrate-makefile: $(wildcard web-tests-migrate-makefile/*) $(wildcard 
 web-tests-collect-ua-strings: $(wildcard web-tests-collect-ua-strings/*) $(wildcard browserstack/*) $(wildcard browserua/*) $(wildcard feature/*) $(wildcard priority/*) $(wildcard result/*) $(wildcard store/*)
 	go install ./web-tests-collect-ua-strings/...
 
+web-tests-native-support-data: $(wildcard web-tests-native-support-data/*) $(wildcard browserstack/*) $(wildcard browserua/*) $(wildcard feature/*) $(wildcard priority/*) $(wildcard result/*) $(wildcard store/*)
+	go install ./web-tests-native-support-data/...
+
 web-tests-collect-polyfillio-hashes: $(wildcard web-tests-collect-polyfillio-hashes/*) $(wildcard browserstack/*) $(wildcard browserua/*) $(wildcard feature/*) $(wildcard priority/*) $(wildcard result/*) $(wildcard store/*)
 	go install ./web-tests-collect-polyfillio-hashes/...
 
 web-tests-passes: $(wildcard web-tests-passes/*) $(wildcard browserstack/*) $(wildcard browserua/*) $(wildcard feature/*) $(wildcard priority/*) $(wildcard result/*) $(wildcard store/*)
 	go install ./web-tests-passes/...
 
-all: web-tests-browserstack web-tests-browserstack-single web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes
+all: web-tests-browserstack web-tests-browserstack-single web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes web-tests-native-support-data
 
-.PHONY: all web-tests-browserstack web-tests-browserstack-single web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes
+.PHONY: all web-tests-browserstack web-tests-browserstack-single web-tests-build-mapping web-tests-build-test web-tests-new-test web-tests-pages web-tests-migrate-meta web-tests-migrate-makefile web-tests-collect-ua-strings web-tests-collect-polyfillio-hashes web-tests-passes web-tests-native-support-data
