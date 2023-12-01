@@ -105,6 +105,10 @@ func (x *Client) ReducedBrowsers(ctx context.Context) ([]Browser, error) {
 			continue // android can't be tested with Browserstack
 		}
 
+		if strings.Contains(strings.ToLower(b.Browser), "opera") {
+			continue // seems to be broken in browserstack
+		}
+
 		if b.Browser == "edge" {
 			parts := strings.Split(b.BrowserVersion, ".")
 			if len(parts) > 0 {

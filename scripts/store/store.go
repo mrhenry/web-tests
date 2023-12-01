@@ -762,6 +762,72 @@ UA_LOOP:
 	return out, nil
 }
 
+//go:embed select_browsers_by_search.sql
+var selectBrowsersBySearchQuery string
+
+func SelectBrowsersBySearch(ctx context.Context, db *sql.DB, allBrowsers []browserstack.Browser, search string) ([]browserstack.Browser, error) {
+	rows, err := db.QueryContext(
+		ctx,
+		selectBrowsersBySearchQuery,
+		search,
+		search,
+	)
+	if err == sql.ErrNoRows {
+		return allBrowsers, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	uas := []browserua.UserAgent{}
+	for rows.Next() {
+		ua := browserua.UserAgent{}
+		err = rows.Scan(&ua.BrowserVersion, &ua.Browser, &ua.OSVersion, &ua.OS)
+		if err != nil {
+			log.Printf("Error %s when scanning all user agents by priority", err)
+			return nil, err
+		}
+
+		uas = append(uas, ua)
+	}
+
+	if rows.Err() != nil {
+		log.Printf("Error %s when scanning all user agents by priority", err)
+		return nil, err
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(uas), func(i, j int) {
+		uas[i], uas[j] = uas[j], uas[i]
+	})
+
+	out := []browserstack.Browser{}
+
+UA_LOOP:
+	for _, ua := range uas {
+		ua := ua
+		for _, browser := range allBrowsers {
+			if ua.OS == browser.OS && ua.OS != "" && ua.OSVersion != "" && ua.OS == "ios" {
+				if strings.Split(ua.OSVersion, ".")[0] == strings.Split(browser.OSVersion, ".")[0] {
+					browser.RealBrowser = &ua
+					out = append(out, browser)
+					continue UA_LOOP
+				}
+			}
+
+			if ua.Browser == browser.Browser && ua.Browser != "" && ua.BrowserVersion != "" && ua.OS != "ios" && browser.OS != "ios" {
+				if strings.Split(ua.BrowserVersion, ".")[0] == strings.Split(browser.BrowserVersion, ".")[0] {
+					browser.RealBrowser = &ua
+					out = append(out, browser)
+					continue UA_LOOP
+				}
+			}
+		}
+	}
+
+	return out, nil
+}
+
 //go:embed select_results_for_ua_and_polyfill_list.sql
 var selectResultsForUAAndPolyfillListQuery string
 

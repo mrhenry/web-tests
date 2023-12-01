@@ -154,21 +154,17 @@ func run(processCtx context.Context, runnerCtx context.Context, db *sql.DB, chun
 		return
 	}
 
-	browsers, err := store.SelectBrowsersByPriority(ctx, db, allBrowsers)
-	if err != nil {
-		panic(err)
-	}
+	var browsers []browserstack.Browser
 
-	if browserFilter != "" {
-		filteredBrowsers := []browserstack.Browser{}
-		for _, b := range browsers {
-			if strings.Contains(strings.ToLower(b.ResultKey()), strings.ToLower(browserFilter)) {
-				filteredBrowsers = append(filteredBrowsers, b)
-			}
+	if browserFilter == "" {
+		browsers, err = store.SelectBrowsersByPriority(ctx, db, allBrowsers)
+		if err != nil {
+			panic(err)
 		}
-
-		if len(filteredBrowsers) > 0 {
-			browsers = filteredBrowsers
+	} else {
+		browsers, err = store.SelectBrowsersBySearch(ctx, db, allBrowsers, browserFilter)
+		if err != nil {
+			panic(err)
 		}
 	}
 
@@ -287,7 +283,7 @@ func runTest(parentCtx context.Context, db *sql.DB, client *browserstack.Client,
 			w3cCompatible = true
 		}
 	} else if browser.Browser == "safari" {
-		if browserVersion != nil && browserVersion.Segments()[0] > 11 {
+		if browserVersion != nil && browserVersion.Segments()[0] > 10 {
 			w3cCompatible = true
 		}
 	} else if browser.Browser == "edge" {
