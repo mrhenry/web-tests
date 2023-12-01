@@ -1,14 +1,18 @@
 package browserstack
 
 import (
+	"archive/zip"
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -48,14 +52,21 @@ func downloadLocalBinary(parentCtx context.Context, localBinPath string, platfor
 	ctx, cancel := context.WithTimeout(parentCtx, time.Second*120)
 	defer cancel()
 
-	ext := ""
-	if platform == "windows" {
-		ext = ".exe"
-	} else {
-		ext = fmt.Sprintf("-%s-%s", platform, arch)
+	if platform == "darwin" {
+		arch = "x64"
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("https://s3.amazonaws.com/browserStack/browserstack-local/BrowserStackLocal%s", ext), nil)
+	ext := ""
+	if platform == "windows" {
+		ext = "win32.zip"
+	} else {
+		ext = fmt.Sprintf("-%s-%s.zip", platform, arch)
+	}
+
+	url := fmt.Sprintf("https://www.browserstack.com/browserstack-local/BrowserStackLocal%s", ext)
+
+	log.Printf("Downloading BrowserStackLocal from %s\n", url)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
@@ -71,29 +82,53 @@ func downloadLocalBinary(parentCtx context.Context, localBinPath string, platfor
 		return errors.New(http.StatusText(resp.StatusCode))
 	}
 
-	f, err := os.Create(localBinPath)
+	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
-	defer f.Close()
-
-	_, err = io.Copy(f, resp.Body)
+	r, err := zip.NewReader(bytes.NewReader(b), int64(len(b)))
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
-	err = f.Close()
-	if err != nil {
-		return err
+	for _, f := range r.File {
+		if !strings.HasPrefix(f.Name, "BrowserStackLocal") {
+			continue
+		}
+
+		rc, err := f.Open()
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rc.Close()
+
+		bf, err := os.Create(localBinPath)
+		if err != nil {
+			return err
+		}
+
+		defer bf.Close()
+
+		_, err = io.Copy(bf, rc)
+		if err != nil {
+			return err
+		}
+
+		err = bf.Close()
+		if err != nil {
+			return err
+		}
+
+		err = os.Chmod(localBinPath, 0700)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
 
-	err = os.Chmod(localBinPath, 0700)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return errors.New("no binary found")
 }
 
 func fileExists(filename string) bool {
