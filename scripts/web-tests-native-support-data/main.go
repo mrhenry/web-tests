@@ -20,10 +20,11 @@ func main() {
 
 	flag.Parse()
 
-	db, err := store.NewSqliteDatabase("./web-tests.db", false)
+	db, err := store.NewSqliteDatabase("./web-tests.db", true)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer store.CloseDB(db)
 
 	featureInMapping := feature.FeatureInMapping{}
 	featureInMapping.ID = featureArg

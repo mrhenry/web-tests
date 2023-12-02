@@ -589,6 +589,22 @@ func InsertUserAgent(ctx context.Context, db *sql.DB, x browserua.UserAgent) err
 	return nil
 }
 
+//go:embed reset_result_priority.sql
+var resetResultPriorityQuery string
+
+func ResetResultPriority(ctx context.Context, db *sql.DB) error {
+	_, err := db.ExecContext(
+		ctx,
+		resetResultPriorityQuery,
+	)
+	if err != nil {
+		log.Printf("Error %s when resetting all result priorities", err)
+		return err
+	}
+
+	return nil
+}
+
 //go:embed select_all_user-agents.sql
 var selectAllUserAgentsQuery string
 
