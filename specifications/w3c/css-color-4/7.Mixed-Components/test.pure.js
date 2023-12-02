@@ -8,5 +8,11 @@
 		return;
 	}
 
+	style = window.getComputedStyle(document.querySelector('.bar'));
+	if (style.color !== green) {
+		cb(false);
+		return;
+	}
+
 	cb(true);
 })(callback);

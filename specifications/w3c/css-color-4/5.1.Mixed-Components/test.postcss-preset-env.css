@@ -1,4 +1,9 @@
 .foo {
 	color: rgb(0, 128, 0);
-	color: rgb(0 128 0%);
+	color: rgb(0 50.2% 0%);
+}
+
+.bar {
+	color: rgba(0, 128, 0, 1);
+	color: rgb(0 128 0% / 1);
 }

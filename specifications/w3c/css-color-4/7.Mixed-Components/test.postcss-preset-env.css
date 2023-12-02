@@ -2,3 +2,8 @@
 	color: hsl(120, 100, 25.1%);
 	color: hsl(120deg 100 25.1%);
 }
+
+.bar {
+	color: hsla(120, 100, 25.1%, 1);
+	color: hsl(120deg 100 25.1% / 1);
+}
