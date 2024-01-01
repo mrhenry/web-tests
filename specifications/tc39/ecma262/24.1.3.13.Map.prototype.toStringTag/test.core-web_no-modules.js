@@ -24,13 +24,13 @@ module.exports = function (argument) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-var isCallable = __webpack_require__(9985);
+var isPossiblePrototype = __webpack_require__(598);
 
 var $String = String;
 var $TypeError = TypeError;
 
 module.exports = function (argument) {
-  if (typeof argument == 'object' || isCallable(argument)) return argument;
+  if (isPossiblePrototype(argument)) return argument;
   throw new $TypeError("Can't set " + $String(argument) + ' as a prototype');
 };
 
@@ -233,31 +233,6 @@ module.exports = {
   // `Array.prototype.filterReject` method
   // https://github.com/tc39/proposal-array-filtering
   filterReject: createMethod(7)
-};
-
-
-/***/ }),
-
-/***/ 9015:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var toAbsoluteIndex = __webpack_require__(7578);
-var lengthOfArrayLike = __webpack_require__(6310);
-var createProperty = __webpack_require__(6522);
-
-var $Array = Array;
-var max = Math.max;
-
-module.exports = function (O, start, end) {
-  var length = lengthOfArrayLike(O);
-  var k = toAbsoluteIndex(start, length);
-  var fin = toAbsoluteIndex(end === undefined ? length : end, length);
-  var result = $Array(max(fin - k, 0));
-  var n = 0;
-  for (; k < fin; k++, n++) createProperty(result, n, O[k]);
-  result.length = n;
-  return result;
 };
 
 
@@ -505,15 +480,14 @@ module.exports = {
       clear: function clear() {
         var that = this;
         var state = getInternalState(that);
-        var data = state.index;
         var entry = state.first;
         while (entry) {
           entry.removed = true;
           if (entry.previous) entry.previous = entry.previous.next = undefined;
-          delete data[entry.index];
           entry = entry.next;
         }
         state.first = state.last = undefined;
+        state.index = create(null);
         if (DESCRIPTORS) state.size = 0;
         else that.size = 0;
       },
@@ -834,23 +808,6 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
-/***/ 6522:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var toPropertyKey = __webpack_require__(8360);
-var definePropertyModule = __webpack_require__(2560);
-var createPropertyDescriptor = __webpack_require__(5684);
-
-module.exports = function (object, key, value) {
-  var propertyKey = toPropertyKey(key);
-  if (propertyKey in object) definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));
-  else object[propertyKey] = value;
-};
-
-
-/***/ }),
-
 /***/ 2148:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -947,24 +904,6 @@ module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 });
-
-
-/***/ }),
-
-/***/ 2659:
-/***/ (function(module) {
-
-
-var documentAll = typeof document == 'object' && document.all;
-
-// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
-// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
-var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
-
-module.exports = {
-  all: documentAll,
-  IS_HTMLDDA: IS_HTMLDDA
-};
 
 
 /***/ }),
@@ -1764,16 +1703,16 @@ module.exports = Array.isArray || function isArray(argument) {
 /***/ }),
 
 /***/ 9985:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ (function(module) {
 
 
-var $documentAll = __webpack_require__(2659);
-
-var documentAll = $documentAll.all;
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+var documentAll = typeof document == 'object' && document.all;
 
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
-module.exports = $documentAll.IS_HTMLDDA ? function (argument) {
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
+module.exports = typeof documentAll == 'undefined' && documentAll !== undefined ? function (argument) {
   return typeof argument == 'function' || argument === documentAll;
 } : function (argument) {
   return typeof argument == 'function';
@@ -1890,14 +1829,22 @@ module.exports = function (it) {
 
 
 var isCallable = __webpack_require__(9985);
-var $documentAll = __webpack_require__(2659);
 
-var documentAll = $documentAll.all;
-
-module.exports = $documentAll.IS_HTMLDDA ? function (it) {
-  return typeof it == 'object' ? it !== null : isCallable(it) || it === documentAll;
-} : function (it) {
+module.exports = function (it) {
   return typeof it == 'object' ? it !== null : isCallable(it);
+};
+
+
+/***/ }),
+
+/***/ 598:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var isObject = __webpack_require__(8999);
+
+module.exports = function (argument) {
+  return isObject(argument) || argument === null;
 };
 
 
@@ -2540,7 +2487,7 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 var classof = __webpack_require__(6648);
 var toIndexedObject = __webpack_require__(5290);
 var $getOwnPropertyNames = (__webpack_require__(2741).f);
-var arraySlice = __webpack_require__(9015);
+var arraySlice = __webpack_require__(6004);
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
   ? Object.getOwnPropertyNames(window) : [];
@@ -2932,10 +2879,10 @@ var store = __webpack_require__(4091);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.34.0',
+  version: '3.35.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.34.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.35.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3766,7 +3713,7 @@ var $defineProperty = function defineProperty(O, P, Attributes) {
   anObject(Attributes);
   if (hasOwn(AllSymbols, key)) {
     if (!Attributes.enumerable) {
-      if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, {}));
+      if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, nativeObjectCreate(null)));
       O[HIDDEN][key] = true;
     } else {
       if (hasOwn(O, HIDDEN) && O[HIDDEN][key]) O[HIDDEN][key] = false;
