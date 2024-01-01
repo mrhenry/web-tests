@@ -42,13 +42,13 @@ module.exports = function (argument) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-var isCallable = __webpack_require__(9985);
+var isPossiblePrototype = __webpack_require__(598);
 
 var $String = String;
 var $TypeError = TypeError;
 
 module.exports = function (argument) {
-  if (typeof argument == 'object' || isCallable(argument)) return argument;
+  if (isPossiblePrototype(argument)) return argument;
   throw new $TypeError("Can't set " + $String(argument) + ' as a prototype');
 };
 
@@ -363,9 +363,10 @@ var fround = __webpack_require__(7788);
 var IEEE754 = __webpack_require__(5477);
 var getPrototypeOf = __webpack_require__(1868);
 var setPrototypeOf = __webpack_require__(9385);
-var getOwnPropertyNames = (__webpack_require__(2741).f);
 var arrayFill = __webpack_require__(2872);
-var arraySlice = __webpack_require__(9015);
+var arraySlice = __webpack_require__(6004);
+var inheritIfRequired = __webpack_require__(3457);
+var copyConstructorProperties = __webpack_require__(8758);
 var setToStringTag = __webpack_require__(5997);
 var InternalStateModule = __webpack_require__(618);
 
@@ -565,18 +566,14 @@ if (!NATIVE_ARRAY_BUFFER) {
     /* eslint-enable no-new -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, ArrayBufferPrototype);
-      return new NativeArrayBuffer(toIndex(length));
+      return inheritIfRequired(new NativeArrayBuffer(toIndex(length)), this, $ArrayBuffer);
     };
 
     $ArrayBuffer[PROTOTYPE] = ArrayBufferPrototype;
 
-    for (var keys = getOwnPropertyNames(NativeArrayBuffer), j = 0, key; keys.length > j;) {
-      if (!((key = keys[j++]) in $ArrayBuffer)) {
-        createNonEnumerableProperty($ArrayBuffer, key, NativeArrayBuffer[key]);
-      }
-    }
-
     ArrayBufferPrototype.constructor = $ArrayBuffer;
+
+    copyConstructorProperties($ArrayBuffer, NativeArrayBuffer);
   } else if (INCORRECT_ARRAY_BUFFER_NAME && CONFIGURABLE_FUNCTION_NAME) {
     createNonEnumerableProperty(NativeArrayBuffer, 'name', ARRAY_BUFFER);
   }
@@ -1035,31 +1032,6 @@ module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
 
 /***/ }),
 
-/***/ 9015:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var toAbsoluteIndex = __webpack_require__(7578);
-var lengthOfArrayLike = __webpack_require__(6310);
-var createProperty = __webpack_require__(6522);
-
-var $Array = Array;
-var max = Math.max;
-
-module.exports = function (O, start, end) {
-  var length = lengthOfArrayLike(O);
-  var k = toAbsoluteIndex(start, length);
-  var fin = toAbsoluteIndex(end === undefined ? length : end, length);
-  var result = $Array(max(fin - k, 0));
-  var n = 0;
-  for (; k < fin; k++, n++) createProperty(result, n, O[k]);
-  result.length = n;
-  return result;
-};
-
-
-/***/ }),
-
 /***/ 6004:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1075,50 +1047,47 @@ module.exports = uncurryThis([].slice);
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-var arraySlice = __webpack_require__(9015);
+var arraySlice = __webpack_require__(6004);
 
 var floor = Math.floor;
 
-var mergeSort = function (array, comparefn) {
+var sort = function (array, comparefn) {
   var length = array.length;
-  var middle = floor(length / 2);
-  return length < 8 ? insertionSort(array, comparefn) : merge(
-    array,
-    mergeSort(arraySlice(array, 0, middle), comparefn),
-    mergeSort(arraySlice(array, middle), comparefn),
-    comparefn
-  );
-};
 
-var insertionSort = function (array, comparefn) {
-  var length = array.length;
-  var i = 1;
-  var element, j;
+  if (length < 8) {
+    // insertion sort
+    var i = 1;
+    var element, j;
 
-  while (i < length) {
-    j = i;
-    element = array[i];
-    while (j && comparefn(array[j - 1], element) > 0) {
-      array[j] = array[--j];
+    while (i < length) {
+      j = i;
+      element = array[i];
+      while (j && comparefn(array[j - 1], element) > 0) {
+        array[j] = array[--j];
+      }
+      if (j !== i++) array[j] = element;
     }
-    if (j !== i++) array[j] = element;
-  } return array;
+  } else {
+    // merge sort
+    var middle = floor(length / 2);
+    var left = sort(arraySlice(array, 0, middle), comparefn);
+    var right = sort(arraySlice(array, middle), comparefn);
+    var llength = left.length;
+    var rlength = right.length;
+    var lindex = 0;
+    var rindex = 0;
+
+    while (lindex < llength || rindex < rlength) {
+      array[lindex + rindex] = (lindex < llength && rindex < rlength)
+        ? comparefn(left[lindex], right[rindex]) <= 0 ? left[lindex++] : right[rindex++]
+        : lindex < llength ? left[lindex++] : right[rindex++];
+    }
+  }
+
+  return array;
 };
 
-var merge = function (array, left, right, comparefn) {
-  var llength = left.length;
-  var rlength = right.length;
-  var lindex = 0;
-  var rindex = 0;
-
-  while (lindex < llength || rindex < rlength) {
-    array[lindex + rindex] = (lindex < llength && rindex < rlength)
-      ? comparefn(left[lindex], right[rindex]) <= 0 ? left[lindex++] : right[rindex++]
-      : lindex < llength ? left[lindex++] : right[rindex++];
-  } return array;
-};
-
-module.exports = mergeSort;
+module.exports = sort;
 
 
 /***/ }),
@@ -1528,24 +1497,6 @@ module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 });
-
-
-/***/ }),
-
-/***/ 2659:
-/***/ (function(module) {
-
-
-var documentAll = typeof document == 'object' && document.all;
-
-// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
-// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
-var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
-
-module.exports = {
-  all: documentAll,
-  IS_HTMLDDA: IS_HTMLDDA
-};
 
 
 /***/ }),
@@ -2757,16 +2708,16 @@ module.exports = function (it) {
 /***/ }),
 
 /***/ 9985:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ (function(module) {
 
 
-var $documentAll = __webpack_require__(2659);
-
-var documentAll = $documentAll.all;
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+var documentAll = typeof document == 'object' && document.all;
 
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
-module.exports = $documentAll.IS_HTMLDDA ? function (argument) {
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
+module.exports = typeof documentAll == 'undefined' && documentAll !== undefined ? function (argument) {
   return typeof argument == 'function' || argument === documentAll;
 } : function (argument) {
   return typeof argument == 'function';
@@ -2901,14 +2852,22 @@ module.exports = function (it) {
 
 
 var isCallable = __webpack_require__(9985);
-var $documentAll = __webpack_require__(2659);
 
-var documentAll = $documentAll.all;
-
-module.exports = $documentAll.IS_HTMLDDA ? function (it) {
-  return typeof it == 'object' ? it !== null : isCallable(it) || it === documentAll;
-} : function (it) {
+module.exports = function (it) {
   return typeof it == 'object' ? it !== null : isCallable(it);
+};
+
+
+/***/ }),
+
+/***/ 598:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var isObject = __webpack_require__(8999);
+
+module.exports = function (argument) {
+  return isObject(argument) || argument === null;
 };
 
 
@@ -3414,8 +3373,8 @@ module.exports = Math.trunc || function trunc(x) {
 
 
 var global = __webpack_require__(9037);
+var safeGetBuiltIn = __webpack_require__(517);
 var bind = __webpack_require__(4071);
-var getOwnPropertyDescriptor = (__webpack_require__(2474).f);
 var macrotask = (__webpack_require__(9886).set);
 var Queue = __webpack_require__(4410);
 var IS_IOS = __webpack_require__(4764);
@@ -3427,9 +3386,7 @@ var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
 var document = global.document;
 var process = global.process;
 var Promise = global.Promise;
-// Node.js 11 shows ExperimentalWarning on getting `queueMicrotask`
-var queueMicrotaskDescriptor = getOwnPropertyDescriptor(global, 'queueMicrotask');
-var microtask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
+var microtask = safeGetBuiltIn('queueMicrotask');
 var notify, toggle, node, promise, then;
 
 // modern engines have queueMicrotask method
@@ -3746,7 +3703,7 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 var classof = __webpack_require__(6648);
 var toIndexedObject = __webpack_require__(5290);
 var $getOwnPropertyNames = (__webpack_require__(2741).f);
-var arraySlice = __webpack_require__(9015);
+var arraySlice = __webpack_require__(6004);
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
   ? Object.getOwnPropertyNames(window) : [];
@@ -4465,6 +4422,26 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ 517:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var global = __webpack_require__(9037);
+var DESCRIPTORS = __webpack_require__(7697);
+
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+
+// Avoid NodeJS experimental warning
+module.exports = function (name) {
+  if (!DESCRIPTORS) return global[name];
+  var descriptor = getOwnPropertyDescriptor(global, name);
+  return descriptor && descriptor.value;
+};
+
+
+/***/ }),
+
 /***/ 8552:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -4589,10 +4566,10 @@ var store = __webpack_require__(4091);
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.34.0',
+  version: '3.35.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.34.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.35.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -5225,6 +5202,7 @@ var setSpecies = __webpack_require__(4241);
 var defineBuiltInAccessor = __webpack_require__(2148);
 var definePropertyModule = __webpack_require__(2560);
 var getOwnPropertyDescriptorModule = __webpack_require__(2474);
+var arrayFromConstructorAndList = __webpack_require__(9976);
 var InternalStateModule = __webpack_require__(618);
 var inheritIfRequired = __webpack_require__(3457);
 
@@ -5241,19 +5219,9 @@ var NATIVE_ARRAY_BUFFER_VIEWS = ArrayBufferViewCore.NATIVE_ARRAY_BUFFER_VIEWS;
 var TYPED_ARRAY_TAG = ArrayBufferViewCore.TYPED_ARRAY_TAG;
 var TypedArray = ArrayBufferViewCore.TypedArray;
 var TypedArrayPrototype = ArrayBufferViewCore.TypedArrayPrototype;
-var aTypedArrayConstructor = ArrayBufferViewCore.aTypedArrayConstructor;
 var isTypedArray = ArrayBufferViewCore.isTypedArray;
 var BYTES_PER_ELEMENT = 'BYTES_PER_ELEMENT';
 var WRONG_LENGTH = 'Wrong length';
-
-var fromList = function (C, list) {
-  aTypedArrayConstructor(C);
-  var index = 0;
-  var length = list.length;
-  var result = new C(length);
-  while (length > index) result[index] = list[index++];
-  return result;
-};
 
 var addGetter = function (it, key) {
   defineBuiltInAccessor(it, key, {
@@ -5372,7 +5340,7 @@ if (DESCRIPTORS) {
           }
           length = byteLength / BYTES;
         } else if (isTypedArray(data)) {
-          return fromList(TypedArrayConstructor, data);
+          return arrayFromConstructorAndList(TypedArrayConstructor, data);
         } else {
           return call(typedArrayFrom, TypedArrayConstructor, data);
         }
@@ -5398,7 +5366,7 @@ if (DESCRIPTORS) {
             : typedArrayOffset !== undefined
               ? new NativeTypedArrayConstructor(data, toOffset(typedArrayOffset, BYTES))
               : new NativeTypedArrayConstructor(data);
-          if (isTypedArray(data)) return fromList(TypedArrayConstructor, data);
+          if (isTypedArray(data)) return arrayFromConstructorAndList(TypedArrayConstructor, data);
           return call(typedArrayFrom, TypedArrayConstructor, data);
         }(), dummy, TypedArrayConstructor);
       });
@@ -6106,7 +6074,7 @@ var INCORRECT_TO_LENGTH = fails(function () {
   return [].push.call({ length: 0x100000000 }, 1) !== 4294967297;
 });
 
-// V8 and Safari <= 15.4, FF < 23 throws InternalError
+// V8 <= 121 and Safari <= 15.4; FF < 23 throws InternalError
 // https://bugs.chromium.org/p/v8/issues/detail?id=12681
 var properErrorOnNonWritableLength = function () {
   try {
@@ -7010,7 +6978,6 @@ $({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION }
 
 
 var $ = __webpack_require__(9989);
-var call = __webpack_require__(2615);
 var newPromiseCapabilityModule = __webpack_require__(8742);
 var FORCED_PROMISE_CONSTRUCTOR = (__webpack_require__(7073).CONSTRUCTOR);
 
@@ -7019,7 +6986,8 @@ var FORCED_PROMISE_CONSTRUCTOR = (__webpack_require__(7073).CONSTRUCTOR);
 $({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
   reject: function reject(r) {
     var capability = newPromiseCapabilityModule.f(this);
-    call(capability.reject, undefined, r);
+    var capabilityReject = capability.reject;
+    capabilityReject(r);
     return capability.promise;
   }
 });
@@ -7132,7 +7100,7 @@ var INCORRECT_NAME = PROPER_FUNCTION_NAME && nativeToString.name !== TO_STRING;
 // `RegExp.prototype.toString` method
 // https://tc39.es/ecma262/#sec-regexp.prototype.tostring
 if (NOT_GENERIC || INCORRECT_NAME) {
-  defineBuiltIn(RegExp.prototype, TO_STRING, function toString() {
+  defineBuiltIn(RegExpPrototype, TO_STRING, function toString() {
     var R = anObject(this);
     var pattern = $toString(R.source);
     var flags = $toString(getRegExpFlags(R));
@@ -7488,7 +7456,7 @@ var $defineProperty = function defineProperty(O, P, Attributes) {
   anObject(Attributes);
   if (hasOwn(AllSymbols, key)) {
     if (!Attributes.enumerable) {
-      if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, {}));
+      if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, nativeObjectCreate(null)));
       O[HIDDEN][key] = true;
     } else {
       if (hasOwn(O, HIDDEN) && O[HIDDEN][key]) O[HIDDEN][key] = false;
@@ -8723,6 +8691,7 @@ __webpack_require__(3509);
 __webpack_require__(752);
 var $ = __webpack_require__(9989);
 var global = __webpack_require__(9037);
+var safeGetBuiltIn = __webpack_require__(517);
 var call = __webpack_require__(2615);
 var uncurryThis = __webpack_require__(8844);
 var DESCRIPTORS = __webpack_require__(7697);
@@ -8756,15 +8725,6 @@ var URL_SEARCH_PARAMS_ITERATOR = URL_SEARCH_PARAMS + 'Iterator';
 var setInternalState = InternalStateModule.set;
 var getInternalParamsState = InternalStateModule.getterFor(URL_SEARCH_PARAMS);
 var getInternalIteratorState = InternalStateModule.getterFor(URL_SEARCH_PARAMS_ITERATOR);
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-
-// Avoid NodeJS experimental warning
-var safeGetBuiltIn = function (name) {
-  if (!DESCRIPTORS) return global[name];
-  var descriptor = getOwnPropertyDescriptor(global, name);
-  return descriptor && descriptor.value;
-};
 
 var nativeFetch = safeGetBuiltIn('fetch');
 var NativeRequest = safeGetBuiltIn('Request');
