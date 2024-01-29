@@ -4453,20 +4453,20 @@ var _mutation = function () {
     }
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.reflect.to-string-tag.js
-var es_reflect_to_string_tag = __webpack_require__(6034);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
+var es_error_cause = __webpack_require__(1057);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
 var es_array_iterator = __webpack_require__(752);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push = __webpack_require__(560);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
+var es_promise = __webpack_require__(3964);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.reflect.to-string-tag.js
+var es_reflect_to_string_tag = __webpack_require__(6034);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4043);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
 var es_regexp_test = __webpack_require__(7409);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
-var es_array_push = __webpack_require__(560);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
-var es_error_cause = __webpack_require__(1057);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
-var es_promise = __webpack_require__(3964);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
 
 

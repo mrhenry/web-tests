@@ -3386,20 +3386,20 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.to-fixed.js
-var es_number_to_fixed = __webpack_require__(7389);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(1057);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(560);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.sort.js
 var es_array_sort = __webpack_require__(5137);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.to-fixed.js
+var es_number_to_fixed = __webpack_require__(7389);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-float.js
+var es_parse_float = __webpack_require__(939);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4043);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(9873);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.parse-float.js
-var es_parse_float = __webpack_require__(939);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3650);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js

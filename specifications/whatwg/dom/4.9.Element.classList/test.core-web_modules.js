@@ -3847,12 +3847,12 @@ var web_self = __webpack_require__(3650);
 var es_string_includes = __webpack_require__(3843);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(1057);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
-var es_object_assign = __webpack_require__(429);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
-var es_array_push = __webpack_require__(560);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
 var es_array_iterator = __webpack_require__(752);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push = __webpack_require__(560);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
+var es_object_assign = __webpack_require__(429);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
@@ -4091,12 +4091,12 @@ var es_object_define_getter = __webpack_require__(3994);
 var es_regexp_exec = __webpack_require__(4043);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
 var es_regexp_test = __webpack_require__(7409);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
-var es_string_split = __webpack_require__(9873);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(7267);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__(2826);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(7267);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
+var es_string_split = __webpack_require__(9873);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
 
 

@@ -2043,12 +2043,12 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
-var web_self = __webpack_require__(3650);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__(4043);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
 var es_regexp_test = __webpack_require__(7409);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(3650);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
 
 
