@@ -7350,20 +7350,20 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 !function() {
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
-var web_self = __webpack_require__(3650);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(9749);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(6544);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
-var es_object_to_string = __webpack_require__(228);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
 var es_symbol_iterator = __webpack_require__(4254);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
 var es_array_iterator = __webpack_require__(752);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string = __webpack_require__(228);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
 var es_string_iterator = __webpack_require__(1694);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self = __webpack_require__(3650);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/console.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
@@ -7424,22 +7424,22 @@ function console_warn_typeof(o) { "@babel/helpers - typeof"; return console_warn
 var es_error_cause = __webpack_require__(1057);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
 var es_error_to_string = __webpack_require__(8932);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__(739);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__(9730);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(24);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__(6801);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
-var es_string_includes = __webpack_require__(3843);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
-var es_array_push = __webpack_require__(560);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
 var es_array_index_of = __webpack_require__(7195);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push = __webpack_require__(560);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
+var es_array_slice = __webpack_require__(9730);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(2506);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__(24);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
+var es_object_define_property = __webpack_require__(739);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__(3843);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Event.js
 function Event_typeof(o) { "@babel/helpers - typeof"; return Event_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, Event_typeof(o); }
 
@@ -7936,22 +7936,22 @@ function Element_prototype_replaceWith_typeof(o) { "@babel/helpers - typeof"; re
     }
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_replaceWith_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_replaceWith_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_replaceWith_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__(4043);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
-var es_regexp_test = __webpack_require__(7409);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.proto.js
-var es_object_proto = __webpack_require__(9330);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
+var es_array_concat = __webpack_require__(4338);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
+var es_function_name = __webpack_require__(4284);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
 var es_object_define_properties = __webpack_require__(5082);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
 var es_object_get_own_property_descriptor = __webpack_require__(1919);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
-var es_array_concat = __webpack_require__(4338);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.proto.js
+var es_object_proto = __webpack_require__(9330);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__(4043);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__(7409);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
 var es_string_replace = __webpack_require__(7267);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
-var es_function_name = __webpack_require__(4284);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/HTMLTemplateElement.js
 
 
@@ -8805,22 +8805,22 @@ function NodeList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; retur
     NodeList.prototype.forEach = Array.prototype.forEach;
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : NodeList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
+var es_array_join = __webpack_require__(6203);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
+var es_function_bind = __webpack_require__(1517);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.map.js
+var es_map = __webpack_require__(6646);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
+var es_object_set_prototype_of = __webpack_require__(5399);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
+var es_promise = __webpack_require__(3964);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.reflect.construct.js
 var es_reflect_construct = __webpack_require__(50);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.reflect.to-string-tag.js
 var es_reflect_to_string_tag = __webpack_require__(6034);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.js
 var es_set = __webpack_require__(9649);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
-var es_function_bind = __webpack_require__(1517);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
-var es_object_set_prototype_of = __webpack_require__(5399);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
-var es_promise = __webpack_require__(3964);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.map.js
-var es_map = __webpack_require__(6646);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
-var es_array_join = __webpack_require__(6203);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
 
 
@@ -9627,14 +9627,14 @@ var es_array_join = __webpack_require__(6203);
   O && !O.forcePolyfill && "function" == typeof O.define && "function" == typeof O.get || Ia();
   window.__CE_installPolyfill = Ia;
 }).call(self);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
-var es_object_get_prototype_of = __webpack_require__(8052);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-primitive.js
 var es_symbol_to_primitive = __webpack_require__(9373);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-primitive.js
 var es_date_to_primitive = __webpack_require__(9903);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
 var es_number_constructor = __webpack_require__(9288);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
+var es_object_get_prototype_of = __webpack_require__(8052);
 ;// CONCATENATED MODULE: ./specifications/whatwg/html/4.13.4.customElements.define/test.pure.js
 function test_pure_typeof(o) { "@babel/helpers - typeof"; return test_pure_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, test_pure_typeof(o); }
 
@@ -9687,26 +9687,13 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == test_pure_typeof(i) ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != test_pure_typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != test_pure_typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _callSuper(_this, derived, args) {
-  function isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
-    try {
-      return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-    } catch (e) {
-      return false;
-    }
-  }
-  derived = _getPrototypeOf(derived);
-  return _possibleConstructorReturn(_this, isNativeReflectConstruct() ? Reflect.construct(derived, args || [], _getPrototypeOf(_this).constructor) : derived.apply(_this, args));
-}
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
 function _possibleConstructorReturn(self, call) { if (call && (test_pure_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
-function _construct(Parent, args, Class) { if (_isNativeReflectConstruct()) { _construct = Reflect.construct.bind(); } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 function _isNativeFunction(fn) { try { return Function.toString.call(fn).indexOf("[native code]") !== -1; } catch (e) { return typeof fn === "function"; } }
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
