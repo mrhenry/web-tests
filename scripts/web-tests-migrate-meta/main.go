@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/mrhenry/web-tests/scripts/feature"
@@ -62,9 +61,6 @@ func main() {
 			postMigration.Spec.Name = feature.Spec.Name
 			postMigration.Spec.URL = feature.Spec.URL
 			postMigration.Tests = feature.Tests
-
-			sort.Strings(feature.PolyfillIO)
-			postMigration.PolyfillIO = feature.PolyfillIO
 			postMigration.Notes = feature.Notes
 			postMigration.SearchTerms = feature.SearchTerms
 
@@ -112,7 +108,5 @@ type FeaturePostMigration struct {
 		InlineScript    string `json:"inline_script,omitempty"`
 		ModuleScript    string `json:"module_script,omitempty"`
 		NoModulesScript string `json:"nomodules_script,omitempty"`
-		HasPolyfillIO   bool   `json:"has_polyfillio,omitempty"`
 	} `json:"tests"`
-	PolyfillIO []string `json:"polyfill.io"`
 }

@@ -20,6 +20,5 @@
       "inline_html": "test.pure.html",
       "inline_script": "test.pure.js"
     }
-  },
-  "polyfill.io": []
+  }
 }

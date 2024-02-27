@@ -22,22 +22,6 @@ func (x Scores) sum(y Scores) {
 		c[k] = v
 	}
 
-	{
-		_, hasPurePolyfillIOResult := c["pure_polyfillio"]
-		pureResult, hasPureResult := c["pure"]
-		if !hasPurePolyfillIOResult && hasPureResult {
-			c["pure_polyfillio"] = pureResult
-		}
-	}
-
-	{
-		_, hasBabelPolyfillIOResult := c["babel_polyfillio"]
-		babelResult, hasBabelResult := c["babel"]
-		if !hasBabelPolyfillIOResult && hasBabelResult {
-			c["babel_polyfillio"] = babelResult
-		}
-	}
-
 	for ck, cv := range c {
 		if xv, ok := x[ck]; ok {
 			x[ck] = append(xv, cv...)
@@ -134,22 +118,6 @@ func (x Points) sum(y Scores) {
 		}
 
 		avgScores[k] = avgScores[k] / float64(len(v))
-	}
-
-	{
-		_, hasPurePolyfillIOResult := avgScores["pure_polyfillio"]
-		pureResult, hasPureResult := avgScores["pure"]
-		if !hasPurePolyfillIOResult && hasPureResult {
-			avgScores["pure_polyfillio"] = pureResult
-		}
-	}
-
-	{
-		_, hasBabelPolyfillIOResult := avgScores["babel_polyfillio"]
-		babelResult, hasBabelResult := avgScores["babel"]
-		if !hasBabelPolyfillIOResult && hasBabelResult {
-			avgScores["babel_polyfillio"] = babelResult
-		}
 	}
 
 	for ck, score := range avgScores {

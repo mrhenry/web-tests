@@ -27,7 +27,6 @@ jobs:
       - name: collect
         run: |
           web-tests-collect-ua-strings
-          web-tests-collect-polyfillio-hashes
           web-tests-reset-priority
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}

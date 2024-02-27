@@ -13,10 +13,6 @@
     "babel": {
       "inline_script": "test.babel.js"
     },
-    "babel_polyfillio": {
-      "inline_script": "test.babel.js",
-      "has_polyfillio": true
-    },
     "babel_webpack": {
       "inline_script": "test.babel_webpack.js"
     },
@@ -26,13 +22,6 @@
     },
     "pure": {
       "inline_script": "test.pure.js"
-    },
-    "pure_polyfillio": {
-      "inline_script": "test.pure.js",
-      "has_polyfillio": true
     }
-  },
-  "polyfill.io": [
-    "HTMLInputElement.prototype.valueAsDate"
-  ]
+  }
 }

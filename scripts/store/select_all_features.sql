@@ -1,2 +1,2 @@
-SELECT `id`, `directory`, `notes`, `polyfill_io_list`, `search_terms`, `spec`, `tests`
+SELECT `id`, `directory`, `notes`, `search_terms`, `spec`, `tests`
 FROM `features`;

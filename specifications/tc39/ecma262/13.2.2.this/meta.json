@@ -22,6 +22,5 @@
     "pure": {
       "inline_script": "test.pure.js"
     }
-  },
-  "polyfill.io": []
+  }
 }

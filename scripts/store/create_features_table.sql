@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS `features` (
 	
 	`directory` TEXT NOT NULL,
 	`notes` TEXT NOT NULL,
-	`polyfill_io_list` TEXT NOT NULL,
 	`search_terms` TEXT NOT NULL,
 	`spec` TEXT NOT NULL,
 	`tests` TEXT NOT NULL,

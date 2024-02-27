@@ -124,7 +124,6 @@ func main() {
 			meta.Spec.ID = id
 			meta.Spec.Section = section
 			meta.Spec.Name = name
-			meta.PolyfillIO = []string{}
 			meta.Notes = []struct {
 				Message string `json:"message"`
 			}{}

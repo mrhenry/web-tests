@@ -29,9 +29,7 @@ type Feature struct {
 		InlineScript    string `json:"inline_script,omitempty"`
 		ModuleScript    string `json:"module_script,omitempty"`
 		NoModulesScript string `json:"nomodules_script,omitempty"`
-		HasPolyfillIO   bool   `json:"has_polyfillio,omitempty"`
 	} `json:"tests"`
-	PolyfillIO []string `json:"polyfill.io"`
 }
 
 type FeatureInMapping struct {
@@ -50,12 +48,6 @@ func (x FeatureInMapping) ContentHashForTest(test string) (string, error) {
 	}
 
 	var dirB []byte
-
-	if x.Tests[test].HasPolyfillIO {
-		for _, polyfill := range x.PolyfillIO {
-			dirB = append(dirB, polyfill...)
-		}
-	}
 
 	if x.Tests[test].InlineCSS != "" {
 		testPath := path.Join(x.Dir, x.Tests[test].InlineCSS)

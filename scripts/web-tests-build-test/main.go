@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"net/url"
 	"os"
 	"strings"
 
@@ -240,12 +239,6 @@ func main() {
 			}
 		}
 
-		polyfillIOScriptTag := ""
-		if v.HasPolyfillIO && len(meta.PolyfillIO) > 0 {
-			polyfills := url.QueryEscape(strings.Join(meta.PolyfillIO, ","))
-			polyfillIOScriptTag = `<script src="https://polyfill.io/v3/polyfill.min.js?features=` + polyfills + `"></script>`
-		}
-
 		{
 			test := `<!DOCTYPE html>
 <html>
@@ -260,8 +253,6 @@ func main() {
 	</script>
 
 	` + errorHandlers + `
-
-	` + polyfillIOScriptTag + `
 </head>
 <body>
 

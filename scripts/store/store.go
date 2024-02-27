@@ -8,7 +8,6 @@ import (
 	"log"
 	"math/rand"
 	"path"
-	"sort"
 	"strings"
 	"time"
 
@@ -18,7 +17,6 @@ import (
 	"github.com/mrhenry/web-tests/scripts/browserstack"
 	"github.com/mrhenry/web-tests/scripts/browserua"
 	"github.com/mrhenry/web-tests/scripts/feature"
-	"github.com/mrhenry/web-tests/scripts/priority"
 	"github.com/mrhenry/web-tests/scripts/result"
 )
 
@@ -61,9 +59,6 @@ var createFeaturesTableQuery string
 //go:embed create_results_table.sql
 var createResultsTableQuery string
 
-//go:embed create_polyfillio_hashes_table.sql
-var createPolyfillIOHashesTableQuery string
-
 //go:embed create_user-agents_table.sql
 var createUserAgentsTableQuery string
 
@@ -80,12 +75,6 @@ func migrate(ctx context.Context, db *sql.DB) error {
 	_, err = db.ExecContext(ctx, createResultsTableQuery)
 	if err != nil {
 		log.Printf("Error %s when creating features table", err)
-		return err
-	}
-
-	_, err = db.ExecContext(ctx, createPolyfillIOHashesTableQuery)
-	if err != nil {
-		log.Printf("Error %s when creating polyfillio hashes table", err)
 		return err
 	}
 
@@ -111,10 +100,7 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		return UpdateFeature(ctx, db, x)
 	}
 
-	sort.Strings(x.PolyfillIO)
-
 	notes, _ := json.Marshal(x.Notes)
-	polyfillIO, _ := json.Marshal(x.PolyfillIO)
 	searchTerms, _ := json.Marshal(x.SearchTerms)
 	spec, _ := json.Marshal(x.Spec)
 	tests, _ := json.Marshal(x.Tests)
@@ -127,7 +113,6 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 
 		x.Dir,
 		notes,
-		polyfillIO,
 		searchTerms,
 		spec,
 		tests,
@@ -144,13 +129,7 @@ func UpsertFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 var updateFeatureQuery string
 
 func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) error {
-	sort.Strings(x.PolyfillIO)
-
 	notes, err := json.Marshal(x.Notes)
-	if err != nil {
-		panic(err)
-	}
-	polyfillIO, err := json.Marshal(x.PolyfillIO)
 	if err != nil {
 		panic(err)
 	}
@@ -173,7 +152,6 @@ func UpdateFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 
 		x.Dir,
 		notes,
-		polyfillIO,
 		searchTerms,
 		spec,
 		tests,
@@ -208,12 +186,11 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 	}
 
 	notesStr := ""
-	polyfillIOStr := ""
 	searchTermsStr := ""
 	specStr := ""
 	testsStr := ""
 
-	err = row.Scan(&x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr, &testsStr)
+	err = row.Scan(&x.Dir, &notesStr, &searchTermsStr, &specStr, &testsStr)
 	if err == sql.ErrNoRows {
 		return x, err
 	}
@@ -227,15 +204,6 @@ func SelectFeature(ctx context.Context, db *sql.DB, x feature.FeatureInMapping) 
 		if err != nil {
 			return x, err
 		}
-	}
-
-	if polyfillIOStr != "" {
-		err = json.Unmarshal([]byte(polyfillIOStr), &x.PolyfillIO)
-		if err != nil {
-			return x, err
-		}
-
-		sort.Strings(x.PolyfillIO)
 	}
 
 	if searchTermsStr != "" {
@@ -281,12 +249,11 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 	for rows.Next() {
 		x := feature.FeatureInMapping{}
 		notesStr := ""
-		polyfillIOStr := ""
 		searchTermsStr := ""
 		specStr := ""
 		testsStr := ""
 
-		err = rows.Scan(&x.ID, &x.Dir, &notesStr, &polyfillIOStr, &searchTermsStr, &specStr, &testsStr)
+		err = rows.Scan(&x.ID, &x.Dir, &notesStr, &searchTermsStr, &specStr, &testsStr)
 		if err == sql.ErrNoRows {
 			return nil, err
 		}
@@ -300,15 +267,6 @@ func SelectAllFeatures(ctx context.Context, db *sql.DB) ([]feature.FeatureInMapp
 			if err != nil {
 				return nil, err
 			}
-		}
-
-		if polyfillIOStr != "" {
-			err = json.Unmarshal([]byte(polyfillIOStr), &x.PolyfillIO)
-			if err != nil {
-				return nil, err
-			}
-
-			sort.Strings(x.PolyfillIO)
 		}
 
 		if searchTermsStr != "" {
@@ -844,53 +802,6 @@ UA_LOOP:
 	return out, nil
 }
 
-//go:embed select_results_for_ua_and_polyfill_list.sql
-var selectResultsForUAAndPolyfillListQuery string
-
-func SelectResultsForUAAndPolyfillList(ctx context.Context, db *sql.DB, ua browserua.UserAgent, polyfillList string) ([]result.Result, error) {
-	rows, err := db.QueryContext(
-		ctx,
-		selectResultsForUAAndPolyfillListQuery,
-		ua.UserAgent,
-		"%"+polyfillList+"%",
-	)
-	if err == sql.ErrNoRows {
-		return []result.Result{}, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	results := []result.Result{}
-	for rows.Next() {
-		r := result.Result{}
-		err = rows.Scan(
-			&r.BrowserVersion,
-			&r.Browser,
-			&r.FeatureID,
-			&r.OSVersion,
-			&r.OS,
-			&r.Test,
-			&r.Hash,
-			&r.Priority,
-			&r.Score,
-		)
-		if err != nil {
-			log.Printf("Error %s when scanning results for ua", err)
-			return nil, err
-		}
-
-		results = append(results, r)
-	}
-
-	if rows.Err() != nil {
-		log.Printf("Error %s when scanning results for ua", err)
-		return nil, err
-	}
-
-	return results, nil
-}
-
 //go:embed select_results_for_feature.sql
 var selectResultsForFeatureQuery string
 
@@ -935,118 +846,6 @@ func SelectResultsForFeature(ctx context.Context, db *sql.DB, feature feature.Fe
 	}
 
 	return results, nil
-}
-
-//go:embed insert_polyfillio_hash.sql
-var insertPolyfillIOHashQuery string
-
-func InsertPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) error {
-	sort.Strings(x.List)
-	list, err := json.Marshal(x.List)
-	if err != nil {
-		panic(err)
-	}
-
-	existing := priority.PolyfillIOHash{
-		List: x.List,
-		UA:   x.UA,
-	}
-	existing, err = SelectPolyfillIOHash(ctx, db, existing)
-	if err == sql.ErrNoRows {
-		_, err = db.ExecContext(
-			ctx,
-			insertPolyfillIOHashQuery,
-
-			list,
-			x.UA,
-
-			x.Hash,
-		)
-		if err != nil {
-			log.Printf("Error %s when inserting a polyfill.io hash", err)
-			return err
-		}
-
-		return nil
-	}
-
-	if existing.Hash == x.Hash {
-		return nil
-	}
-
-	_, err = db.ExecContext(
-		ctx,
-		insertPolyfillIOHashQuery,
-
-		list,
-		x.UA,
-
-		x.Hash,
-	)
-	if err != nil {
-		log.Printf("Error %s when inserting a polyfill.io hash", err)
-		return err
-	}
-
-	results, err := SelectResultsForUAAndPolyfillList(ctx, db, browserua.UserAgent{UserAgent: x.UA}, string(list))
-	if err != nil {
-		return err
-	}
-
-	for _, r := range results {
-		if !strings.HasSuffix(r.Test, "_polyfillio") {
-			continue
-		}
-
-		r.Priority = r.Priority + 1
-		if r.Priority > 10 {
-			r.Priority = 10
-		}
-		err = UpdateResult(ctx, db, r)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-//go:embed select_polyfillio_hash.sql
-var selectPolyfillIOHashQuery string
-
-func SelectPolyfillIOHash(ctx context.Context, db *sql.DB, x priority.PolyfillIOHash) (priority.PolyfillIOHash, error) {
-	sort.Strings(x.List)
-	list, err := json.Marshal(x.List)
-	if err != nil {
-		panic(err)
-	}
-
-	row := db.QueryRowContext(
-		ctx,
-		selectPolyfillIOHashQuery,
-
-		list,
-		x.UA,
-	)
-	err = row.Err()
-	if err == sql.ErrNoRows {
-		return x, err
-	}
-	if row.Err() != nil {
-		log.Printf("Error %s when selecting a polyfill.io hash", err)
-		return x, err
-	}
-
-	err = row.Scan(&x.Hash)
-	if err == sql.ErrNoRows {
-		return x, err
-	}
-	if err != nil {
-		log.Printf("Error %s when scanning a selected polyfill.io hash", err)
-		return x, err
-	}
-
-	return x, nil
 }
 
 //go:embed select_results_by_browser_and_priority.sql

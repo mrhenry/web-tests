@@ -31,9 +31,7 @@ Only desktop browsers are included because there are no reliable statistics for 
 ## Tested
 
 - native *
-- native + polyfill.io
 - babel
-- babel + polyfill.io
 - babel + webpack and core-js
 - babel + webpack, core-js and core-web
 - postcss-preset-env
