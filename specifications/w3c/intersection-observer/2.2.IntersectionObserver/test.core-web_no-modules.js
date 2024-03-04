@@ -5599,14 +5599,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
 
 (function (undefined) {
-  if (!function (n) {
-    if (!("Event" in n)) return !1;
+  if (!function () {
+    if (!("Event" in self)) return !1;
     try {
       return new Event("click"), !0;
     } catch (n) {
       return !1;
     }
-  }(self)) {
+  }()) {
     (function () {
       if (typeof document === 'undefined' || typeof window === 'undefined') return;
       var existingProto = window.Event && window.Event.prototype || null;

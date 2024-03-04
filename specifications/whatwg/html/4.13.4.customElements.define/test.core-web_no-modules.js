@@ -7460,14 +7460,14 @@ function Event_typeof(o) { "@babel/helpers - typeof"; return Event_typeof = "fun
 
 
 (function (undefined) {
-  if (!function (n) {
-    if (!("Event" in n)) return !1;
+  if (!function () {
+    if (!("Event" in self)) return !1;
     try {
       return new Event("click"), !0;
     } catch (n) {
       return !1;
     }
-  }(self)) {
+  }()) {
     (function () {
       if (typeof document === 'undefined' || typeof window === 'undefined') return;
       var existingProto = window.Event && window.Event.prototype || null;
@@ -7633,7 +7633,7 @@ function CustomEvent_typeof(o) { "@babel/helpers - typeof"; return CustomEvent_t
 
 
 (function (undefined) {
-  if (!("CustomEvent" in self && ("function" == typeof self.CustomEvent || self.CustomEvent.toString().indexOf("CustomEventConstructor") > -1))) {
+  if (!("CustomEvent" in self && ("function" == typeof self.CustomEvent || -1 < self.CustomEvent.toString().indexOf("CustomEventConstructor")))) {
     self.CustomEvent = function CustomEvent(type, eventInitDict) {
       if (!type) {
         throw Error('TypeError: Failed to construct "CustomEvent": An event name must be provided.');

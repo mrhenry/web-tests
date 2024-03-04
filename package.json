@@ -17,9 +17,9 @@
     "license": "MIT",
     "devDependencies": {
         "@babel/cli": "^7.23.9",
-        "@babel/core": "^7.23.9",
-        "@babel/preset-env": "^7.23.9",
-        "@mrhenry/babel-plugin-core-web": "^1.2.1",
+        "@babel/core": "^7.24.0",
+        "@babel/preset-env": "^7.24.0",
+        "@mrhenry/babel-plugin-core-web": "^1.2.2",
         "babel-loader": "^9.0.0",
         "core-js": "^3.36.0",
         "postcss": "^8.4.35",
