@@ -2,6 +2,9 @@ name: 'Build after Dependabot'
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: 'Build after Dependabot'
