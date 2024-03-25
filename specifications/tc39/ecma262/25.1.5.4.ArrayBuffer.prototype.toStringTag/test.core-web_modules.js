@@ -99,6 +99,101 @@ module.exports = typeof ArrayBuffer != 'undefined' && typeof DataView != 'undefi
 
 /***/ }),
 
+/***/ 7394:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var uncurryThisAccessor = __webpack_require__(6706);
+var classof = __webpack_require__(4576);
+
+var $TypeError = TypeError;
+
+// Includes
+// - Perform ? RequireInternalSlot(O, [[ArrayBufferData]]).
+// - If IsSharedArrayBuffer(O) is true, throw a TypeError exception.
+module.exports = uncurryThisAccessor(ArrayBuffer.prototype, 'byteLength', 'get') || function (O) {
+  if (classof(O) !== 'ArrayBuffer') throw new $TypeError('ArrayBuffer expected');
+  return O.byteLength;
+};
+
+
+/***/ }),
+
+/***/ 3238:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var uncurryThis = __webpack_require__(9504);
+var arrayBufferByteLength = __webpack_require__(7394);
+
+var slice = uncurryThis(ArrayBuffer.prototype.slice);
+
+module.exports = function (O) {
+  if (arrayBufferByteLength(O) !== 0) return false;
+  try {
+    slice(O, 0, 0);
+    return false;
+  } catch (error) {
+    return true;
+  }
+};
+
+
+/***/ }),
+
+/***/ 5636:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var global = __webpack_require__(4475);
+var uncurryThis = __webpack_require__(9504);
+var uncurryThisAccessor = __webpack_require__(6706);
+var toIndex = __webpack_require__(7696);
+var isDetached = __webpack_require__(3238);
+var arrayBufferByteLength = __webpack_require__(7394);
+var detachTransferable = __webpack_require__(4483);
+var PROPER_STRUCTURED_CLONE_TRANSFER = __webpack_require__(1548);
+
+var structuredClone = global.structuredClone;
+var ArrayBuffer = global.ArrayBuffer;
+var DataView = global.DataView;
+var TypeError = global.TypeError;
+var min = Math.min;
+var ArrayBufferPrototype = ArrayBuffer.prototype;
+var DataViewPrototype = DataView.prototype;
+var slice = uncurryThis(ArrayBufferPrototype.slice);
+var isResizable = uncurryThisAccessor(ArrayBufferPrototype, 'resizable', 'get');
+var maxByteLength = uncurryThisAccessor(ArrayBufferPrototype, 'maxByteLength', 'get');
+var getInt8 = uncurryThis(DataViewPrototype.getInt8);
+var setInt8 = uncurryThis(DataViewPrototype.setInt8);
+
+module.exports = (PROPER_STRUCTURED_CLONE_TRANSFER || detachTransferable) && function (arrayBuffer, newLength, preserveResizability) {
+  var byteLength = arrayBufferByteLength(arrayBuffer);
+  var newByteLength = newLength === undefined ? byteLength : toIndex(newLength);
+  var fixedLength = !isResizable || !isResizable(arrayBuffer);
+  var newBuffer;
+  if (isDetached(arrayBuffer)) throw new TypeError('ArrayBuffer is detached');
+  if (PROPER_STRUCTURED_CLONE_TRANSFER) {
+    arrayBuffer = structuredClone(arrayBuffer, { transfer: [arrayBuffer] });
+    if (byteLength === newByteLength && (preserveResizability || fixedLength)) return arrayBuffer;
+  }
+  if (byteLength >= newByteLength && (!preserveResizability || fixedLength)) {
+    newBuffer = slice(arrayBuffer, 0, newByteLength);
+  } else {
+    var options = preserveResizability && !fixedLength && maxByteLength ? { maxByteLength: maxByteLength(arrayBuffer) } : undefined;
+    newBuffer = new ArrayBuffer(newByteLength, options);
+    var a = new DataView(arrayBuffer);
+    var b = new DataView(newBuffer);
+    var copyLength = min(newByteLength, byteLength);
+    for (var i = 0; i < copyLength; i++) setInt8(b, i, getInt8(a, i));
+  }
+  if (!PROPER_STRUCTURED_CLONE_TRANSFER) detachTransferable(arrayBuffer);
+  return newBuffer;
+};
+
+
+/***/ }),
+
 /***/ 6346:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -669,6 +764,50 @@ module.exports = !fails(function () {
 
 /***/ }),
 
+/***/ 4483:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var global = __webpack_require__(4475);
+var tryNodeRequire = __webpack_require__(9714);
+var PROPER_STRUCTURED_CLONE_TRANSFER = __webpack_require__(1548);
+
+var structuredClone = global.structuredClone;
+var $ArrayBuffer = global.ArrayBuffer;
+var $MessageChannel = global.MessageChannel;
+var detach = false;
+var WorkerThreads, channel, buffer, $detach;
+
+if (PROPER_STRUCTURED_CLONE_TRANSFER) {
+  detach = function (transferable) {
+    structuredClone(transferable, { transfer: [transferable] });
+  };
+} else if ($ArrayBuffer) try {
+  if (!$MessageChannel) {
+    WorkerThreads = tryNodeRequire('worker_threads');
+    if (WorkerThreads) $MessageChannel = WorkerThreads.MessageChannel;
+  }
+
+  if ($MessageChannel) {
+    channel = new $MessageChannel();
+    buffer = new $ArrayBuffer(2);
+
+    $detach = function (transferable) {
+      channel.port1.postMessage(null, [transferable]);
+    };
+
+    if (buffer.byteLength === 2) {
+      $detach(buffer);
+      if (buffer.byteLength === 0) detach = $detach;
+    }
+  }
+} catch (error) { /* empty */ }
+
+module.exports = detach;
+
+
+/***/ }),
+
 /***/ 4055:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -683,6 +822,42 @@ var EXISTS = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
   return EXISTS ? document.createElement(it) : {};
 };
+
+
+/***/ }),
+
+/***/ 7290:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var IS_DENO = __webpack_require__(516);
+var IS_NODE = __webpack_require__(9088);
+
+module.exports = !IS_DENO && !IS_NODE
+  && typeof window == 'object'
+  && typeof document == 'object';
+
+
+/***/ }),
+
+/***/ 516:
+/***/ ((module) => {
+
+
+/* global Deno -- Deno case */
+module.exports = typeof Deno == 'object' && Deno && typeof Deno.version == 'object';
+
+
+/***/ }),
+
+/***/ 9088:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var global = __webpack_require__(4475);
+var classof = __webpack_require__(4576);
+
+module.exports = classof(global.process) === 'process';
 
 
 /***/ }),
@@ -1842,7 +2017,8 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(34);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -1859,8 +2035,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -2006,10 +2183,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2047,6 +2224,31 @@ module.exports = function (O, defaultConstructor) {
   var S;
   return C === undefined || isNullOrUndefined(S = anObject(C)[SPECIES]) ? defaultConstructor : aConstructor(S);
 };
+
+
+/***/ }),
+
+/***/ 1548:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var global = __webpack_require__(4475);
+var fails = __webpack_require__(9039);
+var V8 = __webpack_require__(7388);
+var IS_BROWSER = __webpack_require__(7290);
+var IS_DENO = __webpack_require__(516);
+var IS_NODE = __webpack_require__(9088);
+
+var structuredClone = global.structuredClone;
+
+module.exports = !!structuredClone && !fails(function () {
+  // prevent V8 ArrayBufferDetaching protector cell invalidation and performance degradation
+  // https://github.com/zloirock/core-js/issues/679
+  if ((IS_DENO && V8 > 92) || (IS_NODE && V8 > 94) || (IS_BROWSER && V8 > 97)) return false;
+  var buffer = new ArrayBuffer(8);
+  var clone = structuredClone(buffer, { transfer: [buffer] });
+  return buffer.byteLength !== 0 || clone.byteLength !== 8;
+});
 
 
 /***/ }),
@@ -2252,17 +2454,17 @@ module.exports = String(test) === '[object z]';
 
 /***/ }),
 
-/***/ 655:
+/***/ 9714:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var classof = __webpack_require__(6955);
+var IS_NODE = __webpack_require__(9088);
 
-var $String = String;
-
-module.exports = function (argument) {
-  if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
-  return $String(argument);
+module.exports = function (name) {
+  try {
+    // eslint-disable-next-line no-new-func -- safe
+    if (IS_NODE) return Function('return require("' + name + '")')();
+  } catch (error) { /* empty */ }
 };
 
 
@@ -2400,6 +2602,28 @@ setSpecies(ARRAY_BUFFER);
 
 /***/ }),
 
+/***/ 6573:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var DESCRIPTORS = __webpack_require__(3724);
+var defineBuiltInAccessor = __webpack_require__(2106);
+var isDetached = __webpack_require__(3238);
+
+var ArrayBufferPrototype = ArrayBuffer.prototype;
+
+if (DESCRIPTORS && !('detached' in ArrayBufferPrototype)) {
+  defineBuiltInAccessor(ArrayBufferPrototype, 'detached', {
+    configurable: true,
+    get: function detached() {
+      return isDetached(this);
+    }
+  });
+}
+
+
+/***/ }),
+
 /***/ 1745:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -2447,68 +2671,38 @@ $({ target: 'ArrayBuffer', proto: true, unsafe: true, forced: INCORRECT_SLICE },
 
 /***/ }),
 
-/***/ 9463:
+/***/ 7936:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-// `Symbol.prototype.description` getter
-// https://tc39.es/ecma262/#sec-symbol.prototype.description
 
 var $ = __webpack_require__(6518);
-var DESCRIPTORS = __webpack_require__(3724);
-var global = __webpack_require__(4475);
-var uncurryThis = __webpack_require__(9504);
-var hasOwn = __webpack_require__(9297);
-var isCallable = __webpack_require__(4901);
-var isPrototypeOf = __webpack_require__(1625);
-var toString = __webpack_require__(655);
-var defineBuiltInAccessor = __webpack_require__(2106);
-var copyConstructorProperties = __webpack_require__(7740);
+var $transfer = __webpack_require__(5636);
 
-var NativeSymbol = global.Symbol;
-var SymbolPrototype = NativeSymbol && NativeSymbol.prototype;
+// `ArrayBuffer.prototype.transferToFixedLength` method
+// https://tc39.es/proposal-arraybuffer-transfer/#sec-arraybuffer.prototype.transfertofixedlength
+if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
+  transferToFixedLength: function transferToFixedLength() {
+    return $transfer(this, arguments.length ? arguments[0] : undefined, false);
+  }
+});
 
-if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototype) ||
-  // Safari 12 bug
-  NativeSymbol().description !== undefined
-)) {
-  var EmptyStringDescriptionStore = {};
-  // wrap Symbol constructor for correct work with undefined description
-  var SymbolWrapper = function Symbol() {
-    var description = arguments.length < 1 || arguments[0] === undefined ? undefined : toString(arguments[0]);
-    var result = isPrototypeOf(SymbolPrototype, this)
-      ? new NativeSymbol(description)
-      // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
-      : description === undefined ? NativeSymbol() : NativeSymbol(description);
-    if (description === '') EmptyStringDescriptionStore[result] = true;
-    return result;
-  };
 
-  copyConstructorProperties(SymbolWrapper, NativeSymbol);
-  SymbolWrapper.prototype = SymbolPrototype;
-  SymbolPrototype.constructor = SymbolWrapper;
+/***/ }),
 
-  var NATIVE_SYMBOL = String(NativeSymbol('description detection')) === 'Symbol(description detection)';
-  var thisSymbolValue = uncurryThis(SymbolPrototype.valueOf);
-  var symbolDescriptiveString = uncurryThis(SymbolPrototype.toString);
-  var regexp = /^Symbol\((.*)\)[^)]+$/;
-  var replace = uncurryThis(''.replace);
-  var stringSlice = uncurryThis(''.slice);
+/***/ 8100:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-  defineBuiltInAccessor(SymbolPrototype, 'description', {
-    configurable: true,
-    get: function description() {
-      var symbol = thisSymbolValue(this);
-      if (hasOwn(EmptyStringDescriptionStore, symbol)) return '';
-      var string = symbolDescriptiveString(symbol);
-      var desc = NATIVE_SYMBOL ? stringSlice(string, 7, -1) : replace(string, regexp, '$1');
-      return desc === '' ? undefined : desc;
-    }
-  });
 
-  $({ global: true, constructor: true, forced: true }, {
-    Symbol: SymbolWrapper
-  });
-}
+var $ = __webpack_require__(6518);
+var $transfer = __webpack_require__(5636);
+
+// `ArrayBuffer.prototype.transfer` method
+// https://tc39.es/proposal-arraybuffer-transfer/#sec-arraybuffer.prototype.transfer
+if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
+  transfer: function transfer() {
+    return $transfer(this, arguments.length ? arguments[0] : undefined, true);
+  }
+});
 
 
 /***/ })
@@ -2585,12 +2779,18 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9463);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4743);
-/* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1745);
-/* harmony import */ var core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4743);
+/* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1745);
+/* harmony import */ var core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_buffer_detached_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6573);
+/* harmony import */ var core_js_modules_es_array_buffer_detached_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_detached_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_buffer_transfer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8100);
+/* harmony import */ var core_js_modules_es_array_buffer_transfer_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_transfer_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_buffer_transfer_to_fixed_length_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7936);
+/* harmony import */ var core_js_modules_es_array_buffer_transfer_to_fixed_length_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_transfer_to_fixed_length_js__WEBPACK_IMPORTED_MODULE_4__);
+
+
 
 
 
