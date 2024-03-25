@@ -2101,7 +2101,8 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(34);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -2118,8 +2119,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -2284,10 +2286,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3880,7 +3882,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 (function (cb) {
   "use strict";
@@ -3914,7 +3916,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     function F1() {
       _classCallCheck(this, F1);
     }
-    _createClass(F1, [{
+    return _createClass(F1, [{
       key: "f2",
       value: function f2() {
         if (!(this instanceof F1)) {
@@ -3932,7 +3934,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         cb.apply(this);
       }
     }]);
-    return F1;
   }();
   c1();
   d1();

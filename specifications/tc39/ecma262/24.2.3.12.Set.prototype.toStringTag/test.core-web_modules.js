@@ -140,43 +140,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ 6955:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var TO_STRING_TAG_SUPPORT = __webpack_require__(2140);
-var isCallable = __webpack_require__(4901);
-var classofRaw = __webpack_require__(4576);
-var wellKnownSymbol = __webpack_require__(8227);
-
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var $Object = Object;
-
-// ES3 wrong here
-var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) === 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (error) { /* empty */ }
-};
-
-// getting tag from ES6+ `Object.prototype.toString`
-module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
-  var O, tag, result;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (tag = tryGet(O = $Object(it), TO_STRING_TAG)) == 'string' ? tag
-    // builtinTag case
-    : CORRECT_ARGUMENTS ? classofRaw(O)
-    // ES3 arguments fallback
-    : (result = classofRaw(O)) === 'Object' && isCallable(O.callee) ? 'Arguments' : result;
-};
-
-
-/***/ }),
-
 /***/ 7740:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -259,22 +222,6 @@ module.exports = function (bitmap, value) {
     writable: !(bitmap & 4),
     value: value
   };
-};
-
-
-/***/ }),
-
-/***/ 2106:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var makeBuiltIn = __webpack_require__(283);
-var defineProperty = __webpack_require__(4913);
-
-module.exports = function (target, name, descriptor) {
-  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
-  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
-  return defineProperty.f(target, name, descriptor);
 };
 
 
@@ -1589,7 +1536,8 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(34);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -1606,8 +1554,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -1728,10 +1677,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -1914,38 +1863,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ 2140:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var wellKnownSymbol = __webpack_require__(8227);
-
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var test = {};
-
-test[TO_STRING_TAG] = 'z';
-
-module.exports = String(test) === '[object z]';
-
-
-/***/ }),
-
-/***/ 655:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var classof = __webpack_require__(6955);
-
-var $String = String;
-
-module.exports = function (argument) {
-  if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
-  return $String(argument);
-};
-
-
-/***/ }),
-
 /***/ 6823:
 /***/ ((module) => {
 
@@ -2121,72 +2038,6 @@ if (!IS_PURE && DESCRIPTORS && values.name !== 'values') try {
 } catch (error) { /* empty */ }
 
 
-/***/ }),
-
-/***/ 9463:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-// `Symbol.prototype.description` getter
-// https://tc39.es/ecma262/#sec-symbol.prototype.description
-
-var $ = __webpack_require__(6518);
-var DESCRIPTORS = __webpack_require__(3724);
-var global = __webpack_require__(4475);
-var uncurryThis = __webpack_require__(9504);
-var hasOwn = __webpack_require__(9297);
-var isCallable = __webpack_require__(4901);
-var isPrototypeOf = __webpack_require__(1625);
-var toString = __webpack_require__(655);
-var defineBuiltInAccessor = __webpack_require__(2106);
-var copyConstructorProperties = __webpack_require__(7740);
-
-var NativeSymbol = global.Symbol;
-var SymbolPrototype = NativeSymbol && NativeSymbol.prototype;
-
-if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototype) ||
-  // Safari 12 bug
-  NativeSymbol().description !== undefined
-)) {
-  var EmptyStringDescriptionStore = {};
-  // wrap Symbol constructor for correct work with undefined description
-  var SymbolWrapper = function Symbol() {
-    var description = arguments.length < 1 || arguments[0] === undefined ? undefined : toString(arguments[0]);
-    var result = isPrototypeOf(SymbolPrototype, this)
-      ? new NativeSymbol(description)
-      // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
-      : description === undefined ? NativeSymbol() : NativeSymbol(description);
-    if (description === '') EmptyStringDescriptionStore[result] = true;
-    return result;
-  };
-
-  copyConstructorProperties(SymbolWrapper, NativeSymbol);
-  SymbolWrapper.prototype = SymbolPrototype;
-  SymbolPrototype.constructor = SymbolWrapper;
-
-  var NATIVE_SYMBOL = String(NativeSymbol('description detection')) === 'Symbol(description detection)';
-  var thisSymbolValue = uncurryThis(SymbolPrototype.valueOf);
-  var symbolDescriptiveString = uncurryThis(SymbolPrototype.toString);
-  var regexp = /^Symbol\((.*)\)[^)]+$/;
-  var replace = uncurryThis(''.replace);
-  var stringSlice = uncurryThis(''.slice);
-
-  defineBuiltInAccessor(SymbolPrototype, 'description', {
-    configurable: true,
-    get: function description() {
-      var symbol = thisSymbolValue(this);
-      if (hasOwn(EmptyStringDescriptionStore, symbol)) return '';
-      var string = symbolDescriptiveString(symbol);
-      var desc = NATIVE_SYMBOL ? stringSlice(string, 7, -1) : replace(string, regexp, '$1');
-      return desc === '' ? undefined : desc;
-    }
-  });
-
-  $({ global: true, constructor: true, forced: true }, {
-    Symbol: SymbolWrapper
-  });
-}
-
-
 /***/ })
 
 /******/ 	});
@@ -2261,11 +2112,8 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9463);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3792);
-/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_1__);
-
+/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3792);
+/* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__);
 
 (function (cb) {
   var descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(new Set()[Symbol.iterator]()), Symbol.toStringTag);

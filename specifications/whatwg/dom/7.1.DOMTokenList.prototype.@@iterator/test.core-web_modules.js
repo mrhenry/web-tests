@@ -2180,7 +2180,8 @@ module.exports = IS_PURE || !fails(function () {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(7653);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -2197,8 +2198,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -2608,10 +2610,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3859,7 +3861,6 @@ var es_object_assign = __webpack_require__(9085);
 
 
 
-
 var Iterator = function () {
   var clear = function clear() {
     this.length = 0;
@@ -4035,7 +4036,6 @@ var Iterator = function () {
 }();
 /* harmony default export */ const _Iterator = (Iterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
-
 
 
 var ArrayIterator = function () {

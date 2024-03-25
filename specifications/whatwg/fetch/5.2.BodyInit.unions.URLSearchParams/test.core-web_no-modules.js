@@ -142,6 +142,101 @@ module.exports = typeof ArrayBuffer != 'undefined' && typeof DataView != 'undefi
 
 /***/ }),
 
+/***/ 7394:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var uncurryThisAccessor = __webpack_require__(6706);
+var classof = __webpack_require__(4576);
+
+var $TypeError = TypeError;
+
+// Includes
+// - Perform ? RequireInternalSlot(O, [[ArrayBufferData]]).
+// - If IsSharedArrayBuffer(O) is true, throw a TypeError exception.
+module.exports = uncurryThisAccessor(ArrayBuffer.prototype, 'byteLength', 'get') || function (O) {
+  if (classof(O) !== 'ArrayBuffer') throw new $TypeError('ArrayBuffer expected');
+  return O.byteLength;
+};
+
+
+/***/ }),
+
+/***/ 3238:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var uncurryThis = __webpack_require__(9504);
+var arrayBufferByteLength = __webpack_require__(7394);
+
+var slice = uncurryThis(ArrayBuffer.prototype.slice);
+
+module.exports = function (O) {
+  if (arrayBufferByteLength(O) !== 0) return false;
+  try {
+    slice(O, 0, 0);
+    return false;
+  } catch (error) {
+    return true;
+  }
+};
+
+
+/***/ }),
+
+/***/ 5636:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var global = __webpack_require__(4475);
+var uncurryThis = __webpack_require__(9504);
+var uncurryThisAccessor = __webpack_require__(6706);
+var toIndex = __webpack_require__(7696);
+var isDetached = __webpack_require__(3238);
+var arrayBufferByteLength = __webpack_require__(7394);
+var detachTransferable = __webpack_require__(4483);
+var PROPER_STRUCTURED_CLONE_TRANSFER = __webpack_require__(1548);
+
+var structuredClone = global.structuredClone;
+var ArrayBuffer = global.ArrayBuffer;
+var DataView = global.DataView;
+var TypeError = global.TypeError;
+var min = Math.min;
+var ArrayBufferPrototype = ArrayBuffer.prototype;
+var DataViewPrototype = DataView.prototype;
+var slice = uncurryThis(ArrayBufferPrototype.slice);
+var isResizable = uncurryThisAccessor(ArrayBufferPrototype, 'resizable', 'get');
+var maxByteLength = uncurryThisAccessor(ArrayBufferPrototype, 'maxByteLength', 'get');
+var getInt8 = uncurryThis(DataViewPrototype.getInt8);
+var setInt8 = uncurryThis(DataViewPrototype.setInt8);
+
+module.exports = (PROPER_STRUCTURED_CLONE_TRANSFER || detachTransferable) && function (arrayBuffer, newLength, preserveResizability) {
+  var byteLength = arrayBufferByteLength(arrayBuffer);
+  var newByteLength = newLength === undefined ? byteLength : toIndex(newLength);
+  var fixedLength = !isResizable || !isResizable(arrayBuffer);
+  var newBuffer;
+  if (isDetached(arrayBuffer)) throw new TypeError('ArrayBuffer is detached');
+  if (PROPER_STRUCTURED_CLONE_TRANSFER) {
+    arrayBuffer = structuredClone(arrayBuffer, { transfer: [arrayBuffer] });
+    if (byteLength === newByteLength && (preserveResizability || fixedLength)) return arrayBuffer;
+  }
+  if (byteLength >= newByteLength && (!preserveResizability || fixedLength)) {
+    newBuffer = slice(arrayBuffer, 0, newByteLength);
+  } else {
+    var options = preserveResizability && !fixedLength && maxByteLength ? { maxByteLength: maxByteLength(arrayBuffer) } : undefined;
+    newBuffer = new ArrayBuffer(newByteLength, options);
+    var a = new DataView(arrayBuffer);
+    var b = new DataView(newBuffer);
+    var copyLength = min(newByteLength, byteLength);
+    for (var i = 0; i < copyLength; i++) setInt8(b, i, getInt8(a, i));
+  }
+  if (!PROPER_STRUCTURED_CLONE_TRANSFER) detachTransferable(arrayBuffer);
+  return newBuffer;
+};
+
+
+/***/ }),
+
 /***/ 4644:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1501,6 +1596,50 @@ module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 });
+
+
+/***/ }),
+
+/***/ 4483:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var global = __webpack_require__(4475);
+var tryNodeRequire = __webpack_require__(9714);
+var PROPER_STRUCTURED_CLONE_TRANSFER = __webpack_require__(1548);
+
+var structuredClone = global.structuredClone;
+var $ArrayBuffer = global.ArrayBuffer;
+var $MessageChannel = global.MessageChannel;
+var detach = false;
+var WorkerThreads, channel, buffer, $detach;
+
+if (PROPER_STRUCTURED_CLONE_TRANSFER) {
+  detach = function (transferable) {
+    structuredClone(transferable, { transfer: [transferable] });
+  };
+} else if ($ArrayBuffer) try {
+  if (!$MessageChannel) {
+    WorkerThreads = tryNodeRequire('worker_threads');
+    if (WorkerThreads) $MessageChannel = WorkerThreads.MessageChannel;
+  }
+
+  if ($MessageChannel) {
+    channel = new $MessageChannel();
+    buffer = new $ArrayBuffer(2);
+
+    $detach = function (transferable) {
+      channel.port1.postMessage(null, [transferable]);
+    };
+
+    if (buffer.byteLength === 2) {
+      $detach(buffer);
+      if (buffer.byteLength === 0) detach = $detach;
+    }
+  }
+} catch (error) { /* empty */ }
+
+module.exports = detach;
 
 
 /***/ }),
@@ -3869,7 +4008,8 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(34);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -3886,8 +4026,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -4555,10 +4696,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4701,6 +4842,31 @@ module.exports = {
   // https://tc39.es/ecma262/#sec-string.prototype.trim
   trim: createMethod(3)
 };
+
+
+/***/ }),
+
+/***/ 1548:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var global = __webpack_require__(4475);
+var fails = __webpack_require__(9039);
+var V8 = __webpack_require__(7388);
+var IS_BROWSER = __webpack_require__(7290);
+var IS_DENO = __webpack_require__(516);
+var IS_NODE = __webpack_require__(9088);
+
+var structuredClone = global.structuredClone;
+
+module.exports = !!structuredClone && !fails(function () {
+  // prevent V8 ArrayBufferDetaching protector cell invalidation and performance degradation
+  // https://github.com/zloirock/core-js/issues/679
+  if ((IS_DENO && V8 > 92) || (IS_NODE && V8 > 94) || (IS_BROWSER && V8 > 97)) return false;
+  var buffer = new ArrayBuffer(8);
+  var clone = structuredClone(buffer, { transfer: [buffer] });
+  return buffer.byteLength !== 0 || clone.byteLength !== 8;
+});
 
 
 /***/ }),
@@ -5149,6 +5315,22 @@ var round = Math.round;
 module.exports = function (it) {
   var value = round(it);
   return value < 0 ? 0 : value > 0xFF ? 0xFF : value & 0xFF;
+};
+
+
+/***/ }),
+
+/***/ 9714:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var IS_NODE = __webpack_require__(9088);
+
+module.exports = function (name) {
+  try {
+    // eslint-disable-next-line no-new-func -- safe
+    if (IS_NODE) return Function('return require("' + name + '")')();
+  } catch (error) { /* empty */ }
 };
 
 
@@ -5817,6 +5999,28 @@ setSpecies(ARRAY_BUFFER);
 
 /***/ }),
 
+/***/ 6573:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+var DESCRIPTORS = __webpack_require__(3724);
+var defineBuiltInAccessor = __webpack_require__(2106);
+var isDetached = __webpack_require__(3238);
+
+var ArrayBufferPrototype = ArrayBuffer.prototype;
+
+if (DESCRIPTORS && !('detached' in ArrayBufferPrototype)) {
+  defineBuiltInAccessor(ArrayBufferPrototype, 'detached', {
+    configurable: true,
+    get: function detached() {
+      return isDetached(this);
+    }
+  });
+}
+
+
+/***/ }),
+
 /***/ 9142:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -5876,6 +6080,42 @@ $({ target: 'ArrayBuffer', proto: true, unsafe: true, forced: INCORRECT_SLICE },
     while (first < fin) {
       setUint8(viewTarget, index++, getUint8(viewSource, first++));
     } return result;
+  }
+});
+
+
+/***/ }),
+
+/***/ 7936:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+var $ = __webpack_require__(6518);
+var $transfer = __webpack_require__(5636);
+
+// `ArrayBuffer.prototype.transferToFixedLength` method
+// https://tc39.es/proposal-arraybuffer-transfer/#sec-arraybuffer.prototype.transfertofixedlength
+if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
+  transferToFixedLength: function transferToFixedLength() {
+    return $transfer(this, arguments.length ? arguments[0] : undefined, false);
+  }
+});
+
+
+/***/ }),
+
+/***/ 8100:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+var $ = __webpack_require__(6518);
+var $transfer = __webpack_require__(5636);
+
+// `ArrayBuffer.prototype.transfer` method
+// https://tc39.es/proposal-arraybuffer-transfer/#sec-arraybuffer.prototype.transfer
+if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
+  transfer: function transfer() {
+    return $transfer(this, arguments.length ? arguments[0] : undefined, true);
   }
 });
 
@@ -9321,6 +9561,12 @@ var es_array_buffer_is_view = __webpack_require__(9142);
 var es_array_buffer_slice = __webpack_require__(1745);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.data-view.js
 var es_data_view = __webpack_require__(8309);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.detached.js
+var es_array_buffer_detached = __webpack_require__(6573);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer.js
+var es_array_buffer_transfer = __webpack_require__(8100);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer-to-fixed-length.js
+var es_array_buffer_transfer_to_fixed_length = __webpack_require__(7936);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
 var es_date_to_string = __webpack_require__(3288);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
@@ -9427,6 +9673,9 @@ var web_url_search_params_has = __webpack_require__(7566);
 var web_url_search_params_size = __webpack_require__(8721);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+
+
+
 
 
 

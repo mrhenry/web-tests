@@ -206,9 +206,9 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
   var length, result, step, iterator, next, value;
   // if the target is not iterable or it's an array with the default iterator - use a simple case
   if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
+    result = IS_CONSTRUCTOR ? new this() : [];
     iterator = getIterator(O, iteratorMethod);
     next = iterator.next;
-    result = IS_CONSTRUCTOR ? new this() : [];
     for (;!(step = call(next, iterator)).done; index++) {
       value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
       createProperty(result, index, value);
@@ -2937,7 +2937,8 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 /* eslint-disable no-proto -- safe */
 var uncurryThisAccessor = __webpack_require__(6706);
-var anObject = __webpack_require__(8551);
+var isObject = __webpack_require__(34);
+var requireObjectCoercible = __webpack_require__(7750);
 var aPossiblePrototype = __webpack_require__(3506);
 
 // `Object.setPrototypeOf` method
@@ -2954,8 +2955,9 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
   return function setPrototypeOf(O, proto) {
-    anObject(O);
+    requireObjectCoercible(O);
     aPossiblePrototype(proto);
+    if (!isObject(O)) return O;
     if (CORRECT_SETTER) setter(O, proto);
     else O.__proto__ = proto;
     return O;
@@ -3470,10 +3472,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.36.0',
+  version: '3.36.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.36.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.36.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -6936,8 +6938,6 @@ var es_error_to_string = __webpack_require__(6918);
 var es_array_iterator = __webpack_require__(3792);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
 var es_date_now = __webpack_require__(9089);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string = __webpack_require__(3288);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__(6099);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
@@ -6948,7 +6948,6 @@ var web_self = __webpack_require__(3611);
 var web_timers = __webpack_require__(6031);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/requestAnimationFrame.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-
 
 
 
@@ -7037,6 +7036,8 @@ var es_array_slice = __webpack_require__(4782);
 var es_array_sort = __webpack_require__(6910);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__(4554);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string = __webpack_require__(3288);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.bind.js
 var es_function_bind = __webpack_require__(4170);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js

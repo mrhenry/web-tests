@@ -9,7 +9,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Objec
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 (function (cb) {
   var Alpha = /*#__PURE__*/function () {
@@ -17,35 +17,33 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       _classCallCheck(this, Alpha);
       this._some = some;
     }
-    _createClass(Alpha, [{
+    return _createClass(Alpha, [{
       key: "some",
       get: function get() {
         return this._some;
       }
     }]);
-    return Alpha;
   }();
   var Beta = /*#__PURE__*/function (_Alpha) {
-    _inherits(Beta, _Alpha);
     function Beta() {
       _classCallCheck(this, Beta);
       return _callSuper(this, Beta, ['hello']);
     }
+    _inherits(Beta, _Alpha);
     return _createClass(Beta);
   }(Alpha);
   var Delta = /*#__PURE__*/function (_Alpha2) {
-    _inherits(Delta, _Alpha2);
     function Delta(some) {
       _classCallCheck(this, Delta);
       return _callSuper(this, Delta, [some]);
     }
-    _createClass(Delta, [{
+    _inherits(Delta, _Alpha2);
+    return _createClass(Delta, [{
       key: "some",
       get: function get() {
         return 'hello ' + this._some;
       }
     }]);
-    return Delta;
   }(Alpha);
   var beta = new Beta();
   var delta = new Delta('world');
