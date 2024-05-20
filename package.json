@@ -21,10 +21,10 @@
         "@babel/preset-env": "^7.24.5",
         "@mrhenry/babel-plugin-core-web": "^1.2.2",
         "babel-loader": "^9.0.0",
-        "core-js": "^3.37.0",
+        "core-js": "^3.37.1",
         "postcss": "^8.4.38",
         "postcss-cli": "^11.0.0",
-        "postcss-preset-env": "^9.5.12",
+        "postcss-preset-env": "^9.5.13",
         "webpack": "^5.91.0",
         "webpack-cli": "^5.0.0"
     },
