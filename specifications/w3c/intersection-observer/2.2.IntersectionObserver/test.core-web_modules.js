@@ -3386,8 +3386,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(6280);
@@ -3790,7 +3788,5 @@ var web_self = __webpack_require__(3611);
   var foo = new IntersectionObserver(function () {}, {});
   cb(!!foo);
 })(callback);
-})();
-
 /******/ })()
 ;

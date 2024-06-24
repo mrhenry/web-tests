@@ -5808,8 +5808,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2675);
@@ -7190,6 +7188,5 @@ var es_array_sort = __webpack_require__(6910);
   });
   cb(true);
 })(callback);
-}();
 /******/ })()
 ;

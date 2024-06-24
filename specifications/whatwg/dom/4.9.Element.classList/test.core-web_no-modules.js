@@ -5224,8 +5224,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2675);
@@ -5872,6 +5870,5 @@ function DOMTokenList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; r
   div.classList.add('classlist-test');
   cb(div.className === 'classlist-test');
 })(callback);
-}();
 /******/ })()
 ;

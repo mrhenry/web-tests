@@ -2005,15 +2005,13 @@ if (ErrorPrototype.toString !== errorToString) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
 /* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6280);
 /* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6918);
 /* harmony import */ var core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
+function _readOnlyError(r) { throw new TypeError('"' + r + '" is read-only'); }
 (function (cb) {
   var foo = "foo";
   try {
@@ -2023,6 +2021,5 @@ function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-on
     cb(foo === "foo");
   }
 })(callback);
-}();
 /******/ })()
 ;

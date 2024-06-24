@@ -3839,8 +3839,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(9463);
@@ -4270,7 +4268,5 @@ var _DOMTokenList = function () {
   div.classList.add('classlist-test');
   cb(div.className === 'classlist-test');
 })(callback);
-})();
-
 /******/ })()
 ;

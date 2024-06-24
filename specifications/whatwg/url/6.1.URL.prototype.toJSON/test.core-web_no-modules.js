@@ -4674,8 +4674,6 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
 /* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3792);
 /* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(739);
@@ -4710,6 +4708,5 @@ var __webpack_exports__ = {};
   var foo = new URL("https://developer.mozilla.org/en-US/docs/Web/API/URL/toString");
   cb(foo.toJSON() === foo.href);
 })(callback);
-}();
 /******/ })()
 ;

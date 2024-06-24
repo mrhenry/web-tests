@@ -1543,8 +1543,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
@@ -1668,7 +1666,5 @@ var web_self = __webpack_require__(3611);
   var domRect = new DOMRect();
   cb(typeof domRect.bottom !== "undefined");
 })(callback);
-})();
-
 /******/ })()
 ;
