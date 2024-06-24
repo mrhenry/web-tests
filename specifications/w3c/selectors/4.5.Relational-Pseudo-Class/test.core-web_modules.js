@@ -3611,8 +3611,6 @@ try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(4114);
@@ -4602,7 +4600,5 @@ var es_array_sort = __webpack_require__(6910);
   });
   cb(true);
 })(callback);
-})();
-
 /******/ })()
 ;

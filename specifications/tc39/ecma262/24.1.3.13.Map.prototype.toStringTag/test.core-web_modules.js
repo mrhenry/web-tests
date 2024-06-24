@@ -2110,8 +2110,6 @@ if (!IS_PURE && DESCRIPTORS && values.name !== 'values') try {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 /* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3792);
 /* harmony import */ var core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator_js__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -2119,7 +2117,5 @@ var __webpack_exports__ = {};
   var descriptor = Object.getOwnPropertyDescriptor(Map.prototype, Symbol.toStringTag);
   cb(descriptor.value === 'Map');
 })(callback);
-})();
-
 /******/ })()
 ;

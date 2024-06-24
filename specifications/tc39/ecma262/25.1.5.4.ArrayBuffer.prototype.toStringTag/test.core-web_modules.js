@@ -2777,8 +2777,6 @@ if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 /* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4743);
 /* harmony import */ var core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_buffer_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_array_buffer_slice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1745);
@@ -2798,7 +2796,5 @@ var __webpack_exports__ = {};
   var descriptor = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, Symbol.toStringTag);
   cb(descriptor.value === 'ArrayBuffer');
 })(callback);
-})();
-
 /******/ })()
 ;

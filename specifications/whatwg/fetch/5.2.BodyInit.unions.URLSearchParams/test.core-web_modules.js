@@ -7606,8 +7606,6 @@ if (DESCRIPTORS && !('size' in URLSearchParamsPrototype)) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
 var es_symbol_description = __webpack_require__(9463);
@@ -8229,7 +8227,5 @@ var web_url_search_params_size = __webpack_require__(8721);
     cb(x === 'foo=baz');
   });
 })(callback);
-})();
-
 /******/ })()
 ;

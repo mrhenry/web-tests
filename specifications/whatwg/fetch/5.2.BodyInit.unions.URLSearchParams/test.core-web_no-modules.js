@@ -9524,8 +9524,6 @@ if (DESCRIPTORS && !('size' in URLSearchParamsPrototype)) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__(2675);
@@ -10270,6 +10268,5 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     cb(x === 'foo=baz');
   });
 })(callback);
-}();
 /******/ })()
 ;
