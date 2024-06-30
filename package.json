@@ -22,9 +22,9 @@
         "@mrhenry/babel-plugin-core-web": "^1.2.3",
         "babel-loader": "^9.0.0",
         "core-js": "^3.37.1",
-        "postcss": "^8.4.38",
+        "postcss": "^8.4.39",
         "postcss-cli": "^11.0.0",
-        "postcss-preset-env": "^9.5.14",
+        "postcss-preset-env": "^9.5.15",
         "webpack": "^5.92.1",
         "webpack-cli": "^5.0.0"
     },
