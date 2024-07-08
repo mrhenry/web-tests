@@ -24,7 +24,7 @@
         "core-js": "^3.37.1",
         "postcss": "^8.4.39",
         "postcss-cli": "^11.0.0",
-        "postcss-preset-env": "^9.5.15",
+        "postcss-preset-env": "^9.6.0",
         "webpack": "^5.92.1",
         "webpack-cli": "^5.0.0"
     },
