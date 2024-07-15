@@ -1,5 +1,4 @@
 /******/ (function() { // webpackBootstrap
-var __webpack_exports__ = {};
 (function (cb) {
   var el = document.getElementById("the-fixture");
   var animation = el.animate({
