@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 (function (cb) {
   var el = document.getElementById("the-fixture--positioned");
   var clientBoundingRect = el.getBoundingClientRect();
