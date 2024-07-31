@@ -8182,11 +8182,11 @@ function Event_typeof(o) { "@babel/helpers - typeof"; return Event_typeof = "fun
           try {
             if (!event.bubbles) {
               event.cancelBubble = true;
-              var cancelBubbleEvent = function cancelBubbleEvent(event) {
+              var _cancelBubbleEvent = function cancelBubbleEvent(event) {
                 event.cancelBubble = true;
-                (element || window).detachEvent('on' + type, cancelBubbleEvent);
+                (element || window).detachEvent('on' + type, _cancelBubbleEvent);
               };
-              this.attachEvent('on' + type, cancelBubbleEvent);
+              this.attachEvent('on' + type, _cancelBubbleEvent);
             }
             this.fireEvent('on' + type, event);
           } catch (error) {
