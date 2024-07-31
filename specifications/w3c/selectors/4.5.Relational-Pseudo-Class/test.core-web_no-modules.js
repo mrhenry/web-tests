@@ -5882,9 +5882,9 @@ var Iterator = function () {
     if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
     return fn;
   };
-  var Iterator = function Iterator(list, context) {
-    if (!(this instanceof Iterator)) {
-      return new Iterator(list, context);
+  var _Iterator = function Iterator(list, context) {
+    if (!(this instanceof _Iterator)) {
+      return new _Iterator(list, context);
     }
     Object.defineProperties(this, {
       __list__: {
@@ -5906,9 +5906,9 @@ var Iterator = function () {
     context.on('_delete', this._onDelete.bind(this));
     context.on('_clear', this._onClear.bind(this));
   };
-  Object.defineProperties(Iterator.prototype, Object.assign({
+  Object.defineProperties(_Iterator.prototype, Object.assign({
     constructor: {
-      value: Iterator,
+      value: _Iterator,
       configurable: true,
       enumerable: false,
       writable: true
@@ -6030,7 +6030,7 @@ var Iterator = function () {
       writable: true
     }
   }));
-  Object.defineProperty(Iterator.prototype, Symbol.iterator, {
+  Object.defineProperty(_Iterator.prototype, Symbol.iterator, {
     value: function value() {
       return this;
     },
@@ -6038,13 +6038,13 @@ var Iterator = function () {
     enumerable: false,
     writable: true
   });
-  Object.defineProperty(Iterator.prototype, Symbol.toStringTag, {
+  Object.defineProperty(_Iterator.prototype, Symbol.toStringTag, {
     value: 'Iterator',
     configurable: false,
     enumerable: false,
     writable: true
   });
-  return Iterator;
+  return _Iterator;
 }();
 /* harmony default export */ var _Iterator = (Iterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
@@ -6058,8 +6058,8 @@ var Iterator = function () {
 
 
 var ArrayIterator = function () {
-  var ArrayIterator = function ArrayIterator(arr, kind) {
-    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
+  var _ArrayIterator = function ArrayIterator(arr, kind) {
+    if (!(this instanceof _ArrayIterator)) return new _ArrayIterator(arr, kind);
     _Iterator.call(this, arr);
     if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
     Object.defineProperty(this, '__kind__', {
@@ -6069,10 +6069,10 @@ var ArrayIterator = function () {
       writable: false
     });
   };
-  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
-  ArrayIterator.prototype = Object.create(_Iterator.prototype, {
+  if (Object.setPrototypeOf) Object.setPrototypeOf(_ArrayIterator, _Iterator.prototype);
+  _ArrayIterator.prototype = Object.create(_Iterator.prototype, {
     constructor: {
-      value: ArrayIterator,
+      value: _ArrayIterator,
       configurable: true,
       enumerable: false,
       writable: true
@@ -6096,13 +6096,13 @@ var ArrayIterator = function () {
       writable: true
     }
   });
-  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
+  Object.defineProperty(_ArrayIterator.prototype, Symbol.toStringTag, {
     value: 'Array Iterator',
     writable: false,
     enumerable: false,
     configurable: true
   });
-  return ArrayIterator;
+  return _ArrayIterator;
 }();
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/NodeList.prototype.@@iterator.js
