@@ -238,7 +238,7 @@ module.exports = sort;
 
 /***/ }),
 
-/***/ 4576:
+/***/ 2195:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
@@ -260,7 +260,7 @@ module.exports = function (it) {
 
 var TO_STRING_TAG_SUPPORT = __webpack_require__(2140);
 var isCallable = __webpack_require__(4901);
-var classofRaw = __webpack_require__(4576);
+var classofRaw = __webpack_require__(2195);
 var wellKnownSymbol = __webpack_require__(8227);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
@@ -404,16 +404,16 @@ module.exports = function (O, key, value, options) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 module.exports = function (key, value) {
   try {
-    defineProperty(global, key, { value: value, configurable: true, writable: true });
+    defineProperty(globalThis, key, { value: value, configurable: true, writable: true });
   } catch (error) {
-    global[key] = value;
+    globalThis[key] = value;
   } return value;
 };
 
@@ -454,10 +454,10 @@ module.exports = !fails(function () {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var isObject = __webpack_require__(34);
 
-var document = global.document;
+var document = globalThis.document;
 // typeof document.createElement is 'object' in old IE
 var EXISTS = isObject(document) && isObject(document.createElement);
 
@@ -518,11 +518,29 @@ module.exports = {
 
 /***/ }),
 
-/***/ 8834:
+/***/ 8727:
+/***/ ((module) => {
+
+
+// IE8- don't enum bug keys
+module.exports = [
+  'constructor',
+  'hasOwnProperty',
+  'isPrototypeOf',
+  'propertyIsEnumerable',
+  'toLocaleString',
+  'toString',
+  'valueOf'
+];
+
+
+/***/ }),
+
+/***/ 3709:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var userAgent = __webpack_require__(9392);
+var userAgent = __webpack_require__(2839);
 
 var firefox = userAgent.match(/firefox\/(\d+)/i);
 
@@ -531,47 +549,51 @@ module.exports = !!firefox && +firefox[1];
 
 /***/ }),
 
-/***/ 3202:
+/***/ 3763:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var UA = __webpack_require__(9392);
+var UA = __webpack_require__(2839);
 
 module.exports = /MSIE|Trident/.test(UA);
 
 
 /***/ }),
 
-/***/ 9088:
+/***/ 8574:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
-var classof = __webpack_require__(4576);
+var ENVIRONMENT = __webpack_require__(4215);
 
-module.exports = classof(global.process) === 'process';
+module.exports = ENVIRONMENT === 'NODE';
 
 
 /***/ }),
 
-/***/ 9392:
-/***/ ((module) => {
+/***/ 2839:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
+var globalThis = __webpack_require__(4576);
+
+var navigator = globalThis.navigator;
+var userAgent = navigator && navigator.userAgent;
+
+module.exports = userAgent ? String(userAgent) : '';
 
 
 /***/ }),
 
-/***/ 7388:
+/***/ 9519:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
-var userAgent = __webpack_require__(9392);
+var globalThis = __webpack_require__(4576);
+var userAgent = __webpack_require__(2839);
 
-var process = global.process;
-var Deno = global.Deno;
+var process = globalThis.process;
+var Deno = globalThis.Deno;
 var versions = process && process.versions || Deno && Deno.version;
 var v8 = versions && versions.v8;
 var match, version;
@@ -598,11 +620,11 @@ module.exports = version;
 
 /***/ }),
 
-/***/ 9160:
+/***/ 3607:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var userAgent = __webpack_require__(9392);
+var userAgent = __webpack_require__(2839);
 
 var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
 
@@ -611,20 +633,30 @@ module.exports = !!webkit && +webkit[1];
 
 /***/ }),
 
-/***/ 8727:
-/***/ ((module) => {
+/***/ 4215:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-// IE8- don't enum bug keys
-module.exports = [
-  'constructor',
-  'hasOwnProperty',
-  'isPrototypeOf',
-  'propertyIsEnumerable',
-  'toLocaleString',
-  'toString',
-  'valueOf'
-];
+/* global Bun, Deno -- detection */
+var globalThis = __webpack_require__(4576);
+var userAgent = __webpack_require__(2839);
+var classof = __webpack_require__(2195);
+
+var userAgentStartsWith = function (string) {
+  return userAgent.slice(0, string.length) === string;
+};
+
+module.exports = (function () {
+  if (userAgentStartsWith('Bun/')) return 'BUN';
+  if (userAgentStartsWith('Cloudflare-Workers')) return 'CLOUDFLARE';
+  if (userAgentStartsWith('Deno/')) return 'DENO';
+  if (userAgentStartsWith('Node.js/')) return 'NODE';
+  if (globalThis.Bun && typeof Bun.version == 'string') return 'BUN';
+  if (globalThis.Deno && typeof Deno.version == 'object') return 'DENO';
+  if (classof(globalThis.process) === 'process') return 'NODE';
+  if (globalThis.window && globalThis.document) return 'BROWSER';
+  return 'REST';
+})();
 
 
 /***/ }),
@@ -731,7 +763,7 @@ module.exports = INCORRECT_TO_STRING ? function toString() {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var getOwnPropertyDescriptor = (__webpack_require__(7347).f);
 var createNonEnumerableProperty = __webpack_require__(6699);
 var defineBuiltIn = __webpack_require__(6840);
@@ -760,11 +792,11 @@ module.exports = function (options, source) {
   var STATIC = options.stat;
   var FORCED, target, key, targetProperty, sourceProperty, descriptor;
   if (GLOBAL) {
-    target = global;
+    target = globalThis;
   } else if (STATIC) {
-    target = global[TARGET] || defineGlobalProperty(TARGET, {});
+    target = globalThis[TARGET] || defineGlobalProperty(TARGET, {});
   } else {
-    target = global[TARGET] && global[TARGET].prototype;
+    target = globalThis[TARGET] && globalThis[TARGET].prototype;
   }
   if (target) for (key in source) {
     sourceProperty = source[key];
@@ -997,11 +1029,33 @@ module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
 
 /***/ }),
 
+/***/ 9429:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var globalThis = __webpack_require__(4576);
+var IS_NODE = __webpack_require__(8574);
+
+module.exports = function (name) {
+  if (IS_NODE) {
+    try {
+      return globalThis.process.getBuiltinModule(name);
+    } catch (error) { /* empty */ }
+    try {
+      // eslint-disable-next-line no-new-func -- safe
+      return Function('return require("' + name + '")')();
+    } catch (error) { /* empty */ }
+  }
+};
+
+
+/***/ }),
+
 /***/ 7751:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var isCallable = __webpack_require__(4901);
 
 var aFunction = function (argument) {
@@ -1009,7 +1063,7 @@ var aFunction = function (argument) {
 };
 
 module.exports = function (namespace, method) {
-  return arguments.length < 2 ? aFunction(global[namespace]) : global[namespace] && global[namespace][method];
+  return arguments.length < 2 ? aFunction(globalThis[namespace]) : globalThis[namespace] && globalThis[namespace][method];
 };
 
 
@@ -1085,7 +1139,7 @@ module.exports = function (matched, str, position, captures, namedCaptures, repl
 
 /***/ }),
 
-/***/ 4475:
+/***/ 4576:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
@@ -1172,7 +1226,7 @@ module.exports = !DESCRIPTORS && !fails(function () {
 
 var uncurryThis = __webpack_require__(9504);
 var fails = __webpack_require__(9039);
-var classof = __webpack_require__(4576);
+var classof = __webpack_require__(2195);
 
 var $Object = Object;
 var split = uncurryThis(''.split);
@@ -1260,7 +1314,7 @@ module.exports = function (O, options) {
 
 
 var NATIVE_WEAK_MAP = __webpack_require__(8622);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var isObject = __webpack_require__(34);
 var createNonEnumerableProperty = __webpack_require__(6699);
 var hasOwn = __webpack_require__(9297);
@@ -1269,8 +1323,8 @@ var sharedKey = __webpack_require__(6119);
 var hiddenKeys = __webpack_require__(421);
 
 var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
-var TypeError = global.TypeError;
-var WeakMap = global.WeakMap;
+var TypeError = globalThis.TypeError;
+var WeakMap = globalThis.WeakMap;
 var set, get, has;
 
 var enforce = function (it) {
@@ -1337,7 +1391,7 @@ module.exports = {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var classof = __webpack_require__(4576);
+var classof = __webpack_require__(2195);
 
 // `IsArray` abstract operation
 // https://tc39.es/ecma262/#sec-isarray
@@ -1605,7 +1659,8 @@ var NullProtoObjectViaActiveX = function (activeXDocument) {
   activeXDocument.write(scriptTag(''));
   activeXDocument.close();
   var temp = activeXDocument.parentWindow.Object;
-  activeXDocument = null; // avoid memory leak
+  // eslint-disable-next-line no-useless-assignment -- avoid memory leak
+  activeXDocument = null;
   return temp;
 };
 
@@ -1986,7 +2041,7 @@ module.exports = function (Target, Source, key) {
 var call = __webpack_require__(9565);
 var anObject = __webpack_require__(8551);
 var isCallable = __webpack_require__(4901);
-var classof = __webpack_require__(4576);
+var classof = __webpack_require__(2195);
 var regexpExec = __webpack_require__(7323);
 
 var $TypeError = TypeError;
@@ -2161,10 +2216,10 @@ module.exports = function () {
 
 
 var fails = __webpack_require__(9039);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 
 // babel-minify and Closure Compiler transpiles RegExp('a', 'y') -> /a/y and it causes SyntaxError
-var $RegExp = global.RegExp;
+var $RegExp = globalThis.RegExp;
 
 var UNSUPPORTED_Y = fails(function () {
   var re = $RegExp('a', 'y');
@@ -2199,10 +2254,10 @@ module.exports = {
 
 
 var fails = __webpack_require__(9039);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 
 // babel-minify and Closure Compiler transpiles RegExp('.', 's') -> /./s and it causes SyntaxError
-var $RegExp = global.RegExp;
+var $RegExp = globalThis.RegExp;
 
 module.exports = fails(function () {
   var re = $RegExp('.', 's');
@@ -2217,10 +2272,10 @@ module.exports = fails(function () {
 
 
 var fails = __webpack_require__(9039);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 
 // babel-minify and Closure Compiler transpiles RegExp('(?<a>b)', 'g') -> /(?<a>b)/g and it causes SyntaxError
-var $RegExp = global.RegExp;
+var $RegExp = globalThis.RegExp;
 
 module.exports = fails(function () {
   var re = $RegExp('(?<a>b)', 'g');
@@ -2290,17 +2345,17 @@ module.exports = function (key) {
 
 
 var IS_PURE = __webpack_require__(6395);
-var globalThis = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var defineGlobalProperty = __webpack_require__(9433);
 
 var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.37.1',
+  version: '3.38.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.37.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2430,11 +2485,11 @@ module.exports = {
 
 
 /* eslint-disable es/no-symbol -- required for testing */
-var V8_VERSION = __webpack_require__(7388);
+var V8_VERSION = __webpack_require__(9519);
 var fails = __webpack_require__(9039);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 
-var $String = global.String;
+var $String = globalThis.String;
 
 // eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
@@ -2620,22 +2675,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ 9714:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var IS_NODE = __webpack_require__(9088);
-
-module.exports = function (name) {
-  try {
-    // eslint-disable-next-line no-new-func -- safe
-    if (IS_NODE) return Function('return require("' + name + '")')();
-  } catch (error) { /* empty */ }
-};
-
-
-/***/ }),
-
 /***/ 6823:
 /***/ ((module) => {
 
@@ -2708,10 +2747,10 @@ module.exports = DESCRIPTORS && fails(function () {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var isCallable = __webpack_require__(4901);
 
-var WeakMap = global.WeakMap;
+var WeakMap = globalThis.WeakMap;
 
 module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 
@@ -2722,14 +2761,14 @@ module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var shared = __webpack_require__(5745);
 var hasOwn = __webpack_require__(9297);
 var uid = __webpack_require__(3392);
 var NATIVE_SYMBOL = __webpack_require__(4495);
 var USE_SYMBOL_AS_UID = __webpack_require__(7040);
 
-var Symbol = global.Symbol;
+var Symbol = globalThis.Symbol;
 var WellKnownSymbolsStore = shared('wks');
 var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
@@ -2890,10 +2929,10 @@ var toString = __webpack_require__(655);
 var fails = __webpack_require__(9039);
 var internalSort = __webpack_require__(4488);
 var arrayMethodIsStrict = __webpack_require__(4598);
-var FF = __webpack_require__(8834);
-var IE_OR_EDGE = __webpack_require__(3202);
-var V8 = __webpack_require__(7388);
-var WEBKIT = __webpack_require__(9160);
+var FF = __webpack_require__(3709);
+var IE_OR_EDGE = __webpack_require__(3763);
+var V8 = __webpack_require__(9519);
+var WEBKIT = __webpack_require__(3607);
 
 var test = [];
 var nativeSort = uncurryThis(test.sort);
@@ -2995,12 +3034,12 @@ $({ target: 'Array', proto: true, forced: FORCED }, {
 
 /* eslint-disable no-unused-vars -- required for functions `.length` */
 var $ = __webpack_require__(6518);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var apply = __webpack_require__(8745);
 var wrapErrorConstructorWithCause = __webpack_require__(4601);
 
 var WEB_ASSEMBLY = 'WebAssembly';
-var WebAssembly = global[WEB_ASSEMBLY];
+var WebAssembly = globalThis[WEB_ASSEMBLY];
 
 // eslint-disable-next-line es/no-error-cause -- feature detection
 var FORCED = new Error('e', { cause: 7 }).cause !== 7;
@@ -3285,8 +3324,8 @@ $({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
 
 
 var $ = __webpack_require__(6518);
-var tryNodeRequire = __webpack_require__(9714);
 var getBuiltIn = __webpack_require__(7751);
+var getBuiltInNodeModule = __webpack_require__(9429);
 var fails = __webpack_require__(9039);
 var create = __webpack_require__(2360);
 var createPropertyDescriptor = __webpack_require__(6980);
@@ -3311,7 +3350,7 @@ var Error = getBuiltIn('Error');
 var NativeDOMException = getBuiltIn(DOM_EXCEPTION) || (function () {
   try {
     // NodeJS < 15.0 does not expose `MessageChannel` to global
-    var MessageChannel = getBuiltIn('MessageChannel') || tryNodeRequire('worker_threads').MessageChannel;
+    var MessageChannel = getBuiltIn('MessageChannel') || getBuiltInNodeModule('worker_threads').MessageChannel;
     // eslint-disable-next-line es/no-weak-map, unicorn/require-post-message-target-origin -- safe
     new MessageChannel().port1.postMessage(new WeakMap());
   } catch (error) {
@@ -3437,7 +3476,7 @@ for (var key in DOMExceptionConstants) if (hasOwn(DOMExceptionConstants, key)) {
 
 
 var $ = __webpack_require__(6518);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var getBuiltIn = __webpack_require__(7751);
 var createPropertyDescriptor = __webpack_require__(6980);
 var defineProperty = (__webpack_require__(4913).f);
@@ -3473,7 +3512,7 @@ var ERROR_HAS_STACK = 'stack' in new Error(DOM_EXCEPTION);
 var DOM_EXCEPTION_HAS_STACK = 'stack' in new NativeDOMException(1, 2);
 
 // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-var descriptor = NativeDOMException && DESCRIPTORS && Object.getOwnPropertyDescriptor(global, DOM_EXCEPTION);
+var descriptor = NativeDOMException && DESCRIPTORS && Object.getOwnPropertyDescriptor(globalThis, DOM_EXCEPTION);
 
 // Bun ~ 0.1.1 DOMException have incorrect descriptor and we can't redefine it
 // https://github.com/Jarred-Sumner/bun/issues/399
@@ -3527,31 +3566,31 @@ setToStringTag(getBuiltIn(DOM_EXCEPTION), DOM_EXCEPTION);
 
 
 var $ = __webpack_require__(6518);
-var global = __webpack_require__(4475);
+var globalThis = __webpack_require__(4576);
 var defineBuiltInAccessor = __webpack_require__(2106);
 var DESCRIPTORS = __webpack_require__(3724);
 
 var $TypeError = TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
-var INCORRECT_VALUE = global.self !== global;
+var INCORRECT_VALUE = globalThis.self !== globalThis;
 
 // `self` getter
 // https://html.spec.whatwg.org/multipage/window-object.html#dom-self
 try {
   if (DESCRIPTORS) {
     // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-    var descriptor = Object.getOwnPropertyDescriptor(global, 'self');
+    var descriptor = Object.getOwnPropertyDescriptor(globalThis, 'self');
     // some engines have `self`, but with incorrect descriptor
     // https://github.com/denoland/deno/issues/15765
     if (INCORRECT_VALUE || !descriptor || !descriptor.get || !descriptor.enumerable) {
-      defineBuiltInAccessor(global, 'self', {
+      defineBuiltInAccessor(globalThis, 'self', {
         get: function self() {
-          return global;
+          return globalThis;
         },
         set: function self(value) {
-          if (this !== global) throw new $TypeError('Illegal invocation');
-          defineProperty(global, 'self', {
+          if (this !== globalThis) throw new $TypeError('Illegal invocation');
+          defineProperty(globalThis, 'self', {
             value: value,
             writable: true,
             configurable: true,
@@ -3563,7 +3602,7 @@ try {
       });
     }
   } else $({ global: true, simple: true, forced: INCORRECT_VALUE }, {
-    self: global
+    self: globalThis
   });
 } catch (error) { /* empty */ }
 
