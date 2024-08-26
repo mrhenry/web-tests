@@ -3350,10 +3350,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.0',
+  version: '3.38.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3950,7 +3950,7 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
   var target = state.target;
   var index = state.index++;
   if (!target || index >= target.length) {
-    state.target = undefined;
+    state.target = null;
     return createIterResultObject(undefined, true);
   }
   switch (state.kind) {
@@ -4395,7 +4395,7 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
       reactions: new Queue(),
       rejection: false,
       state: PENDING,
-      value: undefined
+      value: null
     });
   };
 
@@ -4743,76 +4743,6 @@ $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('uni
 
 /***/ }),
 
-/***/ 3375:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(7642);
-
-
-/***/ }),
-
-/***/ 1606:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(8004);
-
-
-/***/ }),
-
-/***/ 3972:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(3853);
-
-
-/***/ }),
-
-/***/ 9209:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(5876);
-
-
-/***/ }),
-
-/***/ 5714:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(2475);
-
-
-/***/ }),
-
-/***/ 7561:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(5024);
-
-
-/***/ }),
-
-/***/ 6197:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(1698);
-
-
-/***/ }),
-
 /***/ 3611:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -5073,20 +5003,20 @@ var es_promise = __webpack_require__(3362);
 var es_regexp_exec = __webpack_require__(7495);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
 var es_regexp_test = __webpack_require__(906);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.difference.v2.js
-var esnext_set_difference_v2 = __webpack_require__(3375);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.intersection.v2.js
-var esnext_set_intersection_v2 = __webpack_require__(1606);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-disjoint-from.v2.js
-var esnext_set_is_disjoint_from_v2 = __webpack_require__(3972);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-subset-of.v2.js
-var esnext_set_is_subset_of_v2 = __webpack_require__(9209);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-superset-of.v2.js
-var esnext_set_is_superset_of_v2 = __webpack_require__(5714);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.symmetric-difference.v2.js
-var esnext_set_symmetric_difference_v2 = __webpack_require__(7561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.union.v2.js
-var esnext_set_union_v2 = __webpack_require__(6197);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.difference.v2.js
+var es_set_difference_v2 = __webpack_require__(7642);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.intersection.v2.js
+var es_set_intersection_v2 = __webpack_require__(8004);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-disjoint-from.v2.js
+var es_set_is_disjoint_from_v2 = __webpack_require__(3853);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-subset-of.v2.js
+var es_set_is_subset_of_v2 = __webpack_require__(5876);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-superset-of.v2.js
+var es_set_is_superset_of_v2 = __webpack_require__(2475);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.symmetric-difference.v2.js
+var es_set_symmetric_difference_v2 = __webpack_require__(5024);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.union.v2.js
+var es_set_union_v2 = __webpack_require__(1698);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
 
 

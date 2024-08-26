@@ -569,8 +569,8 @@ module.exports = {
       setInternalState(that, {
         type: CONSTRUCTOR_NAME,
         index: create(null),
-        first: undefined,
-        last: undefined,
+        first: null,
+        last: null,
         size: 0
       });
       if (!DESCRIPTORS) that.size = 0;
@@ -595,7 +595,7 @@ module.exports = {
           key: key,
           value: value,
           previous: previous = state.last,
-          next: undefined,
+          next: null,
           removed: false
         };
         if (!state.first) state.first = entry;
@@ -629,10 +629,10 @@ module.exports = {
         var entry = state.first;
         while (entry) {
           entry.removed = true;
-          if (entry.previous) entry.previous = entry.previous.next = undefined;
+          if (entry.previous) entry.previous = entry.previous.next = null;
           entry = entry.next;
         }
-        state.first = state.last = undefined;
+        state.first = state.last = null;
         state.index = create(null);
         if (DESCRIPTORS) state.size = 0;
         else that.size = 0;
@@ -724,7 +724,7 @@ module.exports = {
         target: iterated,
         state: getInternalCollectionState(iterated),
         kind: kind,
-        last: undefined
+        last: null
       });
     }, function () {
       var state = getInternalIteratorState(this);
@@ -735,7 +735,7 @@ module.exports = {
       // get next entry
       if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
         // or finish the iteration
-        state.target = undefined;
+        state.target = null;
         return createIterResultObject(undefined, true);
       }
       // return step by kind
@@ -4568,10 +4568,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.0',
+  version: '3.38.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -5485,7 +5485,7 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
   var target = state.target;
   var index = state.index++;
   if (!target || index >= target.length) {
-    state.target = undefined;
+    state.target = null;
     return createIterResultObject(undefined, true);
   }
   switch (state.kind) {
@@ -6629,7 +6629,7 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
       reactions: new Queue(),
       rejection: false,
       state: PENDING,
-      value: undefined
+      value: null
     });
   };
 
@@ -7663,6 +7663,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var SymbolWrapper = function Symbol() {
     var description = arguments.length < 1 || arguments[0] === undefined ? undefined : toString(arguments[0]);
     var result = isPrototypeOf(SymbolPrototype, this)
+      // eslint-disable-next-line sonar/inconsistent-function-call -- ok
       ? new NativeSymbol(description)
       // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
       : description === undefined ? NativeSymbol() : NativeSymbol(description);
@@ -7796,76 +7797,6 @@ defineWellKnownSymbol('toPrimitive');
 // `Symbol.prototype[@@toPrimitive]` method
 // https://tc39.es/ecma262/#sec-symbol.prototype-@@toprimitive
 defineSymbolToPrimitive();
-
-
-/***/ }),
-
-/***/ 3375:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(7642);
-
-
-/***/ }),
-
-/***/ 1606:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(8004);
-
-
-/***/ }),
-
-/***/ 3972:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(3853);
-
-
-/***/ }),
-
-/***/ 9209:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(5876);
-
-
-/***/ }),
-
-/***/ 5714:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(2475);
-
-
-/***/ }),
-
-/***/ 7561:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(5024);
-
-
-/***/ }),
-
-/***/ 6197:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(1698);
 
 
 /***/ }),
@@ -9478,20 +9409,20 @@ var es_promise = __webpack_require__(3362);
 var es_reflect_construct = __webpack_require__(825);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.js
 var es_set = __webpack_require__(1415);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.difference.v2.js
-var esnext_set_difference_v2 = __webpack_require__(3375);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.intersection.v2.js
-var esnext_set_intersection_v2 = __webpack_require__(1606);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-disjoint-from.v2.js
-var esnext_set_is_disjoint_from_v2 = __webpack_require__(3972);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-subset-of.v2.js
-var esnext_set_is_subset_of_v2 = __webpack_require__(9209);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.is-superset-of.v2.js
-var esnext_set_is_superset_of_v2 = __webpack_require__(5714);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.symmetric-difference.v2.js
-var esnext_set_symmetric_difference_v2 = __webpack_require__(7561);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/esnext.set.union.v2.js
-var esnext_set_union_v2 = __webpack_require__(6197);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.difference.v2.js
+var es_set_difference_v2 = __webpack_require__(7642);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.intersection.v2.js
+var es_set_intersection_v2 = __webpack_require__(8004);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-disjoint-from.v2.js
+var es_set_is_disjoint_from_v2 = __webpack_require__(3853);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-subset-of.v2.js
+var es_set_is_subset_of_v2 = __webpack_require__(5876);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.is-superset-of.v2.js
+var es_set_is_superset_of_v2 = __webpack_require__(2475);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.symmetric-difference.v2.js
+var es_set_symmetric_difference_v2 = __webpack_require__(5024);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.union.v2.js
+var es_set_union_v2 = __webpack_require__(1698);
 ;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
 
 

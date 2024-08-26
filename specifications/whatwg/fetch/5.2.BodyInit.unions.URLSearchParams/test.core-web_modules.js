@@ -668,7 +668,7 @@ if (!NATIVE_ARRAY_BUFFER) {
   });
 } else {
   var INCORRECT_ARRAY_BUFFER_NAME = PROPER_FUNCTION_NAME && NativeArrayBuffer.name !== ARRAY_BUFFER;
-  /* eslint-disable no-new -- required for testing */
+  /* eslint-disable no-new, sonar/inconsistent-function-call -- required for testing */
   if (!fails(function () {
     NativeArrayBuffer(1);
   }) || !fails(function () {
@@ -679,7 +679,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer(NaN);
     return NativeArrayBuffer.length !== 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
   })) {
-    /* eslint-enable no-new -- required for testing */
+    /* eslint-enable no-new, sonar/inconsistent-function-call -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, ArrayBufferPrototype);
       return inheritIfRequired(new NativeArrayBuffer(toIndex(length)), this, $ArrayBuffer);
@@ -4348,10 +4348,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.0',
+  version: '3.38.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -5194,7 +5194,7 @@ if (DESCRIPTORS) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-/* eslint-disable no-new -- required for testing */
+/* eslint-disable no-new, sonar/inconsistent-function-call -- required for testing */
 var globalThis = __webpack_require__(4576);
 var fails = __webpack_require__(9039);
 var checkCorrectnessOfIteration = __webpack_require__(4428);
@@ -5677,7 +5677,7 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
   var target = state.target;
   var index = state.index++;
   if (!target || index >= target.length) {
-    state.target = undefined;
+    state.target = null;
     return createIterResultObject(undefined, true);
   }
   switch (state.kind) {
@@ -6138,7 +6138,7 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
       reactions: new Queue(),
       rejection: false,
       state: PENDING,
-      value: undefined
+      value: null
     });
   };
 
@@ -6394,6 +6394,45 @@ if (NOT_GENERIC || INCORRECT_NAME) {
 
 /***/ }),
 
+/***/ 7337:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var $ = __webpack_require__(6518);
+var uncurryThis = __webpack_require__(9504);
+var toAbsoluteIndex = __webpack_require__(5610);
+
+var $RangeError = RangeError;
+var fromCharCode = String.fromCharCode;
+// eslint-disable-next-line es/no-string-fromcodepoint -- required for testing
+var $fromCodePoint = String.fromCodePoint;
+var join = uncurryThis([].join);
+
+// length should be 1, old FF problem
+var INCORRECT_LENGTH = !!$fromCodePoint && $fromCodePoint.length !== 1;
+
+// `String.fromCodePoint` method
+// https://tc39.es/ecma262/#sec-string.fromcodepoint
+$({ target: 'String', stat: true, arity: 1, forced: INCORRECT_LENGTH }, {
+  // eslint-disable-next-line no-unused-vars -- required for `.length`
+  fromCodePoint: function fromCodePoint(x) {
+    var elements = [];
+    var length = arguments.length;
+    var i = 0;
+    var code;
+    while (length > i) {
+      code = +arguments[i++];
+      if (toAbsoluteIndex(code, 0x10FFFF) !== code) throw new $RangeError(code + ' is not a valid code point');
+      elements[i] = code < 0x10000
+        ? fromCharCode(code)
+        : fromCharCode(((code -= 0x10000) >> 10) + 0xD800, code % 0x400 + 0xDC00);
+    } return join(elements, '');
+  }
+});
+
+
+/***/ }),
+
 /***/ 5440:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -6591,6 +6630,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var SymbolWrapper = function Symbol() {
     var description = arguments.length < 1 || arguments[0] === undefined ? undefined : toString(arguments[0]);
     var result = isPrototypeOf(SymbolPrototype, this)
+      // eslint-disable-next-line sonar/inconsistent-function-call -- ok
       ? new NativeSymbol(description)
       // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
       : description === undefined ? NativeSymbol() : NativeSymbol(description);
@@ -7047,9 +7087,11 @@ try {
 
 // TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
 __webpack_require__(3792);
+__webpack_require__(7337);
 var $ = __webpack_require__(6518);
 var globalThis = __webpack_require__(4576);
 var safeGetBuiltIn = __webpack_require__(3389);
+var getBuiltIn = __webpack_require__(7751);
 var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var DESCRIPTORS = __webpack_require__(3724);
@@ -7089,10 +7131,11 @@ var NativeRequest = safeGetBuiltIn('Request');
 var Headers = safeGetBuiltIn('Headers');
 var RequestPrototype = NativeRequest && NativeRequest.prototype;
 var HeadersPrototype = Headers && Headers.prototype;
-var RegExp = globalThis.RegExp;
 var TypeError = globalThis.TypeError;
-var decodeURIComponent = globalThis.decodeURIComponent;
 var encodeURIComponent = globalThis.encodeURIComponent;
+var fromCharCode = String.fromCharCode;
+var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
+var $parseInt = parseInt;
 var charAt = uncurryThis(''.charAt);
 var join = uncurryThis([].join);
 var push = uncurryThis([].push);
@@ -7101,33 +7144,125 @@ var shift = uncurryThis([].shift);
 var splice = uncurryThis([].splice);
 var split = uncurryThis(''.split);
 var stringSlice = uncurryThis(''.slice);
+var exec = uncurryThis(/./.exec);
 
 var plus = /\+/g;
-var sequences = Array(4);
+var FALLBACK_REPLACER = '\uFFFD';
+var VALID_HEX = /^[0-9a-f]+$/i;
 
-var percentSequence = function (bytes) {
-  return sequences[bytes - 1] || (sequences[bytes - 1] = RegExp('((?:%[\\da-f]{2}){' + bytes + '})', 'gi'));
+var parseHexOctet = function (string, start) {
+  var substr = stringSlice(string, start, start + 2);
+  if (!exec(VALID_HEX, substr)) return NaN;
+
+  return $parseInt(substr, 16);
 };
 
-var percentDecode = function (sequence) {
-  try {
-    return decodeURIComponent(sequence);
-  } catch (error) {
-    return sequence;
+var getLeadingOnes = function (octet) {
+  var count = 0;
+  for (var mask = 0x80; mask > 0 && (octet & mask) !== 0; mask >>= 1) {
+    count++;
   }
+  return count;
 };
 
-var deserialize = function (it) {
-  var result = replace(it, plus, ' ');
-  var bytes = 4;
-  try {
-    return decodeURIComponent(result);
-  } catch (error) {
-    while (bytes) {
-      result = replace(result, percentSequence(bytes--), percentDecode);
+var utf8Decode = function (octets) {
+  var codePoint = null;
+
+  switch (octets.length) {
+    case 1:
+      codePoint = octets[0];
+      break;
+    case 2:
+      codePoint = (octets[0] & 0x1F) << 6 | (octets[1] & 0x3F);
+      break;
+    case 3:
+      codePoint = (octets[0] & 0x0F) << 12 | (octets[1] & 0x3F) << 6 | (octets[2] & 0x3F);
+      break;
+    case 4:
+      codePoint = (octets[0] & 0x07) << 18 | (octets[1] & 0x3F) << 12 | (octets[2] & 0x3F) << 6 | (octets[3] & 0x3F);
+      break;
+  }
+
+  return codePoint > 0x10FFFF ? null : codePoint;
+};
+
+var decode = function (input) {
+  input = replace(input, plus, ' ');
+  var length = input.length;
+  var result = '';
+  var i = 0;
+
+  while (i < length) {
+    var decodedChar = charAt(input, i);
+
+    if (decodedChar === '%') {
+      if (charAt(input, i + 1) === '%' || i + 3 > length) {
+        result += '%';
+        i++;
+        continue;
+      }
+
+      var octet = parseHexOctet(input, i + 1);
+
+      // eslint-disable-next-line no-self-compare -- NaN check
+      if (octet !== octet) {
+        result += decodedChar;
+        i++;
+        continue;
+      }
+
+      i += 2;
+      var byteSequenceLength = getLeadingOnes(octet);
+
+      if (byteSequenceLength === 0) {
+        decodedChar = fromCharCode(octet);
+      } else {
+        if (byteSequenceLength === 1 || byteSequenceLength > 4) {
+          result += FALLBACK_REPLACER;
+          i++;
+          continue;
+        }
+
+        var octets = [octet];
+        var sequenceIndex = 1;
+
+        while (sequenceIndex < byteSequenceLength) {
+          i++;
+          if (i + 3 > length || charAt(input, i) !== '%') break;
+
+          var nextByte = parseHexOctet(input, i + 1);
+
+          // eslint-disable-next-line no-self-compare -- NaN check
+          if (nextByte !== nextByte) {
+            i += 3;
+            break;
+          }
+          if (nextByte > 191 || nextByte < 128) break;
+
+          push(octets, nextByte);
+          i += 2;
+          sequenceIndex++;
+        }
+
+        if (octets.length !== byteSequenceLength) {
+          result += FALLBACK_REPLACER;
+          continue;
+        }
+
+        var codePoint = utf8Decode(octets);
+        if (codePoint === null) {
+          result += FALLBACK_REPLACER;
+        } else {
+          decodedChar = fromCodePoint(codePoint);
+        }
+      }
     }
-    return result;
+
+    result += decodedChar;
+    i++;
   }
+
+  return result;
 };
 
 var find = /[!'()~]|%20/g;
@@ -7161,7 +7296,7 @@ var URLSearchParamsIterator = createIteratorConstructor(function Iterator(params
   var target = state.target;
   var index = state.index++;
   if (!target || index >= target.length) {
-    state.target = undefined;
+    state.target = null;
     return createIterResultObject(undefined, true);
   }
   var entry = target[index];
@@ -7220,8 +7355,8 @@ URLSearchParamsState.prototype = {
         if (attribute.length) {
           entry = split(attribute, '=');
           push(entries, {
-            key: deserialize(shift(entry)),
-            value: deserialize(join(entry, '='))
+            key: decode(shift(entry)),
+            value: decode(join(entry, '='))
           });
         }
       }

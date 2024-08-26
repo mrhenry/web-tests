@@ -298,8 +298,8 @@ module.exports = {
       setInternalState(that, {
         type: CONSTRUCTOR_NAME,
         index: create(null),
-        first: undefined,
-        last: undefined,
+        first: null,
+        last: null,
         size: 0
       });
       if (!DESCRIPTORS) that.size = 0;
@@ -324,7 +324,7 @@ module.exports = {
           key: key,
           value: value,
           previous: previous = state.last,
-          next: undefined,
+          next: null,
           removed: false
         };
         if (!state.first) state.first = entry;
@@ -358,10 +358,10 @@ module.exports = {
         var entry = state.first;
         while (entry) {
           entry.removed = true;
-          if (entry.previous) entry.previous = entry.previous.next = undefined;
+          if (entry.previous) entry.previous = entry.previous.next = null;
           entry = entry.next;
         }
-        state.first = state.last = undefined;
+        state.first = state.last = null;
         state.index = create(null);
         if (DESCRIPTORS) state.size = 0;
         else that.size = 0;
@@ -453,7 +453,7 @@ module.exports = {
         target: iterated,
         state: getInternalCollectionState(iterated),
         kind: kind,
-        last: undefined
+        last: null
       });
     }, function () {
       var state = getInternalIteratorState(this);
@@ -464,7 +464,7 @@ module.exports = {
       // get next entry
       if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
         // or finish the iteration
-        state.target = undefined;
+        state.target = null;
         return createIterResultObject(undefined, true);
       }
       // return step by kind
@@ -2618,10 +2618,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.0',
+  version: '3.38.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3060,7 +3060,7 @@ module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
   var target = state.target;
   var index = state.index++;
   if (!target || index >= target.length) {
-    state.target = undefined;
+    state.target = null;
     return createIterResultObject(undefined, true);
   }
   switch (state.kind) {

@@ -425,7 +425,7 @@ if (!NATIVE_ARRAY_BUFFER) {
   });
 } else {
   var INCORRECT_ARRAY_BUFFER_NAME = PROPER_FUNCTION_NAME && NativeArrayBuffer.name !== ARRAY_BUFFER;
-  /* eslint-disable no-new -- required for testing */
+  /* eslint-disable no-new, sonar/inconsistent-function-call -- required for testing */
   if (!fails(function () {
     NativeArrayBuffer(1);
   }) || !fails(function () {
@@ -436,7 +436,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer(NaN);
     return NativeArrayBuffer.length !== 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
   })) {
-    /* eslint-enable no-new -- required for testing */
+    /* eslint-enable no-new, sonar/inconsistent-function-call -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, ArrayBufferPrototype);
       return inheritIfRequired(new NativeArrayBuffer(toIndex(length)), this, $ArrayBuffer);
@@ -2261,10 +2261,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.0',
+  version: '3.38.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
