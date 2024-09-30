@@ -1551,7 +1551,7 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMRect.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMRect.js
 
 (function (undefined) {
   if (!("DOMRect" in self && function (e) {
@@ -1665,7 +1665,7 @@ var web_self = __webpack_require__(3611);
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/geometry-1/3.DOMRect/test.pure.js
+;// ./specifications/w3c/geometry-1/3.DOMRect/test.pure.js
 
 (function (cb) {
   var domRect = new DOMRect();

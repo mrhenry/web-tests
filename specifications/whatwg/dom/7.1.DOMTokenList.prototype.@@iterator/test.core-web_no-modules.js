@@ -5580,7 +5580,7 @@ var es_regexp_to_string = __webpack_require__(8781);
 var es_string_replace = __webpack_require__(5440);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(744);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
+;// ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -5730,7 +5730,7 @@ var _DOMTokenList = function () {
   return _DOMTokenList;
 }();
 /* harmony default export */ var helpers_DOMTokenList = (_DOMTokenList);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.js
 function DOMTokenList_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, DOMTokenList_typeof(o); }
 
 
@@ -5799,7 +5799,7 @@ function DOMTokenList_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.classList.js
 function Element_prototype_classList_typeof(o) { "@babel/helpers - typeof"; return Element_prototype_classList_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, Element_prototype_classList_typeof(o); }
 
 
@@ -5867,7 +5867,7 @@ var es_function_bind = __webpack_require__(4170);
 var es_object_assign = __webpack_require__(9085);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
 var es_object_define_properties = __webpack_require__(7945);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
+;// ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
 
@@ -6059,7 +6059,7 @@ var Iterator = function () {
   return _Iterator;
 }();
 /* harmony default export */ var _Iterator = (Iterator);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
+;// ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
 
 
@@ -6117,7 +6117,7 @@ var ArrayIterator = function () {
   return _ArrayIterator;
 }();
 /* harmony default export */ var _ArrayIterator = (ArrayIterator);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
 function DOMTokenList_prototype_iterator_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList_prototype_iterator_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, DOMTokenList_prototype_iterator_typeof(o); }
 
 
@@ -6151,7 +6151,7 @@ function DOMTokenList_prototype_iterator_typeof(o) { "@babel/helpers - typeof"; 
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
 function DOMTokenList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, DOMTokenList_prototype_forEach_typeof(o); }
 
 
@@ -6179,7 +6179,7 @@ var es_array_from = __webpack_require__(3418);
 var es_array_is_array = __webpack_require__(4346);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
 var es_array_slice = __webpack_require__(4782);
-;// CONCATENATED MODULE: ./specifications/whatwg/dom/7.1.DOMTokenList.prototype.@@iterator/test.pure.js
+;// ./specifications/whatwg/dom/7.1.DOMTokenList.prototype.@@iterator/test.pure.js
 
 
 

@@ -3945,7 +3945,7 @@ var es_regexp_test = __webpack_require__(906);
 var es_string_iterator = __webpack_require__(7764);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
+;// ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -4234,7 +4234,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/whatwg/html/4.10.5.4.valueAsDate/test.pure.js
+;// ./specifications/whatwg/html/4.10.5.4.valueAsDate/test.pure.js
 
 
 (function (cb) {

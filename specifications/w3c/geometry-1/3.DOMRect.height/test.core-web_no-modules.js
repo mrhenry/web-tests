@@ -3524,7 +3524,7 @@ var es_object_to_string = __webpack_require__(6099);
 var es_string_iterator = __webpack_require__(7764);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMRect.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMRect.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -3647,7 +3647,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/geometry-1/3.DOMRect.height/test.pure.js
+;// ./specifications/w3c/geometry-1/3.DOMRect.height/test.pure.js
 
 (function (cb) {
   var domRect = new DOMRect();
