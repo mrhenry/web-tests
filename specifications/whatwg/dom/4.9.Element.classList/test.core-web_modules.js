@@ -3862,7 +3862,7 @@ var es_array_iterator = __webpack_require__(3792);
 var es_array_push = __webpack_require__(4114);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__(9085);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
+;// ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
 
@@ -4041,7 +4041,7 @@ var Iterator = function () {
   return Iterator;
 }();
 /* harmony default export */ const _Iterator = (Iterator);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
+;// ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
 
 var ArrayIterator = function () {
@@ -4104,7 +4104,7 @@ var es_regexp_to_string = __webpack_require__(8781);
 var es_string_replace = __webpack_require__(5440);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(744);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
+;// ./node_modules/@mrhenry/core-web/helpers/_DOMTokenList.js
 
 
 
@@ -4241,7 +4241,7 @@ var _DOMTokenList = function () {
   return _DOMTokenList;
 }();
 /* harmony default export */ const helpers_DOMTokenList = ((/* unused pure expression or super */ null && (_DOMTokenList)));
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
+;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
 
 
 
@@ -4269,7 +4269,7 @@ var _DOMTokenList = function () {
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.9.Element.classList/test.pure.js
+;// ./specifications/whatwg/dom/4.9.Element.classList/test.pure.js
 
 (function (cb) {
   var div = document.createElement('div');

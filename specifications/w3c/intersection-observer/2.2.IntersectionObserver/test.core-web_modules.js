@@ -3409,7 +3409,7 @@ var es_regexp_exec = __webpack_require__(7495);
 var es_string_split = __webpack_require__(744);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
+;// ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
 
 
 
@@ -3788,7 +3788,7 @@ var web_self = __webpack_require__(3611);
     })(window, document);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
+;// ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
 
 (function (cb) {
   var foo = new IntersectionObserver(function () {}, {});

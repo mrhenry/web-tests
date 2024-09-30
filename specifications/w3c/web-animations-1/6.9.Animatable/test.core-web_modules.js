@@ -4977,7 +4977,7 @@ var web_dom_exception_stack = __webpack_require__(4979);
 var web_dom_exception_to_string_tag = __webpack_require__(9739);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
+;// ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
 
 
 
@@ -6738,7 +6738,7 @@ var web_self = __webpack_require__(3611);
     }();
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/web-animations-1/6.9.Animatable/test.pure.js
+;// ./specifications/w3c/web-animations-1/6.9.Animatable/test.pure.js
 
 (function (cb) {
   var el = document.getElementById("the-fixture");

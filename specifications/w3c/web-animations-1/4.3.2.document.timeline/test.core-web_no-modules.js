@@ -6979,7 +6979,7 @@ var es_string_iterator = __webpack_require__(7764);
 var web_self = __webpack_require__(3611);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(6031);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/requestAnimationFrame.js
+;// ./node_modules/@mrhenry/core-web/modules/requestAnimationFrame.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -7109,7 +7109,7 @@ var web_dom_exception_constructor = __webpack_require__(5815);
 var web_dom_exception_stack = __webpack_require__(4979);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-exception.to-string-tag.js
 var web_dom_exception_to_string_tag = __webpack_require__(9739);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
+;// ./node_modules/@mrhenry/core-web/modules/WebAnimations.js
 function WebAnimations_typeof(o) { "@babel/helpers - typeof"; return WebAnimations_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, WebAnimations_typeof(o); }
 
 
@@ -8897,7 +8897,7 @@ function WebAnimations_typeof(o) { "@babel/helpers - typeof"; return WebAnimatio
     }();
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : WebAnimations_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : WebAnimations_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : WebAnimations_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/web-animations-1/4.3.2.document.timeline/test.pure.js
+;// ./specifications/w3c/web-animations-1/4.3.2.document.timeline/test.pure.js
 
 
 (function (cb) {

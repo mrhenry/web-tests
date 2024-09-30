@@ -4835,7 +4835,7 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
+;// ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
 
 (function (undefined) {
   if (!("DocumentFragment" in self && function () {
@@ -4854,7 +4854,7 @@ var web_self = __webpack_require__(3611);
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/helpers/_mutation.js
+;// ./node_modules/@mrhenry/core-web/helpers/_mutation.js
 var _mutation = function () {
   function isNode(object) {
     if (typeof Node === 'function') {
@@ -4874,7 +4874,7 @@ var _mutation = function () {
   };
 }();
 /* harmony default export */ const helpers_mutation = (_mutation);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.append.js
+;// ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.append.js
 
 
 (function (undefined) {
@@ -4890,7 +4890,7 @@ var _mutation = function () {
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.prepend.js
+;// ./node_modules/@mrhenry/core-web/modules/DocumentFragment.prototype.prepend.js
 
 
 (function (undefined) {
@@ -4906,7 +4906,7 @@ var _mutation = function () {
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.after.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.after.js
 
 
 (function (undefined) {
@@ -4931,7 +4931,7 @@ var _mutation = function () {
     }
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.append.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.append.js
 
 
 (function (undefined) {
@@ -4941,7 +4941,7 @@ var _mutation = function () {
     };
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.before.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.before.js
 
 
 (function (undefined) {
@@ -4966,7 +4966,7 @@ var _mutation = function () {
     }
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.prepend.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.prepend.js
 
 
 (function (undefined) {
@@ -4976,7 +4976,7 @@ var _mutation = function () {
     };
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Element.prototype.replaceWith.js
+;// ./node_modules/@mrhenry/core-web/modules/Element.prototype.replaceWith.js
 
 
 (function (undefined) {
@@ -5017,7 +5017,7 @@ var es_set_is_superset_of_v2 = __webpack_require__(2475);
 var es_set_symmetric_difference_v2 = __webpack_require__(5024);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.set.union.v2.js
 var es_set_union_v2 = __webpack_require__(1698);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
+;// ./node_modules/@mrhenry/core-web/modules/~custom-elements.js
 
 
 
@@ -5815,7 +5815,7 @@ var es_set_union_v2 = __webpack_require__(1698);
   O && !O.forcePolyfill && "function" == typeof O.define && "function" == typeof O.get || Ia();
   window.__CE_installPolyfill = Ia;
 }).call(self);
-;// CONCATENATED MODULE: ./specifications/whatwg/html/4.13.4.customElements.define/test.pure.js
+;// ./specifications/whatwg/html/4.13.4.customElements.define/test.pure.js
 
 
 

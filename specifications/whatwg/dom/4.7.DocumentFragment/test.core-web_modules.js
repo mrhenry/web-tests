@@ -1551,7 +1551,7 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
+;// ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
 
 (function (undefined) {
   if (!("DocumentFragment" in self && function () {
@@ -1570,7 +1570,7 @@ var web_self = __webpack_require__(3611);
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/whatwg/dom/4.7.DocumentFragment/test.pure.js
+;// ./specifications/whatwg/dom/4.7.DocumentFragment/test.pure.js
 
 (function (cb) {
   var fixture = document.getElementById('the-fixture');

@@ -5604,7 +5604,7 @@ var es_string_includes = __webpack_require__(1699);
 var es_string_iterator = __webpack_require__(7764);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/Event.js
+;// ./node_modules/@mrhenry/core-web/modules/Event.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -5782,7 +5782,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.now.js
 var es_date_now = __webpack_require__(9089);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/performance.now.js
+;// ./node_modules/@mrhenry/core-web/modules/performance.now.js
 function performance_now_typeof(o) { "@babel/helpers - typeof"; return performance_now_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, performance_now_typeof(o); }
 
 
@@ -5833,7 +5833,7 @@ var es_regexp_exec = __webpack_require__(7495);
 var es_string_split = __webpack_require__(744);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(6031);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
+;// ./node_modules/@mrhenry/core-web/modules/IntersectionObserver.js
 function IntersectionObserver_typeof(o) { "@babel/helpers - typeof"; return IntersectionObserver_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, IntersectionObserver_typeof(o); }
 
 
@@ -6232,7 +6232,7 @@ function IntersectionObserver_typeof(o) { "@babel/helpers - typeof"; return Inte
     })(window, document);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : IntersectionObserver_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : IntersectionObserver_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : IntersectionObserver_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
+;// ./specifications/w3c/intersection-observer/2.2.IntersectionObserver/test.pure.js
 
 
 

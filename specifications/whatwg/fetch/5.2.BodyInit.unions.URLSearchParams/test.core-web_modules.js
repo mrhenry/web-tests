@@ -7839,7 +7839,7 @@ var web_url_search_params_delete = __webpack_require__(4603);
 var web_url_search_params_has = __webpack_require__(7566);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.url-search-params.size.js
 var web_url_search_params_size = __webpack_require__(8721);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/fetch.js
+;// ./node_modules/@mrhenry/core-web/modules/fetch.js
 
 
 
@@ -8378,7 +8378,7 @@ var web_url_search_params_size = __webpack_require__(8721);
     });
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/whatwg/fetch/5.2.BodyInit.unions.URLSearchParams/test.pure.js
+;// ./specifications/whatwg/fetch/5.2.BodyInit.unions.URLSearchParams/test.pure.js
 
 
 

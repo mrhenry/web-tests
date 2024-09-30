@@ -2054,7 +2054,7 @@ var es_regexp_exec = __webpack_require__(7495);
 var es_regexp_test = __webpack_require__(906);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-;// CONCATENATED MODULE: ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
+;// ./node_modules/@mrhenry/core-web/modules/HTMLInputElement.prototype.valueAsDate.js
 
 
 
@@ -2332,7 +2332,7 @@ var web_self = __webpack_require__(3611);
     })(self);
   }
 }).call('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof __webpack_require__.g && __webpack_require__.g || {});
-;// CONCATENATED MODULE: ./specifications/whatwg/html/4.10.5.4.valueAsDate/test.pure.js
+;// ./specifications/whatwg/html/4.10.5.4.valueAsDate/test.pure.js
 
 (function (cb) {
   try {
