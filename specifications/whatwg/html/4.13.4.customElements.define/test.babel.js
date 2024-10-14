@@ -32,7 +32,7 @@ function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? O
         return this._baz;
       }
     }]);
-  }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+  }(/*#__PURE__*/_wrapNativeSuper(HTMLElement));
   customElements.define('web-test-foo', Foo);
   document.body.appendChild(new Foo());
   var foo = document.getElementsByTagName('web-test-foo')[0];
