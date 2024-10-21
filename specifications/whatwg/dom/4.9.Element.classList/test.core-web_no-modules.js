@@ -5540,6 +5540,28 @@ function Element_prototype_classList_typeof(o) { "@babel/helpers - typeof"; retu
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : Element_prototype_classList_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : Element_prototype_classList_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : Element_prototype_classList_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
+;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
+function DOMTokenList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, DOMTokenList_prototype_forEach_typeof(o); }
+
+
+
+
+
+
+
+
+
+(function (undefined) {
+  if (!("DOMTokenList" in self && "forEach" in self.DOMTokenList.prototype)) {
+    (function (global) {
+      global.DOMTokenList.prototype.forEach = global.Array.prototype.forEach;
+      var e = document.createElement('span');
+      if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype.forEach) {
+        e.classList.constructor.prototype.forEach = global.Array.prototype.forEach;
+      }
+    })(self);
+  }
+}).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
 var es_symbol_to_string_tag = __webpack_require__(8125);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
@@ -5846,28 +5868,6 @@ function DOMTokenList_prototype_iterator_typeof(o) { "@babel/helpers - typeof"; 
     })(self);
   }
 }).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_iterator_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
-;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.forEach.js
-function DOMTokenList_prototype_forEach_typeof(o) { "@babel/helpers - typeof"; return DOMTokenList_prototype_forEach_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, DOMTokenList_prototype_forEach_typeof(o); }
-
-
-
-
-
-
-
-
-
-(function (undefined) {
-  if (!("DOMTokenList" in self && "forEach" in self.DOMTokenList.prototype)) {
-    (function (global) {
-      global.DOMTokenList.prototype.forEach = global.Array.prototype.forEach;
-      var e = document.createElement('span');
-      if (e.classList && e.classList.constructor && e.classList.constructor.prototype && !e.classList.constructor.prototype.forEach) {
-        e.classList.constructor.prototype.forEach = global.Array.prototype.forEach;
-      }
-    })(self);
-  }
-}).call('object' === (typeof window === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : DOMTokenList_prototype_forEach_typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 ;// ./specifications/whatwg/dom/4.9.Element.classList/test.pure.js
 
 
