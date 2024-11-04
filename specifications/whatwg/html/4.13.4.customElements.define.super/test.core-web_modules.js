@@ -675,7 +675,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
-// eslint-disable-next-line redos/no-vulnerable -- safe
+// eslint-disable-next-line redos/no-vulnerable, sonarjs/slow-regex -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -3350,10 +3350,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.1',
+  version: '3.39.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3755,9 +3755,9 @@ module.exports = function (key) {
 /* eslint-disable es/no-symbol -- required for testing */
 var NATIVE_SYMBOL = __webpack_require__(4495);
 
-module.exports = NATIVE_SYMBOL
-  && !Symbol.sham
-  && typeof Symbol.iterator == 'symbol';
+module.exports = NATIVE_SYMBOL &&
+  !Symbol.sham &&
+  typeof Symbol.iterator == 'symbol';
 
 
 /***/ }),
@@ -4455,6 +4455,8 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
   }
 }
 
+// `Promise` constructor
+// https://tc39.es/ecma262/#sec-promise-executor
 $({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
   Promise: PromiseConstructor
 });
@@ -4627,7 +4629,7 @@ var difference = __webpack_require__(3440);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.difference` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.difference
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('difference') }, {
   difference: difference
 });
@@ -4650,7 +4652,7 @@ var INCORRECT = !setMethodAcceptSetLike('intersection') || fails(function () {
 });
 
 // `Set.prototype.intersection` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.intersection
 $({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   intersection: intersection
 });
@@ -4667,7 +4669,7 @@ var isDisjointFrom = __webpack_require__(4449);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.isDisjointFrom` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isDisjointFrom') }, {
   isDisjointFrom: isDisjointFrom
 });
@@ -4684,7 +4686,7 @@ var isSubsetOf = __webpack_require__(3838);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.isSubsetOf` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.issubsetof
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isSubsetOf') }, {
   isSubsetOf: isSubsetOf
 });
@@ -4701,7 +4703,7 @@ var isSupersetOf = __webpack_require__(8527);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.isSupersetOf` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.issupersetof
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isSupersetOf') }, {
   isSupersetOf: isSupersetOf
 });
@@ -4718,7 +4720,7 @@ var symmetricDifference = __webpack_require__(3650);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.symmetricDifference` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('symmetricDifference') }, {
   symmetricDifference: symmetricDifference
 });
@@ -4735,7 +4737,7 @@ var union = __webpack_require__(4204);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
 // `Set.prototype.union` method
-// https://github.com/tc39/proposal-set-methods
+// https://tc39.es/ecma262/#sec-set.prototype.union
 $({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('union') }, {
   union: union
 });
