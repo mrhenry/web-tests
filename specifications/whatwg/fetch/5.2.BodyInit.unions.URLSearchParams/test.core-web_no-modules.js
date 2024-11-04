@@ -668,7 +668,7 @@ if (!NATIVE_ARRAY_BUFFER) {
   });
 } else {
   var INCORRECT_ARRAY_BUFFER_NAME = PROPER_FUNCTION_NAME && NativeArrayBuffer.name !== ARRAY_BUFFER;
-  /* eslint-disable no-new, sonar/inconsistent-function-call -- required for testing */
+  /* eslint-disable no-new, sonarjs/inconsistent-function-call -- required for testing */
   if (!fails(function () {
     NativeArrayBuffer(1);
   }) || !fails(function () {
@@ -679,7 +679,7 @@ if (!NATIVE_ARRAY_BUFFER) {
     new NativeArrayBuffer(NaN);
     return NativeArrayBuffer.length !== 1 || INCORRECT_ARRAY_BUFFER_NAME && !CONFIGURABLE_FUNCTION_NAME;
   })) {
-    /* eslint-enable no-new, sonar/inconsistent-function-call -- required for testing */
+    /* eslint-enable no-new, sonarjs/inconsistent-function-call -- required for testing */
     $ArrayBuffer = function ArrayBuffer(length) {
       anInstance(this, ArrayBufferPrototype);
       return inheritIfRequired(new NativeArrayBuffer(toIndex(length)), this, $ArrayBuffer);
@@ -1885,7 +1885,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
-// eslint-disable-next-line redos/no-vulnerable -- safe
+// eslint-disable-next-line redos/no-vulnerable, sonarjs/slow-regex -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -4737,10 +4737,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.38.1',
+  version: '3.39.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -5623,7 +5623,7 @@ if (DESCRIPTORS) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-/* eslint-disable no-new, sonar/inconsistent-function-call -- required for testing */
+/* eslint-disable no-new, sonarjs/inconsistent-function-call -- required for testing */
 var globalThis = __webpack_require__(4576);
 var fails = __webpack_require__(9039);
 var checkCorrectnessOfIteration = __webpack_require__(4428);
@@ -5649,15 +5649,15 @@ module.exports = !NATIVE_ARRAY_BUFFER_VIEWS || !fails(function () {
 
 /***/ }),
 
-/***/ 6357:
+/***/ 9948:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
 var arrayFromConstructorAndList = __webpack_require__(5370);
-var typedArraySpeciesConstructor = __webpack_require__(1412);
+var getTypedArrayConstructor = (__webpack_require__(4644).getTypedArrayConstructor);
 
 module.exports = function (instance, list) {
-  return arrayFromConstructorAndList(typedArraySpeciesConstructor(instance), list);
+  return arrayFromConstructorAndList(getTypedArrayConstructor(instance), list);
 };
 
 
@@ -5707,25 +5707,6 @@ module.exports = function from(source /* , mapfn, thisArg */) {
     result[i] = thisIsBigIntArray ? toBigInt(value) : +value;
   }
   return result;
-};
-
-
-/***/ }),
-
-/***/ 1412:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var ArrayBufferViewCore = __webpack_require__(4644);
-var speciesConstructor = __webpack_require__(2293);
-
-var aTypedArrayConstructor = ArrayBufferViewCore.aTypedArrayConstructor;
-var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
-
-// a part of `TypedArraySpeciesCreate` abstract operation
-// https://tc39.es/ecma262/#typedarray-species-create
-module.exports = function (originalArray) {
-  return aTypedArrayConstructor(speciesConstructor(originalArray, getTypedArrayConstructor(originalArray)));
 };
 
 
@@ -5804,9 +5785,9 @@ module.exports = !fails(function () {
 /* eslint-disable es/no-symbol -- required for testing */
 var NATIVE_SYMBOL = __webpack_require__(4495);
 
-module.exports = NATIVE_SYMBOL
-  && !Symbol.sham
-  && typeof Symbol.iterator == 'symbol';
+module.exports = NATIVE_SYMBOL &&
+  !Symbol.sham &&
+  typeof Symbol.iterator == 'symbol';
 
 
 /***/ }),
@@ -6032,6 +6013,8 @@ var isDetached = __webpack_require__(3238);
 
 var ArrayBufferPrototype = ArrayBuffer.prototype;
 
+// `ArrayBuffer.prototype.detached` getter
+// https://tc39.es/ecma262/#sec-get-arraybuffer.prototype.detached
 if (DESCRIPTORS && !('detached' in ArrayBufferPrototype)) {
   defineBuiltInAccessor(ArrayBufferPrototype, 'detached', {
     configurable: true,
@@ -6073,7 +6056,6 @@ var ArrayBufferModule = __webpack_require__(6346);
 var anObject = __webpack_require__(8551);
 var toAbsoluteIndex = __webpack_require__(5610);
 var toLength = __webpack_require__(8014);
-var speciesConstructor = __webpack_require__(2293);
 
 var ArrayBuffer = ArrayBufferModule.ArrayBuffer;
 var DataView = ArrayBufferModule.DataView;
@@ -6096,7 +6078,7 @@ $({ target: 'ArrayBuffer', proto: true, unsafe: true, forced: INCORRECT_SLICE },
     var length = anObject(this).byteLength;
     var first = toAbsoluteIndex(start, length);
     var fin = toAbsoluteIndex(end === undefined ? length : end, length);
-    var result = new (speciesConstructor(this, ArrayBuffer))(toLength(fin - first));
+    var result = new ArrayBuffer(toLength(fin - first));
     var viewSource = new DataView(this);
     var viewTarget = new DataView(result);
     var index = 0;
@@ -7181,6 +7163,8 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
   }
 }
 
+// `Promise` constructor
+// https://tc39.es/ecma262/#sec-promise-executor
 $({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
   Promise: PromiseConstructor
 });
@@ -7958,7 +7942,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var SymbolWrapper = function Symbol() {
     var description = arguments.length < 1 || arguments[0] === undefined ? undefined : toString(arguments[0]);
     var result = isPrototypeOf(SymbolPrototype, this)
-      // eslint-disable-next-line sonar/inconsistent-function-call -- ok
+      // eslint-disable-next-line sonarjs/inconsistent-function-call -- ok
       ? new NativeSymbol(description)
       // in Edge 13, String(Symbol(undefined)) === 'Symbol(undefined)'
       : description === undefined ? NativeSymbol() : NativeSymbol(description);
@@ -8184,7 +8168,7 @@ exportTypedArrayMethod('fill', function fill(value /* , start, end */) {
 
 var ArrayBufferViewCore = __webpack_require__(4644);
 var $filter = (__webpack_require__(9213).filter);
-var fromSpeciesAndList = __webpack_require__(6357);
+var fromSameTypeAndList = __webpack_require__(9948);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
@@ -8193,7 +8177,7 @@ var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 // https://tc39.es/ecma262/#sec-%typedarray%.prototype.filter
 exportTypedArrayMethod('filter', function filter(callbackfn /* , thisArg */) {
   var list = $filter(aTypedArray(this), callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-  return fromSpeciesAndList(this, list);
+  return fromSameTypeAndList(this, list);
 });
 
 
@@ -8432,16 +8416,16 @@ exportTypedArrayMethod('lastIndexOf', function lastIndexOf(searchElement /* , fr
 
 var ArrayBufferViewCore = __webpack_require__(4644);
 var $map = (__webpack_require__(9213).map);
-var typedArraySpeciesConstructor = __webpack_require__(1412);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 
 // `%TypedArray%.prototype.map` method
 // https://tc39.es/ecma262/#sec-%typedarray%.prototype.map
 exportTypedArrayMethod('map', function map(mapfn /* , thisArg */) {
   return $map(aTypedArray(this), mapfn, arguments.length > 1 ? arguments[1] : undefined, function (O, length) {
-    return new (typedArraySpeciesConstructor(O))(length);
+    return new (getTypedArrayConstructor(O))(length);
   });
 });
 
@@ -8572,11 +8556,11 @@ exportTypedArrayMethod('set', function set(arrayLike /* , offset */) {
 
 
 var ArrayBufferViewCore = __webpack_require__(4644);
-var typedArraySpeciesConstructor = __webpack_require__(1412);
 var fails = __webpack_require__(9039);
 var arraySlice = __webpack_require__(7680);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 
 var FORCED = fails(function () {
@@ -8588,7 +8572,7 @@ var FORCED = fails(function () {
 // https://tc39.es/ecma262/#sec-%typedarray%.prototype.slice
 exportTypedArrayMethod('slice', function slice(start, end) {
   var list = arraySlice(aTypedArray(this), start, end);
-  var C = typedArraySpeciesConstructor(this);
+  var C = getTypedArrayConstructor(this);
   var index = 0;
   var length = list.length;
   var result = new C(length);
@@ -8702,9 +8686,9 @@ exportTypedArrayMethod('sort', function sort(comparefn) {
 var ArrayBufferViewCore = __webpack_require__(4644);
 var toLength = __webpack_require__(8014);
 var toAbsoluteIndex = __webpack_require__(5610);
-var typedArraySpeciesConstructor = __webpack_require__(1412);
 
 var aTypedArray = ArrayBufferViewCore.aTypedArray;
+var getTypedArrayConstructor = ArrayBufferViewCore.getTypedArrayConstructor;
 var exportTypedArrayMethod = ArrayBufferViewCore.exportTypedArrayMethod;
 
 // `%TypedArray%.prototype.subarray` method
@@ -8713,7 +8697,7 @@ exportTypedArrayMethod('subarray', function subarray(begin, end) {
   var O = aTypedArray(this);
   var length = O.length;
   var beginIndex = toAbsoluteIndex(begin, length);
-  var C = typedArraySpeciesConstructor(O);
+  var C = getTypedArrayConstructor(O);
   return new C(
     O.buffer,
     O.byteOffset + beginIndex * O.BYTES_PER_ELEMENT,

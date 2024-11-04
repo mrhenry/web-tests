@@ -21,11 +21,11 @@
         "@babel/preset-env": "^7.26.0",
         "@mrhenry/babel-plugin-core-web": "^1.2.4",
         "babel-loader": "^9.2.1",
-        "core-js": "^3.38.1",
+        "core-js": "^3.39.0",
         "postcss": "^8.4.47",
         "postcss-cli": "^11.0.0",
-        "postcss-preset-env": "^10.0.8",
-        "webpack": "^5.95.0",
+        "postcss-preset-env": "^10.0.9",
+        "webpack": "^5.96.1",
         "webpack-cli": "^5.0.0"
     },
     "volta": {
