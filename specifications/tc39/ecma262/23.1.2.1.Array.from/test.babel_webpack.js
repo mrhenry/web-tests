@@ -1213,7 +1213,7 @@ module.exports = !fails(function () {
 var NATIVE_BIND = __webpack_require__(616);
 
 var call = Function.prototype.call;
-
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 module.exports = NATIVE_BIND ? call.bind(call) : function () {
   return call.apply(call, arguments);
 };
@@ -1288,6 +1288,7 @@ var NATIVE_BIND = __webpack_require__(616);
 
 var FunctionPrototype = Function.prototype;
 var call = FunctionPrototype.call;
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
 module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
@@ -3136,7 +3137,19 @@ var createSetLike = function (size) {
   };
 };
 
-module.exports = function (name) {
+var createSetLikeWithInfinitySize = function (size) {
+  return {
+    size: size,
+    has: function () {
+      return true;
+    },
+    keys: function () {
+      throw new Error('e');
+    }
+  };
+};
+
+module.exports = function (name, callback) {
   var Set = getBuiltIn('Set');
   try {
     new Set()[name](createSetLike(0));
@@ -3146,7 +3159,18 @@ module.exports = function (name) {
       new Set()[name](createSetLike(-1));
       return false;
     } catch (error2) {
-      return true;
+      if (!callback) return true;
+      // early V8 implementation bug
+      // https://issues.chromium.org/issues/351332634
+      try {
+        new Set()[name](createSetLikeWithInfinitySize(-Infinity));
+        return false;
+      } catch (error) {
+        var set = new Set();
+        set.add(1);
+        set.add(2);
+        return callback(set[name](createSetLikeWithInfinitySize(Infinity)));
+      }
     }
   } catch (error) {
     return false;
@@ -3298,10 +3322,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.39.0',
+  version: '3.40.0',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
+  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.40.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3875,9 +3899,13 @@ var $ = __webpack_require__(6518);
 var difference = __webpack_require__(3440);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
+var INCORRECT = !setMethodAcceptSetLike('difference', function (result) {
+  return result.size === 0;
+});
+
 // `Set.prototype.difference` method
 // https://tc39.es/ecma262/#sec-set.prototype.difference
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('difference') }, {
+$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   difference: difference
 });
 
@@ -3893,8 +3921,10 @@ var fails = __webpack_require__(9039);
 var intersection = __webpack_require__(8750);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
-var INCORRECT = !setMethodAcceptSetLike('intersection') || fails(function () {
-  // eslint-disable-next-line es/no-array-from, es/no-set -- testing
+var INCORRECT = !setMethodAcceptSetLike('intersection', function (result) {
+  return result.size === 2 && result.has(1) && result.has(2);
+}) || fails(function () {
+  // eslint-disable-next-line es/no-array-from, es/no-set, es/no-set-prototype-intersection -- testing
   return String(Array.from(new Set([1, 2, 3]).intersection(new Set([3, 2])))) !== '3,2';
 });
 
@@ -3915,9 +3945,13 @@ var $ = __webpack_require__(6518);
 var isDisjointFrom = __webpack_require__(4449);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
+var INCORRECT = !setMethodAcceptSetLike('isDisjointFrom', function (result) {
+  return !result;
+});
+
 // `Set.prototype.isDisjointFrom` method
 // https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isDisjointFrom') }, {
+$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   isDisjointFrom: isDisjointFrom
 });
 
@@ -3932,9 +3966,13 @@ var $ = __webpack_require__(6518);
 var isSubsetOf = __webpack_require__(3838);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
+var INCORRECT = !setMethodAcceptSetLike('isSubsetOf', function (result) {
+  return result;
+});
+
 // `Set.prototype.isSubsetOf` method
 // https://tc39.es/ecma262/#sec-set.prototype.issubsetof
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isSubsetOf') }, {
+$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   isSubsetOf: isSubsetOf
 });
 
@@ -3949,9 +3987,13 @@ var $ = __webpack_require__(6518);
 var isSupersetOf = __webpack_require__(8527);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
+var INCORRECT = !setMethodAcceptSetLike('isSupersetOf', function (result) {
+  return !result;
+});
+
 // `Set.prototype.isSupersetOf` method
 // https://tc39.es/ecma262/#sec-set.prototype.issupersetof
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('isSupersetOf') }, {
+$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
   isSupersetOf: isSupersetOf
 });
 

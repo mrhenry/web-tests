@@ -108,18 +108,16 @@ module.exports = ArrayBuffer && uncurryThisAccessor(ArrayBuffer.prototype, 'byte
 
 
 var globalThis = __webpack_require__(4576);
-var uncurryThis = __webpack_require__(7476);
+var NATIVE_ARRAY_BUFFER = __webpack_require__(7811);
 var arrayBufferByteLength = __webpack_require__(7394);
 
-var ArrayBuffer = globalThis.ArrayBuffer;
-var ArrayBufferPrototype = ArrayBuffer && ArrayBuffer.prototype;
-var slice = ArrayBufferPrototype && uncurryThis(ArrayBufferPrototype.slice);
+var DataView = globalThis.DataView;
 
 module.exports = function (O) {
-  if (arrayBufferByteLength(O) !== 0) return false;
-  if (!slice) return false;
+  if (!NATIVE_ARRAY_BUFFER || arrayBufferByteLength(O) !== 0) return false;
   try {
-    slice(O, 0, 0);
+    // eslint-disable-next-line no-new -- thrower
+    new DataView(O);
     return false;
   } catch (error) {
     return true;
@@ -998,7 +996,7 @@ module.exports = !fails(function () {
 var NATIVE_BIND = __webpack_require__(616);
 
 var call = Function.prototype.call;
-
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 module.exports = NATIVE_BIND ? call.bind(call) : function () {
   return call.apply(call, arguments);
 };
@@ -1073,6 +1071,7 @@ var NATIVE_BIND = __webpack_require__(616);
 
 var FunctionPrototype = Function.prototype;
 var call = FunctionPrototype.call;
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
 module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
@@ -1670,15 +1669,11 @@ Function.prototype.toString = makeBuiltIn(function toString() {
 
 
 var sign = __webpack_require__(7782);
+var roundTiesToEven = __webpack_require__(3602);
 
 var abs = Math.abs;
 
 var EPSILON = 2.220446049250313e-16; // Number.EPSILON
-var INVERSE_EPSILON = 1 / EPSILON;
-
-var roundTiesToEven = function (n) {
-  return n + INVERSE_EPSILON - INVERSE_EPSILON;
-};
 
 module.exports = function (x, FLOAT_EPSILON, FLOAT_MAX_VALUE, FLOAT_MIN_VALUE) {
   var n = +x;
@@ -1710,6 +1705,20 @@ var FLOAT32_MIN_VALUE = 1.1754943508222875e-38; // 2 ** -126;
 // eslint-disable-next-line es/no-math-fround -- safe
 module.exports = Math.fround || function fround(x) {
   return floatRound(x, FLOAT32_EPSILON, FLOAT32_MAX_VALUE, FLOAT32_MIN_VALUE);
+};
+
+
+/***/ }),
+
+/***/ 3602:
+/***/ ((module) => {
+
+
+var EPSILON = 2.220446049250313e-16; // Number.EPSILON
+var INVERSE_EPSILON = 1 / EPSILON;
+
+module.exports = function (n) {
+  return n + INVERSE_EPSILON - INVERSE_EPSILON;
 };
 
 
@@ -2120,10 +2129,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.39.0',
+  version: '3.40.0',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
+  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.40.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
