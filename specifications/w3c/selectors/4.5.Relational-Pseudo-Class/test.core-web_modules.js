@@ -1711,7 +1711,7 @@ var fixRegExpWellKnownSymbolLogic = __webpack_require__(9228);
 var fails = __webpack_require__(9039);
 var anObject = __webpack_require__(8551);
 var isCallable = __webpack_require__(4901);
-var isNullOrUndefined = __webpack_require__(4117);
+var isObject = __webpack_require__(34);
 var toIntegerOrInfinity = __webpack_require__(1291);
 var toLength = __webpack_require__(8014);
 var toString = __webpack_require__(655);
@@ -1769,7 +1769,7 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
     // https://tc39.es/ecma262/#sec-string.prototype.replace
     function replace(searchValue, replaceValue) {
       var O = requireObjectCoercible(this);
-      var replacer = isNullOrUndefined(searchValue) ? undefined : getMethod(searchValue, REPLACE);
+      var replacer = isObject(searchValue) ? getMethod(searchValue, REPLACE) : undefined;
       return replacer
         ? call(replacer, searchValue, O, replaceValue)
         : call(nativeReplace, toString(O), searchValue, replaceValue);
@@ -2885,10 +2885,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.41.0',
+  version: '3.42.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.42.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
