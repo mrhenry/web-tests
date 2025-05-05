@@ -350,37 +350,6 @@ module.exports = function (target, TAG, STATIC) {
 
 /***/ }),
 
-/***/ 713:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var call = __webpack_require__(9565);
-var aCallable = __webpack_require__(9306);
-var anObject = __webpack_require__(8551);
-var getIteratorDirect = __webpack_require__(1767);
-var createIteratorProxy = __webpack_require__(9462);
-var callWithSafeIterationClosing = __webpack_require__(6319);
-
-var IteratorProxy = createIteratorProxy(function () {
-  var iterator = this.iterator;
-  var result = anObject(call(this.next, iterator));
-  var done = this.done = !!result.done;
-  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
-});
-
-// `Iterator.prototype.map` method
-// https://github.com/tc39/proposal-iterator-helpers
-module.exports = function map(mapper) {
-  anObject(this);
-  aCallable(mapper);
-  return new IteratorProxy(getIteratorDirect(this), {
-    mapper: mapper
-  });
-};
-
-
-/***/ }),
-
 /***/ 741:
 /***/ (function(module) {
 
@@ -407,7 +376,7 @@ var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var fixRegExpWellKnownSymbolLogic = __webpack_require__(9228);
 var anObject = __webpack_require__(8551);
-var isNullOrUndefined = __webpack_require__(4117);
+var isObject = __webpack_require__(34);
 var requireObjectCoercible = __webpack_require__(7750);
 var speciesConstructor = __webpack_require__(2293);
 var advanceStringIndex = __webpack_require__(7829);
@@ -455,7 +424,7 @@ fixRegExpWellKnownSymbolLogic('split', function (SPLIT, nativeSplit, maybeCallNa
     // https://tc39.es/ecma262/#sec-string.prototype.split
     function split(separator, limit) {
       var O = requireObjectCoercible(this);
-      var splitter = isNullOrUndefined(separator) ? undefined : getMethod(separator, SPLIT);
+      var splitter = isObject(separator) ? getMethod(separator, SPLIT) : undefined;
       return splitter
         ? call(splitter, separator, O, limit)
         : call(internalSplit, toString(O), separator, limit);
@@ -992,13 +961,42 @@ $({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, 
 
 
 var $ = __webpack_require__(6518);
-var map = __webpack_require__(713);
+var call = __webpack_require__(9565);
+var aCallable = __webpack_require__(9306);
+var anObject = __webpack_require__(8551);
+var getIteratorDirect = __webpack_require__(1767);
+var createIteratorProxy = __webpack_require__(9462);
+var callWithSafeIterationClosing = __webpack_require__(6319);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
 var IS_PURE = __webpack_require__(6395);
+
+var mapWithoutClosingOnEarlyError = !IS_PURE && iteratorHelperWithoutClosingOnEarlyError('map', TypeError);
+
+var IteratorProxy = createIteratorProxy(function () {
+  var iterator = this.iterator;
+  var result = anObject(call(this.next, iterator));
+  var done = this.done = !!result.done;
+  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
+});
 
 // `Iterator.prototype.map` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.map
-$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
-  map: map
+$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE || mapWithoutClosingOnEarlyError }, {
+  map: function map(mapper) {
+    anObject(this);
+    try {
+      aCallable(mapper);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (mapWithoutClosingOnEarlyError) return call(mapWithoutClosingOnEarlyError, this, mapper);
+
+    return new IteratorProxy(getIteratorDirect(this), {
+      mapper: mapper
+    });
+  }
 });
 
 
@@ -1347,6 +1345,10 @@ var getIteratorDirect = __webpack_require__(1767);
 var createIteratorProxy = __webpack_require__(9462);
 var callWithSafeIterationClosing = __webpack_require__(6319);
 var IS_PURE = __webpack_require__(6395);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
+
+var filterWithoutClosingOnEarlyError = !IS_PURE && iteratorHelperWithoutClosingOnEarlyError('filter', TypeError);
 
 var IteratorProxy = createIteratorProxy(function () {
   var iterator = this.iterator;
@@ -1364,10 +1366,17 @@ var IteratorProxy = createIteratorProxy(function () {
 
 // `Iterator.prototype.filter` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.filter
-$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
+$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE || filterWithoutClosingOnEarlyError }, {
   filter: function filter(predicate) {
     anObject(this);
-    aCallable(predicate);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (filterWithoutClosingOnEarlyError) return call(filterWithoutClosingOnEarlyError, this, predicate);
+
     return new IteratorProxy(getIteratorDirect(this), {
       predicate: predicate
     });
@@ -1913,17 +1922,29 @@ module.exports = !construct || fails(function () {
 
 
 var $ = __webpack_require__(6518);
+var call = __webpack_require__(9565);
 var iterate = __webpack_require__(2652);
 var aCallable = __webpack_require__(9306);
 var anObject = __webpack_require__(8551);
 var getIteratorDirect = __webpack_require__(1767);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
+
+var someWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('some', TypeError);
 
 // `Iterator.prototype.some` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.some
-$({ target: 'Iterator', proto: true, real: true }, {
+$({ target: 'Iterator', proto: true, real: true, forced: someWithoutClosingOnEarlyError }, {
   some: function some(predicate) {
     anObject(this);
-    aCallable(predicate);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (someWithoutClosingOnEarlyError) return call(someWithoutClosingOnEarlyError, this, predicate);
+
     var record = getIteratorDirect(this);
     var counter = 0;
     return iterate(record, function (value, stop) {
@@ -2608,6 +2629,36 @@ module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
   } return O.length = length;
 } : function (O, length) {
   return O.length = length;
+};
+
+
+/***/ }),
+
+/***/ 4549:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var globalThis = __webpack_require__(4576);
+
+// https://github.com/tc39/ecma262/pull/3467
+module.exports = function (METHOD_NAME, ExpectedError) {
+  var Iterator = globalThis.Iterator;
+  var IteratorPrototype = Iterator && Iterator.prototype;
+  var method = IteratorPrototype && IteratorPrototype[METHOD_NAME];
+
+  var CLOSED = false;
+
+  if (method) try {
+    method.call({
+      next: function () { return { done: true }; },
+      'return': function () { CLOSED = true; }
+    }, -1);
+  } catch (error) {
+    // https://bugs.webkit.org/show_bug.cgi?id=291195
+    if (!(error instanceof ExpectedError)) CLOSED = false;
+  }
+
+  if (!CLOSED) return method;
 };
 
 
@@ -4470,17 +4521,29 @@ module.exports = function (O, options) {
 
 
 var $ = __webpack_require__(6518);
+var call = __webpack_require__(9565);
 var iterate = __webpack_require__(2652);
 var aCallable = __webpack_require__(9306);
 var anObject = __webpack_require__(8551);
 var getIteratorDirect = __webpack_require__(1767);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
+
+var forEachWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('forEach', TypeError);
 
 // `Iterator.prototype.forEach` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.foreach
-$({ target: 'Iterator', proto: true, real: true }, {
+$({ target: 'Iterator', proto: true, real: true, forced: forEachWithoutClosingOnEarlyError }, {
   forEach: function forEach(fn) {
     anObject(this);
-    aCallable(fn);
+    try {
+      aCallable(fn);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (forEachWithoutClosingOnEarlyError) return call(forEachWithoutClosingOnEarlyError, this, fn);
+
     var record = getIteratorDirect(this);
     var counter = 0;
     iterate(record, function (value) {
@@ -4504,10 +4567,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.41.0',
+  version: '3.42.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.42.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 

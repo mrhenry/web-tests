@@ -2115,8 +2115,10 @@ module.exports = function (name, callback) {
   try {
     new Set()[name](createSetLike(0));
     try {
-      // late spec change, early WebKit ~ Safari 17.0 beta implementation does not pass it
+      // late spec change, early WebKit ~ Safari 17 implementation does not pass it
       // https://github.com/tc39/proposal-set-methods/pull/88
+      // also covered engines with
+      // https://bugs.webkit.org/show_bug.cgi?id=272679
       new Set()[name](createSetLike(-1));
       return false;
     } catch (error2) {
@@ -3174,10 +3176,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.41.0',
+  version: '3.42.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.42.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
