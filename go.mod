@@ -9,7 +9,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/mileusna/useragent v1.3.5
 	github.com/tebeka/selenium v0.9.9
-	golang.org/x/sync v0.14.0
+	golang.org/x/sync v0.15.0
 )
 
 require github.com/blang/semver v3.5.1+incompatible // indirect
