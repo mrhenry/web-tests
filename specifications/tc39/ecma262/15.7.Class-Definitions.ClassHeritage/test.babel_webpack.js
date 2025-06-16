@@ -347,6 +347,7 @@ var clearErrorStack = __webpack_require__(6193);
 var ERROR_STACK_INSTALLABLE = __webpack_require__(4659);
 
 // non-standard V8
+// eslint-disable-next-line es/no-nonstandard-error-properties -- safe
 var captureStackTrace = Error.captureStackTrace;
 
 module.exports = function (error, C, stack, dropEntries) {
@@ -718,7 +719,7 @@ var uncurryThis = __webpack_require__(9504);
 
 // `thisNumberValue` abstract operation
 // https://tc39.es/ecma262/#sec-thisnumbervalue
-module.exports = uncurryThis(1.0.valueOf);
+module.exports = uncurryThis(1.1.valueOf);
 
 
 /***/ }),
@@ -1109,7 +1110,7 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal', condition);
+    if (iterator) iteratorClose(iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -1495,7 +1496,7 @@ var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
 var charCodeAt = uncurryThis(''.charCodeAt);
 var replace = uncurryThis(''.replace);
-var numberToString = uncurryThis(1.0.toString);
+var numberToString = uncurryThis(1.1.toString);
 
 var tester = /[\uD800-\uDFFF]/g;
 var low = /^[\uD800-\uDBFF]$/;
@@ -1603,7 +1604,7 @@ var uncurryThis = __webpack_require__(9504);
 
 var id = 0;
 var postfix = Math.random();
-var toString = uncurryThis(1.0.toString);
+var toString = uncurryThis(1.1.toString);
 
 module.exports = function (key) {
   return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -3528,10 +3529,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.42.0',
+  version: '3.43.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.42.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.43.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 

@@ -242,6 +242,7 @@ var $ = __webpack_require__(6518);
 var IS_PURE = __webpack_require__(6395);
 var IS_NODE = __webpack_require__(8574);
 var globalThis = __webpack_require__(4576);
+var path = __webpack_require__(9167);
 var call = __webpack_require__(9565);
 var defineBuiltIn = __webpack_require__(6840);
 var setPrototypeOf = __webpack_require__(2967);
@@ -525,6 +526,8 @@ $({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUC
   Promise: PromiseConstructor
 });
 
+PromiseWrapper = path.Promise;
+
 setToStringTag(PromiseConstructor, PROMISE, false, true);
 setSpecies(PROMISE);
 
@@ -760,6 +763,7 @@ var clearErrorStack = __webpack_require__(6193);
 var ERROR_STACK_INSTALLABLE = __webpack_require__(4659);
 
 // non-standard V8
+// eslint-disable-next-line es/no-nonstandard-error-properties -- safe
 var captureStackTrace = Error.captureStackTrace;
 
 module.exports = function (error, C, stack, dropEntries) {
@@ -1025,14 +1029,17 @@ module.exports = {
 var call = __webpack_require__(9565);
 var hasOwn = __webpack_require__(9297);
 var isPrototypeOf = __webpack_require__(1625);
-var regExpFlags = __webpack_require__(7979);
+var regExpFlagsDetection = __webpack_require__(5213);
+var regExpFlagsGetterImplementation = __webpack_require__(7979);
 
 var RegExpPrototype = RegExp.prototype;
 
-module.exports = function (R) {
-  var flags = R.flags;
-  return flags === undefined && !('flags' in RegExpPrototype) && !hasOwn(R, 'flags') && isPrototypeOf(RegExpPrototype, R)
-    ? call(regExpFlags, R) : flags;
+module.exports = regExpFlagsDetection.correct ? function (it) {
+  return it.flags;
+} : function (it) {
+  return (!regExpFlagsDetection.correct && isPrototypeOf(RegExpPrototype, it) && !hasOwn(it, 'flags'))
+    ? call(regExpFlagsGetterImplementation, it)
+    : it.flags;
 };
 
 
@@ -1282,7 +1289,7 @@ var uncurryThis = __webpack_require__(9504);
 
 // `thisNumberValue` abstract operation
 // https://tc39.es/ecma262/#sec-thisnumbervalue
-module.exports = uncurryThis(1.0.valueOf);
+module.exports = uncurryThis(1.1.valueOf);
 
 
 /***/ }),
@@ -1450,11 +1457,14 @@ $({ target: 'Array', proto: true, forced: [].forEach !== forEach }, {
 
 var $ = __webpack_require__(6518);
 var union = __webpack_require__(4204);
+var setMethodGetKeysBeforeCloning = __webpack_require__(9835);
 var setMethodAcceptSetLike = __webpack_require__(4916);
+
+var FORCED = !setMethodAcceptSetLike('union') || !setMethodGetKeysBeforeCloning('union');
 
 // `Set.prototype.union` method
 // https://tc39.es/ecma262/#sec-set.prototype.union
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('union') }, {
+$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
   union: union
 });
 
@@ -2054,7 +2064,7 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal', condition);
+    if (iterator) iteratorClose(iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -2319,7 +2329,7 @@ var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
 var charCodeAt = uncurryThis(''.charCodeAt);
 var replace = uncurryThis(''.replace);
-var numberToString = uncurryThis(1.0.toString);
+var numberToString = uncurryThis(1.1.toString);
 
 var tester = /[\uD800-\uDFFF]/g;
 var low = /^[\uD800-\uDBFF]$/;
@@ -2503,7 +2513,7 @@ var uncurryThis = __webpack_require__(9504);
 
 var id = 0;
 var postfix = Math.random();
-var toString = uncurryThis(1.0.toString);
+var toString = uncurryThis(1.1.toString);
 
 module.exports = function (key) {
   return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -2557,7 +2567,7 @@ module.exports = function difference(other) {
     if (otherRec.includes(e)) remove(result, e);
   });
   else iterateSimple(otherRec.getIterator(), function (e) {
-    if (has(O, e)) remove(result, e);
+    if (has(result, e)) remove(result, e);
   });
   return result;
 };
@@ -4112,11 +4122,14 @@ module.exports = function (name, callback) {
 
 var $ = __webpack_require__(6518);
 var symmetricDifference = __webpack_require__(3650);
+var setMethodGetKeysBeforeCloning = __webpack_require__(9835);
 var setMethodAcceptSetLike = __webpack_require__(4916);
+
+var FORCED = !setMethodAcceptSetLike('symmetricDifference') || !setMethodGetKeysBeforeCloning('symmetricDifference');
 
 // `Set.prototype.symmetricDifference` method
 // https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
-$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('symmetricDifference') }, {
+$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
   symmetricDifference: symmetricDifference
 });
 
@@ -4155,6 +4168,60 @@ var SetHelpers = __webpack_require__(4402);
 module.exports = uncurryThisAccessor(SetHelpers.proto, 'size', 'get') || function (set) {
   return set.size;
 };
+
+
+/***/ }),
+
+/***/ 5213:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var globalThis = __webpack_require__(4576);
+var fails = __webpack_require__(9039);
+
+// babel-minify and Closure Compiler transpiles RegExp('.', 'd') -> /./d and it causes SyntaxError
+var RegExp = globalThis.RegExp;
+
+var FLAGS_GETTER_IS_CORRECT = !fails(function () {
+  var INDICES_SUPPORT = true;
+  try {
+    RegExp('.', 'd');
+  } catch (error) {
+    INDICES_SUPPORT = false;
+  }
+
+  var O = {};
+  // modern V8 bug
+  var calls = '';
+  var expected = INDICES_SUPPORT ? 'dgimsy' : 'gimsy';
+
+  var addGetter = function (key, chr) {
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
+    Object.defineProperty(O, key, { get: function () {
+      calls += chr;
+      return true;
+    } });
+  };
+
+  var pairs = {
+    dotAll: 's',
+    global: 'g',
+    ignoreCase: 'i',
+    multiline: 'm',
+    sticky: 'y'
+  };
+
+  if (INDICES_SUPPORT) pairs.hasIndices = 'd';
+
+  for (var key in pairs) addGetter(key, pairs[key]);
+
+  // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+  var result = Object.getOwnPropertyDescriptor(RegExp.prototype, 'flags').get.call(O);
+
+  return result !== expected || calls !== expected;
+});
+
+module.exports = { correct: FLAGS_GETTER_IS_CORRECT };
 
 
 /***/ }),
@@ -4223,6 +4290,7 @@ var requireObjectCoercible = __webpack_require__(7750);
 var advanceStringIndex = __webpack_require__(7829);
 var getMethod = __webpack_require__(5966);
 var getSubstitution = __webpack_require__(2478);
+var getRegExpFlags = __webpack_require__(1034);
 var regExpExec = __webpack_require__(6682);
 var wellKnownSymbol = __webpack_require__(8227);
 
@@ -4296,10 +4364,11 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
       var functionalReplace = isCallable(replaceValue);
       if (!functionalReplace) replaceValue = toString(replaceValue);
 
-      var global = rx.global;
+      var flags = toString(getRegExpFlags(rx));
+      var global = stringIndexOf(flags, 'g') !== -1;
       var fullUnicode;
       if (global) {
-        fullUnicode = rx.unicode;
+        fullUnicode = stringIndexOf(flags, 'u') !== -1;
         rx.lastIndex = 0;
       }
 
@@ -6154,10 +6223,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.42.0',
+  version: '3.43.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.42.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.43.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -6195,15 +6264,38 @@ module.exports = function (CONSTRUCTOR_NAME) {
 
 var $ = __webpack_require__(6518);
 var difference = __webpack_require__(3440);
+var fails = __webpack_require__(9039);
 var setMethodAcceptSetLike = __webpack_require__(4916);
 
-var INCORRECT = !setMethodAcceptSetLike('difference', function (result) {
+var SET_LIKE_INCORRECT_BEHAVIOR = !setMethodAcceptSetLike('difference', function (result) {
   return result.size === 0;
+});
+
+var FORCED = SET_LIKE_INCORRECT_BEHAVIOR || fails(function () {
+  // https://bugs.webkit.org/show_bug.cgi?id=288595
+  var setLike = {
+    size: 1,
+    has: function () { return true; },
+    keys: function () {
+      var index = 0;
+      return {
+        next: function () {
+          var done = index++ > 1;
+          if (baseSet.has(1)) baseSet.clear();
+          return { done: done, value: 2 };
+        }
+      };
+    }
+  };
+  // eslint-disable-next-line es/no-set -- testing
+  var baseSet = new Set([1, 2, 3, 4]);
+  // eslint-disable-next-line es/no-set-prototype-difference -- testing
+  return baseSet.difference(setLike).size !== 3;
 });
 
 // `Set.prototype.difference` method
 // https://tc39.es/ecma262/#sec-set.prototype.difference
-$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
   difference: difference
 });
 
@@ -8001,6 +8093,43 @@ $({ target: 'Object', stat: true, forced: FORCED }, {
     return $getOwnPropertySymbols ? $getOwnPropertySymbols(toObject(it)) : [];
   }
 });
+
+
+/***/ }),
+
+/***/ 9835:
+/***/ (function(module) {
+
+
+// Should get iterator record of a set-like object before cloning this
+// https://bugs.webkit.org/show_bug.cgi?id=289430
+module.exports = function (METHOD_NAME) {
+  try {
+    // eslint-disable-next-line es/no-set -- needed for test
+    var baseSet = new Set();
+    var setLike = {
+      size: 0,
+      has: function () { return true; },
+      keys: function () {
+        // eslint-disable-next-line es/no-object-defineproperty -- needed for test
+        return Object.defineProperty({}, 'next', {
+          get: function () {
+            baseSet.clear();
+            baseSet.add(4);
+            return function () {
+              return { done: true };
+            };
+          }
+        });
+      }
+    };
+    var result = baseSet[METHOD_NAME](setLike);
+
+    return result.size !== 1 || result.values().next().value !== 4;
+  } catch (error) {
+    return false;
+  }
+};
 
 
 /***/ }),
