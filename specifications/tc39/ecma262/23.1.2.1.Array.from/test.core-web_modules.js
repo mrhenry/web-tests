@@ -1553,9 +1553,7 @@ module.exports = function (name, callback) {
         new Set()[name](createSetLikeWithInfinitySize(-Infinity));
         return false;
       } catch (error) {
-        var set = new Set();
-        set.add(1);
-        set.add(2);
+        var set = new Set([1, 2]);
         return callback(set[name](createSetLikeWithInfinitySize(Infinity)));
       }
     }
@@ -2124,10 +2122,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.46.0',
+  version: '3.47.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru), 2025 CoreJS Company (core-js.io)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.46.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.47.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
