@@ -6323,18 +6323,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 }).call('object' === (typeof window === "undefined" ? "undefined" : _typeof(window)) && window || 'object' === (typeof self === "undefined" ? "undefined" : _typeof(self)) && self || 'object' === (typeof __webpack_require__.g === "undefined" ? "undefined" : _typeof(__webpack_require__.g)) && __webpack_require__.g || {});
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
 var es_symbol_to_string_tag = __webpack_require__(8125);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
-var es_json_to_string_tag = __webpack_require__(4731);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
-var es_math_to_string_tag = __webpack_require__(479);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
-var es_object_create = __webpack_require__(9904);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
-var es_object_define_property = __webpack_require__(4185);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
-var es_object_set_prototype_of = __webpack_require__(287);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
-var es_string_includes = __webpack_require__(1699);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(6280);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
@@ -6351,10 +6339,18 @@ var es_function_bind = __webpack_require__(4170);
 var es_iterator_constructor = __webpack_require__(8111);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.iterator.for-each.js
 var es_iterator_for_each = __webpack_require__(7588);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
+var es_json_to_string_tag = __webpack_require__(4731);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
+var es_math_to_string_tag = __webpack_require__(479);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__(9085);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.create.js
+var es_object_create = __webpack_require__(9904);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-properties.js
 var es_object_define_properties = __webpack_require__(7945);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-property.js
+var es_object_define_property = __webpack_require__(4185);
 ;// ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
 
 
@@ -6375,7 +6371,8 @@ var es_object_define_properties = __webpack_require__(7945);
 
 
 
-var Iterator = function () {
+
+var _Iterator = function () {
   var clear = function clear() {
     this.length = 0;
     return this;
@@ -6384,9 +6381,9 @@ var Iterator = function () {
     if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
     return fn;
   };
-  var _Iterator = function Iterator(list, context) {
-    if (!(this instanceof _Iterator)) {
-      return new _Iterator(list, context);
+  var _Iterator2 = function _Iterator(list, context) {
+    if (!(this instanceof _Iterator2)) {
+      return new _Iterator2(list, context);
     }
     Object.defineProperties(this, {
       __list__: {
@@ -6408,9 +6405,10 @@ var Iterator = function () {
     context.on('_delete', this._onDelete.bind(this));
     context.on('_clear', this._onClear.bind(this));
   };
-  Object.defineProperties(_Iterator.prototype, Object.assign({
+  _Iterator2.prototype = Object.create(Iterator.prototype);
+  Object.defineProperties(_Iterator2.prototype, Object.assign({
     constructor: {
-      value: _Iterator,
+      value: _Iterator2,
       configurable: true,
       enumerable: false,
       writable: true
@@ -6532,7 +6530,7 @@ var Iterator = function () {
       writable: true
     }
   }));
-  Object.defineProperty(_Iterator.prototype, Symbol.iterator, {
+  Object.defineProperty(_Iterator2.prototype, Symbol.iterator, {
     value: function value() {
       return this;
     },
@@ -6540,15 +6538,19 @@ var Iterator = function () {
     enumerable: false,
     writable: true
   });
-  Object.defineProperty(_Iterator.prototype, Symbol.toStringTag, {
+  Object.defineProperty(_Iterator2.prototype, Symbol.toStringTag, {
     value: 'Iterator',
     configurable: false,
     enumerable: false,
     writable: true
   });
-  return _Iterator;
+  return _Iterator2;
 }();
-/* harmony default export */ var _Iterator = (Iterator);
+/* harmony default export */ var helpers_Iterator = (_Iterator);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
+var es_object_set_prototype_of = __webpack_require__(287);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__(1699);
 ;// ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
 
 
@@ -6562,7 +6564,7 @@ var Iterator = function () {
 var ArrayIterator = function () {
   var _ArrayIterator = function ArrayIterator(arr, kind) {
     if (!(this instanceof _ArrayIterator)) return new _ArrayIterator(arr, kind);
-    _Iterator.call(this, arr);
+    helpers_Iterator.call(this, arr);
     if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
     Object.defineProperty(this, '__kind__', {
       value: kind,
@@ -6571,8 +6573,8 @@ var ArrayIterator = function () {
       writable: false
     });
   };
-  if (Object.setPrototypeOf) Object.setPrototypeOf(_ArrayIterator, _Iterator.prototype);
-  _ArrayIterator.prototype = Object.create(_Iterator.prototype, {
+  if (Object.setPrototypeOf) Object.setPrototypeOf(_ArrayIterator, helpers_Iterator.prototype);
+  _ArrayIterator.prototype = Object.create(helpers_Iterator.prototype, {
     constructor: {
       value: _ArrayIterator,
       configurable: true,

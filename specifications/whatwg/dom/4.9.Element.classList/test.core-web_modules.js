@@ -4313,252 +4313,14 @@ var __webpack_exports__ = {};
 var es_symbol_description = __webpack_require__(9463);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self = __webpack_require__(3611);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
-var es_string_includes = __webpack_require__(1699);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__(6280);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__(3792);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__(4114);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.iterator.constructor.js
 var es_iterator_constructor = __webpack_require__(8111);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.iterator.for-each.js
 var es_iterator_for_each = __webpack_require__(7588);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
-var es_object_assign = __webpack_require__(9085);
-;// ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
-
-
-
-
-
-
-var Iterator = function () {
-  var clear = function clear() {
-    this.length = 0;
-    return this;
-  };
-  var callable = function callable(fn) {
-    if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
-    return fn;
-  };
-  var Iterator = function Iterator(list, context) {
-    if (!(this instanceof Iterator)) {
-      return new Iterator(list, context);
-    }
-    Object.defineProperties(this, {
-      __list__: {
-        writable: true,
-        value: list
-      },
-      __context__: {
-        writable: true,
-        value: context
-      },
-      __nextIndex__: {
-        writable: true,
-        value: 0
-      }
-    });
-    if (!context) return;
-    callable(context.on);
-    context.on('_add', this._onAdd.bind(this));
-    context.on('_delete', this._onDelete.bind(this));
-    context.on('_clear', this._onClear.bind(this));
-  };
-  Object.defineProperties(Iterator.prototype, Object.assign({
-    constructor: {
-      value: Iterator,
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _next: {
-      value: function () {
-        var i;
-        if (!this.__list__) return;
-        if (this.__redo__) {
-          i = this.__redo__.shift();
-          if (i !== undefined) return i;
-        }
-        if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
-        this._unBind();
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    next: {
-      value: function () {
-        return this._createResult(this._next());
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _createResult: {
-      value: function (i) {
-        if (i === undefined) return {
-          done: true,
-          value: undefined
-        };
-        return {
-          done: false,
-          value: this._resolve(i)
-        };
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _resolve: {
-      value: function (i) {
-        return this.__list__[i];
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _unBind: {
-      value: function () {
-        this.__list__ = null;
-        delete this.__redo__;
-        if (!this.__context__) return;
-        this.__context__.off('_add', this._onAdd.bind(this));
-        this.__context__.off('_delete', this._onDelete.bind(this));
-        this.__context__.off('_clear', this._onClear.bind(this));
-        this.__context__ = null;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    toString: {
-      value: function () {
-        return '[object Iterator]';
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  }, {
-    _onAdd: {
-      value: function (index) {
-        if (index >= this.__nextIndex__) return;
-        ++this.__nextIndex__;
-        if (!this.__redo__) {
-          Object.defineProperty(this, '__redo__', {
-            value: [index],
-            configurable: true,
-            enumerable: false,
-            writable: false
-          });
-          return;
-        }
-        this.__redo__.forEach(function (redo, i) {
-          if (redo >= index) this.__redo__[i] = ++redo;
-        }, this);
-        this.__redo__.push(index);
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _onDelete: {
-      value: function (index) {
-        var i;
-        if (index >= this.__nextIndex__) return;
-        --this.__nextIndex__;
-        if (!this.__redo__) return;
-        i = this.__redo__.indexOf(index);
-        if (i !== -1) this.__redo__.splice(i, 1);
-        this.__redo__.forEach(function (redo, i) {
-          if (redo > index) this.__redo__[i] = --redo;
-        }, this);
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _onClear: {
-      value: function () {
-        if (this.__redo__) clear.call(this.__redo__);
-        this.__nextIndex__ = 0;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  }));
-  Object.defineProperty(Iterator.prototype, Symbol.iterator, {
-    value: function () {
-      return this;
-    },
-    configurable: true,
-    enumerable: false,
-    writable: true
-  });
-  Object.defineProperty(Iterator.prototype, Symbol.toStringTag, {
-    value: 'Iterator',
-    configurable: false,
-    enumerable: false,
-    writable: true
-  });
-  return Iterator;
-}();
-/* harmony default export */ const _Iterator = (Iterator);
-;// ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
-
-
-var ArrayIterator = function () {
-  var ArrayIterator = function ArrayIterator(arr, kind) {
-    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
-    _Iterator.call(this, arr);
-    if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
-    Object.defineProperty(this, '__kind__', {
-      value: kind,
-      configurable: false,
-      enumerable: false,
-      writable: false
-    });
-  };
-  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, _Iterator.prototype);
-  ArrayIterator.prototype = Object.create(_Iterator.prototype, {
-    constructor: {
-      value: ArrayIterator,
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    _resolve: {
-      value: function (i) {
-        if (this.__kind__ === 'value') return this.__list__[i];
-        if (this.__kind__ === 'key+value') return [i, this.__list__[i]];
-        return i;
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    },
-    toString: {
-      value: function () {
-        return '[object Array Iterator]';
-      },
-      configurable: true,
-      enumerable: false,
-      writable: true
-    }
-  });
-  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
-    value: 'Array Iterator',
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  return ArrayIterator;
-}();
-/* harmony default export */ const _ArrayIterator = (ArrayIterator);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-getter.js
 var es_object_define_getter = __webpack_require__(7427);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
@@ -4710,6 +4472,245 @@ var _DOMTokenList = function () {
   return _DOMTokenList;
 }();
 /* harmony default export */ const helpers_DOMTokenList = ((/* unused pure expression or super */ null && (_DOMTokenList)));
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__(3792);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
+var es_object_assign = __webpack_require__(9085);
+;// ./node_modules/@mrhenry/core-web/helpers/_Iterator.js
+
+
+
+
+
+
+var _Iterator = function () {
+  var clear = function clear() {
+    this.length = 0;
+    return this;
+  };
+  var callable = function callable(fn) {
+    if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
+    return fn;
+  };
+  var _Iterator = function _Iterator(list, context) {
+    if (!(this instanceof _Iterator)) {
+      return new _Iterator(list, context);
+    }
+    Object.defineProperties(this, {
+      __list__: {
+        writable: true,
+        value: list
+      },
+      __context__: {
+        writable: true,
+        value: context
+      },
+      __nextIndex__: {
+        writable: true,
+        value: 0
+      }
+    });
+    if (!context) return;
+    callable(context.on);
+    context.on('_add', this._onAdd.bind(this));
+    context.on('_delete', this._onDelete.bind(this));
+    context.on('_clear', this._onClear.bind(this));
+  };
+  _Iterator.prototype = Object.create(Iterator.prototype);
+  Object.defineProperties(_Iterator.prototype, Object.assign({
+    constructor: {
+      value: _Iterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _next: {
+      value: function () {
+        var i;
+        if (!this.__list__) return;
+        if (this.__redo__) {
+          i = this.__redo__.shift();
+          if (i !== undefined) return i;
+        }
+        if (this.__nextIndex__ < this.__list__.length) return this.__nextIndex__++;
+        this._unBind();
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    next: {
+      value: function () {
+        return this._createResult(this._next());
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _createResult: {
+      value: function (i) {
+        if (i === undefined) return {
+          done: true,
+          value: undefined
+        };
+        return {
+          done: false,
+          value: this._resolve(i)
+        };
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function (i) {
+        return this.__list__[i];
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _unBind: {
+      value: function () {
+        this.__list__ = null;
+        delete this.__redo__;
+        if (!this.__context__) return;
+        this.__context__.off('_add', this._onAdd.bind(this));
+        this.__context__.off('_delete', this._onDelete.bind(this));
+        this.__context__.off('_clear', this._onClear.bind(this));
+        this.__context__ = null;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function () {
+        return '[object Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }, {
+    _onAdd: {
+      value: function (index) {
+        if (index >= this.__nextIndex__) return;
+        ++this.__nextIndex__;
+        if (!this.__redo__) {
+          Object.defineProperty(this, '__redo__', {
+            value: [index],
+            configurable: true,
+            enumerable: false,
+            writable: false
+          });
+          return;
+        }
+        this.__redo__.forEach(function (redo, i) {
+          if (redo >= index) this.__redo__[i] = ++redo;
+        }, this);
+        this.__redo__.push(index);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onDelete: {
+      value: function (index) {
+        var i;
+        if (index >= this.__nextIndex__) return;
+        --this.__nextIndex__;
+        if (!this.__redo__) return;
+        i = this.__redo__.indexOf(index);
+        if (i !== -1) this.__redo__.splice(i, 1);
+        this.__redo__.forEach(function (redo, i) {
+          if (redo > index) this.__redo__[i] = --redo;
+        }, this);
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _onClear: {
+      value: function () {
+        if (this.__redo__) clear.call(this.__redo__);
+        this.__nextIndex__ = 0;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  }));
+  Object.defineProperty(_Iterator.prototype, Symbol.iterator, {
+    value: function () {
+      return this;
+    },
+    configurable: true,
+    enumerable: false,
+    writable: true
+  });
+  Object.defineProperty(_Iterator.prototype, Symbol.toStringTag, {
+    value: 'Iterator',
+    configurable: false,
+    enumerable: false,
+    writable: true
+  });
+  return _Iterator;
+}();
+/* harmony default export */ const helpers_Iterator = (_Iterator);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__(1699);
+;// ./node_modules/@mrhenry/core-web/helpers/_ArrayIterator.js
+
+
+var ArrayIterator = function () {
+  var ArrayIterator = function ArrayIterator(arr, kind) {
+    if (!(this instanceof ArrayIterator)) return new ArrayIterator(arr, kind);
+    helpers_Iterator.call(this, arr);
+    if (!kind) kind = 'value';else if (String.prototype.includes.call(kind, 'key+value')) kind = 'key+value';else if (String.prototype.includes.call(kind, 'key')) kind = 'key';else kind = 'value';
+    Object.defineProperty(this, '__kind__', {
+      value: kind,
+      configurable: false,
+      enumerable: false,
+      writable: false
+    });
+  };
+  if (Object.setPrototypeOf) Object.setPrototypeOf(ArrayIterator, helpers_Iterator.prototype);
+  ArrayIterator.prototype = Object.create(helpers_Iterator.prototype, {
+    constructor: {
+      value: ArrayIterator,
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    _resolve: {
+      value: function (i) {
+        if (this.__kind__ === 'value') return this.__list__[i];
+        if (this.__kind__ === 'key+value') return [i, this.__list__[i]];
+        return i;
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    },
+    toString: {
+      value: function () {
+        return '[object Array Iterator]';
+      },
+      configurable: true,
+      enumerable: false,
+      writable: true
+    }
+  });
+  Object.defineProperty(ArrayIterator.prototype, Symbol.toStringTag, {
+    value: 'Array Iterator',
+    writable: false,
+    enumerable: false,
+    configurable: true
+  });
+  return ArrayIterator;
+}();
+/* harmony default export */ const _ArrayIterator = (ArrayIterator);
 ;// ./node_modules/@mrhenry/core-web/modules/DOMTokenList.prototype.@@iterator.js
 
 
