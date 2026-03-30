@@ -38,21 +38,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ 6194:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var has = (__webpack_require__(2248).has);
-
-// Perform ? RequireInternalSlot(M, [[MapData]])
-module.exports = function (it) {
-  has(it);
-  return it;
-};
-
-
-/***/ }),
-
 /***/ 3506:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1056,7 +1041,7 @@ var $TypeError = TypeError;
 var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
 
 module.exports = function (it) {
-  if (it > MAX_SAFE_INTEGER) throw $TypeError('Maximum allowed index exceeded');
+  if (it > MAX_SAFE_INTEGER) throw new $TypeError('Maximum allowed index exceeded');
   return it;
 };
 
@@ -1425,7 +1410,7 @@ var fails = __webpack_require__(9039);
 
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-function-prototype-bind -- safe
-  var test = (function () { /* empty */ }).bind();
+  var test = function () { /* empty */ }.bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
 });
@@ -1504,7 +1489,7 @@ var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
 // additional protection from minified / mangled / dropped function names
-var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+var PROPER = EXISTS && function something() { /* empty */ }.name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
 
 module.exports = {
@@ -2267,7 +2252,9 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal');
+    var $iterator = iterator;
+    iterator = undefined;
+    if ($iterator) iteratorClose($iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -2297,10 +2284,13 @@ module.exports = function (iterable, unboundFunction, options) {
 
   next = IS_RECORD ? iterable.next : iterator.next;
   while (!(step = call(next, iterator)).done) {
+    // `IteratorValue` errors should propagate without closing the iterator
+    var value = step.value;
     try {
-      result = callFn(step.value);
+      result = callFn(value);
     } catch (error) {
-      iteratorClose(iterator, 'throw', error);
+      if (iterator) iteratorClose(iterator, 'throw', error);
+      else throw error;
     }
     if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
@@ -3457,10 +3447,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.48.0',
+  version: '3.49.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
-  license: 'https://github.com/zloirock/core-js/blob/v3.48.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4363,8 +4353,8 @@ var push = uncurryThis([].push);
 var numberToString = uncurryThis(1.1.toString);
 
 var surrogates = /[\uD800-\uDFFF]/g;
-var lowSurrogates = /^[\uD800-\uDBFF]$/;
-var hiSurrogates = /^[\uDC00-\uDFFF]$/;
+var leadingSurrogates = /^[\uD800-\uDBFF]$/;
+var trailingSurrogates = /^[\uDC00-\uDFFF]$/;
 
 var MARK = uid();
 var MARK_LENGTH = MARK.length;
@@ -4400,7 +4390,10 @@ var stringifyWithProperSymbolsConversion = WRONG_SYMBOLS_CONVERSION ? function (
 var fixIllFormedJSON = function (match, offset, string) {
   var prev = charAt(string, offset - 1);
   var next = charAt(string, offset + 1);
-  if ((exec(lowSurrogates, match) && !exec(hiSurrogates, next)) || (exec(hiSurrogates, match) && !exec(lowSurrogates, prev))) {
+  if (
+    (exec(leadingSurrogates, match) && !exec(trailingSurrogates, next)) ||
+    (exec(trailingSurrogates, match) && !exec(leadingSurrogates, prev))
+  ) {
     return '\\u' + numberToString(charCodeAt(match, 0), 16);
   } return match;
 };
@@ -4491,7 +4484,6 @@ collection('Map', function (init) {
 
 var $ = __webpack_require__(6518);
 var aCallable = __webpack_require__(9306);
-var aMap = __webpack_require__(6194);
 var MapHelpers = __webpack_require__(2248);
 var IS_PURE = __webpack_require__(6395);
 
@@ -4500,12 +4492,12 @@ var has = MapHelpers.has;
 var set = MapHelpers.set;
 
 // `Map.prototype.getOrInsertComputed` method
-// https://github.com/tc39/proposal-upsert
+// https://tc39.es/ecma262/#sec-map.prototype.getorinsertcomputed
 $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
   getOrInsertComputed: function getOrInsertComputed(key, callbackfn) {
-    aMap(this);
+    var hasKey = has(this, key);
     aCallable(callbackfn);
-    if (has(this, key)) return get(this, key);
+    if (hasKey) return get(this, key);
     // CanonicalizeKeyedCollectionKey
     if (key === 0 && 1 / key === -Infinity) key = 0;
     var value = callbackfn(key);
@@ -4522,7 +4514,6 @@ $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
 
 
 var $ = __webpack_require__(6518);
-var aMap = __webpack_require__(6194);
 var MapHelpers = __webpack_require__(2248);
 var IS_PURE = __webpack_require__(6395);
 
@@ -4531,10 +4522,10 @@ var has = MapHelpers.has;
 var set = MapHelpers.set;
 
 // `Map.prototype.getOrInsert` method
-// https://github.com/tc39/proposal-upsert
+// https://tc39.es/ecma262/#sec-map.prototype.getorinsert
 $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
   getOrInsert: function getOrInsert(key, value) {
-    if (has(aMap(this), key)) return get(this, key);
+    if (has(this, key)) return get(this, key);
     set(this, key, value);
     return value;
   }
@@ -4891,8 +4882,8 @@ var FORCED = NEW_TARGET_BUG || ARGS_BUG;
 $({ target: 'Reflect', stat: true, forced: FORCED, sham: FORCED }, {
   construct: function construct(Target, args /* , newTarget */) {
     aConstructor(Target);
-    anObject(args);
     var newTarget = arguments.length < 3 ? Target : aConstructor(arguments[2]);
+    anObject(args);
     if (ARGS_BUG && !NEW_TARGET_BUG) return nativeConstruct(Target, args, newTarget);
     if (Target === newTarget) {
       // w/o altered newTarget, optimization for 0-4 arguments
@@ -4930,22 +4921,24 @@ var anObject = __webpack_require__(8551);
 var isDataDescriptor = __webpack_require__(6575);
 var getOwnPropertyDescriptorModule = __webpack_require__(7347);
 var getPrototypeOf = __webpack_require__(2787);
+var toPropertyKey = __webpack_require__(6969);
 
 // `Reflect.get` method
 // https://tc39.es/ecma262/#sec-reflect.get
-function get(target, propertyKey /* , receiver */) {
-  var receiver = arguments.length < 3 ? target : arguments[2];
-  var descriptor, prototype;
+var $get = function (target, propertyKey, receiver) {
   if (anObject(target) === receiver) return target[propertyKey];
-  descriptor = getOwnPropertyDescriptorModule.f(target, propertyKey);
+  var descriptor = getOwnPropertyDescriptorModule.f(target, propertyKey);
   if (descriptor) return isDataDescriptor(descriptor)
     ? descriptor.value
     : descriptor.get === undefined ? undefined : call(descriptor.get, receiver);
-  if (isObject(prototype = getPrototypeOf(target))) return get(prototype, propertyKey, receiver);
-}
+  var prototype = getPrototypeOf(target);
+  if (isObject(prototype)) return $get(prototype, propertyKey, receiver);
+};
 
 $({ target: 'Reflect', stat: true }, {
-  get: get
+  get: function get(target, propertyKey /* , receiver */) {
+    return $get(anObject(target), toPropertyKey(propertyKey), arguments.length < 3 ? target : arguments[2]);
+  }
 });
 
 
@@ -5114,7 +5107,7 @@ var fallbackDefineProperty = function (O, P, Attributes) {
   nativeDefineProperty(O, P, Attributes);
   if (ObjectPrototypeDescriptor && O !== ObjectPrototype) {
     nativeDefineProperty(ObjectPrototype, P, ObjectPrototypeDescriptor);
-  }
+  } return O;
 };
 
 var setSymbolDescriptor = DESCRIPTORS && fails(function () {
@@ -5140,7 +5133,8 @@ var $defineProperty = function defineProperty(O, P, Attributes) {
   var key = toPropertyKey(P);
   anObject(Attributes);
   if (hasOwn(AllSymbols, key)) {
-    if (!Attributes.enumerable) {
+    // first definition - default non-enumerable; redefinition - preserve existing state
+    if (!('enumerable' in Attributes) ? !hasOwn(O, key) || (hasOwn(O, HIDDEN) && O[HIDDEN][key]) : !Attributes.enumerable) {
       if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, nativeObjectCreate(null)));
       O[HIDDEN][key] = true;
     } else {
@@ -5318,6 +5312,7 @@ hiddenKeys[HIDDEN] = true;
 var $ = __webpack_require__(6518);
 var DESCRIPTORS = __webpack_require__(3724);
 var globalThis = __webpack_require__(4576);
+var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var isCallable = __webpack_require__(4901);
@@ -5347,6 +5342,14 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   };
 
   copyConstructorProperties(SymbolWrapper, NativeSymbol);
+  // wrap Symbol.for for correct handling of empty string descriptions
+  var nativeFor = SymbolWrapper['for'];
+  SymbolWrapper['for'] = { 'for': function (key) {
+    var stringKey = toString(key);
+    var symbol = call(nativeFor, this, stringKey);
+    if (stringKey === '') EmptyStringDescriptionStore[symbol] = true;
+    return symbol;
+  } }['for'];
   SymbolWrapper.prototype = SymbolPrototype;
   SymbolPrototype.constructor = SymbolWrapper;
 

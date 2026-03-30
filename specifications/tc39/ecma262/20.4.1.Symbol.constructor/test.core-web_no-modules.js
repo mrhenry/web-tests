@@ -636,7 +636,7 @@ var fails = __webpack_require__(9039);
 
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-function-prototype-bind -- safe
-  var test = (function () { /* empty */ }).bind();
+  var test = function () { /* empty */ }.bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
 });
@@ -672,7 +672,7 @@ var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
 // additional protection from minified / mangled / dropped function names
-var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+var PROPER = EXISTS && function something() { /* empty */ }.name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
 
 module.exports = {
@@ -1808,10 +1808,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.48.0',
+  version: '3.49.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
-  license: 'https://github.com/zloirock/core-js/blob/v3.48.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2237,8 +2237,8 @@ var push = uncurryThis([].push);
 var numberToString = uncurryThis(1.1.toString);
 
 var surrogates = /[\uD800-\uDFFF]/g;
-var lowSurrogates = /^[\uD800-\uDBFF]$/;
-var hiSurrogates = /^[\uDC00-\uDFFF]$/;
+var leadingSurrogates = /^[\uD800-\uDBFF]$/;
+var trailingSurrogates = /^[\uDC00-\uDFFF]$/;
 
 var MARK = uid();
 var MARK_LENGTH = MARK.length;
@@ -2274,7 +2274,10 @@ var stringifyWithProperSymbolsConversion = WRONG_SYMBOLS_CONVERSION ? function (
 var fixIllFormedJSON = function (match, offset, string) {
   var prev = charAt(string, offset - 1);
   var next = charAt(string, offset + 1);
-  if ((exec(lowSurrogates, match) && !exec(hiSurrogates, next)) || (exec(hiSurrogates, match) && !exec(lowSurrogates, prev))) {
+  if (
+    (exec(leadingSurrogates, match) && !exec(trailingSurrogates, next)) ||
+    (exec(trailingSurrogates, match) && !exec(leadingSurrogates, prev))
+  ) {
     return '\\u' + numberToString(charCodeAt(match, 0), 16);
   } return match;
 };
@@ -2461,7 +2464,7 @@ var fallbackDefineProperty = function (O, P, Attributes) {
   nativeDefineProperty(O, P, Attributes);
   if (ObjectPrototypeDescriptor && O !== ObjectPrototype) {
     nativeDefineProperty(ObjectPrototype, P, ObjectPrototypeDescriptor);
-  }
+  } return O;
 };
 
 var setSymbolDescriptor = DESCRIPTORS && fails(function () {
@@ -2487,7 +2490,8 @@ var $defineProperty = function defineProperty(O, P, Attributes) {
   var key = toPropertyKey(P);
   anObject(Attributes);
   if (hasOwn(AllSymbols, key)) {
-    if (!Attributes.enumerable) {
+    // first definition - default non-enumerable; redefinition - preserve existing state
+    if (!('enumerable' in Attributes) ? !hasOwn(O, key) || (hasOwn(O, HIDDEN) && O[HIDDEN][key]) : !Attributes.enumerable) {
       if (!hasOwn(O, HIDDEN)) nativeDefineProperty(O, HIDDEN, createPropertyDescriptor(1, nativeObjectCreate(null)));
       O[HIDDEN][key] = true;
     } else {
@@ -2665,6 +2669,7 @@ hiddenKeys[HIDDEN] = true;
 var $ = __webpack_require__(6518);
 var DESCRIPTORS = __webpack_require__(3724);
 var globalThis = __webpack_require__(4576);
+var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var isCallable = __webpack_require__(4901);
@@ -2694,6 +2699,14 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   };
 
   copyConstructorProperties(SymbolWrapper, NativeSymbol);
+  // wrap Symbol.for for correct handling of empty string descriptions
+  var nativeFor = SymbolWrapper['for'];
+  SymbolWrapper['for'] = { 'for': function (key) {
+    var stringKey = toString(key);
+    var symbol = call(nativeFor, this, stringKey);
+    if (stringKey === '') EmptyStringDescriptionStore[symbol] = true;
+    return symbol;
+  } }['for'];
   SymbolWrapper.prototype = SymbolPrototype;
   SymbolPrototype.constructor = SymbolWrapper;
 

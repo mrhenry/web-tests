@@ -20,21 +20,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ 6194:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var has = (__webpack_require__(2248).has);
-
-// Perform ? RequireInternalSlot(M, [[MapData]])
-module.exports = function (it) {
-  has(it);
-  return it;
-};
-
-
-/***/ }),
-
 /***/ 3506:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -162,18 +147,19 @@ var createProperty = __webpack_require__(4659);
 var setArrayLength = __webpack_require__(4527);
 var getIterator = __webpack_require__(81);
 var getIteratorMethod = __webpack_require__(851);
+var iteratorClose = __webpack_require__(9539);
 
 var $Array = Array;
 
 // `Array.from` method implementation
 // https://tc39.es/ecma262/#sec-array.from
 module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-  var O = toObject(arrayLike);
   var IS_CONSTRUCTOR = isConstructor(this);
   var argumentsLength = arguments.length;
   var mapfn = argumentsLength > 1 ? arguments[1] : undefined;
   var mapping = mapfn !== undefined;
   if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined);
+  var O = toObject(arrayLike);
   var iteratorMethod = getIteratorMethod(O);
   var index = 0;
   var length, result, step, iterator, next, value;
@@ -184,7 +170,11 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
     next = iterator.next;
     for (;!(step = call(next, iterator)).done; index++) {
       value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
-      createProperty(result, index, value);
+      try {
+        createProperty(result, index, value);
+      } catch (error) {
+        iteratorClose(iterator, 'throw', error);
+      }
     }
   } else {
     length = lengthOfArrayLike(O);
@@ -964,7 +954,7 @@ var $TypeError = TypeError;
 var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
 
 module.exports = function (it) {
-  if (it > MAX_SAFE_INTEGER) throw $TypeError('Maximum allowed index exceeded');
+  if (it > MAX_SAFE_INTEGER) throw new $TypeError('Maximum allowed index exceeded');
   return it;
 };
 
@@ -1158,7 +1148,7 @@ var fails = __webpack_require__(9039);
 
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-function-prototype-bind -- safe
-  var test = (function () { /* empty */ }).bind();
+  var test = function () { /* empty */ }.bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
 });
@@ -1194,7 +1184,7 @@ var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
 // additional protection from minified / mangled / dropped function names
-var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+var PROPER = EXISTS && function something() { /* empty */ }.name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
 
 module.exports = {
@@ -1993,7 +1983,9 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal');
+    var $iterator = iterator;
+    iterator = undefined;
+    if ($iterator) iteratorClose($iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -2023,10 +2015,13 @@ module.exports = function (iterable, unboundFunction, options) {
 
   next = IS_RECORD ? iterable.next : iterator.next;
   while (!(step = call(next, iterator)).done) {
+    // `IteratorValue` errors should propagate without closing the iterator
+    var value = step.value;
     try {
-      result = callFn(step.value);
+      result = callFn(value);
     } catch (error) {
-      iteratorClose(iterator, 'throw', error);
+      if (iterator) iteratorClose(iterator, 'throw', error);
+      else throw error;
     }
     if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
@@ -2928,7 +2923,7 @@ module.exports = function difference(other) {
   var O = aSet(this);
   var otherRec = getSetRecord(other);
   var result = clone(O);
-  if (size(O) <= otherRec.size) iterateSet(O, function (e) {
+  if (size(result) <= otherRec.size) iterateSet(result, function (e) {
     if (otherRec.includes(e)) remove(result, e);
   });
   else iterateSimple(otherRec.getIterator(), function (e) {
@@ -3021,7 +3016,7 @@ module.exports = function isDisjointFrom(other) {
   }, true) !== false;
   var iterator = otherRec.getIterator();
   return iterateSimple(iterator, function (e) {
-    if (has(O, e)) return iteratorClose(iterator, 'normal', false);
+    if (has(O, e)) return iteratorClose(iterator.iterator, 'normal', false);
   }) !== false;
 };
 
@@ -3070,7 +3065,7 @@ module.exports = function isSupersetOf(other) {
   if (size(O) < otherRec.size) return false;
   var iterator = otherRec.getIterator();
   return iterateSimple(iterator, function (e) {
-    if (!has(O, e)) return iteratorClose(iterator, 'normal', false);
+    if (!has(O, e)) return iteratorClose(iterator.iterator, 'normal', false);
   }) !== false;
 };
 
@@ -3342,10 +3337,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.48.0',
+  version: '3.49.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
-  license: 'https://github.com/zloirock/core-js/blob/v3.48.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3874,7 +3869,6 @@ collection('Map', function (init) {
 
 var $ = __webpack_require__(6518);
 var aCallable = __webpack_require__(9306);
-var aMap = __webpack_require__(6194);
 var MapHelpers = __webpack_require__(2248);
 var IS_PURE = __webpack_require__(6395);
 
@@ -3883,12 +3877,12 @@ var has = MapHelpers.has;
 var set = MapHelpers.set;
 
 // `Map.prototype.getOrInsertComputed` method
-// https://github.com/tc39/proposal-upsert
+// https://tc39.es/ecma262/#sec-map.prototype.getorinsertcomputed
 $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
   getOrInsertComputed: function getOrInsertComputed(key, callbackfn) {
-    aMap(this);
+    var hasKey = has(this, key);
     aCallable(callbackfn);
-    if (has(this, key)) return get(this, key);
+    if (hasKey) return get(this, key);
     // CanonicalizeKeyedCollectionKey
     if (key === 0 && 1 / key === -Infinity) key = 0;
     var value = callbackfn(key);
@@ -3905,7 +3899,6 @@ $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
 
 
 var $ = __webpack_require__(6518);
-var aMap = __webpack_require__(6194);
 var MapHelpers = __webpack_require__(2248);
 var IS_PURE = __webpack_require__(6395);
 
@@ -3914,10 +3907,10 @@ var has = MapHelpers.has;
 var set = MapHelpers.set;
 
 // `Map.prototype.getOrInsert` method
-// https://github.com/tc39/proposal-upsert
+// https://tc39.es/ecma262/#sec-map.prototype.getorinsert
 $({ target: 'Map', proto: true, real: true, forced: IS_PURE }, {
   getOrInsert: function getOrInsert(key, value) {
-    if (has(aMap(this), key)) return get(this, key);
+    if (has(this, key)) return get(this, key);
     set(this, key, value);
     return value;
   }
