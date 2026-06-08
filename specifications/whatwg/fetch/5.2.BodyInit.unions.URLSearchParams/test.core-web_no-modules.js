@@ -10983,11 +10983,6 @@ if (DESCRIPTORS && !('size' in URLSearchParamsPrototype)) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/amd options */
-/******/ 	!function() {
-/******/ 		__webpack_require__.amdO = {};
-/******/ 	}();
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	!function() {
 /******/ 		__webpack_require__.g = (function() {
@@ -11254,7 +11249,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
   }())) {
     (function (global, factory) {
-      (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && "object" !== 'undefined' ? factory(exports) : typeof define === 'function' && __webpack_require__.amdO ? define(['exports'], factory) : factory(global.WHATWGFetch = {});
+      (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.WHATWGFetch = {});
     })(this, function (exports) {
       'use strict';
 
