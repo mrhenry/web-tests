@@ -9063,11 +9063,6 @@ if (DESCRIPTORS && !('size' in URLSearchParamsPrototype)) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/amd options */
-/******/ 	(() => {
-/******/ 		__webpack_require__.amdO = {};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -9213,7 +9208,7 @@ var web_url_search_params_size = __webpack_require__(8721);
     }
   }())) {
     (function (global, factory) {
-      typeof exports === 'object' && "object" !== 'undefined' ? factory(exports) : typeof define === 'function' && __webpack_require__.amdO ? define(['exports'], factory) : factory(global.WHATWGFetch = {});
+      typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.WHATWGFetch = {});
     })(this, function (exports) {
       'use strict';
 

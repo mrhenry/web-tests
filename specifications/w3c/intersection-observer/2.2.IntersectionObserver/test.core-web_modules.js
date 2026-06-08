@@ -1756,7 +1756,7 @@ var defineBuiltIns = __webpack_require__(6279);
 var wellKnownSymbol = __webpack_require__(8227);
 var InternalStateModule = __webpack_require__(1181);
 var getMethod = __webpack_require__(5966);
-var IteratorPrototype = (__webpack_require__(38).IteratorPrototype);
+var IteratorPrototype = (__webpack_require__(7657).IteratorPrototype);
 var createIterResultObject = __webpack_require__(2529);
 var iteratorClose = __webpack_require__(9539);
 var iteratorCloseAll = __webpack_require__(1385);
@@ -1890,7 +1890,7 @@ module.exports = function (METHOD_NAME, ExpectedError) {
 
 /***/ },
 
-/***/ 38
+/***/ 7657
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
@@ -3706,7 +3706,7 @@ var createProperty = __webpack_require__(2278);
 var fails = __webpack_require__(9039);
 var hasOwn = __webpack_require__(9297);
 var wellKnownSymbol = __webpack_require__(8227);
-var IteratorPrototype = (__webpack_require__(38).IteratorPrototype);
+var IteratorPrototype = (__webpack_require__(7657).IteratorPrototype);
 var DESCRIPTORS = __webpack_require__(3724);
 var IS_PURE = __webpack_require__(6395);
 
