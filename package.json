@@ -16,18 +16,18 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@babel/cli": "^7.29.7",
-        "@babel/core": "^7.29.7",
-        "@babel/preset-env": "^7.29.7",
+        "@babel/cli": "^8.0.4",
+        "@babel/core": "^8.0.1",
+        "@babel/preset-env": "^8.0.2",
         "@mrhenry/babel-plugin-core-web": "^2.0.0",
         "babel-loader": "^10.1.1",
         "babel-plugin-polyfill-corejs3": "^1.0.0",
         "core-js": "^3.49.0",
-        "postcss": "^8.5.15",
+        "postcss": "^8.5.19",
         "postcss-cli": "^11.0.1",
-        "postcss-preset-env": "^11.3.1",
-        "webpack": "^5.107.2",
-        "webpack-cli": "^7.0.3"
+        "postcss-preset-env": "^11.3.2",
+        "webpack": "^5.108.4",
+        "webpack-cli": "^7.2.1"
     },
     "volta": {
         "node": "24.8.0"
