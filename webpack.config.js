@@ -40,10 +40,7 @@ module.exports = [
 							presets: [
 								[
 									'@babel/preset-env',
-									{
-										corejs: '3.999999.999999',
-										bugfixes: true,
-									}
+									{}
 								]
 							],
 							plugins: [
