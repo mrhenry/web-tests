@@ -27,25 +27,27 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							targets: {
+								browsers: [
+									"IE >= 8",
+									"Opera >= 12",
+									"Safari >= 5.1",
+									"Chrome >= 15",
+									"Edge >= 12",
+									"Firefox >= 4"
+								]
+							},
 							presets: [
 								[
 									'@babel/preset-env',
 									{
 										corejs: '3.999999.999999',
 										bugfixes: true,
-										targets: {
-											browsers: [
-												"IE >= 8",
-												"Opera >= 12",
-												"Safari >= 5.1",
-												"Chrome >= 15",
-												"Edge >= 12",
-												"Firefox >= 4"
-											]
-										},
-										useBuiltIns: 'usage'
 									}
 								]
+							],
+							plugins: [
+								['polyfill-corejs3', { method: 'usage-global', version: '3.999999.999999' }]
 							]
 						}
 					}

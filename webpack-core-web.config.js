@@ -13,9 +13,9 @@ module.exports = [
 			}
 		},
 		target: [
-				'web',
-				'browserslist:Opera 48 or Safari 10.1 or Chrome 61 or Edge 16 or Firefox 60'
-			],
+			'web',
+			'browserslist:Opera 48 or Safari 10.1 or Chrome 61 or Edge 16 or Firefox 60'
+		],
 		optimization: {
 			minimize: false
 		},
@@ -28,22 +28,29 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							targets: {
+								browsers: [
+									"Opera >= 48",
+									"Safari >= 10.1",
+									"Chrome >= 61",
+									"Edge >= 16",
+									"Firefox >= 60"
+								]
+							},
 							presets: [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '3.999999.999999',
-										bugfixes: true,
-										targets: {
-											browsers: [
-												"Opera >= 48",
-												"Safari >= 10.1",
-												"Chrome >= 61",
-												"Edge >= 16",
-												"Firefox >= 60"
-											]
-										},
-										useBuiltIns: 'usage',
+										bugfixes: true
+									}
+								]
+							],
+							plugins: [
+								[
+									'polyfill-corejs3',
+									{
+										method: 'usage-global',
+										version: '3.999999.999999',
 										exclude: [
 											"web.dom-collections.iterator",
 											"web.dom-collections.for-each"
@@ -61,6 +68,15 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							targets: {
+								browsers: [
+									"Opera >= 48",
+									"Safari >= 10.1",
+									"Chrome >= 61",
+									"Edge >= 16",
+									"Firefox >= 60"
+								]
+							},
 							plugins: [
 								[
 									'@mrhenry/core-web',
@@ -74,28 +90,24 @@ module.exports = [
 										},
 										debug: false
 									}
+								],
+								[
+									'polyfill-corejs3',
+									{
+										method: 'usage-global',
+										version: '3.999999.999999',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
+									}
 								]
 							],
 							presets: [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '3.999999.999999',
-										bugfixes: true,
-										targets: {
-											browsers: [
-												"Opera >= 48",
-												"Safari >= 10.1",
-												"Chrome >= 61",
-												"Edge >= 16",
-												"Firefox >= 60"
-											]
-										},
-										useBuiltIns: 'usage',
-										exclude: [
-											"web.dom-collections.iterator",
-											"web.dom-collections.for-each"
-										]
+										bugfixes: true
 									}
 								]
 							]
@@ -120,9 +132,9 @@ module.exports = [
 			}
 		},
 		target: [
-				'web',
-				'browserslist:IE 8 or Opera 12 or Safari 5 or Chrome 15 or Edge 12 or Firefox 4'
-			],
+			'web',
+			'browserslist:IE 8 or Opera 12 or Safari 5 or Chrome 15 or Edge 12 or Firefox 4'
+		],
 		optimization: {
 			minimize: false
 		},
@@ -135,23 +147,30 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							targets: {
+								browsers: [
+									"IE >= 8",
+									"Opera >= 12",
+									"Safari >= 5.1",
+									"Chrome >= 15",
+									"Edge >= 12",
+									"Firefox >= 4"
+								]
+							},
 							presets: [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '3.999999.999999',
-										bugfixes: true,
-										targets: {
-											browsers: [
-												"IE >= 8",
-												"Opera >= 12",
-												"Safari >= 5.1",
-												"Chrome >= 15",
-												"Edge >= 12",
-												"Firefox >= 4"
-											]
-										},
-										useBuiltIns: 'usage',
+										bugfixes: true
+									}
+								]
+							],
+							plugins: [
+								[
+									'polyfill-corejs3',
+									{
+										method: 'usage-global',
+										version: '3.999999.999999',
 										exclude: [
 											"web.dom-collections.iterator",
 											"web.dom-collections.for-each"
@@ -169,6 +188,16 @@ module.exports = [
 						loader: 'babel-loader',
 						options: {
 							comments: false,
+							targets: {
+								browsers: [
+									"IE >= 8",
+									"Opera >= 12",
+									"Safari >= 5.1",
+									"Chrome >= 15",
+									"Edge >= 12",
+									"Firefox >= 4"
+								]
+							},
 							plugins: [
 								[
 									'@mrhenry/core-web',
@@ -183,29 +212,24 @@ module.exports = [
 										},
 										debug: true
 									}
+								],
+								[
+									'polyfill-corejs3',
+									{
+										method: 'usage-global',
+										version: '3.999999.999999',
+										exclude: [
+											"web.dom-collections.iterator",
+											"web.dom-collections.for-each"
+										]
+									}
 								]
 							],
 							presets: [
 								[
 									'@babel/preset-env',
 									{
-										corejs: '3.999999.999999',
-										bugfixes: true,
-										targets: {
-											browsers: [
-												"IE >= 8",
-												"Opera >= 12",
-												"Safari >= 5.1",
-												"Chrome >= 15",
-												"Edge >= 12",
-												"Firefox >= 4"
-											]
-										},
-										useBuiltIns: 'usage',
-										exclude: [
-											"web.dom-collections.iterator",
-											"web.dom-collections.for-each"
-										]
+										bugfixes: true
 									}
 								]
 							]

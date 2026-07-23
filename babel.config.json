@@ -1,4 +1,14 @@
 {
+    "targets": {
+      "browsers": [
+        "IE >= 6",
+        "Opera >= 9",
+        "Safari >= 4",
+        "Chrome >= 4",
+        "Edge >= 12",
+        "Firefox >= 2"
+      ]
+    },
     "presets": [
         [
             "@babel/preset-env",
@@ -6,19 +16,8 @@
                 "modules": false,
                 "bugfixes": true,
                 "exclude": [
-                    "@babel/plugin-transform-regenerator"
-                ],
-                "targets": {
-                    "browsers": [
-                        "IE >= 6",
-                        "Opera >= 9",
-                        "Safari >= 4",
-                        "Chrome >= 4",
-                        "Edge >= 12",
-                        "Firefox >= 2"
-                    ]
-                },
-                "useBuiltIns": false
+                  "@babel/plugin-transform-regenerator"
+                ]
             }
         ]
     ]
