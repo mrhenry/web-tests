@@ -16,9 +16,9 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@babel/cli": "^7.29.7",
-        "@babel/core": "^7.29.7",
-        "@babel/preset-env": "^7.29.7",
+        "@babel/cli": "^8.0.4",
+        "@babel/core": "^8.0.1",
+        "@babel/preset-env": "^8.0.2",
         "@mrhenry/babel-plugin-core-web": "^2.0.0",
         "babel-loader": "^10.1.1",
         "babel-plugin-polyfill-corejs3": "^1.0.0",
@@ -31,5 +31,8 @@
     },
     "volta": {
         "node": "24.8.0"
+    },
+    "dependencies": {
+        "0": "^0.0.0"
     }
 }

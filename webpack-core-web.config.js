@@ -40,9 +40,7 @@ module.exports = [
 							presets: [
 								[
 									'@babel/preset-env',
-									{
-										bugfixes: true
-									}
+									{}
 								]
 							],
 							plugins: [
@@ -106,9 +104,7 @@ module.exports = [
 							presets: [
 								[
 									'@babel/preset-env',
-									{
-										bugfixes: true
-									}
+									{}
 								]
 							]
 						}
@@ -160,9 +156,7 @@ module.exports = [
 							presets: [
 								[
 									'@babel/preset-env',
-									{
-										bugfixes: true
-									}
+									{}
 								]
 							],
 							plugins: [
@@ -228,9 +222,7 @@ module.exports = [
 							presets: [
 								[
 									'@babel/preset-env',
-									{
-										bugfixes: true
-									}
+									{}
 								]
 							]
 						}
