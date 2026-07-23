@@ -13,6 +13,17 @@ import (
 	"github.com/mrhenry/web-tests/scripts/store"
 )
 
+type ResultsByBrowser struct {
+	fullyQualifiedBrowserVersion string
+	browserNameForResults        string
+	browser                      string
+	browserVersion               string
+	featureID                    string
+	os                           string
+	osVersion                    string
+	results                      map[string]result.Result
+}
+
 func fullResult() {
 	totalPoints5 := Points{
 		threshold: 0.99999,
@@ -52,7 +63,7 @@ func fullResult() {
 			totalFeatures++
 		}
 
-		results := map[string]map[string]result.Result{}
+		results := map[string]ResultsByBrowser{}
 		tests := map[string]struct{}{}
 		testsSlice := []string{}
 
@@ -84,52 +95,57 @@ func fullResult() {
 
 				byBrowser, ok := results[significantUAVersion(r)]
 				if !ok {
-					byBrowser = map[string]result.Result{}
+					byBrowser = ResultsByBrowser{
+						fullyQualifiedBrowserVersion: significantUAVersion(r),
+						browser:                      r.Browser,
+						browserVersion:               r.BrowserVersion,
+						browserNameForResults:        r.Browser,
+						os:                           r.OS,
+						osVersion:                    r.OSVersion,
+						results:                      map[string]result.Result{},
+					}
+
+					if byBrowser.os == "ios" {
+						byBrowser.browserNameForResults = "ios"
+					}
 				}
 
-				_, ok = byBrowser[r.Test]
+				_, ok = byBrowser.results[r.Test]
 				if ok {
-					panic(fmt.Sprintf("duplicate result for %s %s %s/%s", r.Test, significantUAVersion(r), r.Browser, r.BrowserVersion))
+					panic(fmt.Sprintf("duplicate result for %s %s | %s/%s", r.Test, significantUAVersion(r), r.Browser, r.BrowserVersion))
 				}
 
-				byBrowser[r.Test] = r
+				byBrowser.results[r.Test] = r
 
 				results[significantUAVersion(r)] = byBrowser
 			}
 		}
 
 		{
-			resultsByBrowserVersion := []struct {
-				browser string
-				results map[string]result.Result
-			}{}
+			resultsByBrowserVersion := []ResultsByBrowser{}
 
-			for browser, byBrowser := range results {
-				resultsByBrowserVersion = append(resultsByBrowserVersion, struct {
-					browser string
-					results map[string]result.Result
-				}{
-					browser: browser,
-					results: byBrowser,
-				})
+			for _, byBrowser := range results {
+				resultsByBrowserVersion = append(resultsByBrowserVersion, byBrowser)
 			}
 
 			sort.Slice(resultsByBrowserVersion, func(i int, j int) bool {
-				parts1 := strings.Split(resultsByBrowserVersion[i].browser, "/")
-				parts2 := strings.Split(resultsByBrowserVersion[j].browser, "/")
+				browserI := resultsByBrowserVersion[i].browserNameForResults
+				browserVersionI := resultsByBrowserVersion[i].browserVersion
+				browserJ := resultsByBrowserVersion[j].browserNameForResults
+				browserVersionJ := resultsByBrowserVersion[j].browserVersion
 
-				if parts1[0] == parts2[0] {
-					v1, _ := version.NewVersion(parts1[1])
-					v2, _ := version.NewVersion(parts2[1])
+				if browserI == browserJ {
+					v1, _ := version.NewVersion(browserVersionI)
+					v2, _ := version.NewVersion(browserVersionJ)
 
 					if v1 != nil && v2 != nil {
 						return v1.GreaterThan(v2)
 					}
 
-					return parts1[1] > parts2[1]
+					return browserVersionI > browserVersionJ
 				}
 
-				return parts1[0] < parts2[0]
+				return browserI < browserJ
 			})
 
 			resultsByBrowser := []struct {
@@ -148,7 +164,7 @@ func fullResult() {
 				}{}
 
 				for i, byBrowser := range resultsByBrowserVersion {
-					if strings.Split(byBrowser.browser, "/")[0] != lastBrowser && lastBrowser != "" {
+					if byBrowser.browserNameForResults != lastBrowser && lastBrowser != "" {
 						resultsByBrowser = append(resultsByBrowser, struct {
 							browser   string
 							byBrowser []struct {
@@ -165,18 +181,18 @@ func fullResult() {
 							results            map[string]result.Result
 						}{}
 
-						lastBrowser = strings.Split(byBrowser.browser, "/")[0]
+						lastBrowser = byBrowser.browserNameForResults
 					}
 
 					if lastBrowser == "" {
-						lastBrowser = strings.Split(byBrowser.browser, "/")[0]
+						lastBrowser = byBrowser.browserNameForResults
 					}
 
 					currentResults = append(currentResults, struct {
 						browserWithVersion string
 						results            map[string]result.Result
 					}{
-						browserWithVersion: byBrowser.browser,
+						browserWithVersion: byBrowser.fullyQualifiedBrowserVersion,
 						results:            byBrowser.results,
 					})
 
