@@ -30,9 +30,6 @@
         "webpack-cli": "^7.0.3"
     },
     "volta": {
-        "node": "24.8.0"
-    },
-    "dependencies": {
-        "0": "^0.0.0"
+        "node": "26.6.0"
     }
 }
