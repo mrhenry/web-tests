@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -26,6 +27,8 @@ func getLocalBinary(parentCtx context.Context, accessKey string, localIdentifier
 			localBinPath += ".exe"
 		}
 	}
+
+	localBinPath = filepath.Clean(localBinPath)
 
 	if !fileExists(localBinPath) {
 		err := downloadLocalBinary(parentCtx, localBinPath, platform, arch)
