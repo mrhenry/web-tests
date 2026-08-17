@@ -822,7 +822,8 @@ var lengthOfArrayLike = __webpack_require__(6198);
 
 // `Array.prototype.fill` method implementation
 // https://tc39.es/ecma262/#sec-array.prototype.fill
-module.exports = function fill(value /* , start = 0, end = @length */) {
+// eslint-disable-next-line es/no-array-prototype-fill -- fallback included
+module.exports = [].fill || function fill(value /* , start = 0, end = @length */) {
   var O = toObject(this);
   var length = lengthOfArrayLike(O);
   var argumentsLength = arguments.length;
@@ -1934,7 +1935,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
-// eslint-disable-next-line redos/no-vulnerable, sonarjs/slow-regex -- safe
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -2406,43 +2407,43 @@ module.exports = function (obj) {
 
 /***/ }),
 
-/***/ 851:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var classof = __webpack_require__(6955);
-var getMethod = __webpack_require__(5966);
-var isNullOrUndefined = __webpack_require__(4117);
-var Iterators = __webpack_require__(6269);
-var wellKnownSymbol = __webpack_require__(8227);
-
-var ITERATOR = wellKnownSymbol('iterator');
-
-module.exports = function (it) {
-  if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR)
-    || getMethod(it, '@@iterator')
-    || Iterators[classof(it)];
-};
-
-
-/***/ }),
-
-/***/ 81:
+/***/ 8563:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
 var call = __webpack_require__(9565);
-var aCallable = __webpack_require__(9306);
+var isCallable = __webpack_require__(4901);
 var anObject = __webpack_require__(8551);
 var tryToString = __webpack_require__(6823);
-var getIteratorMethod = __webpack_require__(851);
+var getIteratorMethod = __webpack_require__(3085);
 
 var $TypeError = TypeError;
 
 module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-  if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
+  if (isCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
   throw new $TypeError(tryToString(argument) + ' is not iterable');
+};
+
+
+/***/ }),
+
+/***/ 3085:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var classof = __webpack_require__(2195);
+var isNullOrUndefined = __webpack_require__(4117);
+var getMethod = __webpack_require__(5966);
+var wellKnownSymbol = __webpack_require__(8227);
+
+var ITERATOR = wellKnownSymbol('iterator');
+var ArrayPrototype = Array.prototype;
+
+module.exports = function (it) {
+  if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR)
+    || getMethod(it, '@@iterator')
+    || (classof(it) === 'Arguments' ? ArrayPrototype[ITERATOR] : undefined);
 };
 
 
@@ -3160,8 +3161,8 @@ var tryToString = __webpack_require__(6823);
 var isArrayIteratorMethod = __webpack_require__(4209);
 var lengthOfArrayLike = __webpack_require__(6198);
 var isPrototypeOf = __webpack_require__(1625);
-var getIterator = __webpack_require__(81);
-var getIteratorMethod = __webpack_require__(851);
+var getIterator = __webpack_require__(8563);
+var getIteratorMethod = __webpack_require__(3085);
 var iteratorClose = __webpack_require__(9539);
 
 var $TypeError = TypeError;
@@ -3225,6 +3226,19 @@ module.exports = function (iterable, unboundFunction, options) {
     }
     if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
+};
+
+
+/***/ }),
+
+/***/ 6859:
+/***/ (function(module) {
+
+
+// release references held by exhausted / closed iterator helpers to allow GC of the source chain
+module.exports = function (state) {
+  state.iterator = state.next = state.nextHandler = state.mapper = state.predicate = state.inner =
+    state.iterables = state.iters = state.openIters = state.padding = state.finishResults = state.buffer = null;
 };
 
 
@@ -3322,6 +3336,7 @@ var IteratorPrototype = (__webpack_require__(7657).IteratorPrototype);
 var createIterResultObject = __webpack_require__(2529);
 var iteratorClose = __webpack_require__(9539);
 var iteratorCloseAll = __webpack_require__(1385);
+var cleanupState = __webpack_require__(6859);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var ITERATOR_HELPER = 'IteratorHelper';
@@ -3343,29 +3358,34 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
       if (state.done) return createIterResultObject(undefined, true);
       try {
         var result = state.nextHandler();
+        if (state.done) cleanupState(state);
         return state.returnHandlerResult ? result : createIterResultObject(result, state.done);
       } catch (error) {
         state.done = true;
+        cleanupState(state);
         throw error;
       }
     },
     'return': function () {
       var state = getInternalState(this);
       var iterator = state.iterator;
+      var inner = state.inner;
+      var openIters = state.openIters;
       var done = state.done;
       state.done = true;
       if (IS_ITERATOR) {
         var returnMethod = getMethod(iterator, 'return');
         return returnMethod ? call(returnMethod, iterator) : createIterResultObject(undefined, true);
       }
+      cleanupState(state);
       if (done) return createIterResultObject(undefined, true);
-      if (state.inner) try {
-        iteratorClose(state.inner.iterator, NORMAL);
+      if (inner) try {
+        iteratorClose(inner.iterator, NORMAL);
       } catch (error) {
         return iteratorClose(iterator, THROW, error);
       }
-      if (state.openIters) try {
-        iteratorCloseAll(state.openIters, NORMAL);
+      if (openIters) try {
+        iteratorCloseAll(openIters, NORMAL);
       } catch (error) {
         if (iterator) return iteratorClose(iterator, THROW, error);
         throw error;
@@ -3621,7 +3641,7 @@ module.exports = {
 /***/ (function(module) {
 
 
-module.exports = {};
+module.exports = Object.create ? Object.create(null) : {};
 
 
 /***/ }),
@@ -5129,10 +5149,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.49.0',
+  version: '3.50.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
-  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.50.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -5144,9 +5164,11 @@ var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, 
 
 
 var store = __webpack_require__(7629);
+// eslint-disable-next-line es/no-object-create -- safe
+var create = Object.create || Object;
 
 module.exports = function (key, value) {
-  return store[key] || (store[key] = value || {});
+  return store[key] || (store[key] = value || create(null));
 };
 
 
@@ -5488,6 +5510,19 @@ module.exports = {
   set: set,
   clear: clear
 };
+
+
+/***/ }),
+
+/***/ 1240:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var uncurryThis = __webpack_require__(9504);
+
+// `thisNumberValue` abstract operation
+// https://tc39.es/ecma262/#sec-thisnumbervalue
+module.exports = uncurryThis(1.1.valueOf);
 
 
 /***/ }),
@@ -6072,8 +6107,8 @@ var aCallable = __webpack_require__(9306);
 var aConstructor = __webpack_require__(5548);
 var toObject = __webpack_require__(8981);
 var lengthOfArrayLike = __webpack_require__(6198);
-var getIterator = __webpack_require__(81);
-var getIteratorMethod = __webpack_require__(851);
+var getIterator = __webpack_require__(8563);
+var getIteratorMethod = __webpack_require__(3085);
 var isArrayIteratorMethod = __webpack_require__(4209);
 var isBigIntArray = __webpack_require__(1108);
 var aTypedArrayConstructor = (__webpack_require__(4644).aTypedArrayConstructor);
@@ -6148,7 +6183,9 @@ var base64UrlAlphabet = base64Map.c2iUrl;
 
 var SyntaxError = globalThis.SyntaxError;
 var TypeError = globalThis.TypeError;
+var $Array = globalThis.Array;
 var at = uncurryThis(''.charAt);
+var floor = Math.floor;
 
 var skipAsciiWhitespace = function (string, index) {
   var length = string.length;
@@ -6217,7 +6254,7 @@ module.exports = function (string, options, into, maxLength) {
   if (into) notDetached(into.buffer);
 
   var stringLength = string.length;
-  var bytes = into || [];
+  var bytes = into || $Array(floor(stringLength * 3 / 4));
   var written = 0;
   var read = 0;
   var chunk = '';
@@ -6287,7 +6324,7 @@ module.exports = function (string, options, into, maxLength) {
       }
     }
   }
-
+  if (!into) bytes.length = written;
   return { bytes: bytes, read: read, written: written };
 };
 
@@ -6311,7 +6348,7 @@ module.exports = function (string, into) {
   if (stringLength % 2 !== 0) throw new SyntaxError('String should be an even number of characters');
   var maxLength = into ? min(into.length, stringLength / 2) : stringLength / 2;
   var bytes = into || new Uint8Array(maxLength);
-  var segments = stringMatch(string, /.{2}/g);
+  var segments = stringMatch(string, /[\S\s]{2}/g);
   var written = 0;
   for (; written < maxLength; written++) {
     var result = +('0x' + segments[written] + '0');
@@ -6372,6 +6409,184 @@ module.exports = !fails(function () {
     // throws in Safari
     || new URL('https://x', undefined).host !== 'x';
 });
+
+
+/***/ }),
+
+/***/ 918:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+// TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
+__webpack_require__(7337);
+var getBuiltIn = __webpack_require__(7751);
+var uncurryThis = __webpack_require__(9504);
+
+var fromCharCode = String.fromCharCode;
+var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
+var $encodeURIComponent = encodeURIComponent;
+var $parseInt = parseInt;
+var charAt = uncurryThis(''.charAt);
+var push = uncurryThis([].push);
+var replace = uncurryThis(''.replace);
+var stringSlice = uncurryThis(''.slice);
+var exec = uncurryThis(/./.exec);
+
+var FALLBACK_REPLACER = '\uFFFD';
+var VALID_HEX = /^[0-9a-f]+$/i;
+// a surrogate pair is matched first, so a one-unit match is always a lone surrogate
+var SURROGATE = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDFFF]/g;
+
+var parseHexOctet = function (string, start) {
+  var substr = stringSlice(string, start, start + 2);
+  if (!exec(VALID_HEX, substr)) return NaN;
+
+  return $parseInt(substr, 16);
+};
+
+var getLeadingOnes = function (octet) {
+  var count = 0;
+  for (var mask = 0x80; mask > 0 && (octet & mask) !== 0; mask >>= 1) {
+    count++;
+  }
+  return count;
+};
+
+var utf8Decode = function (octets) {
+  var codePoint = null;
+  var length = octets.length;
+
+  switch (length) {
+    case 1:
+      codePoint = octets[0];
+      break;
+    case 2:
+      codePoint = (octets[0] & 0x1F) << 6 | (octets[1] & 0x3F);
+      break;
+    case 3:
+      codePoint = (octets[0] & 0x0F) << 12 | (octets[1] & 0x3F) << 6 | (octets[2] & 0x3F);
+      break;
+    case 4:
+      codePoint = (octets[0] & 0x07) << 18 | (octets[1] & 0x3F) << 12 | (octets[2] & 0x3F) << 6 | (octets[3] & 0x3F);
+      break;
+  }
+
+  // reject surrogates, overlong encodings, and out-of-range codepoints
+  if (codePoint === null
+    || codePoint > 0x10FFFF
+    || (codePoint >= 0xD800 && codePoint <= 0xDFFF)
+    || codePoint < (length > 3 ? 0x10000 : length > 2 ? 0x800 : length > 1 ? 0x80 : 0)
+  ) return null;
+
+  return codePoint;
+};
+
+var replaceLoneSurrogate = function (chunk) {
+  return chunk.length === 2 ? chunk : FALLBACK_REPLACER;
+};
+
+// https://url.spec.whatwg.org/#percent-decode
+/* eslint-disable max-depth -- ok */
+var decode = function (input) {
+  var length = input.length;
+  var result = '';
+  var i = 0;
+
+  while (i < length) {
+    var decodedChar = charAt(input, i);
+
+    if (decodedChar === '%') {
+      if (charAt(input, i + 1) === '%' || i + 3 > length) {
+        result += '%';
+        i++;
+        continue;
+      }
+
+      var octet = parseHexOctet(input, i + 1);
+
+      // eslint-disable-next-line no-self-compare -- NaN check
+      if (octet !== octet) {
+        result += decodedChar;
+        i++;
+        continue;
+      }
+
+      i += 2;
+      var byteSequenceLength = getLeadingOnes(octet);
+
+      if (byteSequenceLength === 0) {
+        decodedChar = fromCharCode(octet);
+      } else {
+        if (byteSequenceLength === 1 || byteSequenceLength > 4) {
+          result += FALLBACK_REPLACER;
+          i++;
+          continue;
+        }
+
+        var octets = [octet];
+        var sequenceIndex = 1;
+
+        while (sequenceIndex < byteSequenceLength) {
+          i++;
+          if (i + 3 > length || charAt(input, i) !== '%') break;
+
+          var nextByte = parseHexOctet(input, i + 1);
+
+          // eslint-disable-next-line no-self-compare -- NaN check
+          if (nextByte !== nextByte || nextByte > 191 || nextByte < 128) break;
+
+          // https://encoding.spec.whatwg.org/#utf-8-decoder - position-specific byte ranges
+          if (sequenceIndex === 1) {
+            if (octet === 0xE0 && nextByte < 0xA0) break;
+            if (octet === 0xED && nextByte > 0x9F) break;
+            if (octet === 0xF0 && nextByte < 0x90) break;
+            if (octet === 0xF4 && nextByte > 0x8F) break;
+          }
+
+          push(octets, nextByte);
+          i += 2;
+          sequenceIndex++;
+        }
+
+        if (octets.length !== byteSequenceLength) {
+          result += FALLBACK_REPLACER;
+          continue;
+        }
+
+        var codePoint = utf8Decode(octets);
+        if (codePoint === null) {
+          for (var replacement = 0; replacement < byteSequenceLength; replacement++) result += FALLBACK_REPLACER;
+          i++;
+          continue;
+        } else {
+          decodedChar = fromCodePoint(codePoint);
+        }
+      }
+    }
+
+    result += decodedChar;
+    i++;
+  }
+
+  return result;
+};
+/* eslint-enable max-depth -- ok */
+
+// https://url.spec.whatwg.org/#string-percent-encode-after-encoding
+// a lone surrogate is the only input `encodeURIComponent` throws on, and the UTF-8
+// encoder replaces it - so the throw selects the slow path instead of a per-call scan
+var encode = function (input) {
+  try {
+    return $encodeURIComponent(input);
+  } catch (error) {
+    return $encodeURIComponent(replace(input, SURROGATE, replaceLoneSurrogate));
+  }
+};
+
+module.exports = {
+  decode: decode,
+  encode: encode
+};
 
 
 /***/ }),
@@ -7404,7 +7619,7 @@ var OBJECT = 1;
 
 var $parse = function (source, reviver) {
   source = toString(source);
-  var context = new Context(source, 0, '');
+  var context = new Context(source, 0);
   var root = context.parse();
   var value = root.value;
   var endIndex = context.skip(IS_WHITESPACE, root.end);
@@ -7637,38 +7852,54 @@ $({ target: 'JSON', stat: true, forced: NO_SOURCE_SUPPORT }, {
 
 var $ = __webpack_require__(6518);
 var getBuiltIn = __webpack_require__(7751);
-var apply = __webpack_require__(8745);
 var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var fails = __webpack_require__(9039);
 var isArray = __webpack_require__(4376);
 var isCallable = __webpack_require__(4901);
+var isObject = __webpack_require__(34);
+var create = __webpack_require__(2360);
 var isRawJSON = __webpack_require__(5810);
 var isSymbol = __webpack_require__(757);
 var classof = __webpack_require__(2195);
+var thisNumberValue = __webpack_require__(1240);
+var includes = (__webpack_require__(9617).includes);
+var hasOwn = __webpack_require__(9297);
 var toString = __webpack_require__(655);
-var arraySlice = __webpack_require__(7680);
 var parseJSONString = __webpack_require__(8235);
 var uid = __webpack_require__(3392);
 var NATIVE_SYMBOL = __webpack_require__(4495);
 var NATIVE_RAW_JSON = __webpack_require__(7819);
 
 var $String = String;
+var $TypeError = TypeError;
 var $stringify = getBuiltIn('JSON', 'stringify');
+var $BigInt = getBuiltIn('BigInt');
+var stringValueOf = uncurryThis(''.valueOf);
+var booleanValueOf = uncurryThis(true.valueOf);
+var bigIntValueOf = $BigInt && uncurryThis($BigInt.prototype.valueOf);
 var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
 var charCodeAt = uncurryThis(''.charCodeAt);
 var replace = uncurryThis(''.replace);
 var slice = uncurryThis(''.slice);
 var push = uncurryThis([].push);
+var pop = uncurryThis([].pop);
 var numberToString = uncurryThis(1.1.toString);
 
 var surrogates = /[\uD800-\uDFFF]/g;
 var leadingSurrogates = /^[\uD800-\uDBFF]$/;
 var trailingSurrogates = /^[\uDC00-\uDFFF]$/;
+var digits = /^\d+$/;
 
-var MARK = uid();
-var MARK_LENGTH = MARK.length;
+// a placeholder of a raw JSON value
+var RAW_MARK = uid();
+// a prefix of keys of a reordered object, see `createOrderedObject`
+var KEY_MARK = uid();
+// the last key of a reordered object, marks the end of its serialization
+var END_MARK = uid();
+var RAW_MARK_LENGTH = RAW_MARK.length;
+var KEY_MARK_LENGTH = KEY_MARK.length;
 
 var WRONG_SYMBOLS_CONVERSION = !NATIVE_SYMBOL || fails(function () {
   var symbol = getBuiltIn('Symbol')('stringify detection');
@@ -7686,16 +7917,13 @@ var ILL_FORMED_UNICODE = fails(function () {
     || $stringify('\uDEAD') !== '"\\udead"';
 });
 
-var stringifyWithProperSymbolsConversion = WRONG_SYMBOLS_CONVERSION ? function (it, replacer) {
-  var args = arraySlice(arguments);
-  var $replacer = getReplacerFunction(replacer);
-  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
-  args[1] = function (key, value) {
-    // some old implementations (like WebKit) could pass numbers as keys
-    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
-    if (!isSymbol(value)) return value;
-  };
-  return apply($stringify, null, args);
+var isRawJSONValue = NATIVE_RAW_JSON ? getBuiltIn('JSON', 'isRawJSON') : isRawJSON;
+
+var stringifyWithProperSymbolsConversion = WRONG_SYMBOLS_CONVERSION ? function (it, replacer, space) {
+  return $stringify(it, function (key, value) {
+    var replaced = call(replacer, this, key, value);
+    if (!isSymbol(replaced)) return replaced;
+  }, space);
 } : $stringify;
 
 var fixIllFormedJSON = function (match, offset, string) {
@@ -7709,26 +7937,92 @@ var fixIllFormedJSON = function (match, offset, string) {
   } return match;
 };
 
-var getReplacerFunction = function (replacer) {
-  if (isCallable(replacer)) return replacer;
+// `PropertyList` of `JSON.stringify`
+// https://tc39.es/ecma262/#sec-json.stringify
+var getPropertyList = function (replacer) {
   if (!isArray(replacer)) return;
   var rawLength = replacer.length;
-  var keys = [];
+  var propertyList = [];
+  // a null prototype object is used as a set of already added keys to keep the deduplication linear
+  var addedKeys = create(null);
   for (var i = 0; i < rawLength; i++) {
     var element = replacer[i];
-    if (typeof element == 'string') push(keys, element);
-    else if (typeof element == 'number' || classof(element) === 'Number' || classof(element) === 'String') push(keys, toString(element));
-  }
-  var keysLength = keys.length;
-  var root = true;
-  return function (key, value) {
-    if (root) {
-      root = false;
-      return value;
+    var key;
+    if (typeof element == 'string') key = element;
+    else if (typeof element == 'number' || classof(element) === 'Number' || classof(element) === 'String') key = toString(element);
+    else continue;
+    if (!hasOwn(addedKeys, key)) {
+      addedKeys[key] = true;
+      push(propertyList, key);
     }
-    if (isArray(this)) return value;
-    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
+  }
+  return propertyList;
+};
+
+// values with such an internal slot are unwrapped by `SerializeJSONProperty` instead of being serialized as objects
+var hasInternalSlot = function (valueOf, it) {
+  try {
+    valueOf(it);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+// the slot check is expensive, so it's performed only for the kind reported by the value itself -
+// a value lying about its kind via `Symbol.toStringTag` is serialized as an ordinary object
+var isBoxedPrimitive = function (it) {
+  var kind = classof(it);
+  return (kind === 'Number' && hasInternalSlot(thisNumberValue, it))
+    || (kind === 'String' && hasInternalSlot(stringValueOf, it))
+    || (kind === 'Boolean' && hasInternalSlot(booleanValueOf, it))
+    || (!!bigIntValueOf && kind === 'BigInt' && hasInternalSlot(bigIntValueOf, it));
+};
+
+// only objects serialized by `SerializeJSONObject` are affected by the property list
+var isSerializedAsObject = function (it) {
+  if (!isObject(it) || isCallable(it) || isArray(it)) return false;
+  try {
+    return !isBoxedPrimitive(it);
+  // `classof` reads `Symbol.toStringTag`, so a proxy could throw - it has no internal slots anyway
+  } catch (error) {
+    return true;
+  }
+};
+
+// the engine unwraps it in the same order as it would read the original property,
+// so the property is read lazily and `toJSON` is called once and with the original key
+var createElementHolder = function (holder, key) {
+  return {
+    toJSON: function () {
+      var element = holder[key];
+      if (isObject(element) || typeof element == 'bigint') {
+        var elementToJSON = element.toJSON;
+        if (isCallable(elementToJSON)) element = call(elementToJSON, element, key);
+      } return element;
+    }
   };
+};
+
+// own keys of objects are sorted - integer-like keys are moved to the beginning,
+// so such keys should be marked and restored in the serialized string
+var getKeyPrefix = function (propertyList) {
+  for (var i = 0, length = propertyList.length; i < length; i++) {
+    if (exec(digits, propertyList[i])) return KEY_MARK;
+  } return '';
+};
+
+// `SerializeJSONObject` iterates the property list, so the value is replaced with an object with keys in this order
+var createOrderedObject = function (value, propertyList, keyPrefix) {
+  // keys are not marked if the property list has no integer-like keys, so `Object.prototype`
+  // with a setter, a non-writable property or `__proto__` should not intercept the assignment
+  var ordered = create(null);
+  for (var i = 0, length = propertyList.length; i < length; i++) {
+    var key = propertyList[i];
+    ordered[keyPrefix + key] = createElementHolder(value, key);
+  }
+  ordered[END_MARK] = null;
+  return ordered;
 };
 
 // `JSON.stringify` method
@@ -7736,20 +8030,57 @@ var getReplacerFunction = function (replacer) {
 // https://github.com/tc39/proposal-json-parse-with-source
 if ($stringify) $({ target: 'JSON', stat: true, arity: 3, forced: WRONG_SYMBOLS_CONVERSION || ILL_FORMED_UNICODE || !NATIVE_RAW_JSON }, {
   stringify: function stringify(text, replacer, space) {
-    var replacerFunction = getReplacerFunction(replacer);
+    var replacerFunction = isCallable(replacer) ? replacer : undefined;
+    var propertyList = replacerFunction ? undefined : getPropertyList(replacer);
+    var keyPrefix = propertyList && getKeyPrefix(propertyList);
     var rawStrings = [];
+    var openObjects = [];
+    var parentOrdered = [];
+    var currentOrdered;
+    var marked = false;
+    var root = true;
 
     var json = stringifyWithProperSymbolsConversion(text, function (key, value) {
       // some old implementations (like WebKit) could pass numbers as keys
-      var v = isCallable(replacerFunction) ? call(replacerFunction, this, $String(key), value) : value;
-      return !NATIVE_RAW_JSON && isRawJSON(v) ? MARK + (push(rawStrings, v.rawJSON) - 1) : v;
+      key = $String(key);
+
+      if (propertyList) {
+        if (key === END_MARK) {
+          pop(openObjects);
+          currentOrdered = pop(parentOrdered);
+          return;
+        }
+        if (root) root = false;
+        // the innermost reordered object already contains only keys of the property list and arrays are not
+        // affected by it, the rest of objects (like objects with a fake `Symbol.toStringTag`) are filtered here
+        else if (this !== currentOrdered && !isArray(this) && !includes(propertyList, key)) return;
+      } else if (replacerFunction) value = call(replacerFunction, this, key, value);
+
+      if (isRawJSONValue(value)) {
+        if (NATIVE_RAW_JSON) return value;
+        marked = true;
+        return RAW_MARK + (push(rawStrings, value.rawJSON) - 1);
+      }
+
+      if (propertyList && isSerializedAsObject(value)) {
+        // reordered objects are new each time, so cycles should be detected before the engine does it
+        if (includes(openObjects, value)) throw new $TypeError('Converting circular structure to JSON');
+        var ordered = createOrderedObject(value, propertyList, keyPrefix);
+        push(openObjects, value);
+        push(parentOrdered, currentOrdered);
+        currentOrdered = ordered;
+        if (keyPrefix) marked = true;
+        return ordered;
+      }
+
+      return value;
     }, space);
 
     if (typeof json != 'string') return json;
 
     if (ILL_FORMED_UNICODE) json = replace(json, surrogates, fixIllFormedJSON);
 
-    if (NATIVE_RAW_JSON) return json;
+    if (!marked) return json;
 
     var result = '';
     var length = json.length;
@@ -7759,9 +8090,9 @@ if ($stringify) $({ target: 'JSON', stat: true, arity: 3, forced: WRONG_SYMBOLS_
       if (chr === '"') {
         var end = parseJSONString(json, ++i).end - 1;
         var string = slice(json, i, end);
-        result += slice(string, 0, MARK_LENGTH) === MARK
-          ? rawStrings[slice(string, MARK_LENGTH)]
-          : '"' + string + '"';
+        if (slice(string, 0, RAW_MARK_LENGTH) === RAW_MARK) result += rawStrings[slice(string, RAW_MARK_LENGTH)];
+        else if (slice(string, 0, KEY_MARK_LENGTH) === KEY_MARK) result += '"' + slice(string, KEY_MARK_LENGTH) + '"';
+        else result += '"' + string + '"';
         i = end;
       } else result += chr;
     }
@@ -10094,6 +10425,7 @@ if (globalThis.Uint8Array) $({ target: 'Uint8Array', proto: true, forced: throws
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 
+/* eslint-disable no-useless-assignment -- false positive for [index++] syntax */
 var $ = __webpack_require__(6518);
 var globalThis = __webpack_require__(4576);
 var uncurryThis = __webpack_require__(9504);
@@ -10105,10 +10437,14 @@ var getAlphabetOption = __webpack_require__(944);
 
 var base64Alphabet = base64Map.i2c;
 var base64UrlAlphabet = base64Map.i2cUrl;
+var $floor = Math.floor;
+var $ceil = Math.ceil;
 
 var charAt = uncurryThis(''.charAt);
 
 var Uint8Array = globalThis.Uint8Array;
+var $Array = globalThis.Array;
+var join = uncurryThis([].join);
 
 var INCORRECT_BEHAVIOR_OR_DOESNT_EXISTS = !Uint8Array || !Uint8Array.prototype.toBase64 || !function () {
   try {
@@ -10129,9 +10465,10 @@ if (Uint8Array) $({ target: 'Uint8Array', proto: true, forced: INCORRECT_BEHAVIO
     var omitPadding = !!options && !!options.omitPadding;
     notDetached(this.buffer);
 
-    var result = '';
     var i = 0;
     var length = array.length;
+    var result = $Array(omitPadding ? $floor(length / 3) * 4 + (length % 3 ? length % 3 + 1 : 0) : $ceil(length / 3) * 4);
+    var written = 0;
     var triplet;
 
     var at = function (shift) {
@@ -10140,17 +10477,28 @@ if (Uint8Array) $({ target: 'Uint8Array', proto: true, forced: INCORRECT_BEHAVIO
 
     for (; i + 2 < length; i += 3) {
       triplet = (array[i] << 16) + (array[i + 1] << 8) + array[i + 2];
-      result += at(3) + at(2) + at(1) + at(0);
+      result[written++] = at(3);
+      result[written++] = at(2);
+      result[written++] = at(1);
+      result[written++] = at(0);
     }
     if (i + 2 === length) {
       triplet = (array[i] << 16) + (array[i + 1] << 8);
-      result += at(3) + at(2) + at(1) + (omitPadding ? '' : '=');
+      result[written++] = at(3);
+      result[written++] = at(2);
+      result[written++] = at(1);
+      if (!omitPadding) result[written++] = '=';
     } else if (i + 1 === length) {
       triplet = array[i] << 16;
-      result += at(3) + at(2) + (omitPadding ? '' : '==');
+      result[written++] = at(3);
+      result[written++] = at(2);
+      if (!omitPadding) {
+        result[written++] = '=';
+        result[written++] = '=';
+      }
     }
 
-    return result;
+    return join(result, '');
   }
 });
 
@@ -10303,15 +10651,14 @@ __webpack_require__(4599);
 
 // TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
 __webpack_require__(3792);
-__webpack_require__(7337);
 var $ = __webpack_require__(6518);
 var globalThis = __webpack_require__(4576);
 var safeGetBuiltIn = __webpack_require__(3389);
-var getBuiltIn = __webpack_require__(7751);
 var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var DESCRIPTORS = __webpack_require__(3724);
 var USE_NATIVE_URL = __webpack_require__(7416);
+var percentCoding = __webpack_require__(918);
 var defineBuiltIn = __webpack_require__(6840);
 var defineBuiltInAccessor = __webpack_require__(2106);
 var defineBuiltIns = __webpack_require__(6279);
@@ -10328,8 +10675,8 @@ var isObject = __webpack_require__(34);
 var $toString = __webpack_require__(655);
 var create = __webpack_require__(2360);
 var createPropertyDescriptor = __webpack_require__(6980);
-var getIterator = __webpack_require__(81);
-var getIteratorMethod = __webpack_require__(851);
+var getIterator = __webpack_require__(8563);
+var getIteratorMethod = __webpack_require__(3085);
 var createIterResultObject = __webpack_require__(2529);
 var validateArgumentsLength = __webpack_require__(2812);
 var wellKnownSymbol = __webpack_require__(8227);
@@ -10341,6 +10688,8 @@ var URL_SEARCH_PARAMS_ITERATOR = URL_SEARCH_PARAMS + 'Iterator';
 var setInternalState = InternalStateModule.set;
 var getInternalParamsState = InternalStateModule.getterFor(URL_SEARCH_PARAMS);
 var getInternalIteratorState = InternalStateModule.getterFor(URL_SEARCH_PARAMS_ITERATOR);
+var percentDecode = percentCoding.decode;
+var percentEncode = percentCoding.encode;
 
 var nativeFetch = safeGetBuiltIn('fetch');
 var NativeRequest = safeGetBuiltIn('Request');
@@ -10348,10 +10697,6 @@ var Headers = safeGetBuiltIn('Headers');
 var RequestPrototype = NativeRequest && NativeRequest.prototype;
 var HeadersPrototype = Headers && Headers.prototype;
 var TypeError = globalThis.TypeError;
-var encodeURIComponent = globalThis.encodeURIComponent;
-var fromCharCode = String.fromCharCode;
-var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
-var $parseInt = parseInt;
 var charAt = uncurryThis(''.charAt);
 var join = uncurryThis([].join);
 var push = uncurryThis([].push);
@@ -10360,142 +10705,13 @@ var shift = uncurryThis([].shift);
 var splice = uncurryThis([].splice);
 var split = uncurryThis(''.split);
 var stringSlice = uncurryThis(''.slice);
-var exec = uncurryThis(/./.exec);
 
 var plus = /\+/g;
-var FALLBACK_REPLACER = '\uFFFD';
-var VALID_HEX = /^[0-9a-f]+$/i;
 
-var parseHexOctet = function (string, start) {
-  var substr = stringSlice(string, start, start + 2);
-  if (!exec(VALID_HEX, substr)) return NaN;
-
-  return $parseInt(substr, 16);
+// https://url.spec.whatwg.org/#urlencoded-parsing - `+` decodes to a space
+var decodeQueryComponent = function (input) {
+  return percentDecode(replace(input, plus, ' '));
 };
-
-var getLeadingOnes = function (octet) {
-  var count = 0;
-  for (var mask = 0x80; mask > 0 && (octet & mask) !== 0; mask >>= 1) {
-    count++;
-  }
-  return count;
-};
-
-var utf8Decode = function (octets) {
-  var codePoint = null;
-  var length = octets.length;
-
-  switch (length) {
-    case 1:
-      codePoint = octets[0];
-      break;
-    case 2:
-      codePoint = (octets[0] & 0x1F) << 6 | (octets[1] & 0x3F);
-      break;
-    case 3:
-      codePoint = (octets[0] & 0x0F) << 12 | (octets[1] & 0x3F) << 6 | (octets[2] & 0x3F);
-      break;
-    case 4:
-      codePoint = (octets[0] & 0x07) << 18 | (octets[1] & 0x3F) << 12 | (octets[2] & 0x3F) << 6 | (octets[3] & 0x3F);
-      break;
-  }
-
-  // reject surrogates, overlong encodings, and out-of-range codepoints
-  if (codePoint === null
-    || codePoint > 0x10FFFF
-    || (codePoint >= 0xD800 && codePoint <= 0xDFFF)
-    || codePoint < (length > 3 ? 0x10000 : length > 2 ? 0x800 : length > 1 ? 0x80 : 0)
-  ) return null;
-
-  return codePoint;
-};
-
-/* eslint-disable max-statements, max-depth -- ok */
-var decode = function (input) {
-  input = replace(input, plus, ' ');
-  var length = input.length;
-  var result = '';
-  var i = 0;
-
-  while (i < length) {
-    var decodedChar = charAt(input, i);
-
-    if (decodedChar === '%') {
-      if (charAt(input, i + 1) === '%' || i + 3 > length) {
-        result += '%';
-        i++;
-        continue;
-      }
-
-      var octet = parseHexOctet(input, i + 1);
-
-      // eslint-disable-next-line no-self-compare -- NaN check
-      if (octet !== octet) {
-        result += decodedChar;
-        i++;
-        continue;
-      }
-
-      i += 2;
-      var byteSequenceLength = getLeadingOnes(octet);
-
-      if (byteSequenceLength === 0) {
-        decodedChar = fromCharCode(octet);
-      } else {
-        if (byteSequenceLength === 1 || byteSequenceLength > 4) {
-          result += FALLBACK_REPLACER;
-          i++;
-          continue;
-        }
-
-        var octets = [octet];
-        var sequenceIndex = 1;
-
-        while (sequenceIndex < byteSequenceLength) {
-          i++;
-          if (i + 3 > length || charAt(input, i) !== '%') break;
-
-          var nextByte = parseHexOctet(input, i + 1);
-
-          // eslint-disable-next-line no-self-compare -- NaN check
-          if (nextByte !== nextByte || nextByte > 191 || nextByte < 128) break;
-
-          // https://encoding.spec.whatwg.org/#utf-8-decoder - position-specific byte ranges
-          if (sequenceIndex === 1) {
-            if (octet === 0xE0 && nextByte < 0xA0) break;
-            if (octet === 0xED && nextByte > 0x9F) break;
-            if (octet === 0xF0 && nextByte < 0x90) break;
-            if (octet === 0xF4 && nextByte > 0x8F) break;
-          }
-
-          push(octets, nextByte);
-          i += 2;
-          sequenceIndex++;
-        }
-
-        if (octets.length !== byteSequenceLength) {
-          result += FALLBACK_REPLACER;
-          continue;
-        }
-
-        var codePoint = utf8Decode(octets);
-        if (codePoint === null) {
-          for (var replacement = 0; replacement < byteSequenceLength; replacement++) result += FALLBACK_REPLACER;
-          i++;
-          continue;
-        } else {
-          decodedChar = fromCodePoint(codePoint);
-        }
-      }
-    }
-
-    result += decodedChar;
-    i++;
-  }
-
-  return result;
-};
-/* eslint-enable max-statements, max-depth -- ok */
 
 var find = /[!'()~]|%20/g;
 
@@ -10513,7 +10729,7 @@ var replacer = function (match) {
 };
 
 var serialize = function (it) {
-  return replace(encodeURIComponent(it), find, replacer);
+  return replace(percentEncode(it), find, replacer);
 };
 
 var URLSearchParamsIterator = createIteratorConstructor(function Iterator(params, kind) {
@@ -10587,8 +10803,8 @@ URLSearchParamsState.prototype = {
         if (attribute.length) {
           entry = split(attribute, '=');
           push(entries, {
-            key: decode(shift(entry)),
-            value: decode(join(entry, '='))
+            key: decodeQueryComponent(shift(entry)),
+            value: decodeQueryComponent(join(entry, '='))
           });
         }
       }
