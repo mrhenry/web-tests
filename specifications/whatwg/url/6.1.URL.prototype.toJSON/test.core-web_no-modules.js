@@ -112,9 +112,10 @@ var isConstructor = __webpack_require__(3517);
 var lengthOfArrayLike = __webpack_require__(6198);
 var createProperty = __webpack_require__(4659);
 var setArrayLength = __webpack_require__(4527);
-var getIterator = __webpack_require__(81);
-var getIteratorMethod = __webpack_require__(851);
+var getIterator = __webpack_require__(8563);
+var getIteratorMethod = __webpack_require__(3085);
 var iteratorClose = __webpack_require__(9539);
+var doesNotExceedSafeInteger = __webpack_require__(6837);
 
 var $Array = Array;
 
@@ -136,6 +137,11 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
     iterator = getIterator(O, iteratorMethod);
     next = iterator.next;
     for (;!(step = call(next, iterator)).done; index++) {
+      try {
+        doesNotExceedSafeInteger(index);
+      } catch (error) {
+        iteratorClose(iterator, 'throw', error);
+      }
       value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
       try {
         createProperty(result, index, value);
@@ -586,6 +592,21 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ 6837:
+/***/ (function(module) {
+
+
+var $TypeError = TypeError;
+var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
+
+module.exports = function (it) {
+  if (it > MAX_SAFE_INTEGER) throw new $TypeError('Maximum allowed index exceeded');
+  return it;
+};
+
+
+/***/ }),
+
 /***/ 8727:
 /***/ (function(module) {
 
@@ -861,6 +882,21 @@ module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
 
 /***/ }),
 
+/***/ 4124:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var globalThis = __webpack_require__(2195);
+
+module.exports = function (CONSTRUCTOR, METHOD) {
+  var Constructor = globalThis[CONSTRUCTOR];
+  var Prototype = Constructor && Constructor.prototype;
+  return Prototype && Prototype[METHOD];
+};
+
+
+/***/ }),
+
 /***/ 7751:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -879,43 +915,43 @@ module.exports = function (namespace, method) {
 
 /***/ }),
 
-/***/ 851:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-
-var classof = __webpack_require__(6955);
-var getMethod = __webpack_require__(5966);
-var isNullOrUndefined = __webpack_require__(4117);
-var Iterators = __webpack_require__(6269);
-var wellKnownSymbol = __webpack_require__(8227);
-
-var ITERATOR = wellKnownSymbol('iterator');
-
-module.exports = function (it) {
-  if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR)
-    || getMethod(it, '@@iterator')
-    || Iterators[classof(it)];
-};
-
-
-/***/ }),
-
-/***/ 81:
+/***/ 8563:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
 var call = __webpack_require__(9565);
-var aCallable = __webpack_require__(9306);
+var isCallable = __webpack_require__(4901);
 var anObject = __webpack_require__(8551);
 var tryToString = __webpack_require__(6823);
-var getIteratorMethod = __webpack_require__(851);
+var getIteratorMethod = __webpack_require__(3085);
 
 var $TypeError = TypeError;
 
 module.exports = function (argument, usingIterator) {
   var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-  if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
+  if (isCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
   throw new $TypeError(tryToString(argument) + ' is not iterable');
+};
+
+
+/***/ }),
+
+/***/ 3085:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var classof = __webpack_require__(4576);
+var isNullOrUndefined = __webpack_require__(4117);
+var getMethod = __webpack_require__(5966);
+var wellKnownSymbol = __webpack_require__(8227);
+
+var ITERATOR = wellKnownSymbol('iterator');
+var ArrayPrototype = Array.prototype;
+
+module.exports = function (it) {
+  if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR)
+    || getMethod(it, '@@iterator')
+    || (classof(it) === 'Arguments' ? ArrayPrototype[ITERATOR] : undefined);
 };
 
 
@@ -1576,7 +1612,7 @@ module.exports = {
 /***/ (function(module) {
 
 
-module.exports = {};
+module.exports = Object.create ? Object.create(null) : {};
 
 
 /***/ }),
@@ -2260,10 +2296,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.49.0',
+  version: '3.50.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
-  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.50.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2275,9 +2311,11 @@ var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, 
 
 
 var store = __webpack_require__(7629);
+// eslint-disable-next-line es/no-object-create -- safe
+var create = Object.create || Object;
 
 module.exports = function (key, value) {
-  return store[key] || (store[key] = value || {});
+  return store[key] || (store[key] = value || create(null));
 };
 
 
@@ -2793,6 +2831,184 @@ module.exports = !fails(function () {
 
 /***/ }),
 
+/***/ 918:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+// TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
+__webpack_require__(7337);
+var getBuiltIn = __webpack_require__(7751);
+var uncurryThis = __webpack_require__(9504);
+
+var fromCharCode = String.fromCharCode;
+var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
+var $encodeURIComponent = encodeURIComponent;
+var $parseInt = parseInt;
+var charAt = uncurryThis(''.charAt);
+var push = uncurryThis([].push);
+var replace = uncurryThis(''.replace);
+var stringSlice = uncurryThis(''.slice);
+var exec = uncurryThis(/./.exec);
+
+var FALLBACK_REPLACER = '\uFFFD';
+var VALID_HEX = /^[0-9a-f]+$/i;
+// a surrogate pair is matched first, so a one-unit match is always a lone surrogate
+var SURROGATE = /[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDFFF]/g;
+
+var parseHexOctet = function (string, start) {
+  var substr = stringSlice(string, start, start + 2);
+  if (!exec(VALID_HEX, substr)) return NaN;
+
+  return $parseInt(substr, 16);
+};
+
+var getLeadingOnes = function (octet) {
+  var count = 0;
+  for (var mask = 0x80; mask > 0 && (octet & mask) !== 0; mask >>= 1) {
+    count++;
+  }
+  return count;
+};
+
+var utf8Decode = function (octets) {
+  var codePoint = null;
+  var length = octets.length;
+
+  switch (length) {
+    case 1:
+      codePoint = octets[0];
+      break;
+    case 2:
+      codePoint = (octets[0] & 0x1F) << 6 | (octets[1] & 0x3F);
+      break;
+    case 3:
+      codePoint = (octets[0] & 0x0F) << 12 | (octets[1] & 0x3F) << 6 | (octets[2] & 0x3F);
+      break;
+    case 4:
+      codePoint = (octets[0] & 0x07) << 18 | (octets[1] & 0x3F) << 12 | (octets[2] & 0x3F) << 6 | (octets[3] & 0x3F);
+      break;
+  }
+
+  // reject surrogates, overlong encodings, and out-of-range codepoints
+  if (codePoint === null
+    || codePoint > 0x10FFFF
+    || (codePoint >= 0xD800 && codePoint <= 0xDFFF)
+    || codePoint < (length > 3 ? 0x10000 : length > 2 ? 0x800 : length > 1 ? 0x80 : 0)
+  ) return null;
+
+  return codePoint;
+};
+
+var replaceLoneSurrogate = function (chunk) {
+  return chunk.length === 2 ? chunk : FALLBACK_REPLACER;
+};
+
+// https://url.spec.whatwg.org/#percent-decode
+/* eslint-disable max-depth -- ok */
+var decode = function (input) {
+  var length = input.length;
+  var result = '';
+  var i = 0;
+
+  while (i < length) {
+    var decodedChar = charAt(input, i);
+
+    if (decodedChar === '%') {
+      if (charAt(input, i + 1) === '%' || i + 3 > length) {
+        result += '%';
+        i++;
+        continue;
+      }
+
+      var octet = parseHexOctet(input, i + 1);
+
+      // eslint-disable-next-line no-self-compare -- NaN check
+      if (octet !== octet) {
+        result += decodedChar;
+        i++;
+        continue;
+      }
+
+      i += 2;
+      var byteSequenceLength = getLeadingOnes(octet);
+
+      if (byteSequenceLength === 0) {
+        decodedChar = fromCharCode(octet);
+      } else {
+        if (byteSequenceLength === 1 || byteSequenceLength > 4) {
+          result += FALLBACK_REPLACER;
+          i++;
+          continue;
+        }
+
+        var octets = [octet];
+        var sequenceIndex = 1;
+
+        while (sequenceIndex < byteSequenceLength) {
+          i++;
+          if (i + 3 > length || charAt(input, i) !== '%') break;
+
+          var nextByte = parseHexOctet(input, i + 1);
+
+          // eslint-disable-next-line no-self-compare -- NaN check
+          if (nextByte !== nextByte || nextByte > 191 || nextByte < 128) break;
+
+          // https://encoding.spec.whatwg.org/#utf-8-decoder - position-specific byte ranges
+          if (sequenceIndex === 1) {
+            if (octet === 0xE0 && nextByte < 0xA0) break;
+            if (octet === 0xED && nextByte > 0x9F) break;
+            if (octet === 0xF0 && nextByte < 0x90) break;
+            if (octet === 0xF4 && nextByte > 0x8F) break;
+          }
+
+          push(octets, nextByte);
+          i += 2;
+          sequenceIndex++;
+        }
+
+        if (octets.length !== byteSequenceLength) {
+          result += FALLBACK_REPLACER;
+          continue;
+        }
+
+        var codePoint = utf8Decode(octets);
+        if (codePoint === null) {
+          for (var replacement = 0; replacement < byteSequenceLength; replacement++) result += FALLBACK_REPLACER;
+          i++;
+          continue;
+        } else {
+          decodedChar = fromCodePoint(codePoint);
+        }
+      }
+    }
+
+    result += decodedChar;
+    i++;
+  }
+
+  return result;
+};
+/* eslint-enable max-depth -- ok */
+
+// https://url.spec.whatwg.org/#string-percent-encode-after-encoding
+// a lone surrogate is the only input `encodeURIComponent` throws on, and the UTF-8
+// encoder replaces it - so the throw selects the slow path instead of a per-call scan
+var encode = function (input) {
+  try {
+    return $encodeURIComponent(input);
+  } catch (error) {
+    return $encodeURIComponent(replace(input, SURROGATE, replaceLoneSurrogate));
+  }
+};
+
+module.exports = {
+  decode: decode,
+  encode: encode
+};
+
+
+/***/ }),
+
 /***/ 7040:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2966,7 +3182,7 @@ var FORCED = fails(function () {
 
 // `Date.prototype.toJSON` method
 // https://tc39.es/ecma262/#sec-date.prototype.tojson
-$({ target: 'Date', proto: true, arity: 1, forced: FORCED }, {
+$({ target: 'Date', proto: true, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   toJSON: function toJSON(key) {
     var O = toObject(this);
@@ -3078,15 +3294,14 @@ defineIterator(String, 'String', function (iterated) {
 
 // TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
 __webpack_require__(3792);
-__webpack_require__(7337);
 var $ = __webpack_require__(6518);
 var globalThis = __webpack_require__(2195);
 var safeGetBuiltIn = __webpack_require__(3389);
-var getBuiltIn = __webpack_require__(7751);
 var call = __webpack_require__(9565);
 var uncurryThis = __webpack_require__(9504);
 var DESCRIPTORS = __webpack_require__(3724);
 var USE_NATIVE_URL = __webpack_require__(7416);
+var percentCoding = __webpack_require__(918);
 var defineBuiltIn = __webpack_require__(6840);
 var defineBuiltInAccessor = __webpack_require__(2106);
 var defineBuiltIns = __webpack_require__(6279);
@@ -3103,8 +3318,8 @@ var isObject = __webpack_require__(34);
 var $toString = __webpack_require__(655);
 var create = __webpack_require__(2360);
 var createPropertyDescriptor = __webpack_require__(6980);
-var getIterator = __webpack_require__(81);
-var getIteratorMethod = __webpack_require__(851);
+var getIterator = __webpack_require__(8563);
+var getIteratorMethod = __webpack_require__(3085);
 var createIterResultObject = __webpack_require__(2529);
 var validateArgumentsLength = __webpack_require__(2812);
 var wellKnownSymbol = __webpack_require__(8227);
@@ -3116,6 +3331,8 @@ var URL_SEARCH_PARAMS_ITERATOR = URL_SEARCH_PARAMS + 'Iterator';
 var setInternalState = InternalStateModule.set;
 var getInternalParamsState = InternalStateModule.getterFor(URL_SEARCH_PARAMS);
 var getInternalIteratorState = InternalStateModule.getterFor(URL_SEARCH_PARAMS_ITERATOR);
+var percentDecode = percentCoding.decode;
+var percentEncode = percentCoding.encode;
 
 var nativeFetch = safeGetBuiltIn('fetch');
 var NativeRequest = safeGetBuiltIn('Request');
@@ -3123,10 +3340,6 @@ var Headers = safeGetBuiltIn('Headers');
 var RequestPrototype = NativeRequest && NativeRequest.prototype;
 var HeadersPrototype = Headers && Headers.prototype;
 var TypeError = globalThis.TypeError;
-var encodeURIComponent = globalThis.encodeURIComponent;
-var fromCharCode = String.fromCharCode;
-var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
-var $parseInt = parseInt;
 var charAt = uncurryThis(''.charAt);
 var join = uncurryThis([].join);
 var push = uncurryThis([].push);
@@ -3135,142 +3348,13 @@ var shift = uncurryThis([].shift);
 var splice = uncurryThis([].splice);
 var split = uncurryThis(''.split);
 var stringSlice = uncurryThis(''.slice);
-var exec = uncurryThis(/./.exec);
 
 var plus = /\+/g;
-var FALLBACK_REPLACER = '\uFFFD';
-var VALID_HEX = /^[0-9a-f]+$/i;
 
-var parseHexOctet = function (string, start) {
-  var substr = stringSlice(string, start, start + 2);
-  if (!exec(VALID_HEX, substr)) return NaN;
-
-  return $parseInt(substr, 16);
+// https://url.spec.whatwg.org/#urlencoded-parsing - `+` decodes to a space
+var decodeQueryComponent = function (input) {
+  return percentDecode(replace(input, plus, ' '));
 };
-
-var getLeadingOnes = function (octet) {
-  var count = 0;
-  for (var mask = 0x80; mask > 0 && (octet & mask) !== 0; mask >>= 1) {
-    count++;
-  }
-  return count;
-};
-
-var utf8Decode = function (octets) {
-  var codePoint = null;
-  var length = octets.length;
-
-  switch (length) {
-    case 1:
-      codePoint = octets[0];
-      break;
-    case 2:
-      codePoint = (octets[0] & 0x1F) << 6 | (octets[1] & 0x3F);
-      break;
-    case 3:
-      codePoint = (octets[0] & 0x0F) << 12 | (octets[1] & 0x3F) << 6 | (octets[2] & 0x3F);
-      break;
-    case 4:
-      codePoint = (octets[0] & 0x07) << 18 | (octets[1] & 0x3F) << 12 | (octets[2] & 0x3F) << 6 | (octets[3] & 0x3F);
-      break;
-  }
-
-  // reject surrogates, overlong encodings, and out-of-range codepoints
-  if (codePoint === null
-    || codePoint > 0x10FFFF
-    || (codePoint >= 0xD800 && codePoint <= 0xDFFF)
-    || codePoint < (length > 3 ? 0x10000 : length > 2 ? 0x800 : length > 1 ? 0x80 : 0)
-  ) return null;
-
-  return codePoint;
-};
-
-/* eslint-disable max-statements, max-depth -- ok */
-var decode = function (input) {
-  input = replace(input, plus, ' ');
-  var length = input.length;
-  var result = '';
-  var i = 0;
-
-  while (i < length) {
-    var decodedChar = charAt(input, i);
-
-    if (decodedChar === '%') {
-      if (charAt(input, i + 1) === '%' || i + 3 > length) {
-        result += '%';
-        i++;
-        continue;
-      }
-
-      var octet = parseHexOctet(input, i + 1);
-
-      // eslint-disable-next-line no-self-compare -- NaN check
-      if (octet !== octet) {
-        result += decodedChar;
-        i++;
-        continue;
-      }
-
-      i += 2;
-      var byteSequenceLength = getLeadingOnes(octet);
-
-      if (byteSequenceLength === 0) {
-        decodedChar = fromCharCode(octet);
-      } else {
-        if (byteSequenceLength === 1 || byteSequenceLength > 4) {
-          result += FALLBACK_REPLACER;
-          i++;
-          continue;
-        }
-
-        var octets = [octet];
-        var sequenceIndex = 1;
-
-        while (sequenceIndex < byteSequenceLength) {
-          i++;
-          if (i + 3 > length || charAt(input, i) !== '%') break;
-
-          var nextByte = parseHexOctet(input, i + 1);
-
-          // eslint-disable-next-line no-self-compare -- NaN check
-          if (nextByte !== nextByte || nextByte > 191 || nextByte < 128) break;
-
-          // https://encoding.spec.whatwg.org/#utf-8-decoder - position-specific byte ranges
-          if (sequenceIndex === 1) {
-            if (octet === 0xE0 && nextByte < 0xA0) break;
-            if (octet === 0xED && nextByte > 0x9F) break;
-            if (octet === 0xF0 && nextByte < 0x90) break;
-            if (octet === 0xF4 && nextByte > 0x8F) break;
-          }
-
-          push(octets, nextByte);
-          i += 2;
-          sequenceIndex++;
-        }
-
-        if (octets.length !== byteSequenceLength) {
-          result += FALLBACK_REPLACER;
-          continue;
-        }
-
-        var codePoint = utf8Decode(octets);
-        if (codePoint === null) {
-          for (var replacement = 0; replacement < byteSequenceLength; replacement++) result += FALLBACK_REPLACER;
-          i++;
-          continue;
-        } else {
-          decodedChar = fromCodePoint(codePoint);
-        }
-      }
-    }
-
-    result += decodedChar;
-    i++;
-  }
-
-  return result;
-};
-/* eslint-enable max-statements, max-depth -- ok */
 
 var find = /[!'()~]|%20/g;
 
@@ -3288,7 +3372,7 @@ var replacer = function (match) {
 };
 
 var serialize = function (it) {
-  return replace(encodeURIComponent(it), find, replacer);
+  return replace(percentEncode(it), find, replacer);
 };
 
 var URLSearchParamsIterator = createIteratorConstructor(function Iterator(params, kind) {
@@ -3362,8 +3446,8 @@ URLSearchParamsState.prototype = {
         if (attribute.length) {
           entry = split(attribute, '=');
           push(entries, {
-            key: decode(shift(entry)),
-            value: decode(join(entry, '='))
+            key: decodeQueryComponent(shift(entry)),
+            value: decodeQueryComponent(join(entry, '='))
           });
         }
       }
@@ -3752,6 +3836,7 @@ var arrayFrom = __webpack_require__(7916);
 var arraySlice = __webpack_require__(7680);
 var codeAt = (__webpack_require__(8183).codeAt);
 var toASCII = __webpack_require__(6098);
+var percentCoding = __webpack_require__(918);
 var $toString = __webpack_require__(655);
 var setToStringTag = __webpack_require__(687);
 var validateArgumentsLength = __webpack_require__(2812);
@@ -3762,13 +3847,15 @@ var setInternalState = InternalStateModule.set;
 var getInternalURLState = InternalStateModule.getterFor('URL');
 var URLSearchParams = URLSearchParamsModule.URLSearchParams;
 var getInternalSearchParamsState = URLSearchParamsModule.getState;
+var percentDecode = percentCoding.decode;
+var percentEncode = percentCoding.encode;
 
 var NativeURL = globalThis.URL;
 var TypeError = globalThis.TypeError;
-var encodeURIComponent = globalThis.encodeURIComponent;
 var parseInt = globalThis.parseInt;
 var floor = Math.floor;
 var pow = Math.pow;
+var fromCharCode = String.fromCharCode;
 var charAt = uncurryThis(''.charAt);
 var exec = uncurryThis(/./.exec);
 var join = uncurryThis([].join);
@@ -3778,6 +3865,7 @@ var push = uncurryThis([].push);
 var replace = uncurryThis(''.replace);
 var shift = uncurryThis([].shift);
 var split = uncurryThis(''.split);
+var stringIndexOf = uncurryThis(''.indexOf);
 var stringSlice = uncurryThis(''.slice);
 var toLowerCase = uncurryThis(''.toLowerCase);
 var unshift = uncurryThis([].unshift);
@@ -3795,14 +3883,87 @@ var OCT = /^[0-7]+$/;
 var DEC = /^\d+$/;
 var HEX = /^[\da-f]+$/i;
 /* eslint-disable regexp/no-control-character -- safe */
-var FORBIDDEN_HOST_CODE_POINT = /[\0\t\n\r #%/:<>?@[\\\]^|]/;
-var FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT = /[\0\t\n\r #/:<>?@[\\\]^|]/;
+// https://url.spec.whatwg.org/#forbidden-domain-code-point
+var FORBIDDEN_DOMAIN_CODE_POINT = /[\u0000-\u0020#%/:<>?@[\\\]^|\u007F]/;
+// https://url.spec.whatwg.org/#forbidden-host-code-point
+var FORBIDDEN_HOST_CODE_POINT = /[\0\t\n\r #/:<>?@[\\\]^|]/;
 var LEADING_C0_CONTROL_OR_SPACE = /^[\u0000-\u0020]+/;
 var TRAILING_C0_CONTROL_OR_SPACE = /(^|[^\u0000-\u0020])[\u0000-\u0020]+$/;
 var TAB_AND_NEW_LINE = /[\t\n\r]/g;
+var NON_ASCII = /[^\u0000-\u007F]/;
 /* eslint-enable regexp/no-control-character -- safe */
+// UTS#46 maps these onto a string containing a forbidden domain code point, so a domain
+// holding one is rejected - listing them is far smaller than shipping the mapping table
+var MAPPED_ONTO_FORBIDDEN = '\u00A8\u00AF\u00B4\u00B8\u02D8\u02D9\u02DA\u02DB\u02DC\u02DD\u037A\u0384\u0385\u1FBD\u1FBF\u1FC0'
+  + '\u1FC1\u1FCD\u1FCE\u1FCF\u1FDD\u1FDE\u1FDF\u1FED\u1FEE\u1FFD\u1FFE\u2017\u203E\u2047\u2048\u2049'
+  + '\u2100\u2101\u2105\u2106\u2A74\u309B\u309C\uFC5E\uFC5F\uFC60\uFC61\uFC62\uFC63\uFDFA\uFDFB\uFE13'
+  + '\uFE16\uFE47\uFE48\uFE49\uFE4A\uFE4B\uFE4C\uFE55\uFE56\uFE5F\uFE64\uFE65\uFE68\uFE6A\uFE6B\uFE70'
+  + '\uFE72\uFE74\uFE76\uFE78\uFE7A\uFE7C\uFE7E\uFFE3';
 // eslint-disable-next-line no-unassigned-vars -- expected `undefined` value
 var EOF;
+
+// https://www.unicode.org/reports/tr46/#IDNA_Mapping_Table
+var isIgnoredCodePoint = function (code) {
+  return code === 0xAD || code === 0x34F || code === 0x200B || code === 0x3164
+    || code === 0xFEFF || code === 0xFFA0
+    || (code >= 0x115F && code <= 0x1160)
+    || (code >= 0x17B4 && code <= 0x17B5)
+    || (code >= 0x180B && code <= 0x180F)
+    || (code >= 0x2060 && code <= 0x2064) || (code >= 0x206A && code <= 0x206F)
+    || (code >= 0xFE00 && code <= 0xFE0F)
+    || (code >= 0xE0100 && code <= 0xE01EF);
+};
+
+var isDisallowedCodePoint = function (code) {
+  return code === 0xFFFD
+    // lone surrogate - a matched pair is a single code point and never lands here
+    || (code >= 0xD800 && code <= 0xDFFF)
+    // C1 controls
+    || (code >= 0x80 && code <= 0x9F)
+    // line and paragraph separators, bidirectional formatting characters
+    || (code >= 0x200E && code <= 0x200F) || (code >= 0x2028 && code <= 0x2029)
+    || (code >= 0x202A && code <= 0x202E) || (code >= 0x2065 && code <= 0x2069)
+    // noncharacters
+    || (code >= 0xFDD0 && code <= 0xFDEF) || (code & 0xFFFE) === 0xFFFE
+    // private use
+    || (code >= 0xE000 && code <= 0xF8FF) || (code >= 0xF0000 && code <= 0x10FFFD);
+};
+
+var mapCodePoint = function (code) {
+  // full-width forms
+  if (code >= 0xFF01 && code <= 0xFF5E) return code - 0xFEE0;
+  // spaces and the listed code points collapse onto a forbidden domain code point; a space
+  // stands in for the real mapping since either way the domain is rejected
+  if (code === 0xA0 || code === 0x1680 || code === 0x202F || code === 0x205F || code === 0x3000) return 0x20;
+  if (code >= 0x2000 && code <= 0x200A) return 0x20;
+  // the list holds no supplementary code point, and `fromCharCode` would truncate one
+  if (code <= 0xFFFF && stringIndexOf(MAPPED_ONTO_FORBIDDEN, fromCharCode(code)) > -1) return 0x20;
+  return code;
+};
+
+// https://url.spec.whatwg.org/#concept-domain-to-ascii
+// A subset of UTS#46 processing - the full mapping table is too large to ship. Covered are the
+// entries cheap to express: the ignored and disallowed code points, full-width forms, and the
+// code points mapping onto a forbidden domain code point. Not covered, so such domains are
+// punycoded rather than mapped or rejected: unassigned code points, half-width forms,
+// compatibility decompositions, NFC, CheckJoiners, CheckBidi, and labels that already arrive
+// punycoded - those are not decoded back for validation.
+var domainToASCII = function (domain) {
+  // every mapped, ignored and disallowed code point is non-ASCII, so an ASCII domain
+  // needs the punycode step only - this keeps the common case off the slow path
+  if (!exec(NON_ASCII, domain)) return domain === '' ? null : toASCII(domain);
+  var codePoints = arrayFrom(domain);
+  var result = '';
+  var index, code, mapped;
+  for (index = 0; index < codePoints.length; index++) {
+    code = codeAt(codePoints[index], 0);
+    if (isDisallowedCodePoint(code)) return null;
+    if (isIgnoredCodePoint(code)) continue;
+    mapped = mapCodePoint(code);
+    result += mapped === code ? codePoints[index] : fromCharCode(mapped);
+  }
+  return result === '' ? null : toASCII(result);
+};
 
 // https://url.spec.whatwg.org/#ends-in-a-number-checker
 var endsInNumber = function (input) {
@@ -3995,6 +4156,9 @@ var serializeHost = function (host) {
   return host;
 };
 
+// https://url.spec.whatwg.org/#c0-control-percent-encode-set
+// empty because the set is the code points outside U+0020..U+007E, which the range
+// check below already covers; the sets extending it only add code points inside it
 var C0ControlPercentEncodeSet = {};
 var queryPercentEncodeSet = assign({}, C0ControlPercentEncodeSet, {
   ' ': 1, '"': 1, '#': 1, '<': 1, '>': 1
@@ -4012,10 +4176,11 @@ var userinfoPercentEncodeSet = assign({}, pathPercentEncodeSet, {
   '/': 1, ':': 1, ';': 1, '=': 1, '@': 1, '[': 1, '\\': 1, ']': 1, '^': 1, '|': 1
 });
 
-var percentEncode = function (chr, set) {
+// https://url.spec.whatwg.org/#string-utf-8-percent-encode
+var utf8PercentEncode = function (chr, set) {
   var code = codeAt(chr, 0);
-  // encodeURIComponent does not encode ', which is in the special-query percent-encode set
-  return code >= 0x20 && code < 0x7F && !hasOwn(set, chr) ? chr : chr === "'" && hasOwn(set, chr) ? '%27' : encodeURIComponent(chr);
+  // percent-encoding leaves ' alone, but it belongs to the special-query percent-encode set
+  return code >= 0x20 && code < 0x7F && !hasOwn(set, chr) ? chr : chr === "'" && hasOwn(set, chr) ? '%27' : percentEncode(chr);
 };
 
 // https://url.spec.whatwg.org/#special-scheme
@@ -4287,7 +4452,7 @@ URLState.prototype = {
                 seenPasswordToken = true;
                 continue;
               }
-              var encodedCodePoints = percentEncode(codePoint, userinfoPercentEncodeSet);
+              var encodedCodePoints = utf8PercentEncode(codePoint, userinfoPercentEncodeSet);
               if (seenPasswordToken) url.password += encodedCodePoints;
               else url.username += encodedCodePoints;
             }
@@ -4455,6 +4620,7 @@ URLState.prototype = {
               }
             } else {
               if (url.scheme === 'file' && !url.path.length && isWindowsDriveLetter(buffer)) {
+                // eslint-disable-next-line max-depth -- ok
                 if (url.host !== null && url.host !== '') url.host = '';
                 buffer = charAt(buffer, 0) + ':'; // normalize windows drive letter
               }
@@ -4474,7 +4640,7 @@ URLState.prototype = {
               state = FRAGMENT;
             }
           } else {
-            buffer += percentEncode(chr, pathPercentEncodeSet);
+            buffer += utf8PercentEncode(chr, pathPercentEncodeSet);
           } break;
 
         case CANNOT_BE_A_BASE_URL_PATH:
@@ -4485,7 +4651,11 @@ URLState.prototype = {
             url.fragment = '';
             state = FRAGMENT;
           } else if (chr !== EOF) {
-            url.path[0] += percentEncode(chr, C0ControlPercentEncodeSet);
+            if (chr === ' ') {
+              url.path[0] += codePoints[pointer + 1] === '?' || codePoints[pointer + 1] === '#' ? '%20' : ' ';
+            } else {
+              url.path[0] += utf8PercentEncode(chr, C0ControlPercentEncodeSet);
+            }
           } break;
 
         case QUERY:
@@ -4493,11 +4663,11 @@ URLState.prototype = {
             url.fragment = '';
             state = FRAGMENT;
           } else if (chr !== EOF) {
-            url.query += percentEncode(chr, url.isSpecial() ? specialQueryPercentEncodeSet : queryPercentEncodeSet);
+            url.query += utf8PercentEncode(chr, url.isSpecial() ? specialQueryPercentEncodeSet : queryPercentEncodeSet);
           } break;
 
         case FRAGMENT:
-          if (chr !== EOF) url.fragment += percentEncode(chr, fragmentPercentEncodeSet);
+          if (chr !== EOF) url.fragment += utf8PercentEncode(chr, fragmentPercentEncodeSet);
           break;
       }
 
@@ -4514,16 +4684,16 @@ URLState.prototype = {
       this.host = result;
     // opaque host
     } else if (!this.isSpecial()) {
-      if (exec(FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT, input)) return INVALID_HOST;
+      if (exec(FORBIDDEN_HOST_CODE_POINT, input)) return INVALID_HOST;
       result = '';
       codePoints = arrayFrom(input);
       for (index = 0; index < codePoints.length; index++) {
-        result += percentEncode(codePoints[index], C0ControlPercentEncodeSet);
+        result += utf8PercentEncode(codePoints[index], C0ControlPercentEncodeSet);
       }
       this.host = result;
     } else {
-      input = toASCII(input);
-      if (exec(FORBIDDEN_HOST_CODE_POINT, input)) return INVALID_HOST;
+      input = domainToASCII(percentDecode(input));
+      if (input === null || exec(FORBIDDEN_DOMAIN_CODE_POINT, input)) return INVALID_HOST;
       if (endsInNumber(input)) {
         result = parseIPv4(input);
         if (result === null) return INVALID_HOST;
@@ -4613,7 +4783,7 @@ URLState.prototype = {
     if (this.cannotHaveUsernamePasswordPort()) return;
     this.username = '';
     for (var i = 0; i < codePoints.length; i++) {
-      this.username += percentEncode(codePoints[i], userinfoPercentEncodeSet);
+      this.username += utf8PercentEncode(codePoints[i], userinfoPercentEncodeSet);
     }
   },
   // https://url.spec.whatwg.org/#dom-url-password
@@ -4625,7 +4795,7 @@ URLState.prototype = {
     if (this.cannotHaveUsernamePasswordPort()) return;
     this.password = '';
     for (var i = 0; i < codePoints.length; i++) {
-      this.password += percentEncode(codePoints[i], userinfoPercentEncodeSet);
+      this.password += utf8PercentEncode(codePoints[i], userinfoPercentEncodeSet);
     }
   },
   // https://url.spec.whatwg.org/#dom-url-host
@@ -4834,12 +5004,15 @@ __webpack_require__(5806);
 
 var $ = __webpack_require__(6518);
 var call = __webpack_require__(9565);
+var getBuiltInPrototypeMethod = __webpack_require__(4124);
+
+var toString = getBuiltInPrototypeMethod('URL', 'toString');
 
 // `URL.prototype.toJSON` method
 // https://url.spec.whatwg.org/#dom-url-tojson
 $({ target: 'URL', proto: true, enumerable: true }, {
   toJSON: function toJSON() {
-    return call(URL.prototype.toString, this);
+    return call(toString, this);
   }
 });
 
