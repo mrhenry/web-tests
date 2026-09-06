@@ -25,9 +25,9 @@
         "core-js": "^3.50.0",
         "postcss": "^8.5.26",
         "postcss-cli": "^11.0.1",
-        "postcss-preset-env": "^11.4.0",
-        "webpack": "^5.109.0",
-        "webpack-cli": "^7.0.3"
+        "postcss-preset-env": "^11.5.0",
+        "webpack": "^5.110.2",
+        "webpack-cli": "^7.2.3"
     },
     "volta": {
         "node": "26.6.0"
