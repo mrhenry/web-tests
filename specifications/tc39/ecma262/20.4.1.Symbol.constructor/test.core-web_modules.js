@@ -73,7 +73,7 @@ module.exports = {
   includes: createMethod(true),
   // `Array.prototype.indexOf` method
   // https://tc39.es/ecma262/#sec-array.prototype.indexof
-  indexOf: createMethod(false)
+  q: createMethod(false)
 };
 
 
@@ -488,7 +488,7 @@ var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(Func
 module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
-  CONFIGURABLE: CONFIGURABLE
+  i2: CONFIGURABLE
 };
 
 
@@ -871,7 +871,7 @@ var fails = __webpack_require__(9039);
 var isCallable = __webpack_require__(4901);
 var hasOwn = __webpack_require__(9297);
 var DESCRIPTORS = __webpack_require__(3724);
-var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350).CONFIGURABLE);
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350)/* .CONFIGURABLE */ .i2);
 var inspectSource = __webpack_require__(3706);
 var InternalStateModule = __webpack_require__(1181);
 
@@ -1070,7 +1070,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var toIndexedObject = __webpack_require__(5397);
-var indexOf = (__webpack_require__(9617).indexOf);
+var indexOf = (__webpack_require__(9617)/* .indexOf */ .q);
 var hiddenKeys = __webpack_require__(421);
 
 var push = uncurryThis([].push);
@@ -1529,25 +1529,136 @@ module.exports = function (name) {
 };
 
 
-/***/ },
+/***/ }
 
-/***/ 9463
-(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/concatenation wrap */
+/******/ 	// wrap a concatenated module body as a lazy, memoized accessor; mod is
+/******/ 	// set before the body runs so re-entrant calls (require cycles) observe
+/******/ 	// the partial exports like Node.js
+/******/ 	__webpack_require__.cw = (body) => {
+/******/ 		var mod;
+/******/ 		return () => {
+/******/ 			if (body) {
+/******/ 				var fn = body;
+/******/ 				body = 0;
+/******/ 				mod = { exports: {} };
+/******/ 				fn.call(mod.exports, mod, mod.exports);
+/******/ 			}
+/******/ 			return mod.exports;
+/******/ 		};
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	__webpack_require__.g = (function() {
+/******/ 		if (typeof globalThis === 'object') return globalThis;
+/******/ 		try {
+/******/ 			return this || new Function('return this')();
+/******/ 		} catch (e) {
+/******/ 			if (typeof window === 'object') return window;
+/******/ 		}
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
 
+// EXTERNAL MODULE: ./node_modules/core-js/internals/copy-constructor-properties.js
+var copy_constructor_properties_namespaceFn = () => {
+	return __webpack_require__(7740);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/define-built-in-accessor.js
+var define_built_in_accessor_namespaceFn = () => {
+	return __webpack_require__(2106);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/descriptors.js
+var descriptors_namespaceFn = () => {
+	return __webpack_require__(3724);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/export.js
+var export_namespaceFn = () => {
+	return __webpack_require__(6518);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/function-call.js
+var function_call_namespaceFn = () => {
+	return __webpack_require__(9565);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/function-uncurry-this.js
+var function_uncurry_this_namespaceFn = () => {
+	return __webpack_require__(9504);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/global-this.js
+var global_this_namespaceFn = () => {
+	return __webpack_require__(4576);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/has-own-property.js
+var has_own_property_namespaceFn = () => {
+	return __webpack_require__(9297);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/is-callable.js
+var is_callable_namespaceFn = () => {
+	return __webpack_require__(4901);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/object-is-prototype-of.js
+var object_is_prototype_of_namespaceFn = () => {
+	return __webpack_require__(1625);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/to-string.js
+var to_string_namespaceFn = () => {
+	return __webpack_require__(655);
+};
+
+// MODULE: ./node_modules/core-js/modules/es.symbol.description.js
+var es_symbol_description_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 // `Symbol.prototype.description` getter
 // https://tc39.es/ecma262/#sec-symbol.prototype.description
 
-var $ = __webpack_require__(6518);
-var DESCRIPTORS = __webpack_require__(3724);
-var globalThis = __webpack_require__(4576);
-var call = __webpack_require__(9565);
-var uncurryThis = __webpack_require__(9504);
-var hasOwn = __webpack_require__(9297);
-var isCallable = __webpack_require__(4901);
-var isPrototypeOf = __webpack_require__(1625);
-var toString = __webpack_require__(655);
-var defineBuiltInAccessor = __webpack_require__(2106);
-var copyConstructorProperties = __webpack_require__(7740);
+var $ = export_namespaceFn();
+var DESCRIPTORS = descriptors_namespaceFn();
+var globalThis = global_this_namespaceFn();
+var call = function_call_namespaceFn();
+var uncurryThis = function_uncurry_this_namespaceFn();
+var hasOwn = has_own_property_namespaceFn();
+var isCallable = is_callable_namespaceFn();
+var isPrototypeOf = object_is_prototype_of_namespaceFn();
+var toString = to_string_namespaceFn();
+var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
+var copyConstructorProperties = copy_constructor_properties_namespaceFn();
 
 var NativeSymbol = globalThis.Symbol;
 var SymbolPrototype = NativeSymbol && NativeSymbol.prototype;
@@ -1604,96 +1715,12 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   });
 }
 
+});
 
-/***/ }
+;// ./node_modules/core-js/modules/es.symbol.description.js
+es_symbol_description_namespaceFn();
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	const __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		const module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			const getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter/value functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			if(Array.isArray(definition)) {
-/******/ 				var i = 0;
-/******/ 				while(i < definition.length) {
-/******/ 					var key = definition[i++];
-/******/ 					var binding = definition[i++];
-/******/ 					if(!__webpack_require__.o(exports, key)) {
-/******/ 						if(binding === 0) {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
-/******/ 						} else {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
-/******/ 						}
-/******/ 					} else if(binding === 0) { i++; }
-/******/ 				}
-/******/ 			} else {
-/******/ 				for(var key in definition) {
-/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-let __webpack_exports__ = {};
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9463);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_0__);
+;// ./specifications/tc39/ecma262/20.4.1.Symbol.constructor/test.pure.js
 
 (function (cb) {
   var foo = Symbol('foo');
