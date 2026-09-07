@@ -42,7 +42,7 @@ module.exports = function (argument) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-var $forEach = (__webpack_require__(9213).forEach);
+var $forEach = (__webpack_require__(9213)/* .forEach */ .jJ);
 var arrayMethodIsStrict = __webpack_require__(4598);
 
 var STRICT_METHOD = arrayMethodIsStrict('forEach');
@@ -92,7 +92,7 @@ module.exports = {
   includes: createMethod(true),
   // `Array.prototype.indexOf` method
   // https://tc39.es/ecma262/#sec-array.prototype.indexof
-  indexOf: createMethod(false)
+  q: createMethod(false)
 };
 
 
@@ -150,7 +150,7 @@ var createMethod = function (TYPE) {
 module.exports = {
   // `Array.prototype.forEach` method
   // https://tc39.es/ecma262/#sec-array.prototype.foreach
-  forEach: createMethod(0),
+  jJ: createMethod(0),
   // `Array.prototype.map` method
   // https://tc39.es/ecma262/#sec-array.prototype.map
   map: createMethod(1),
@@ -718,7 +718,7 @@ var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(Func
 module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
-  CONFIGURABLE: CONFIGURABLE
+  i2: CONFIGURABLE
 };
 
 
@@ -1193,7 +1193,7 @@ var fails = __webpack_require__(9039);
 var isCallable = __webpack_require__(4901);
 var hasOwn = __webpack_require__(9297);
 var DESCRIPTORS = __webpack_require__(3724);
-var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350).CONFIGURABLE);
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350)/* .CONFIGURABLE */ .i2);
 var inspectSource = __webpack_require__(3706);
 var InternalStateModule = __webpack_require__(1181);
 
@@ -1392,7 +1392,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var toIndexedObject = __webpack_require__(5397);
-var indexOf = (__webpack_require__(9617).indexOf);
+var indexOf = (__webpack_require__(9617)/* .indexOf */ .q);
 var hiddenKeys = __webpack_require__(421);
 
 var push = uncurryThis([].push);
@@ -1851,14 +1851,120 @@ module.exports = function (name) {
 };
 
 
-/***/ }),
+/***/ })
 
-/***/ 1629:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/concatenation wrap */
+/******/ 	// wrap a concatenated module body as a lazy, memoized accessor; mod is
+/******/ 	// set before the body runs so re-entrant calls (require cycles) observe
+/******/ 	// the partial exports like Node.js
+/******/ 	__webpack_require__.cw = function(body) {
+/******/ 		var mod;
+/******/ 		return function() {
+/******/ 			if (body) {
+/******/ 				var fn = body;
+/******/ 				body = 0;
+/******/ 				mod = { exports: {} };
+/******/ 				fn.call(mod.exports, mod, mod.exports);
+/******/ 			}
+/******/ 			return mod.exports;
+/******/ 		};
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	__webpack_require__.g = (function() {
+/******/ 		if (typeof globalThis === 'object') return globalThis;
+/******/ 		try {
+/******/ 			return this || new Function('return this')();
+/******/ 		} catch (e) {
+/******/ 			if (typeof window === 'object') return window;
+/******/ 		}
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 
+// EXTERNAL MODULE: ./node_modules/core-js/internals/array-for-each.js
+var array_for_each_namespaceFn = function() {
+	return __webpack_require__(235);
+};
 
-var $ = __webpack_require__(6518);
-var forEach = __webpack_require__(235);
+// EXTERNAL MODULE: ./node_modules/core-js/internals/array-set-length.js
+var array_set_length_namespaceFn = function() {
+	return __webpack_require__(4527);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/define-built-in.js
+var define_built_in_namespaceFn = function() {
+	return __webpack_require__(6840);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/does-not-exceed-safe-integer.js
+var does_not_exceed_safe_integer_namespaceFn = function() {
+	return __webpack_require__(6837);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/export.js
+var export_namespaceFn = function() {
+	return __webpack_require__(6518);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/fails.js
+var fails_namespaceFn = function() {
+	return __webpack_require__(9039);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/length-of-array-like.js
+var length_of_array_like_namespaceFn = function() {
+	return __webpack_require__(6198);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/object-to-string.js
+var object_to_string_namespaceFn = function() {
+	return __webpack_require__(3179);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/to-object.js
+var to_object_namespaceFn = function() {
+	return __webpack_require__(8981);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/to-string-tag-support.js
+var to_string_tag_support_namespaceFn = function() {
+	return __webpack_require__(2140);
+};
+
+// MODULE: ./node_modules/core-js/modules/es.array.for-each.js
+var es_array_for_each_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+
+var $ = export_namespaceFn();
+var forEach = array_for_each_namespaceFn();
 
 // `Array.prototype.forEach` method
 // https://tc39.es/ecma262/#sec-array.prototype.foreach
@@ -1867,19 +1973,17 @@ $({ target: 'Array', proto: true, forced: [].forEach !== forEach }, {
   forEach: forEach
 });
 
+});
 
-/***/ }),
+// MODULE: ./node_modules/core-js/modules/es.array.push.js
+var es_array_push_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-/***/ 4114:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-var $ = __webpack_require__(6518);
-var toObject = __webpack_require__(8981);
-var lengthOfArrayLike = __webpack_require__(6198);
-var setArrayLength = __webpack_require__(4527);
-var doesNotExceedSafeInteger = __webpack_require__(6837);
-var fails = __webpack_require__(9039);
+var $ = export_namespaceFn();
+var toObject = to_object_namespaceFn();
+var lengthOfArrayLike = length_of_array_like_namespaceFn();
+var setArrayLength = array_set_length_namespaceFn();
+var doesNotExceedSafeInteger = does_not_exceed_safe_integer_namespaceFn();
+var fails = fails_namespaceFn();
 
 var INCORRECT_TO_LENGTH = fails(function () {
   return [].push.call({ length: 0x100000000 }, 1) !== 4294967297;
@@ -1916,16 +2020,14 @@ $({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   }
 });
 
+});
 
-/***/ }),
+// MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-/***/ 6099:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-var TO_STRING_TAG_SUPPORT = __webpack_require__(2140);
-var defineBuiltIn = __webpack_require__(6840);
-var toString = __webpack_require__(3179);
+var TO_STRING_TAG_SUPPORT = to_string_tag_support_namespaceFn();
+var defineBuiltIn = define_built_in_namespaceFn();
+var toString = object_to_string_namespaceFn();
 
 // `Object.prototype.toString` method
 // https://tc39.es/ecma262/#sec-object.prototype.tostring
@@ -1933,100 +2035,18 @@ if (!TO_STRING_TAG_SUPPORT) {
   defineBuiltIn(Object.prototype, 'toString', toString, { unsafe: true });
 }
 
+});
 
-/***/ })
+;// ./node_modules/core-js/modules/es.array.for-each.js
+es_array_for_each_namespaceFn();
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter/value functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			if(Array.isArray(definition)) {
-/******/ 				var i = 0;
-/******/ 				while(i < definition.length) {
-/******/ 					var key = definition[i++];
-/******/ 					var binding = definition[i++];
-/******/ 					if(!__webpack_require__.o(exports, key)) {
-/******/ 						if(binding === 0) {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
-/******/ 						} else {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
-/******/ 						}
-/******/ 					} else if(binding === 0) { i++; }
-/******/ 				}
-/******/ 			} else {
-/******/ 				for(var key in definition) {
-/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1629);
-/* harmony import */ var core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4114);
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6099);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
+;// ./node_modules/core-js/modules/es.array.push.js
+es_array_push_namespaceFn();
+
+;// ./node_modules/core-js/modules/es.object.to-string.js
+es_object_to_string_namespaceFn();
+
+;// ./specifications/tc39/ecma262/13.2.5.1.ArrayInitialiser.Elision/test.pure.js
 
 
 

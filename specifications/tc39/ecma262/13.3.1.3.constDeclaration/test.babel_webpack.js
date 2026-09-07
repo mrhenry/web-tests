@@ -90,7 +90,7 @@ module.exports = {
   includes: createMethod(true),
   // `Array.prototype.indexOf` method
   // https://tc39.es/ecma262/#sec-array.prototype.indexof
-  indexOf: createMethod(false)
+  q: createMethod(false)
 };
 
 
@@ -606,7 +606,7 @@ var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(Func
 module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
-  CONFIGURABLE: CONFIGURABLE
+  i2: CONFIGURABLE
 };
 
 
@@ -1063,7 +1063,7 @@ var fails = __webpack_require__(9039);
 var isCallable = __webpack_require__(4901);
 var hasOwn = __webpack_require__(9297);
 var DESCRIPTORS = __webpack_require__(3724);
-var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350).CONFIGURABLE);
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350)/* .CONFIGURABLE */ .i2);
 var inspectSource = __webpack_require__(3706);
 var InternalStateModule = __webpack_require__(1181);
 
@@ -1275,7 +1275,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var toIndexedObject = __webpack_require__(5397);
-var indexOf = (__webpack_require__(9617).indexOf);
+var indexOf = (__webpack_require__(9617)/* .indexOf */ .q);
 var hiddenKeys = __webpack_require__(421);
 
 var push = uncurryThis([].push);
@@ -1859,17 +1859,103 @@ module.exports = function (FULL_NAME, wrapper, FORCED, IS_AGGREGATE_ERROR) {
 };
 
 
-/***/ }),
+/***/ })
 
-/***/ 6280:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/concatenation wrap */
+/******/ 	// wrap a concatenated module body as a lazy, memoized accessor; mod is
+/******/ 	// set before the body runs so re-entrant calls (require cycles) observe
+/******/ 	// the partial exports like Node.js
+/******/ 	__webpack_require__.cw = function(body) {
+/******/ 		var mod;
+/******/ 		return function() {
+/******/ 			if (body) {
+/******/ 				var fn = body;
+/******/ 				body = 0;
+/******/ 				mod = { exports: {} };
+/******/ 				fn.call(mod.exports, mod, mod.exports);
+/******/ 			}
+/******/ 			return mod.exports;
+/******/ 		};
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	__webpack_require__.g = (function() {
+/******/ 		if (typeof globalThis === 'object') return globalThis;
+/******/ 		try {
+/******/ 			return this || new Function('return this')();
+/******/ 		} catch (e) {
+/******/ 			if (typeof window === 'object') return window;
+/******/ 		}
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 
+// EXTERNAL MODULE: ./node_modules/core-js/internals/define-built-in.js
+var define_built_in_namespaceFn = function() {
+	return __webpack_require__(6840);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/error-to-string.js
+var error_to_string_namespaceFn = function() {
+	return __webpack_require__(7536);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/export.js
+var export_namespaceFn = function() {
+	return __webpack_require__(6518);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/function-apply.js
+var function_apply_namespaceFn = function() {
+	return __webpack_require__(8745);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/global-this.js
+var global_this_namespaceFn = function() {
+	return __webpack_require__(4576);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/wrap-error-constructor-with-cause.js
+var wrap_error_constructor_with_cause_namespaceFn = function() {
+	return __webpack_require__(4601);
+};
+
+// MODULE: ./node_modules/core-js/modules/es.error.cause.js
+var es_error_cause_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
 /* eslint-disable no-unused-vars -- required for functions `.length` */
-var $ = __webpack_require__(6518);
-var globalThis = __webpack_require__(4576);
-var apply = __webpack_require__(8745);
-var wrapErrorConstructorWithCause = __webpack_require__(4601);
+var $ = export_namespaceFn();
+var globalThis = global_this_namespaceFn();
+var apply = function_apply_namespaceFn();
+var wrapErrorConstructorWithCause = wrap_error_constructor_with_cause_namespaceFn();
 
 var WEB_ASSEMBLY = 'WebAssembly';
 var WebAssembly = globalThis[WEB_ASSEMBLY];
@@ -1925,15 +2011,13 @@ exportWebAssemblyErrorCauseWrapper('RuntimeError', function (init) {
   return function RuntimeError(message) { return apply(init, this, arguments); };
 });
 
+});
 
-/***/ }),
+// MODULE: ./node_modules/core-js/modules/es.error.to-string.js
+var es_error_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-/***/ 6918:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-var defineBuiltIn = __webpack_require__(6840);
-var errorToString = __webpack_require__(7536);
+var defineBuiltIn = define_built_in_namespaceFn();
+var errorToString = error_to_string_namespaceFn();
 
 var ErrorPrototype = Error.prototype;
 
@@ -1943,98 +2027,15 @@ if (ErrorPrototype.toString !== errorToString) {
   defineBuiltIn(ErrorPrototype, 'toString', errorToString);
 }
 
+});
 
-/***/ })
+;// ./node_modules/core-js/modules/es.error.cause.js
+es_error_cause_namespaceFn();
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter/value functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			if(Array.isArray(definition)) {
-/******/ 				var i = 0;
-/******/ 				while(i < definition.length) {
-/******/ 					var key = definition[i++];
-/******/ 					var binding = definition[i++];
-/******/ 					if(!__webpack_require__.o(exports, key)) {
-/******/ 						if(binding === 0) {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
-/******/ 						} else {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
-/******/ 						}
-/******/ 					} else if(binding === 0) { i++; }
-/******/ 				}
-/******/ 			} else {
-/******/ 				for(var key in definition) {
-/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 					}
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6280);
-/* harmony import */ var core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_cause_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6918);
-/* harmony import */ var core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_error_to_string_js__WEBPACK_IMPORTED_MODULE_1__);
+;// ./node_modules/core-js/modules/es.error.to-string.js
+es_error_to_string_namespaceFn();
+
+;// ./specifications/tc39/ecma262/13.3.1.3.constDeclaration/test.pure.js
 
 
 function _readOnlyError(r) { throw new TypeError('"' + r + '" is read-only'); }

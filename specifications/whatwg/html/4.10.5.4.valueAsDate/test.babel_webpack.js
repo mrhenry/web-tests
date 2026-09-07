@@ -274,7 +274,7 @@ var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(Func
 module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
-  CONFIGURABLE: CONFIGURABLE
+  i2: CONFIGURABLE
 };
 
 
@@ -589,7 +589,7 @@ var fails = __webpack_require__(39);
 var isCallable = __webpack_require__(901);
 var hasOwn = __webpack_require__(297);
 var DESCRIPTORS = __webpack_require__(724);
-var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350).CONFIGURABLE);
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350)/* .CONFIGURABLE */ .i2);
 var inspectSource = __webpack_require__(706);
 var InternalStateModule = __webpack_require__(181);
 
@@ -997,33 +997,6 @@ module.exports = function (name) {
 };
 
 
-/***/ }),
-
-/***/ 288:
-/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
-
-
-// TODO: Remove from `core-js@4`
-var uncurryThis = __webpack_require__(504);
-var defineBuiltIn = __webpack_require__(840);
-
-var DatePrototype = Date.prototype;
-var INVALID_DATE = 'Invalid Date';
-var TO_STRING = 'toString';
-var nativeDateToString = uncurryThis(DatePrototype[TO_STRING]);
-var thisTimeValue = uncurryThis(DatePrototype.getTime);
-
-// `Date.prototype.toString` method
-// https://tc39.es/ecma262/#sec-date.prototype.tostring
-if (String(new Date(NaN)) !== INVALID_DATE) {
-  defineBuiltIn(DatePrototype, TO_STRING, function toString() {
-    var value = thisTimeValue(this);
-    // eslint-disable-next-line no-self-compare -- NaN check
-    return value === value ? nativeDateToString(this) : INVALID_DATE;
-  });
-}
-
-
 /***/ })
 
 /******/ 	});
@@ -1053,66 +1026,75 @@ if (String(new Date(NaN)) !== INVALID_DATE) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter/value functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			if(Array.isArray(definition)) {
-/******/ 				var i = 0;
-/******/ 				while(i < definition.length) {
-/******/ 					var key = definition[i++];
-/******/ 					var binding = definition[i++];
-/******/ 					if(!__webpack_require__.o(exports, key)) {
-/******/ 						if(binding === 0) {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
-/******/ 						} else {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
-/******/ 						}
-/******/ 					} else if(binding === 0) { i++; }
-/******/ 				}
-/******/ 			} else {
-/******/ 				for(var key in definition) {
-/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 					}
-/******/ 				}
+/******/ 	/* webpack/runtime/concatenation wrap */
+/******/ 	// wrap a concatenated module body as a lazy, memoized accessor; mod is
+/******/ 	// set before the body runs so re-entrant calls (require cycles) observe
+/******/ 	// the partial exports like Node.js
+/******/ 	__webpack_require__.cw = function(body) {
+/******/ 		var mod;
+/******/ 		return function() {
+/******/ 			if (body) {
+/******/ 				var fn = body;
+/******/ 				body = 0;
+/******/ 				mod = { exports: {} };
+/******/ 				fn.call(mod.exports, mod, mod.exports);
 /******/ 			}
+/******/ 			return mod.exports;
 /******/ 		};
-/******/ 	}();
+/******/ 	};
 /******/ 	
 /******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	__webpack_require__.g = (function() {
+/******/ 		if (typeof globalThis === 'object') return globalThis;
+/******/ 		try {
+/******/ 			return this || new Function('return this')();
+/******/ 		} catch (e) {
+/******/ 			if (typeof window === 'object') return window;
+/******/ 		}
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-/* harmony import */ var core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(288);
-/* harmony import */ var core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/define-built-in.js
+var define_built_in_namespaceFn = function() {
+	return __webpack_require__(840);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/function-uncurry-this.js
+var function_uncurry_this_namespaceFn = function() {
+	return __webpack_require__(504);
+};
+
+// MODULE: ./node_modules/core-js/modules/es.date.to-string.js
+var es_date_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+
+// TODO: Remove from `core-js@4`
+var uncurryThis = function_uncurry_this_namespaceFn();
+var defineBuiltIn = define_built_in_namespaceFn();
+
+var DatePrototype = Date.prototype;
+var INVALID_DATE = 'Invalid Date';
+var TO_STRING = 'toString';
+var nativeDateToString = uncurryThis(DatePrototype[TO_STRING]);
+var thisTimeValue = uncurryThis(DatePrototype.getTime);
+
+// `Date.prototype.toString` method
+// https://tc39.es/ecma262/#sec-date.prototype.tostring
+if (String(new Date(NaN)) !== INVALID_DATE) {
+  defineBuiltIn(DatePrototype, TO_STRING, function toString() {
+    var value = thisTimeValue(this);
+    // eslint-disable-next-line no-self-compare -- NaN check
+    return value === value ? nativeDateToString(this) : INVALID_DATE;
+  });
+}
+
+});
+
+;// ./node_modules/core-js/modules/es.date.to-string.js
+es_date_to_string_namespaceFn();
+
+;// ./specifications/whatwg/html/4.10.5.4.valueAsDate/test.pure.js
 
 (function (cb) {
   try {

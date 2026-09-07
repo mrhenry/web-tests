@@ -73,7 +73,7 @@ module.exports = {
   includes: createMethod(true),
   // `Array.prototype.indexOf` method
   // https://tc39.es/ecma262/#sec-array.prototype.indexof
-  indexOf: createMethod(false)
+  q: createMethod(false)
 };
 
 
@@ -451,7 +451,7 @@ var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(Func
 module.exports = {
   EXISTS: EXISTS,
   PROPER: PROPER,
-  CONFIGURABLE: CONFIGURABLE
+  i2: CONFIGURABLE
 };
 
 
@@ -834,7 +834,7 @@ var fails = __webpack_require__(9039);
 var isCallable = __webpack_require__(4901);
 var hasOwn = __webpack_require__(9297);
 var DESCRIPTORS = __webpack_require__(3724);
-var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350).CONFIGURABLE);
+var CONFIGURABLE_FUNCTION_NAME = (__webpack_require__(350)/* .CONFIGURABLE */ .i2);
 var inspectSource = __webpack_require__(3706);
 var InternalStateModule = __webpack_require__(1181);
 
@@ -1033,7 +1033,7 @@ module.exports = uncurryThis({}.isPrototypeOf);
 var uncurryThis = __webpack_require__(9504);
 var hasOwn = __webpack_require__(9297);
 var toIndexedObject = __webpack_require__(5397);
-var indexOf = (__webpack_require__(9617).indexOf);
+var indexOf = (__webpack_require__(9617)/* .indexOf */ .q);
 var hiddenKeys = __webpack_require__(421);
 
 var push = uncurryThis([].push);
@@ -1460,16 +1460,92 @@ module.exports = function (name) {
 };
 
 
-/***/ },
+/***/ }
 
-/***/ 3611
-(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/concatenation wrap */
+/******/ 	// wrap a concatenated module body as a lazy, memoized accessor; mod is
+/******/ 	// set before the body runs so re-entrant calls (require cycles) observe
+/******/ 	// the partial exports like Node.js
+/******/ 	__webpack_require__.cw = (body) => {
+/******/ 		var mod;
+/******/ 		return () => {
+/******/ 			if (body) {
+/******/ 				var fn = body;
+/******/ 				body = 0;
+/******/ 				mod = { exports: {} };
+/******/ 				fn.call(mod.exports, mod, mod.exports);
+/******/ 			}
+/******/ 			return mod.exports;
+/******/ 		};
+/******/ 	};
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	__webpack_require__.g = (function() {
+/******/ 		if (typeof globalThis === 'object') return globalThis;
+/******/ 		try {
+/******/ 			return this || new Function('return this')();
+/******/ 		} catch (e) {
+/******/ 			if (typeof window === 'object') return window;
+/******/ 		}
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
 
+// EXTERNAL MODULE: ./node_modules/core-js/internals/define-built-in-accessor.js
+var define_built_in_accessor_namespaceFn = () => {
+	return __webpack_require__(2106);
+};
 
-var $ = __webpack_require__(6518);
-var globalThis = __webpack_require__(4576);
-var defineBuiltInAccessor = __webpack_require__(2106);
-var DESCRIPTORS = __webpack_require__(3724);
+// EXTERNAL MODULE: ./node_modules/core-js/internals/descriptors.js
+var descriptors_namespaceFn = () => {
+	return __webpack_require__(3724);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/export.js
+var export_namespaceFn = () => {
+	return __webpack_require__(6518);
+};
+
+// EXTERNAL MODULE: ./node_modules/core-js/internals/global-this.js
+var global_this_namespaceFn = () => {
+	return __webpack_require__(4576);
+};
+
+// MODULE: ./node_modules/core-js/modules/web.self.js
+var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+
+var $ = export_namespaceFn();
+var globalThis = global_this_namespaceFn();
+var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
+var DESCRIPTORS = descriptors_namespaceFn();
 
 var $TypeError = TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe
@@ -1507,53 +1583,11 @@ try {
   });
 } catch (error) { /* empty */ }
 
+});
 
-/***/ }
+;// ./node_modules/core-js/modules/web.self.js
+web_self_namespaceFn();
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	const __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		const module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-let __webpack_exports__ = {};
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.self.js
-var web_self = __webpack_require__(3611);
 ;// ./node_modules/@mrhenry/core-web/modules/DocumentFragment.js
 
 (function (undefined) {
