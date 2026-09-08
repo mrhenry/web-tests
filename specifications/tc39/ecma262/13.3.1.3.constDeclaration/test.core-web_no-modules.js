@@ -1952,10 +1952,10 @@ var wrap_error_constructor_with_cause_namespaceFn = function() {
 var es_error_cause_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
 /* eslint-disable no-unused-vars -- required for functions `.length` */
-var $ = export_namespaceFn();
-var globalThis = global_this_namespaceFn();
-var apply = function_apply_namespaceFn();
-var wrapErrorConstructorWithCause = wrap_error_constructor_with_cause_namespaceFn();
+var $ = (export_namespaceFn());
+var globalThis = (global_this_namespaceFn());
+var apply = (function_apply_namespaceFn());
+var wrapErrorConstructorWithCause = (wrap_error_constructor_with_cause_namespaceFn());
 
 var WEB_ASSEMBLY = 'WebAssembly';
 var WebAssembly = globalThis[WEB_ASSEMBLY];
@@ -2016,8 +2016,8 @@ exportWebAssemblyErrorCauseWrapper('RuntimeError', function (init) {
 // MODULE: ./node_modules/core-js/modules/es.error.to-string.js
 var es_error_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var defineBuiltIn = define_built_in_namespaceFn();
-var errorToString = error_to_string_namespaceFn();
+var defineBuiltIn = (define_built_in_namespaceFn());
+var errorToString = (error_to_string_namespaceFn());
 
 var ErrorPrototype = Error.prototype;
 

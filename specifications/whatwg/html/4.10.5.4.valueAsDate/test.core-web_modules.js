@@ -2015,8 +2015,8 @@ var to_string_namespaceFn = () => {
 // MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var exec = regexp_exec_namespaceFn();
+var $ = (export_namespaceFn());
+var exec = (regexp_exec_namespaceFn());
 
 // `RegExp.prototype.exec` method
 // https://tc39.es/ecma262/#sec-regexp.prototype.exec
@@ -2030,12 +2030,12 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 var es_regexp_test_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
-es_regexp_exec_namespaceFn();
-var $ = export_namespaceFn();
-var call = function_call_namespaceFn();
-var isCallable = is_callable_namespaceFn();
-var anObject = an_object_namespaceFn();
-var toString = to_string_namespaceFn();
+(es_regexp_exec_namespaceFn());
+var $ = (export_namespaceFn());
+var call = (function_call_namespaceFn());
+var isCallable = (is_callable_namespaceFn());
+var anObject = (an_object_namespaceFn());
+var toString = (to_string_namespaceFn());
 
 var DELEGATES_TO_EXEC = function () {
   var execCalled = false;
@@ -2069,10 +2069,10 @@ $({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
 // MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var globalThis = global_this_namespaceFn();
-var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
-var DESCRIPTORS = descriptors_namespaceFn();
+var $ = (export_namespaceFn());
+var globalThis = (global_this_namespaceFn());
+var defineBuiltInAccessor = (define_built_in_accessor_namespaceFn());
+var DESCRIPTORS = (descriptors_namespaceFn());
 
 var $TypeError = TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe

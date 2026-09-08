@@ -1542,10 +1542,10 @@ var global_this_namespaceFn = () => {
 // MODULE: ./node_modules/core-js/modules/web.self.js
 var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var globalThis = global_this_namespaceFn();
-var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
-var DESCRIPTORS = descriptors_namespaceFn();
+var $ = (export_namespaceFn());
+var globalThis = (global_this_namespaceFn());
+var defineBuiltInAccessor = (define_built_in_accessor_namespaceFn());
+var DESCRIPTORS = (descriptors_namespaceFn());
 
 var $TypeError = TypeError;
 // eslint-disable-next-line es/no-object-defineproperty -- safe

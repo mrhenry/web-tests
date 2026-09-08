@@ -2517,46 +2517,6 @@ module.exports = function (name) {
 /******/ 		};
 /******/ 	};
 /******/ 	
-/******/ 	/* webpack/runtime/create fake namespace object */
-/******/ 	(() => {
-/******/ 		const getProto = Object.getPrototypeOf;
-/******/ 		let leafPrototypes;
-/******/ 		// create a fake namespace object
-/******/ 		// mode & 1: value is a module id, require it
-/******/ 		// mode & 2: merge all properties of value into the ns
-/******/ 		// mode & 4: return value when already ns object
-/******/ 		// mode & 16: return value when it's Promise-like
-/******/ 		// mode & 8|1: behave like require
-/******/ 		__webpack_require__.t = function(value, mode) {
-/******/ 			if(mode & 1) value = this(value);
-/******/ 			if(mode & 8) return value;
-/******/ 			if(typeof value === 'object' && value) {
-/******/ 				if((mode & 4) && value.__esModule) return value;
-/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
-/******/ 			}
-/******/ 			const ns = Object.create(null);
-/******/ 			__webpack_require__.r(ns);
-/******/ 			const def = {};
-/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
-/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
-/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
-/******/ 			}
-/******/ 			def['default'] = () => (value);
-/******/ 			__webpack_require__.d(ns, def);
-/******/ 			return ns;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	// define getter/value functions for harmony exports
-/******/ 	__webpack_require__.d = (exports, definition) => {
-/******/ 		for(var key in definition) {
-/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 			}
-/******/ 		}
-/******/ 	};
-/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	__webpack_require__.g = (function() {
 /******/ 		if (typeof globalThis === 'object') return globalThis;
@@ -2566,16 +2526,6 @@ module.exports = function (name) {
 /******/ 			if (typeof window === 'object') return window;
 /******/ 		}
 /******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop));
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = (exports) => {
-/******/ 		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
 /******/ 	
 /************************************************************************/
 let __webpack_exports__ = {};
@@ -2648,10 +2598,10 @@ var to_length_namespaceFn = () => {
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
 var es_array_buffer_constructor_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var globalThis = global_this_namespaceFn();
-var arrayBufferModule = array_buffer_namespaceObject();
-var setSpecies = set_species_namespaceFn();
+var $ = (export_namespaceFn());
+var globalThis = (global_this_namespaceFn());
+var arrayBufferModule = (array_buffer_namespaceFn());
+var setSpecies = (set_species_namespaceFn());
 
 var ARRAY_BUFFER = 'ArrayBuffer';
 var ArrayBuffer = arrayBufferModule[ARRAY_BUFFER];
@@ -2670,9 +2620,9 @@ setSpecies(ARRAY_BUFFER);
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.detached.js
 var es_array_buffer_detached_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var DESCRIPTORS = descriptors_namespaceFn();
-var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
-var isDetached = array_buffer_is_detached_namespaceFn();
+var DESCRIPTORS = (descriptors_namespaceFn());
+var defineBuiltInAccessor = (define_built_in_accessor_namespaceFn());
+var isDetached = (array_buffer_is_detached_namespaceFn());
 
 var ArrayBufferPrototype = ArrayBuffer.prototype;
 
@@ -2692,13 +2642,13 @@ if (DESCRIPTORS && !('detached' in ArrayBufferPrototype)) {
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.slice.js
 var es_array_buffer_slice_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var uncurryThis = function_uncurry_this_clause_namespaceFn();
-var fails = fails_namespaceFn();
-var ArrayBufferModule = array_buffer_namespaceObject();
-var anObject = an_object_namespaceFn();
-var toAbsoluteIndex = to_absolute_index_namespaceFn();
-var toLength = to_length_namespaceFn();
+var $ = (export_namespaceFn());
+var uncurryThis = (function_uncurry_this_clause_namespaceFn());
+var fails = (fails_namespaceFn());
+var ArrayBufferModule = (array_buffer_namespaceFn());
+var anObject = (an_object_namespaceFn());
+var toAbsoluteIndex = (to_absolute_index_namespaceFn());
+var toLength = (to_length_namespaceFn());
 
 var ArrayBuffer = ArrayBufferModule.ArrayBuffer;
 var DataView = ArrayBufferModule.DataView;
@@ -2736,8 +2686,8 @@ $({ target: 'ArrayBuffer', proto: true, unsafe: true, forced: INCORRECT_SLICE },
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer-to-fixed-length.js
 var es_array_buffer_transfer_to_fixed_length_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var $transfer = array_buffer_transfer_namespaceFn();
+var $ = (export_namespaceFn());
+var $transfer = (array_buffer_transfer_namespaceFn());
 
 // `ArrayBuffer.prototype.transferToFixedLength` method
 // https://tc39.es/ecma262/#sec-arraybuffer.prototype.transfertofixedlength
@@ -2752,8 +2702,8 @@ if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer.js
 var es_array_buffer_transfer_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var $transfer = array_buffer_transfer_namespaceFn();
+var $ = (export_namespaceFn());
+var $transfer = (array_buffer_transfer_namespaceFn());
 
 // `ArrayBuffer.prototype.transfer` method
 // https://tc39.es/ecma262/#sec-arraybuffer.prototype.transfer
@@ -2765,7 +2715,6 @@ if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
 
 });
 
-function array_buffer_namespaceObject() { return array_buffer_namespaceObject.c || (array_buffer_namespaceObject.c = __webpack_require__.t(array_buffer_namespaceFn(), 2)); }
 ;// ./node_modules/core-js/modules/es.array-buffer.constructor.js
 es_array_buffer_constructor_namespaceFn();
 

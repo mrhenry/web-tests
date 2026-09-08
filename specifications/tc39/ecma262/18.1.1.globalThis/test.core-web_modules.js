@@ -1516,8 +1516,8 @@ var global_this_namespaceFn = () => {
 // MODULE: ./node_modules/core-js/modules/es.global-this.js
 var es_global_this_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
-var $ = export_namespaceFn();
-var globalThis = global_this_namespaceFn();
+var $ = (export_namespaceFn());
+var globalThis = (global_this_namespaceFn());
 
 // `globalThis` object
 // https://tc39.es/ecma262/#sec-globalthis

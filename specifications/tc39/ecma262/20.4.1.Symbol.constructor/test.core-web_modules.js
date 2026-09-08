@@ -1648,17 +1648,17 @@ var es_symbol_description_namespaceFn = /*#__PURE__*/__webpack_require__.cw(func
 // `Symbol.prototype.description` getter
 // https://tc39.es/ecma262/#sec-symbol.prototype.description
 
-var $ = export_namespaceFn();
-var DESCRIPTORS = descriptors_namespaceFn();
-var globalThis = global_this_namespaceFn();
-var call = function_call_namespaceFn();
-var uncurryThis = function_uncurry_this_namespaceFn();
-var hasOwn = has_own_property_namespaceFn();
-var isCallable = is_callable_namespaceFn();
-var isPrototypeOf = object_is_prototype_of_namespaceFn();
-var toString = to_string_namespaceFn();
-var defineBuiltInAccessor = define_built_in_accessor_namespaceFn();
-var copyConstructorProperties = copy_constructor_properties_namespaceFn();
+var $ = (export_namespaceFn());
+var DESCRIPTORS = (descriptors_namespaceFn());
+var globalThis = (global_this_namespaceFn());
+var call = (function_call_namespaceFn());
+var uncurryThis = (function_uncurry_this_namespaceFn());
+var hasOwn = (has_own_property_namespaceFn());
+var isCallable = (is_callable_namespaceFn());
+var isPrototypeOf = (object_is_prototype_of_namespaceFn());
+var toString = (to_string_namespaceFn());
+var defineBuiltInAccessor = (define_built_in_accessor_namespaceFn());
+var copyConstructorProperties = (copy_constructor_properties_namespaceFn());
 
 var NativeSymbol = globalThis.Symbol;
 var SymbolPrototype = NativeSymbol && NativeSymbol.prototype;

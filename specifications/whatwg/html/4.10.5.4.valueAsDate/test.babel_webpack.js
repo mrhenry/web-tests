@@ -1070,8 +1070,8 @@ var function_uncurry_this_namespaceFn = function() {
 var es_date_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
 
 // TODO: Remove from `core-js@4`
-var uncurryThis = function_uncurry_this_namespaceFn();
-var defineBuiltIn = define_built_in_namespaceFn();
+var uncurryThis = (function_uncurry_this_namespaceFn());
+var defineBuiltIn = (define_built_in_namespaceFn());
 
 var DatePrototype = Date.prototype;
 var INVALID_DATE = 'Invalid Date';
