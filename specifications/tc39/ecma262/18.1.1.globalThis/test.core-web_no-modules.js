@@ -1514,7 +1514,7 @@ var global_this_namespaceFn = function() {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.global-this.js
-var es_global_this_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_global_this_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function() {
 
 var $ = (export_namespaceFn());
 var globalThis = (global_this_namespaceFn());

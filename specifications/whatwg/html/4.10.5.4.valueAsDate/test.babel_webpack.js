@@ -1067,7 +1067,7 @@ var function_uncurry_this_namespaceFn = function() {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.date.to-string.js
-var es_date_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_date_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function() {
 
 // TODO: Remove from `core-js@4`
 var uncurryThis = (function_uncurry_this_namespaceFn());
