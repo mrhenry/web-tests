@@ -1540,7 +1540,7 @@ var global_this_namespaceFn = () => {
 };
 
 // MODULE: ./node_modules/core-js/modules/web.self.js
-var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var globalThis = (global_this_namespaceFn());

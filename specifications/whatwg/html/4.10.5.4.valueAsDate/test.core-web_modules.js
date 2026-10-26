@@ -2013,7 +2013,7 @@ var to_string_namespaceFn = () => {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_regexp_exec_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var exec = (regexp_exec_namespaceFn());
@@ -2027,7 +2027,7 @@ $({ target: 'RegExp', proto: true, forced: /./.exec !== exec }, {
 });
 
 // MODULE: ./node_modules/core-js/modules/es.regexp.test.js
-var es_regexp_test_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_regexp_test_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 (es_regexp_exec_namespaceFn());
@@ -2067,7 +2067,7 @@ $({ target: 'RegExp', proto: true, forced: !DELEGATES_TO_EXEC }, {
 });
 
 // MODULE: ./node_modules/core-js/modules/web.self.js
-var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var web_self_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var globalThis = (global_this_namespaceFn());

@@ -1949,7 +1949,7 @@ var wrap_error_constructor_with_cause_namespaceFn = function() {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.error.cause.js
-var es_error_cause_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_error_cause_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function() {
 
 /* eslint-disable no-unused-vars -- required for functions `.length` */
 var $ = (export_namespaceFn());
@@ -2014,7 +2014,7 @@ exportWebAssemblyErrorCauseWrapper('RuntimeError', function (init) {
 });
 
 // MODULE: ./node_modules/core-js/modules/es.error.to-string.js
-var es_error_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_error_to_string_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function() {
 
 var defineBuiltIn = (define_built_in_namespaceFn());
 var errorToString = (error_to_string_namespaceFn());

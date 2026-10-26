@@ -1644,7 +1644,7 @@ var to_string_namespaceFn = () => {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.symbol.description.js
-var es_symbol_description_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_symbol_description_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 // `Symbol.prototype.description` getter
 // https://tc39.es/ecma262/#sec-symbol.prototype.description
 

@@ -2596,7 +2596,7 @@ var to_length_namespaceFn = () => {
 };
 
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.constructor.js
-var es_array_buffer_constructor_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_array_buffer_constructor_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var globalThis = (global_this_namespaceFn());
@@ -2618,7 +2618,7 @@ setSpecies(ARRAY_BUFFER);
 });
 
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.detached.js
-var es_array_buffer_detached_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_array_buffer_detached_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var DESCRIPTORS = (descriptors_namespaceFn());
 var defineBuiltInAccessor = (define_built_in_accessor_namespaceFn());
@@ -2640,7 +2640,7 @@ if (DESCRIPTORS && !('detached' in ArrayBufferPrototype)) {
 });
 
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.slice.js
-var es_array_buffer_slice_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_array_buffer_slice_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var uncurryThis = (function_uncurry_this_clause_namespaceFn());
@@ -2684,7 +2684,7 @@ $({ target: 'ArrayBuffer', proto: true, unsafe: true, forced: INCORRECT_SLICE },
 });
 
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer-to-fixed-length.js
-var es_array_buffer_transfer_to_fixed_length_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_array_buffer_transfer_to_fixed_length_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var $transfer = (array_buffer_transfer_namespaceFn());
@@ -2700,7 +2700,7 @@ if ($transfer) $({ target: 'ArrayBuffer', proto: true }, {
 });
 
 // MODULE: ./node_modules/core-js/modules/es.array-buffer.transfer.js
-var es_array_buffer_transfer_namespaceFn = /*#__PURE__*/__webpack_require__.cw(function(module, exports) {
+var es_array_buffer_transfer_namespaceFn = /*#__PURE__*/__webpack_require__.cw(() => {
 
 var $ = (export_namespaceFn());
 var $transfer = (array_buffer_transfer_namespaceFn());
